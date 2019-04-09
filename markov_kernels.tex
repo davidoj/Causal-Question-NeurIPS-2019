@@ -1,0 +1,30 @@
+\section{Definitions}
+\begin{definition}[Markov kernel]
+Given two measureable sets $(E,\mathcal{E})$ and $(F,\mathcal{F})$, a Markov kernel $K$ is a map $E\times \mathcal{F} \to [0,1]$ where
+\begin{enumerate}
+    \item The map $x\mapsto K(x;B)$ is $\mathcal{E}$-measurable for every $B\in\mathcal{F}$
+    \item The map $B\mapsto K(x;B)$ is a probability measure on $(F,\mathcal{F})$ for every $x\in E$ 
+\end{enumerate}
+
+We will give Markov kernels the alternate type signature $K:E\to \Delta(\mathcal{F})$ to emphasize part 2 of this definition, bearing in mind that they must also satisfy the measurability of part 1.
+\end{definition}
+
+\begin{definition}[Measure-kernel-function product]\label{def:kernel_products}
+If $K$ is a Markov kernel from $E\to \Delta(F)$ and $\mu$ is a probability measure on $(E,\mathcal{E})$, then
+\begin{align}
+    \mu K(B)=\int_E \mu(dx) K(x;B),\qquad B\in\mathcal{F}
+\end{align}
+defines a probability measure $\mu K$ on $(F,\mathcal{F})$.
+
+If $f$ is a nonnegative measurable function $F\to \mathbb{R}$ then
+\begin{align}
+    Kf(x) = \int_F K(dy;x)f(y), \qquad x\in E
+\end{align}
+is a nonnegative measureable function $E\to \mathbb{R}$.
+
+If $L$ is a Markov kernel from $F\to \Delta(G)$, then
+\begin{align}
+    KL(B;x) = \int_F K(x;dy) L(y;B),\qquad x\in E, B\in \mathcal{G}
+\end{align}
+is a Markov kernel $KL:E\to \Delta(G)$. \cite{cinlar_probability_2011}
+\end{definition}
