@@ -54,8 +54,8 @@ Deadline: May 23
 
 Pretty damn good draft needed: May 16
 
-April 8 - April 15: Feedback on overall story. Definition of CDP, statement/proof of reductions (mostly already written). CBNs from universal conditional independence (about 40% written already)
-April 15 - April 22: Feature complete "Connection to other causal frameworks"
-April 22 - April 29: At least 3 solid examples from "CDP approach to..." (some of these are partially already written)
-April 29 - May 6: If I'm done and bored, I'll try to lift the theory to the continuous case.
-May 6 - May 13: Feature complete draft
+ - April 8 - April 15: Feedback on overall story. Definition of CDP, statement/proof of reductions (mostly already written). CBNs from universal conditional independence (about 40% written already)
+ - April 15 - April 22: Feature complete "Connection to other causal frameworks"
+ - April 22 - April 29: At least 3 solid examples from "CDP approach to..." (some of these are partially already written)
+ - April 29 - May 6: If I'm done and bored, I'll try to lift the theory to the continuous case.
+ - May 6 - May 13: Feature complete draft
