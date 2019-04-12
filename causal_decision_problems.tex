@@ -64,37 +64,40 @@ A causal decision problem (CDP) is a tuple $\langle (\mathscr{H}, \mathscr{T}, E
 
 Given a decision map $J\in\mathscr{D}$, $\mu\in \mathscr{H}$ and $\tau\in \mathscr{T}$ the risk $R(J,\mu,\tau)$ is
 \begin{align}
-    R(J,\mu,\tau) = \int_D\int_E L(\tau(x,y; \cdot), y) J(x;dy) mu(dx)
+    R(J,\mu,\tau) = \int_D\int_E L(\nu J\tau, y) J(x;dy) \nu(dx)
 \end{align}
+
+\textbf{Note for proofreading:} This is the definition of risk that makes the closest connection with standard statistical decision problems. More elegant definitions would work with losses $L:\Delta(\mathcal{D}\otimes\mathcal{F})\to [0,\infty)$ (which might be more general than expected utility maximisation) or $L:D\times F\to [0,\infty)$ (which is simply an ordinary utility function).
+
+The triple $\langle \mathscr{H}\times\mathscr{T}, \mathscr{D}, R\rangle$ is a normal form two person game.
 \end{definition}
 
-
-
-
-\begin{definition}[Generalised Causal Prospect]\label{def:gen_causal_prospect}
-A generalised causal prospect is a set of generalised causal theories.
+\begin{definition}[SDP and CDP reduction]
+Given a statistical decision problem $\alpha$ with an induced game $\langle \mathscr{H}, \mathscr{D}, R\rangle$ and a causal decision problem $\beta$ with induced game $\langle \mathscr{H}'\times \mathscr{T}', \mathscr{D}, R'\rangle$ where the set of actions $\mathscr{D}$ is shared, $\alpha$ is reducible to $\beta$ if there is a function $f:\mathscr{H}\to \mathscr{H}'\times\mathscr{T}'$ such that for all $\mu\in \mathscr{H}$ and $J\in \mathscr{D}$ we have $R(J,\mu)=R'(J,f(\mu))$ and $\beta$ is reducible to $\alpha$ if there is some function $g:\mathscr{H}'\times\mathscr{T}'\to \mathscr{H}$ such that for all $(\nu,\tau)\in \mathscr{H}'\times \mathscr{T}'$ we have $R(J,g(\nu,\tau))=R'(J,\nu,\tau)$.
 \end{definition}
 
-\begin{definition}[Generalised Statistical Causal Decision Problem]\label{def:gen_scdp}
-A generalised statistical causal decision problem (GSCDP) is a tuple $\langle (\Omega,\mathcal{F},\kappa^*,\mu), (D,\mathcal{D}), L, \RV{X}, \mathscr{T} \rangle$.
+\begin{theorem}
+Every statistical decision problem $\langle (\mathscr{H},E),D,\RV{X},L\rangle$ can be reduced to a causal decision problem.
+\end{theorem}
+\begin{proof}
+Define the theory $\tau_0:(z,y;A)\mapsto I_z(A)$ and the causal prospect $\mathscr{T}_0=\{\tau_0\}$ and consider the causal decision problem $\langle (\mathscr{H},\mathscr{T},E,E),D,\RV{X},L\rangle$. 
 
-The elements $(\Omega, \mathcal{F},\kappa^*), (D,\mathcal{D}), L$ are in common with a causal decision problem. $\RV{X}:\Omega\to X$ is a random variable distributed according to $\RV{X}_*\mu$ where $\mu\in \mathscr{H}\subset \Delta(\mathcal{F})$. $\mathscr{T}$ is a generalised causal prospect containing theories $X\times D\to \Delta(\mathcal{F})$.
+For the bijective map, take $f:\mathscr{H}\to \mathscr{H}\times\mathscr{T}$ defined by $f(\mu)=(\mu,\tau_0)$ and $f^{-1}(\nu,\tau_0)=\nu$.
 
-The objective of a GSCDP is to find a decision kernel $\phi:X\to \Delta(D)$ such that $L(\mu\phi\kappa^*)$ is minimal.
+Denote by $R$ the risk associated with $\langle (\mathscr{H},E),D,\RV{X},L\rangle$ and by $R'$ the risk associated with $\langle (\mathscr{H},\mathscr{T},E,E),D,\RV{X},L\rangle$. Then
+\begin{align}
+    R'(J,\nu,\tau_0) &= \int_D\int_E L(\nu J\tau_0, y) J(x;dy) \nu(dx)\\
+                   &= \int_D\int_E L(\nu,y) J(x;dy) \nu(dx)\\
+                   &=R(J,f(\nu,\tau_0))
+\end{align}
+\end{proof}
 
-If a GSCDP is realisable, given arbitray $A\in \mathcal{X}$ such that $\mu(A)>0$, the true kernel $\kappa^*$ is assumed to belong to the set $\{\frac{1}{\mu(A)}\int_A \tau(\cdot;x,\cdot)\mu(dx)|\tau\in\mathscr{T}\}$. That is, we assume the causal prospect is sufficiently large to contain a theory mapping to the true kernel with probability 1.
-\end{definition}
-
-A GSCDP can be reduced to a regular CDP. The intuition is that a decision kernel for a statistical causal decision problem can be considered to be an ordinary decision for a regular causal decision problem. If the set of available decision kernels is convex and closed, each stochastic decision in the regular causal decision problem corresponds to a decision kernel in the GSCDP, so each problem presents exactly the same set of options.
-
-\begin{theorem}[Reduction from GSCDP to CDP]\label{th:gscdp_to_cdp}
-Given a GSCDP $Q=\langle (\Omega,\mathcal{F},\kappa^*,\mu), (D,\mathcal{D}), L, \RV{X}, \mathscr{T} \rangle$, suppose we further have a set of available decision functions $\Phi\subset \Delta(\mathcal{F})^D$ along with some $\sigma$-algebra $\mathcal{E}$ and a hypothesis class $\mathscr{H}\ni \mu$. Then $Q$ can be reduced to a regular causal decision problem $\langle (\Omega,\mathcal{F},\kappa^{*\prime}), (D',\mathcal{D}'), L, \mathbf{K}' \rangle$ with the identification $(D',\mathcal{D}') = (\Phi,\mathcal{E})$, $\kappa^{*\prime}:\phi\mapsto \mu\phi \kappa^*$, $\mathbf{K}' = \{\phi\mapsto \nu\phi\frac{1}{\nu(A)}\int_A\tau(\cdot;x,\cdot)\nu(dx)|\tau\in\mathscr{T},\nu\in \mathscr{H},\forall A:\nu(A)>0\}$.
-
-If $\Phi$ is convex and closed, then each $\theta\in \Delta(\mathcal{E})$ can be identified with some $\phi\in \Phi$ such that $\theta\kappa^{*\prime} = \mu\phi\kappa^*$.
+\begin{theorem}
+A causal decision problem $\langle (\mathscr{H},\mathscr{T},E,F),D,\RV{X},L\rangle$ where $D$ is a denumerable set can be reduced to a statistical decision problem.
 \end{theorem}
 
 \begin{proof}
-For the reduction, we must show that $\kappa^*\in \{\frac{1}{\nu(A)}\int_A \tau(\cdot;x,\cdot)\nu(dx)|\tau\in \mathscr{T},\nu\in\mathscr{H},\forall A:\nu(A)>0\}$ implies $\kappa^{*\prime}\in \mathbf{K}'$. This is trivial by the definition of $\mathscr{H}$, $\mathbf{K}'$ and $\kappa^{*\prime}$.
+Take some $\mu\in \Delta(\mathcal{D})$ such that $\mu(\{y\})>0$ for all $y\in D$. Such a $\mu$ exists by the denumerability of $\mathcal{D}$.
 
-For the identification, we require for each $\theta\in \Delta(\mathcal{E})$ there is a corresponding $\phi\in \Phi$ such that $L(\mu\phi\kappa^*)=L(\theta\kappa^{*\prime})$. Observe that given any $\theta\in \Delta(\mathcal{E})$ by convexity and closure there exists $\phi_0\in \Phi$ such that $\phi_0 = \int_\Phi \phi \theta(d\phi)$. Therefore $\theta\kappa^{*\prime}=\int_\Phi \mu \phi \kappa^* \theta(d\phi) = \mu \int_\Phi \phi \theta(d\phi) \kappa^*=\mu\phi_0\kappa^*$.
+Define a function $f:\mathscr{H}\times\mathscr{T}\to \mathscr{H}'$ such that $f(\nu,\tau)=(\mu\otimes\nu)\tau$. 
 \end{proof}
