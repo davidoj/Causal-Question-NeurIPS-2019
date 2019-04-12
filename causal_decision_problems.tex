@@ -1,42 +1,75 @@
 \section{Causal Decision Problems}
 
-We will work with a slightly restricted version of a statistical decision problem where the sequence of observations is fixed in advance.
+The normal form representation of a two person game is a triple:
 
-\begin{definition}[Statistical Decision Problem]
-A statistical decision problem (SDP) is a tuple $\langle (\Omega,\mathcal{F},\mu), (D,\mathcal{D}), \RV{X}, \mathscr{H}, \ell\rangle$. 
+\begin{definition}[Two person game (normal form)]
+A normal form game is a triple $\langle \mathscr{S}, A, L\rangle$ where $\mathscr{S}$ and $A$ are arbitrary sets and $L:\mathscr{S}\times A\to [0,\infty)$ is a loss function.
 
-$(\Omega,\mathcal{F},\mu)$ is a probability space given by the environment where the distribution $\mu$ is unknown, $(D,\mathcal{D})$ is a measurable space of decisions, $\RV{X}:\Omega\to X$ is a random variable representing a fixed sequence of observations, $\mathscr{H}\subseteq\Delta(\mathcal{F})$ is a hypothesis class known to contain $\mu$ and $\ell:\mathscr{H}\times D\to [0,\infty)$ is a loss.
-
-The aim of a statistical decision problem is to find a decision kernel $J:X\to \Delta(\mathcal{D})$ minimising the risk:
-\begin{align}
-    R(J,\mu) = \int_{\Omega}\int_D \ell(\mu,y) \mu J(dy)
-\end{align}
+By way of interpretation, we will identify the set $\mathscr{S}$ with a set of possible states that the environment may occupy and $A$ with a set of actions some decision maker may take. The decision maker seeks an action in $A$ that minimises the loss $L$.
 \end{definition}
 
-Here $\mu J$ is the measure-kernel product defined in \ref{def:kernel_product}. As $\mu$ is generally unknown, it is not possible to do this directly. Given a prior $\pi$ on 
+The definition presented here does not generally admit a unique best action. A minimax solution chooses an action that minimises the worst case loss:
+\begin{align}
+    a^*_{mm} = \argmin_{a\in A} [\sup_{s\in \mathscr{S}} L(s,a)]\label{eq:mm_soln}
+\end{align}
 
+If the set $\mathscr{S}$ is equipped with a $\sigma$-algebra $\mathcal{S}$, then given a probability measure $\xi\in \Delta(\mathcal{S})$ which we will call a ``prior'', the Bayes solution minimizes the expected risk with respect to $\xi$:
+\begin{align}
+    a^*_{ba} = \argmin_{a\in A} \int_{\mathcal{S}} L(s,a) \xi(ds)
+\end{align}
 
-A causal decision problem extends a statistical decision problem in that, while an SDP provides us with a loss $D\times \Delta(\mathcal{F})\to [0,\infty)$ that evaluates (decision, state) pairs, a CDP gives us a loss from $\Delta(\mathcal{F})\to [0,\infty)$ that evaluates only consequences. Evaluating the quality of a decsion in an CDP therefore requires an object of the type $D\to \Delta(\mathcal{F})$, which we call a \emph{consequence kernel}.
+A statistical decision problem is an instance of a two person zero sum game.
 
-\begin{definition}[Consequence kernel]
-Given a measurable space $(\Omega,\mathcal{F})$ and a measurable decision set $(D,\mathcal{D})$, a consequence kernel is a Markov kernel $\kappa:D \to \Delta(\mathcal{F})$.
+\begin{definition}[Statistical Decision Problem]
+A statistical decision problem (SDP) is defined by a tuple $\langle (\mathscr{H},E), D, \RV{X}, L\rangle$.
+\begin{itemize}
+    \item Given a $\sigma$-algebra $\mathcal{E}$ on $E$, $\mathscr{H}\subset\Delta(\mathcal{E})$ is a hypothesis class.
+    \item The set $D$, which is equipped with a $\sigma$-algebra $\mathcal{D}$, is a set of decisions
+    \item $\RV{X}:E\to X$ is a random variable representing the information available for the statistician to make a decision
+    \item $L:\mathcal{H}\times D\to [0,\infty)$ is a loss function
+\end{itemize}
+
+Denote by $\mathscr{D}$ the set of decision kernels $X\to \Delta(\mathcal{D})$. For $J\in \mathscr{D}$ and $\mu\in \mathcal{H}$, the risk is defined as:
+\begin{align}
+    R(J,\mu) = \int_D L(\mu,y) \mu J(dy)
+\end{align}
+
+Here $\mu J$ is the measure-kernel product defined in \ref{def:kernel_product}.
+
+Denoting by $\mathscr{D}$  the set of kernels $X\to \Delta(\mathcal{D})$, the triple $\langle \mathscr{H}, \mathscr{D}, R\rangle$ forms a two player normal form game. The concepts of the minimax and Bayes solutions (Eq. \ref{eq:mm_soln} and \ref{eq:bayes_soln}) apply to this game.
+\end{definition}
+
+The loss function $L$ expresses preferences over (state, decision) pairs. However, it may be the case that our preferences don't naturally apply directly to such pairs. For a doctor deciding whether to prescribe a treatment to a patient, it is clear that this patient being healthy in the future is preferable to them being sick. While it may be possible to build a state for which it makes sense to evaluate the desirability of a (state, treatment) pair (for example, such a state may describe both the patient's illness and their responsiveness to treatement), such a description appears to be derived from the more basic preferences over future states of the patient's health.
+
+This motivates the definition of a causal decision problem, which proceeds from a loss defined over outcomes rather than (state, decision) pairs.
+
+\begin{definition}[Consequences]
+Given a measurable space $(F,\mathcal{F})$ and a measurable decision set $(D,\mathcal{D})$, a Markov kernel $\kappa:D \to \Delta(\mathcal{F})$ is a consequence mapping, or just a consequence for short.
+\end{definition}
+
+\begin{definition}[Causal Theory]\label{def:causal_theory}
+Given measurable spaces $(E,\mathcal{E})$, $(F,\mathcal{F})$ and a measurable decision set $(D,\mathcal{D})$, a causal theory is a Markov kernel $\tau:E\times D \to \Delta(\mathcal{F})$. Fixing $x\in E$, $\tau(x,\cdot;\cdot\cdot)$ is a consequence.
 \end{definition}
 
 \begin{definition}[Causal Decision Problem]
-A causal decision problem (CDP) is a tuple $\langle (\Omega,\mathcal{F},\kappa^*), (D,\mathcal{D}), L, \mathbf{K} \rangle$. The triple $(\Omega,\mathcal{F},\kappa^*)$ is given by the environment, where $\Omega$ is the sample space and $\mathcal{F}$ is a $\sigma$-algebra on $\Omega$. We posit that a true consequence kernel $\kappa^*$ exists which is only known to belong to the class $\mathbf{K}\subset \Delta(\mathcal{F})^D$.
+A causal decision problem (CDP) is a tuple $\langle (\mathscr{H}, \mathscr{T}, E, F), D, \RV{X}, L \rangle$. The sets $E$, $F$ and $D$ are equipped with $\sigma$-algebras which we leave implicit.
 
-The measurable set $D$ represents the decisions available, and $L:\Delta(\mathcal{F})\to [0,\infty)$ is the loss.
+\begin{itemize}
+    \item $\mathscr{H}\subset \Delta(\mathcal{E})$ is a hypothesis class
+    \item $\mathscr{T}$ is a set of causal theories $\tau:E\times D\to \Delta(\mathcal{F})$ which we term a \emph{causal prospect}
+    \item $(D,\mathcal{D})$ is a measurable decision set
+    \item $\RV{X}:E\to X$ is a random variable representing the given information
+    \item $L:\Delta(\mathcal{F})\times D\to [0,\infty)$ is a loss function
+\end{itemize}
 
-The objective of a causal decision problem is to choose a stochastic decision $\theta\in \Delta(\mathcal{D})$ such that $L(\theta \kappa^*)$ is minimal.
+Given a decision map $J\in\mathscr{D}$, $\mu\in \mathscr{H}$ and $\tau\in \mathscr{T}$ the risk $R(J,\mu,\tau)$ is
+\begin{align}
+    R(J,\mu,\tau) = \int_D\int_E L(\tau(x,y; \cdot), y) J(x;dy) mu(dx)
+\end{align}
 \end{definition}
 
-In a causal decision problem, the class $\mathbf{K}$ represents the given background knowledge about how the world works. Without an informative class $\mathbf{K}$ it is clearly impossible to determine if any decision is preferred to any other decision.
 
-A statistical causal decision problem is a causal decision problem where we are provided some data which we may use to make a decision. A generalised statistical causal decision problem features a causal prospect $\mathscr{T}$ that plays a similar role to to the class of possible consequences $\mathbf{K}$ for a regular causal decision problem.
 
-\begin{definition}[Generalised Causal Theory]\label{def:gen_causal_theory}
-Given measurable space $(\Omega,\mathcal{F})$ and $(X,\mathcal{X})$, a random variable $\RV{X}:\Omega\to X$ and a decision set $D$, a generalised causal theory is a Markov kernel $\tau:X\times D \to \Delta(\mathcal{F})$. The map $x\mapsto \tau(\cdot;x,\cdot)$ maps the set $X$ to a consequence kernel.
-\end{definition}
 
 \begin{definition}[Generalised Causal Prospect]\label{def:gen_causal_prospect}
 A generalised causal prospect is a set of generalised causal theories.
