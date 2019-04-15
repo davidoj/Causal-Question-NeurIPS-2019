@@ -29,12 +29,12 @@ A statistical decision problem (SDP) is defined by a tuple $\langle (\mathscr{H}
     \item $L:\mathcal{H}\times D\to [0,\infty)$ is a loss function
 \end{itemize}
 
-Denote by $\mathscr{D}$ the set of decision kernels $X\to \Delta(\mathcal{D})$. For $J\in \mathscr{D}$ and $\mu\in \mathcal{H}$, the risk is defined as:
+Denote by $\mathscr{D}$ the set of decision kernels $X\to \Delta(\mathcal{D})$. Denote by $K_{\RV{X}}:E\to \Delta(\mathcal{X})$ the kernel given by $x\mapsto \delta_x$. For $J\in \mathscr{D}$ and $\mu\in \mathcal{H}$, the risk is defined as:
 \begin{align}
-    R(J,\mu) = \int_D L(\mu,y) \mu J(dy)
+    R(J,\mu) = \int_D L(\mu,y) \mu K_{\RV{X}} J(dy)
 \end{align}
 
-Here $\mu J$ is the measure-kernel product defined in \ref{def:kernel_product}.
+Here $\mu K_{\RV{X}} J$ is the measure-kernel-kernel product defined in \ref{def:kernel_product}.
 
 Denoting by $\mathscr{D}$  the set of kernels $X\to \Delta(\mathcal{D})$, the triple $\langle \mathscr{H}, \mathscr{D}, R\rangle$ forms a two player normal form game. The concepts of the minimax and Bayes solutions (Eq. \ref{eq:mm_soln} and \ref{eq:bayes_soln}) apply to this game.
 \end{definition}
@@ -48,7 +48,7 @@ Given a measurable space $(F,\mathcal{F})$ and a measurable decision set $(D,\ma
 \end{definition}
 
 \begin{definition}[Causal Theory]\label{def:causal_theory}
-Given measurable spaces $(E,\mathcal{E})$, $(F,\mathcal{F})$ and a measurable decision set $(D,\mathcal{D})$, a causal theory is a Markov kernel $\tau:E\times D \to \Delta(\mathcal{F})$. Fixing $x\in E$, $\tau(x,\cdot;\cdot\cdot)$ is a consequence.
+Given measurable spaces $(E,\mathcal{E})$, $(F,\mathcal{F})$, a hypothesis class $\mathscr{H}\subset \Delta(\mathcal{E})$ and a measurable decision set $(D,\mathcal{D})$, a causal theory is a map $\tau:\mathscr{H}\to (D \to \Delta(\mathcal{F}))$. A theory $\tau$ maps a distribution $\mu$ to a consequence.
 \end{definition}
 
 \begin{definition}[Causal Decision Problem]
@@ -56,48 +56,96 @@ A causal decision problem (CDP) is a tuple $\langle (\mathscr{H}, \mathscr{T}, E
 
 \begin{itemize}
     \item $\mathscr{H}\subset \Delta(\mathcal{E})$ is a hypothesis class
-    \item $\mathscr{T}$ is a set of causal theories $\tau:E\times D\to \Delta(\mathcal{F})$ which we term a \emph{causal prospect}
+    \item $\mathscr{T}$ is a set of causal theories $\tau:\mathscr{H}\to ( D\to \Delta(\mathcal{F}))$ which we term a \emph{causal prospect}
     \item $(D,\mathcal{D})$ is a measurable decision set
     \item $\RV{X}:E\to X$ is a random variable representing the given information
-    \item $L:\Delta(\mathcal{F})\times D\to [0,\infty)$ is a loss function
+    \item $L:\Delta(\mathcal{F}\times\mathcal{D})\to [0,\infty)$ is a loss function over distributions on the joint $F\times D$ space
 \end{itemize}
 
-Given a decision map $J\in\mathscr{D}$, $\mu\in \mathscr{H}$ and $\tau\in \mathscr{T}$ the risk $R(J,\mu,\tau)$ is
+Given a decision map $J\in\mathscr{D}$, $\mu\in \mathscr{H}$ and $\tau\in \mathscr{T}$, define 
 \begin{align}
-    R(J,\mu,\tau) = \int_D\int_E L(\nu J\tau, y) J(x;dy) \nu(dx)
+    \mu K_{\RV{X}} J\underline{[I_D\otimes \tau^\mu]}(A\times B) = \int_A \tau(\mu)(y;B) \mu K_{\RV{X}} J(dy)
+\end{align}
+the risk $R(J,\mu,\tau)$ is
+\begin{align}
+    R(J,\mu,\tau) = L(\mu K_{\RV{X}} J\underline{[I_D\otimes \tau^\mu]}) 
 \end{align}
 
-\textbf{Note for proofreading:} This is the definition of risk that makes the closest connection with standard statistical decision problems. More elegant definitions would work with losses $L:\Delta(\mathcal{D}\otimes\mathcal{F})\to [0,\infty)$ (which might be more general than expected utility maximisation) or $L:D\times F\to [0,\infty)$ (which is simply an ordinary utility function).
+Where $\tau^\mu(d;\cdot)\in \Delta(\mathcal{F})$ is shorthand for $\tau(\mu)(d;\cdot)$.
 
 The triple $\langle \mathscr{H}\times\mathscr{T}, \mathscr{D}, R\rangle$ is a normal form two person game.
+
+Given random variables $\RV{D}:F\times D\to D$ and $\RV{F}:F\times D\to F$ defined by the projections, if the loss has the form $L(\nu) = \mathbb{E}_{\nu}[\ell(\RV{F},\RV{D})]$ for some $\ell:F\times D\to [0,\infty)$ we call it an ordinary utility. In this case, the risk takes the form
+\begin{align}
+    R(J,\mu,\tau) &= \mathbb{E}_{\mu K_{\RV{X}} J\underline{[I_D\otimes \tau^\mu]}}[\ell(\RV{F},\RV{D})]
+\end{align}
+
+
 \end{definition}
 
 \begin{definition}[SDP and CDP reduction]
-Given a statistical decision problem $\alpha$ with an induced game $\langle \mathscr{H}, \mathscr{D}, R\rangle$ and a causal decision problem $\beta$ with induced game $\langle \mathscr{H}'\times \mathscr{T}', \mathscr{D}, R'\rangle$ where the set of actions $\mathscr{D}$ is shared, $\alpha$ is reducible to $\beta$ if there is a function $f:\mathscr{H}\to \mathscr{H}'\times\mathscr{T}'$ such that for all $\mu\in \mathscr{H}$ and $J\in \mathscr{D}$ we have $R(J,\mu)=R'(J,f(\mu))$ and $\beta$ is reducible to $\alpha$ if there is some function $g:\mathscr{H}'\times\mathscr{T}'\to \mathscr{H}$ such that for all $(\nu,\tau)\in \mathscr{H}'\times \mathscr{T}'$ we have $R(J,g(\nu,\tau))=R'(J,\nu,\tau)$.
+Given a statistical decision problem $\alpha$ with an induced game $\langle \mathscr{H}, \mathscr{D}, R\rangle$ and a causal decision problem $\beta$ with induced game $\langle \mathscr{H}'\times \mathscr{T}', \mathscr{D}, R'\rangle$ where the set of decision functions $\mathscr{D}$ is shared, $\alpha$ is reducible to $\beta$ if there is a surjective function $f:\mathscr{H}\to \mathscr{H}'\times\mathscr{T}'$ such that for all $\mu\in \mathscr{H}$ and $J\in \mathscr{D}$ we have $R(J,\mu)=R'(J,f(\mu))$ and $\beta$ is reducible to $\alpha$ if there is some surjective function $g:\mathscr{H}'\times\mathscr{T}'\to \mathscr{H}$ such that for all $(\nu,\tau)\in \mathscr{H}'\times \mathscr{T}'$ we have $R(J,g(\nu,\tau))=R'(J,\nu,\tau)$.
 \end{definition}
+
+The intuition behind this definition is that, if one problem can be reduced to another, then for every (decision, state of nature) pair in the first problem there is a state of nature in the second problem assigning the same risk to the decision in question.
+
+The following theorem shows that any statistical decision problem can be reduced to a causal decision problem where decisions have no effect. The intuition is that if we choose a causal theory that always returns the input distribution, then we ``essentially'' have a statistical decision problem, provided we can find a loss that treats the output distribution the same way as the statistical decision problem treats the (input distribution, decision) pair.
 
 \begin{theorem}
 Every statistical decision problem $\langle (\mathscr{H},E),D,\RV{X},L\rangle$ can be reduced to a causal decision problem.
 \end{theorem}
 \begin{proof}
-Define the theory $\tau_0:(z,y;A)\mapsto I_z(A)$ and the causal prospect $\mathscr{T}_0=\{\tau_0\}$ and consider the causal decision problem $\langle (\mathscr{H},\mathscr{T},E,E),D,\RV{X},L\rangle$. 
+Consider the causal theory $\tau_0$ with the property $\tau_(0)^\mu(d;\cdot)=\mu$ for all $\mu\in\mathscr{H}$, $d\in D$. Take the causal prospect $\mathscr{T}_0=\{\tau_0\}$ and the loss $L':\Delta(\mathcal{E}\otimes\mathcal{D})\to[0,\infty)$ defined by $L'(\nu) = \mathbb{E}_\nu \left[L(\nu_\RV{E},\RV{D})\right]$ to construct the causal decision problem $\langle (\mathscr{H},\mathscr{T}_0,E,E),D,\RV{X},L'\rangle$. We will show that the original problem can be reduced to this.
 
-For the bijective map, take $f:\mathscr{H}\to \mathscr{H}\times\mathscr{T}$ defined by $f(\mu)=(\mu,\tau_0)$ and $f^{-1}(\nu,\tau_0)=\nu$.
+For the surjective map, take $f:\mathscr{H}\to \mathscr{H}\times\mathscr{T}$ defined by $f(\mu)=(\mu,\tau_0)$.
 
 Denote by $R$ the risk associated with $\langle (\mathscr{H},E),D,\RV{X},L\rangle$ and by $R'$ the risk associated with $\langle (\mathscr{H},\mathscr{T},E,E),D,\RV{X},L\rangle$. Then
 \begin{align}
-    R'(J,\nu,\tau_0) &= \int_D\int_E L(\nu J\tau_0, y) J(x;dy) \nu(dx)\\
-                   &= \int_D\int_E L(\nu,y) J(x;dy) \nu(dx)\\
+    R'(J,\mu,\tau_0) &= \int_D L(\mu K_{\RV{X}} J\underline{[I_D\otimes \tau^\mu]}_{\RV{E}}, y) \mu K_{\RV{X}} J(dy)\\
+                   &= \int_D L(\mu,y) \mu K_{\RV{X}} J(dy)\\
                    &=R(J,f(\nu,\tau_0))
 \end{align}
 \end{proof}
 
-\begin{theorem}
-A causal decision problem $\langle (\mathscr{H},\mathscr{T},E,F),D,\RV{X},L\rangle$ where $D$ is a denumerable set can be reduced to a statistical decision problem.
+Whether a causal decision problem can, in general, be reduced to a statistical decision problem is an open question. Theorem \ref{th:cdp_to_sdp} shows that the reduction is possible under restricted conditions. The intuition is that, under appropriate conditions, we can construct a hypothesis class such that every consequence in the causal decision problem corresponds to a conditional distribution in the statistical decision problem.
+
+Caution is required, however. In order to construct the relevant hypothesis class, we must assume a positive definite marginal distribution over the decision space $(D,\mathcal{D})$. As a result, elements of this hypothesis class will generally induce different distributions over ``input'' and ``output'' variables.
+
+\begin{theorem}\label{th:cdp_to_sdp}
+A causal decision problem $\langle (\mathscr{H},\mathscr{T},E,F),D,\RV{X},L\rangle$ where $D$ is a denumerable set and the loss $L$ is an ordinary utility can be reduced to a statistical decision problem.
 \end{theorem}
 
 \begin{proof}
 Take some $\mu\in \Delta(\mathcal{D})$ such that $\mu(\{y\})>0$ for all $y\in D$. Such a $\mu$ exists by the denumerability of $\mathcal{D}$.
 
-Define a function $f:\mathscr{H}\times\mathscr{T}\to \mathscr{H}'$ such that $f(\nu,\tau)=(\mu\otimes\nu)\tau$. 
+Define a function $f:\mathscr{H}\times\mathscr{T}\to \Delta(\mathcal{E}\otimes\mathcal{F}\otimes\mathcal{D})$ such that
+\begin{align}
+    f(\nu,\tau)(A\times B\times C)&=\int_C \tau^\nu(y;B) \nu(A)\mu(dy)\\
+                                  &:=P^{\nu\tau}
+\end{align}
+
+Define $L':\Delta(\mathcal{E}\otimes\mathcal{F}\otimes\mathcal{D})\times D\to[0,\infty)$ by
+\begin{align}
+    L'(\xi,y) = \int_F \ell(z,y) \frac{\xi(E\times dz\times\{y\})}{\mu(\{y\})}
+\end{align}
+
+Note that
+\begin{align}
+    L'(f(\nu,\tau),y) &= \int_{F} \ell(z,y)  \frac{ \tau^{\mu}(y;dz)\mu(\{y\})}{\mu(\{y\})}\\
+                      &= \int_F \ell(z,y) \tau^{\mu}(y;dz) \\
+\end{align}
+
+Define $\RV{D}:F\times D\to D$, $\RV{F}:F\times D\to F$ by their respective projections.
+
+Then, given the statistical decision problem $\langle(\mathcal{H}',E\times F\times D),D,\RV{X},L'\rangle$, we have the risk
+\begin{align}
+    R'(J,f(\nu,\tau)) &= \int_D \int_F \ell(z,y) \tau^\mu(y;dz)  \nu K_{\RV{X}} J(x;dy) \\
+                      &= \mathbb{E}_{\nu K_{\RV{X}} J\underline{[I_D\otimes \tau^\mu]}}[\ell(\RV{F},\RV{D}]
+\end{align}
 \end{proof}
+
+A more straightforward reduction can be made if the causal decision problem is \emph{identifiable}. A causal decision problem is identifiable if the risk of a given decision function is unique for any given distribution over the inputs.
+
+\begin{definition}[Identifiability]
+A causal decision problem $\langle (\mathscr{H}, \mathscr{T}, E, F), D, \RV{X}, L \rangle$ is identifiable iff for each $\mu\in \mathscr{H}$, $J\in \mathscr{D}$, $|\{R(J,\mu,\tau)|\tau\in \mathscr{T}\}|=1$.
+\end{definition}
