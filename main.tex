@@ -51,8 +51,13 @@
 \newtheorem{definition}{Definition}[section]
 \newtheorem{example}{Example}[section]
 
-
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+\newcommand{\CII}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp\mkern-10mu\perp$}}}}
 \newcommand{\RV}[1]{\ensuremath{\mathsf{#1}}}
+\newcommand{\PA}[2]{\ensuremath{\text{Pa}_{#1}(#2)}}
+\newcommand{\ND}[2]{\ensuremath{\text{ND}_{#1}(#2)}}
+\newcommand{\CH}[2]{\ensuremath{\text{Ch}_{#1}(#2)}}
+\newcommand{\DE}[2]{\ensuremath{\text{De}_{#1}(#2)}}
 
 \newcommand\splitter[1]{%
 \begin{tikzpicture}[scale=#1]
@@ -133,6 +138,7 @@
 
 \include{markov_kernels}
 \include{causal_decision_problems}
+\include{causal_bayesian_networks}
 
 \bibliographystyle{plainnat}
 \bibliography{references}
