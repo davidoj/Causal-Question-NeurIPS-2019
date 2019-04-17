@@ -99,7 +99,7 @@ Consider the causal theory $\tau_0$ with the property $\tau_(0)^\mu(d;\cdot)=\mu
 
 For the surjective map, take $f:\mathscr{H}\to \mathscr{H}\times\mathscr{T}$ defined by $f(\mu)=(\mu,\tau_0)$.
 
-Denote by $R$ the risk associated with $\langle (\mathscr{H},E),D,\RV{X},L\rangle$ and by $R'$ the risk associated with $\langle (\mathscr{H},\mathscr{T},E,E),D,\RV{X},L\rangle$. Then
+Denote by $R$ the risk associated with $\langle (\mathscr{H},E),D,\RV{X},L\rangle$ and by $R'$ the risk associated with $\langle (\mathscr{H},\mathscr{T},E,E),D,\RV{X},L'\rangle$. Then
 \begin{align}
     R'(J,\mu,\tau_0) &= \int_D L(\mu K_{\RV{X}} J\underline{[I_D\otimes \tau^\mu]}_{\RV{E}}, y) \mu K_{\RV{X}} J(dy)\\
                    &= \int_D L(\mu,y) \mu K_{\RV{X}} J(dy)\\
@@ -109,7 +109,7 @@ Denote by $R$ the risk associated with $\langle (\mathscr{H},E),D,\RV{X},L\rangl
 
 Whether a causal decision problem can, in general, be reduced to a statistical decision problem is an open question. Theorem \ref{th:cdp_to_sdp} shows that the reduction is possible under restricted conditions. The intuition is that, under appropriate conditions, we can construct a hypothesis class such that every consequence in the causal decision problem corresponds to a conditional distribution in the statistical decision problem.
 
-Caution is required, however. In order to construct the relevant hypothesis class, we must assume a positive definite marginal distribution over the decision space $(D,\mathcal{D})$. As a result, elements of this hypothesis class will generally induce different distributions over ``input'' and ``output'' variables.
+The induced probability distribution is a joint distribution on $(E,\mathcal{E}),(F,\mathcal{F}),(D,\mathcal{D})$. It's important to bear in mind that even if the input data $\RV{X}:E\to X$ is a set of IID variables, and the output data $\RV{Y}:F\to Y$ is a set of IID variables, the ``joint variable'' $\underline{[\RV{X}\otimes\RV{Y}]}$ will generally not be a set of identically distributed variables.
 
 \begin{theorem}\label{th:cdp_to_sdp}
 A causal decision problem $\langle (\mathscr{H},\mathscr{T},E,F),D,\RV{X},L\rangle$ where $D$ is a denumerable set and the loss $L$ is an ordinary utility can be reduced to a statistical decision problem.
@@ -139,7 +139,7 @@ Define $\RV{D}:F\times D\to D$, $\RV{F}:F\times D\to F$ by their respective proj
 
 Then, given the statistical decision problem $\langle(\mathcal{H}',E\times F\times D),D,\RV{X},L'\rangle$, we have the risk
 \begin{align}
-    R'(J,f(\nu,\tau)) &= \int_D \int_F \ell(z,y) \tau^\mu(y;dz)  \nu K_{\RV{X}} J(x;dy) \\
+    R'(J,f(\nu,\tau)) &= \int_D \int_F \ell(z,y) \tau^\mu(y;dz)  \nu K_{\RV{X}} J(dy) \\
                       &= \mathbb{E}_{\nu K_{\RV{X}} J\underline{[I_D\otimes \tau^\mu]}}[\ell(\RV{F},\RV{D}]
 \end{align}
 \end{proof}
@@ -148,4 +148,30 @@ A more straightforward reduction can be made if the causal decision problem is \
 
 \begin{definition}[Identifiability]
 A causal decision problem $\langle (\mathscr{H}, \mathscr{T}, E, F), D, \RV{X}, L \rangle$ is identifiable iff for each $\mu\in \mathscr{H}$, $J\in \mathscr{D}$, $|\{R(J,\mu,\tau)|\tau\in \mathscr{T}\}|=1$.
+\end{definition}
+
+\begin{theorem}[Reduction of identifiable problems]
+An identifiable causal decision problem $\langle (\mathscr{H}, \mathscr{T}, E, F), D, \RV{X}, L \rangle$ where the loss is an ordinary utility can be reduced to a statistical decision problem that shares the hypothesis class $\mathscr{H}$.
+\end{theorem}
+
+\begin{proof}
+Choose an arbitrary $\tau\in\mathscr{T}$ and define $L':\mathscr{H}\times D\to [0,\infty)$ by
+\begin{align}
+    L'(\nu,y) &= L(\delta_y\underline{[I_D\otimes \tau^\nu]})\\
+              &= \int_F \ell(z,y) \tau^\nu(y;dz)
+\end{align}
+
+Then the risk $R'$ associated with the statistical decision problem $\langle (\mathscr{H},E),D,\RV{X},L'\rangle$ is given by 
+\begin{align}
+    R'(J,\nu) &= \int_E \int_F \ell(z,y)  \tau^\nu (y;dz) \nu K_{\RV{X}} J(dy)\\
+              &= R(J,\nu,\tau')
+\end{align}
+For any $\tau'\in\mathscr{T}$. Taking the map $f:(\nu,\tau)\mapsto \nu$ completes the proof.
+\end{proof}
+
+
+\begin{definition}[$\mathscr{H}$-Universal conditional independence]\label{def:univ_indep}
+Given measurable spaces $(E,\mathcal{E})$ and $(F,\mathcal{F})$, a kernel $K:E\times\mathcal{F}\to[0,1]$ and random variables $\RV{W}:(E\times F,\mathcal{E}\otimes\mathcal{F})\to (W,\mathcal{W})$, $\RV{X}:(E\times F,\mathcal{E}\otimes\mathcal{F})\to (X,\mathcal{X})$ and $\RV{Y}:(E\times F,\mathcal{E}\otimes \mathcal{F})\to (Y,\mathcal{Y})$. $\mathscr{H}\subset\Delta(\mathcal{E})$ is a class of distributions. We say that $\RV{W}$ and $\RV{Y}$ are $\mathscr{H}$-universally independent with respect to $K$ conditional on $\RV{X}$ iff for all $\mu\in \mathscr{H}$, $\RV{W}\CI_{\mu \overline{K}} \RV{Y} |\RV{X}$. We write this $\RV{Y} \CII_K \RV{W} | \RV{X}$. 
+
+If $\RV{X}$ is a constant (i.e. it induces the trivial $\sigma$-algebra) we have $\mathscr{H}$-universal independence, written $\RV{Y}\CII_K \RV{W}$.
 \end{definition}
