@@ -1,25 +1,48 @@
 \section{Causal Bayesian Networks}
 
-A causal Bayesian network is an example of a causal theory. A CBN is a non-trivial setup, so we need to define a number of moving parts to make the connection. Given a measurable space $(E,\mathcal{E})$ and a decision space $(D,\mathcal{D})$, a CBN is a causal theory $\Delta(\mathcal{E})\to (D\to \Delta(\mathcal{E}))$.
+A causal Bayesian network can be understood to be a causal theory. The CBN convention is to call the elements of the decision space $D$ ``interventions'' and denote then with $do()$ notation. Given a random variable $\RV{X}^i$ on the output space $(F,\mathcal{F})\to (X^i,\mathcal{X}^i)$, we identify the intervention $do(\RV{X}^i=x)$ with an element $x\in X^i$ and the absence of any do intervention with the special ``passive'' element $*$.
 
-Suppose we have a graph $\mathcal{G}=(V,E)$ where $V=\{V_i|i\in [N]\}$.
+\begin{definition}[Causal Bayesian Network]\label{def:CBN}
+The definition here follows \cite{pearl_causality:_2009}.
 
-Take some sequence of variables $\RV{X}:(E,\mathcal{E})\to X$ where $\RV{X} = \otimes\underline[\RV{X}_j]$, $j\in \mathbb{N}$, and suppose that they are IID with respect to both $\mathscr{H}$ and $\mathscr{T}$ (that is, they are IID for all $\mu\in\mathscr{H}$ and all  $\tau(\mu)(d;\cdot)$ for $\tau \in \mathscr{T}$). Pick some $j\in \mathbb{N}$ and omit the subscript henceforth: $\RV{X}_j:=\RV{X}$. Suppose $\RV{X} = \otimes_{i\in[N]}\underline[\RV{X}^i]$. Take $\RV{X}^i:(E,\mathcal{E})\to \mathbb{R}$. The $\RV{X}^i$ represent the variables in a regular CBN.
+Consider a directed acyclic graph $\mathcal{G}$ with edges $\mathbf{V}=\{\RV{X}^i|i\in [N]\}$, a measurable space $(F,\mathcal{F})$ and a set of random variables $\RV{X}^i:F\to X^i$ and let $X=\cup_{i\in[N]} X^i$. For each $x\in X\cup\{*\}$ suppose we have an \emph{interventional distribution} $P^{x}_\RV{X}$, and let the set of all such distributions be denoted $\mathbf{P}^{X\cup\{*\}}$. Let $P^*_{\RV{X}}$ be the passive distribution given by the intervention $x = (*,...,*)$.
 
-For each $i\in [N]$ define a random variable $\RV{D}^i:D\to \mathbb{R}\cup\{*\}$. The variable $\RV{D}^i$ represents a do-intervention on $\RV{X}^i$.
+Given any $x\in X\cup\{*\}$ let $S\subset[N]$ be the set of all indices $i$ such that $x^i\neq *$. The graph $\mathcal{G}$ is a causal Bayesian network compatible with $\mathbf{P}^{X\cup\{*\}}$ iff for all $x\in X$ and $S\subset [N]$:
+\begin{enumerate}
+    \item $P^{x}_{\RV{X}}$ is compatible with $\mathcal{G}$ for all $x\in X\cup\{*\}$
+    \item $P^x_{\RV{X}}(\RV{X}^S)=\delta_{x^S}(\RV{X}^S)$
+    \item For $i\in S^C$, $P^x_{\RV{X}}(\RV{X}^i|\PA{\mathcal{G}}{\RV{X}^i})=P^*_\RV{X}(\RV{X}^i|\PA{\mathcal{G}}{\RV{X}^i})$, $P^x$-almost surely
+\end{enumerate}
+\end{definition}
 
-A causal theory $\tau$ must satisfy three conditions in order to be a CBN with respect to $\mathcal{G}$.
+Taking $(F,\mathcal{F})=(X^{\mathbb{N}},\mathcal{X}^{\mathbb{N}})$ and considering only distributions where the sequence $\RV{X}_0,\RV{X}_1,..$ is IID, the above three conditions are sufficient that, given some graph $\mathcal{G}$ and $P^*_{\RV{X}}\in \Delta(\mathcal{X})$, one obtains a unique set of interventional distributions $\mathbf{P}^{X\cup\{*\}}$ (this follows from the truncated factorisation property given by \cite{pearl_causality:_2009}). 
 
-\begin{itemize}
-    \item For $x\in \mathbb{R}$, $\mu\in \mathscr{H}$, $\xi\in \Delta(\mathcal{D})$,  $P^{\xi \tau^\mu}(\RV{X}^i|\RV{D}^i=x)=\delta_x(\RV{X}^i)$ ($\RV{D}^i=x\in \mathbb{R}$ represents an active intervention on $\RV{X}^i$)
-    \item $P^{\xi \tau^\mu}(\RV{X}^i|\RV{D}_i=*,\PA{\mathcal{G}}{\RV{X}^i}) = P^\mu(\RV{X}^i|\PA{\mathcal{G}}{\RV{X}^i})$ ($\RV{D}^i=*$ represents a passive intervention on $\RV{X}^i$)
-    \item For all $\mu\in \mathscr{H}$, $d\in D$, $P^{\delta_d \tau^\mu}(\RV{X})$ is Markov with respect to $\mathcal{G}$
-\end{itemize}
+Taking the map $\kappa: x\mapsto P^x$ as a consequence, a graph $\mathcal{G}$ therefore defines the causal theory $P^*\mapsto \kappa$. Theorem \ref{th:cbn_MK} establishes that the object $\kappa$ is a Markov kernel if $\mathcal{G}$ has a finite number of nodes, so it is strictly correct to consider this map a causal theory.
 
+\begin{theorem}\label{th:cbn_MK}
+Given a graph $\mathcal{G}$ and a set $\mathscr{H}\subset\Delta{\mathcal{X}}$ of probability distributions compatible with $\mathcal{G}$, the map $\tau_{\mathcal{G}}:\mathscr{H}\to (D\to \mathscr{H})$ given by $\mu\mapsto (x\mapsto P^x)$ for $\mu\in \Delta(X)$ is a causal theory.
+\end{theorem}
 
+The proof is given in Appendix \ref{app:cbn_ct}.
 
 \subsection{Supergraph equivalence}
+
+A CBN defines a causal theory, so naturally a set of CBNs defines a causal prospect. 
+
+It is well known that in Definition \ref{def:CBN}, condition 1 is vacuous if $\mathcal{G}$ is a fully connected graph. For a fully connected graph, therefore, conditions 2 and 3 are sufficient to define the causal theory associated with $\mathcal{G}$. 
+
+
+
+Theorem \ref{th:sup_equiv} establishes that in fact, a set of fully connected graphs and hence conditions 2 and 3 alone are enough to specify any causal prospect (that is, any set of causal theories) that can be specified by a set of causal Bayesian networks.
+
+This has consequences for the practice of learning causal graphs. In particular, any algorithm that learns to delete edges from a set of graphs 
+
+\begin{theorem}[Supergraph equivalence]\label{th:sup_equiv}
+
+\end{theorem}
 
 \section{Single World Intervetion Graphs}
 
 \section{Potential Outcomes}
+
+The definition of 
