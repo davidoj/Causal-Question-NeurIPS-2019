@@ -1,0 +1,38 @@
+To fully define the respective CDPs, suppose in both cases the loss is $L:\xi\mapsto 0.6\mathbb{E}_\xi[g(\RV{D}_A)] - \mathbb{E}_{\xi}[\RV{B}] - l^*$ where $g:\{0,1,*\}\to \{0,1\}$ is given by $g:x\mapsto x$ for $x\in \{0,1\}$ and $*\mapsto 0$. That is, $\RV{B}=1$ is desirable and setting $\RV{D}_A=1$ is a costly action. $l^*$ is some constant that ensures the minimal loss is 0.
+
+Finally, suppose the given data is are IID samples from some distribution $\pi\in \Delta(\sigma(\{0,1\}^3))$ such that $P^\pi(\RV{B}|\RV{A}=a)=\delta_a(\RV{B})$. A naive application of $\mathcal{G}$ would then suggest that the consequence $\kappa$ were such that for any stochastic decision $\eta\in \Delta(\mathcal{D})$, $P^{\eta {(I_D\otimes \kappa)}}(\RV{B}|\RV{D}_A = x) =\delta_x(\RV{B})$ for $x\in\{0,1\}$. If $P^\pi(A=1)<0.4$ we then have $\delta_1(\RV{D}_A)$ as the optimal decision.
+
+Consider the Bayes risk for such a problem (a similar problem can be constructed, but is more complicated, using Bayes risk), and suppose we have a learning rule that  This requires assigning a prior to causal states in $\mathscr{T}_{\mathcal{G}}'$ and $\mathscr{T}_{\mathcal{G}}^\square$- we will suppose that this prior that admits a density on the 8-simplex $\Delta(\sigma(\{0,1\}^3))$. In particular, the prior assigns 0 weight to any set $\mathscr{P}\subset\Delta(\sigma(\{0,1\}^3))$ with 0 volume. This is not an uncontroversial choice, but it is compatible with the view that ``there are no true parametric zeros'' endorsed by many statisticians (for example  \cite{gelman_bayesian_2010,meehl_theory-testing_1967,berkson_difficulties_1938}). Where a theory contains more than one state with a given distribution, we give these states equal weight. 
+
+Note that the conditional independence $A\perp_\mathcal{G} C | B$ is associated with a lower dimensional subspace of $\Delta(\sigma(\{0,1\}^3))$ defined by 
+\begin{align}
+    \mu_{000}\mu_{101}-\mu_{100}\mu_{001}&=0\label{eq:ci0}\\
+    \mu_{010}\mu_{111}-\mu_{110}\mu_{011}&=0 \label{eq:ci}
+\end{align}
+Hence any distribution compatible with $\mathcal{G}$ is in fact assigned 0 weight in our prior. Furthermore, for every graph with an arrow $A\to B$ there is a graph with an arrow $B\to A$; therefore the prior assigns at least a weight of 0.5 to the possibility that $\RV{B}$ is independent of $\RV{D}_A$ in the decision-consequence joint distribution. The gain from the decision $\RV{D}_B=1$ is therefore ``capped'' at 0.5, which is less than the direct cost of the decision. As such, any decision function $J$ that assigns nonzero weight to $\RV{D}_B = 1$ given \emph{any data} is dominated by any function that always assigns zero weight to this decision. This is despite the fact that, as noted above, the optimal stochastic decision should naively be $\delta_1(\RV{D}_B)$.
+
+Consider instead the theory $\mathscr{T}^\square_{\mathcal{G}}$. As before, 0 weight is assigned to the causal states associated with $\mathscr{T}_{\mathcal{G}}$. On the other hand, given some incompatible $\mu$, $\mathscr{T}^\square_{\mathcal{G}}$ yields the following pair of states (for simplicity, marginalising over $\RV{A}$ and $\RV{C}$ that are irrelevant to the loss and ignoring the passive action):
+\begin{align}
+    &(\mu,x\mapsto P^\mu(\RV{B}|\RV{A}=x) )\label{eq:cbn_s1}\\
+    &(p,x \mapsto \sum_c P^\mu(\RV{B}|\RV{A}=x,\RV{C}=c)P^\mu(\RV{C}=c)) \label{eq:cbn_s2}
+\end{align}
+
+Suppose Eq's \ref{eq:ci0} and \ref{eq:ci} hold approximately for some $\mu$. That is, the absolute value of the expression on the left hand side is less than some $\epsilon>0$ in each case. Then we have
+\begin{align}
+    \left|P^\mu(\RV{B}|\RV{A}=x,\RV{C}=0) - P^\mu(\RV{B}|\RV{A}=x,\RV{C}=1) \right| &< \frac{\epsilon}{P^\mu(\RV{A}=x,\RV{C}=0) P^\mu(\RV{A}=x,\RV{C}=1)}\\
+    \left|\sum_c P^\mu(\RV{B}|\RV{A}=x,\RV{C}=c)P^\mu(\RV{C}=c)-P^\mu(B|A=x)\right| &< \frac{\epsilon}{P^\mu(\RV{A}=x,\RV{C}=0) P^\mu(\RV{A}=x,\RV{C}=1)} 
+\end{align}
+
+The set of distributions for which this independence holds are those that satisfy the following equalities:
+
+\begin{align}
+    \nu(0,0,0)\nu(1,0,1)-\nu(1,0,0)\nu(0,0,1)&=0\label{eq:ci0}\\
+    \nu(0,1,0)\nu(1,1,1)-\nu(1,1,0)\nu(0,1,1)&=0 \label{eq:ci}
+\end{align}
+
+Suppose, then, that 
+
+\begin{align}
+    \mu(0,0,0)\mu(1,0,1)-\mu(1,0,0)\mu(0,0,1)&<\epsilon\label{eq:eci0}\\
+    \mu(0,1,0)\mu(1,1,1)-\mu(1,1,0)\mu(0,1,1)&<\epsilon \label{eq:eci1}
+\end{align}

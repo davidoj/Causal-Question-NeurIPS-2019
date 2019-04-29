@@ -153,11 +153,13 @@ The map $m:\Delta(\mathcal{E}\otimes\mathcal{D})\to \mathscr{K}$ given by $m(\xi
 A more straightforward reduction can be made if the causal decision problem is \emph{identifiable}. A causal decision problem is identifiable if the risk of a given decision function is unique given a distribution over the observed data.
 
 \begin{definition}[Identifiability]
-A causal decision problem $\langle (\mathscr{T}, E), D, \RV{X}, L \rangle$ is identifiable iff for each $J\in \mathscr{D}$ and $\mu\in \Delta(\mathcal{E})$, $|\{R(J,\kappa,\mu)|(\kappa,\mu)\in \mathscr{T}\}|=1$.
+A causal decision problem $\langle (\mathscr{T}, E), D, \RV{X}, L \rangle$ is risk-identifiable iff for each $J\in \mathscr{D}$ and $\mu\in \Delta(\mathcal{E})$, $|\{R(J,\kappa,\mu)|(\kappa,\mu)\in \mathscr{T}\}|=1$.
+
+A causal theory $\mathscr{T}$ is identifiable iff for each $\mu\in \Delta(\mathcal{E})$, $|\{(\kappa,\mu)|(\kappa,\mu)\in\mathscr{T}\}|=1$.
 \end{definition}
 
 \begin{theorem}[Reduction of identifiable problems]
-An identifiable causal decision problem $\langle (\mathscr{T}, E), D, \RV{X}, L \rangle$ where the loss is an ordinary utility can be reduced to a statistical decision problem.
+A risk-identifiable causal decision problem $\langle (\mathscr{T}, E), D, \RV{X}, L \rangle$ where the loss is an ordinary utility can be reduced to a statistical decision problem.
 \end{theorem}
 
 \begin{proof}
