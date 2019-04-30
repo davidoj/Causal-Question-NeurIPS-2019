@@ -15,7 +15,7 @@ The definition presented here does not generally admit a unique best action. A m
 
 If the set $\mathscr{S}$ is equipped with a $\sigma$-algebra $\mathcal{S}$, then given a probability measure $\xi\in \Delta(\mathcal{S})$ which we will call a ``prior'', the Bayes solution minimizes the expected risk with respect to $\xi$:
 \begin{align}
-    a^*_{ba} = \argmin_{a\in A} \int_{\mathcal{S}} L(s,a) \xi(ds)
+    a^*_{ba} = \argmin_{a\in A} \int_{\mathcal{S}} L(s,a) \xi(ds) \label{eq:ba_soln}
 \end{align}
 
 A statistical decision problem is an instance of a normal form two person game.
@@ -119,8 +119,19 @@ If a causal decision problem $\beta$ with induced game $\langle \mathscr{T},\mat
 
 \begin{definition}[Induced prior]
 If a causal decision problem $\beta$ with induced game $\langle \mathscr{T},\mathscr{D}, R\rangle$ can be reduced to a statistical decision problem $\alpha$ with induced game $\langle \mathscr{H},\mathscr{D},R' \rangle$ witnessed by $h:\mathscr{T}\to\mathscr{H}$ then given a prior $\xi$ on $(\mathscr{H},\mathcal{H})$ the induced prior $\xi_h$ on $(\mathscr{T},\sigma(h))$ is defined by $\xi_h(h^{-1}(A)) = \xi(A)$ for $A\in \mathcal{H}$.
-\end{definition}[Induced prior]
+\end{definition}
 
+\begin{lemma}[Induced Bayes rule]
+If a causal decision problem $\beta$ with induced game $\langle \mathscr{T},\mathscr{D}, R\rangle$ can be reduced to a statistical decision problem $\alpha$ with induced game $\langle \mathscr{H},\mathscr{D},R' \rangle$ witnessed by $h:\mathscr{T}\to\mathscr{H}$ and $J_{ba}^\xi\in \mathscr{D}$ is a Bayes rule with respect to the problem $\alpha$ and the prior $\xi$ (Equation \ref{eq:ba_soln}) then $J_{ba}^\xi$ is a Bayes rule with respect to the problem $\beta$ and the induced prior $\xi_h$.
+\end{lemma}
+
+\begin{proof}
+For any $J\in\mathscr{D}$, $\tau\in \mathscr{T}$
+\begin{align}
+    \int_\mathscr{T} R(J,\tau) \xi_h(d\tau) &= \int_\mathscr{H} \int_{h^{-1}(\mu)} R(J,\tau) \xi_h(d\tau)d\mu\\
+                                            &= \int_\mathscr{H} R'(J,h(\tau)) \xi(h(\tau))d\mu
+\end{align}
+\end{proof}
 
 The following theorem shows that any statistical decision problem can be reduced to a causal decision problem where decisions have no effect. The intuition is that if we choose a causal theory that always returns the input distribution, then we ``essentially'' have a statistical decision problem.
 
