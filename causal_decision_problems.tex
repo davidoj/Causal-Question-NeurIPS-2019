@@ -18,7 +18,7 @@ If the set $\mathscr{S}$ is equipped with a $\sigma$-algebra $\mathcal{S}$, then
     a^*_{ba} = \argmin_{a\in A} \int_{\mathcal{S}} L(s,a) \xi(ds)
 \end{align}
 
-A statistical decision problem is an instance of a two person zero sum game.
+A statistical decision problem is an instance of a normal form two person game.
 
 \begin{definition}[Statistical Decision Problem]
 A statistical decision problem (SDP) is defined by a tuple $\langle (\mathscr{H},E), D, \RV{X}, L\rangle$.
@@ -90,6 +90,38 @@ Given a statistical decision problem $\alpha$ with an induced game $\langle \mat
 
 The intuition behind this definition is that, if one problem can be reduced to another, then for every (decision, state of nature) pair in the first problem there is a state of nature in the second problem assigning the same risk to the same decision.
 
+\begin{definition}[Admissible Action]
+Given a normal form two person game $\langle \mathscr{S}, A, L\rangle$, an action $a\in A$ is strictly better than $a'\in A$ iff $L(s,a)\leq L(s,a')$ for all $s\in\mathscr{S}$ and $L(s_0,a)<L(s_0,a')$ for some $s_0\in \mathscr{S}$. If only the first holds, then $a$ is as good as $a'$.
+
+An admissible action is an action $a\in A$ such that there is no action strictly better than $A$.
+\end{definition}
+
+\begin{definition}[Complete Class]
+A class $C$ of decisions is a complete class if for every $a\not\in C$ there is some $a'\in C$ that is strictly better than $a$.
+
+A class $C$ is an essentially complete class if for every $a\not\in C$ there is some $a'\in C$ that is as good as $a$.
+\end{definition}
+
+\begin{lemma}[Reduction and admissibility]
+If a causal decision problem $\beta$ with induced game $\langle \mathscr{T},\mathscr{D}, R\rangle$ can be reduced to a statistical decision problem $\alpha$ with induced game $\langle \mathscr{H},\mathscr{D},R' \rangle$ then a decision function $J\in \mathscr{D}$ is admissible in $\beta$ iff it is admissible in $\alpha$.
+\end{lemma}
+
+
+\begin{proof}
+Suppose $J\in\mathscr{D}$ is inadmissible in $\alpha$. Then there is some $J'\in\mathscr{D}$, $\mu\in\mathscr{H}$ such that $R'(J',\mu)<R'(J,\mu)$ and $R'(J',\nu)\leq R'(J,\nu)$ for all $\nu\in \mathscr{H}$. Let $h$ be the function that witnesses the reduction. Then we have for all $\tau\in h^{-1}(\mu)$, $R(J',\tau)=R'(J',\mu)<R(J,\tau)=R'(J,\nu)$ and for all $\nu\in \mathscr{H}$, $\chi\in h^{-1}(\nu)$, $R(J',\chi)=R'(J',\nu)\leq R(J,\chi)=R'(J,\nu)$. The set $\bigcup_{\nu\in\mathscr{H}} h^{-1}(\nu)=\mathscr{T}$, so $J$ is inadmissible in $\beta$.
+
+Suppose $J\in \mathscr{D}$ is admissible in $\beta$. Then there is some $J'\in\mathscr{D}$, $\tau\in\mathscr{T}$ such that $R(J',\tau)<R(J,\tau)$ and $R(J',\chi)\leq R(J,\chi)$ for all $\chi\in \mathscr{T}$. Then we have $R'(J',h(\tau))=R(J',\tau)<R(J,\tau)=R'(J,h(\tau))$ and $R'(J',h(\chi))=R(J',\chi)\leq R(J,\chi)=R'(J,h(\chi))$. Because $h$ is surjective, $J$ is admissible in $\alpha$.
+\end{proof}
+
+\begin{corollary}[Reduction and completeness]
+If a causal decision problem $\beta$ with induced game $\langle \mathscr{T},\mathscr{D}, R\rangle$ can be reduced to a statistical decision problem $\alpha$ with induced game $\langle \mathscr{H},\mathscr{D},R' \rangle$, then an (essentially) complete class with respect to $\alpha$ is (essentially) complete with respect to $\beta$.
+\end{corollary}
+
+\begin{definition}[Induced prior]
+If a causal decision problem $\beta$ with induced game $\langle \mathscr{T},\mathscr{D}, R\rangle$ can be reduced to a statistical decision problem $\alpha$ with induced game $\langle \mathscr{H},\mathscr{D},R' \rangle$ witnessed by $h:\mathscr{T}\to\mathscr{H}$ then given a prior $\xi$ on $(\mathscr{H},\mathcal{H})$ the induced prior $\xi_h$ on $(\mathscr{T},\sigma(h))$ is defined by $\xi_h(h^{-1}(A)) = \xi(A)$ for $A\in \mathcal{H}$.
+\end{definition}[Induced prior]
+
+
 The following theorem shows that any statistical decision problem can be reduced to a causal decision problem where decisions have no effect. The intuition is that if we choose a causal theory that always returns the input distribution, then we ``essentially'' have a statistical decision problem.
 
 \begin{theorem}
@@ -150,7 +182,11 @@ The map $m:\Delta(\mathcal{E}\otimes\mathcal{D})\to \mathscr{K}$ given by $m(\xi
 
 \end{proof}
 
-\textbf{Todo: }This is not a practically useful reduction, but it might be enough to lift some version of the complete class theorem from statistical decision problems to causal decision problems.
+This reduction is not particularly practically useful, but it is sufficient to lift results from the theory of statistical decision functions.
+
+\begin{theorem}[Complete class theorem (CDP)]
+
+\end{theorem}
 
 A more straightforward reduction can be made if the causal decision problem is \emph{identifiable}. A causal decision problem is identifiable if the risk of a given decision function is unique given a distribution over the observed data.
 
