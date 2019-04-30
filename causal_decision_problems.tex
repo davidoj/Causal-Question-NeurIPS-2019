@@ -48,7 +48,7 @@ Given a measurable space $(F,\mathcal{F})$ and a measurable decision set $(D,\ma
 \end{definition}
 
 \begin{definition}[Causal state]
-Given a consequence $\kappa:D\to \Delta(\mathcal{F})$ and some distribution $\mu\in \Delta(\mathcal{E})$, the pair $(\kappa,\mu):=\tau$ is a \emph{causal state}.
+Given a consequence $\kappa:D\to \Delta(\mathcal{F})$ and some distribution $\mu\in \Delta(\mathcal{E})$, the pair $(\kappa,\mu):=\tau$ is a \emph{causal state}. We refer to $\kappa$ as the consequence and $\mu$ as the observed state.
 \end{definition}
 
 \begin{definition}[Causal Theory]\label{def:causal_theory}
@@ -149,6 +149,8 @@ Take some test distribution $\pi\in \Delta(\mathcal{D})$ such that $\pi(\{y\})>0
 The map $m:\Delta(\mathcal{E}\otimes\mathcal{D})\to \mathscr{K}$ given by $m(\xi) = \frac{\xi(E\times \cdot\times \{y\})}{\pi(\{y\})}$ is surjective. The result follows from Lemma \ref{lem:red_cdp}.
 
 \end{proof}
+
+\textbf{Todo: }This is not a practically useful reduction, but it might be enough to lift some version of the complete class theorem from statistical decision problems to causal decision problems.
 
 A more straightforward reduction can be made if the causal decision problem is \emph{identifiable}. A causal decision problem is identifiable if the risk of a given decision function is unique given a distribution over the observed data.
 

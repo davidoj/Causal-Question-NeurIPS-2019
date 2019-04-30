@@ -91,8 +91,84 @@ Suppose that we have some loss such that $L(\rho)= \mathbb{E}_\rho[\RV{B}] + k$.
         &< \epsilon
 \end{align}
 
-The stipulation that the prior $\xi$ was such that the marginal distribution over $\Delta(\mathcal{E})$ admitted a density may be controversial. It is consistent with the notion that ``there are no true parametric zeros'' endorsed by many statisticians (for example  \cite{gelman_bayesian_2010,meehl_theory-testing_1967,berkson_difficulties_1938}). Furthermore, if conditional independences rarely hold precisely, then learners based on the theory $\mathscr{T}_{\mathcal{G}}'$ may converge to a state of skepticism even given a prior that assigns nonzero weight to the set of compatible probability distributions because the data are drawn from a distribution from which this independence does not hold.
+The stipulation that the prior $\xi$ was such that the marginal distribution over $\Delta(\mathcal{E})$ admitted a density may be controversial. It is consistent with the notion that ``there are no true parametric zeros'' endorsed by many statisticians (for example  \cite{gelman_bayesian_2010,meehl_theory-testing_1967,berkson_difficulties_1938}). Furthermore, if conditional independences rarely hold precisely, then learners based on the theory $\mathscr{T}_{\mathcal{G}}'$ may usually converge to a state of skepticism even given a prior that assigns nonzero weight to the set of compatible probability distributions because the data are usually drawn from a distribution from which this independence does not hold.
+
+\textbf{TODO (maybe)} A useful property to consider of causal theories is whether determining the data generating distribution $\mu$ is ``close'' to $\mu_0$ implies that the risk is ``close'' to $R(J,\mu_0,\kappa_0)$ for all $(\mu_0,\kappa_0)$ in $\mathscr{T}$. One has to choose a reasonable notion of closeness. There are possible results in the spirit of the example above for Bayesian networks.
 
 \section{Potential Outcomes}
 
-Potential outcomes provide an alternative means to discuss causal effects 
+Potential outcomes provide an alternative means to discuss causal effects. The standard setup posits a joint distribution between observed data $\RV{X}$, a treatment $\RV{Z}$ taking values in $[N]$ and several ``potential outcomes'' $\RV{X}_i$, $i\in [N]\setminus\{0\}$. At a minimum, the consistency condition is usually asserted (\cite{richardson2013single}): $\RV{Z}=i$ implies $\RV{X}_i=\RV{X}$. 
+
+We modify this setup somewhat in order to analyse it in terms of a causal theory. We believe these choices are reasonable, but there is an element of interpretation involved here. For clarity every variable gets a subscript and $\RV{X}_{ob}$, $\RV{Z}_{ob}$ are random variables representing outcomes and treatments in the observed data. $\RV{X}_i, \RV{Z}_i$, $i\geq 0$ are random variables representing outcomes and treatments in consequence of choosing a decision $\RV{D}=i$ deterministically. Note that we do not necessarily have a ``passive decision'' as we did with CBNs. Finally, we work with a slightly weaker ``almost certain consistency'':
+
+\begin{align}
+    P(\RV{X}_i,\RV{X}_{ob}|\RV{Z}_{ob}=i,\RV{Z}_i=i)=\mathds{1}_{\RV{X}_{ob}=\RV{X}_i} \qquad\text{ with probabiliy 1}\label{eq:consistency}
+\end{align}
+
+Conditioning on $\RV{Z}_i=i$ is redundant under the usual assumption that $P(\RV{Z}_i) = \delta_i(\RV{Z}_i)$.
+
+While there appears to be a natural identification of ``potential outcomes'' with consequences, observed data with observed state and treatments with decisions in a causal theory, it is usually not possible to represent a joint distribution obeying Condition \ref{eq:consistency} with a causal theory. Take the spaces $D,X,Z=\{0,1\}$ and suppose we have a causal theory $\mathscr{T}$ consisting of pairs $(\kappa,\mu)$ where $\mu\in\Delta(\mathcal{X}\otimes\mathcal{Z})$ and $\kappa$ is a Markov kernel from $D\to \Delta(\mathcal{X}\otimes\mathcal{Z})$. To construct a joint distribution between $\RV{X}_{ob}$ and $\RV{X}_i$ for $i\in \{0,1\}$ we take some deterministic decision function $J_i:X\times Z\to \Delta(\mathcal{D})$ where $J_i:(x,z;d)\mapsto \delta_i(d)$. For $A,C\in \Delta(\mathcal{X}\otimes\mathcal{Z})$, $B\in \Delta(\mathcal{D})$ we compose the objects as 
+\begin{align}
+    \xi(A\times B\times C) =  \int_B \int_A  \kappa(y; C) \delta_i(dy) \mu(dx\times dz)
+\end{align}
+
+For $\alpha\in\{ob,0,1\}$ take random variables $\RV{X}_\alpha:(X\times Z)^2\times D\to X$, $\RV{Z}_\alpha:(X\times Z)^2\times D\to X$ and $\RV{D}:(X\times Z)^2\times D\to D$ defined by projections $\RV{X}_\alpha:((x_{ob},z_{ob}),(x_i,z_i),d)\mapsto x_\alpha$, $\RV{Z}_\alpha$ similarly and $\RV{D}:((x_{ob},z_{ob}),(x_i,z_i),d)\mapsto d$. It is then straightforward to show that $(x,z,d))\mapsto \kappa(d; C)$ is a version of the conditional probability $P^\xi(\RV{X}_i|\RV{D},\RV{X}_{ob},\RV{Z}_{ob})$, which implies 
+\begin{align}
+    \RV{X}_i&\CI_\xi \RV{X}_{ob}|\RV{D}, \RV{Z}_{ob}
+\end{align}
+For any choice of $J_i,\mu,\kappa$. Noting that $J_i$ is deterministic, we also have
+\begin{align}
+    \RV{X}_i&\CI_\xi \RV{X}_{ob}|\RV{Z}_{ob} \label{eq:decision_d_sep}
+\end{align}
+Conditions \ref{eq:consistency} and \ref{eq:decision_d_sep} can hold simultaneously only if $\RV{X}_i$ and $\RV{X}_{ob}$ are deterministic conditional on $\RV{Z}_{ob}$. This is usually not the case.
+
+In order to facilitate nontrival joint distributions between obsevations and potential outcomes, we introduce a \emph{generalised consequence}:
+
+\begin{definition}[Generalised consequence]
+Given a measurable consequence space $(F,\mathcal{F})$, a sample space $(E,\mathcal{E})$ and a measurable decision set $(D,\mathcal{D})$, a Markov kernel $\kappa:D\times E \to \Delta(\mathcal{F})$ is a generalised consequence.
+\end{definition}
+
+\begin{definition}[Generalised causal theory]
+A generalised causal theory is the analogue of a causal theory with the consequence replaced by a generalised consequence.
+\end{definition}
+
+Given $D,X,Z$ as before, we provide an explicit construction respecting \ref{eq:consistency}. Here, for convenience, we identify $E=F=X\times Z$. For $x\in X$, $z\in Z$, $d\in D$ and $G\in \mathcal{X}$, $H\in \mathcal{Z}$ consider the kernel
+
+\begin{align}
+    \iota: (d,x,z;G\times H) \mapsto \delta_d(H)(\delta_z(H) \delta_x(G) + (1-\delta_z(H)) \iota'(d,x,z;G))
+\end{align}
+
+Where $\iota'$ is an arbitrary Markov kernel $D\times X\times Z\to \Delta(\mathcal{X}\otimes\mathcal{Z})$. It is straightforward to check that $\iota$ is a Markov kernel. Take the Consider the distribution given by
+\begin{align}
+    \zeta (A\times B\times C) =  \int_B \int_A  \iota(y,x,z; C) \delta_i(dy) \mu(dx\times dz)
+\end{align}
+And random variables $\RV{X}_i$, $\RV{Z}_i$ and $\RV{D}$ as before. Then
+\begin{align}
+    P^\zeta(\RV{X}_i=j,\RV{X}_{ob}=k|\RV{Z}_{ob}=i)P^\zeta(\RV{Z}_{ob}=i) &= \sum_{m,n} \iota(n,k,i;\{j,m\}) \delta_i(\{n\}) \mu(k,i)\\
+     &= \sum_{m,n} \delta_n(m)[\delta_i(m) \delta_k(j) + (1-\delta_i(m))\iota'(n,k,i;\{j,m\})]\delta_i(\{n\}) \mu(k,i)\\
+     &= \delta_k(j) \mu(k,i)
+\end{align}
+
+Which implies \ref{eq:consistency}.
+
+\subsubsection{Causal Theories and Generalised Causal Theoreis}
+
+There is a straightforward way to construct a generalised causal decision problem from an ordinary causal decision problem. 
+
+Given an ordinary consequence $\kappa:D\to \Delta(\mathcal{F})$, we can trivially construct a generalised consequence $\iota:(d,e;A)\mapsto \kappa(d;A)$. In addition, given a loss $L:\Delta(\mathcal{D}\otimes\mathcal{F})\to[0,\infty]$ we can construct $L':\Delta(\mathcal{E}\otimes \mathcal{D}\otimes\mathcal{F})\to[0,\infty]$ by $L':\mu\mapsto L(\mu(E\times \cdot \times \cdot \cdot))$.
+
+Given a generalised consequence $\iota:D\times E\to \Delta(\mathcal{F})$ and a hypothesis class $\mathscr{H}\subset\Delta(\mathcal{F})$, we can construct a causal theory $\mathscr{T}_{\iota,\mathscr{H}} = \{(d\mapsto (\mu\otimes \delta_d)\iota,\mu)|\mu\in \mathscr{H}\}$. This causal theory ``forgets'' the joint structure induced by $\iota$. For many practical problems, this extra structure is unnecessary.
+
+Suppose $E=F=\{0,1\}^\mathbb{N}$ and $\RV{X}_{<N}=\otimes_{i\in [N-1]} \underline{\RV{X}_i}$ represents the ``past'' data while $\RV{X}_{\geq N}=\otimes_{i\geq N} \underline{\RV{X}_i}$ represents ``future'' data. Then, given some loss $L':\Delta(\mathcal{E}\otimes \mathcal{D}\otimes\mathcal{F})\to[0,\infty]$ that depends only on the distribution of the future data $\RV{X}_{\geq N}$ and $\RV{D}$, and if 
+
+If a loss function over $\Delta(\mathcal{D}\otimes\mathcal{F})$ is sufficient to describe our preferences then any counterfactual decision problem can be posed as a regular causal decision problem.
+
+\subsubsection{Acyclic Structural Equation Models}
+
+An acyclic structural equation model can be understood as a special case of a generalised consequence. Recall that an acyclic structural equation model is a set of equations $M=\{X^i = f(X^{<i},\epsilon^i)|i\in[N]\}$ along with an intervention operation that replaces the right hand side of an arbitrary subset of equations with an arbitrary set of (allowable) chosen values. Identify the sample space $E=\mathbb{R}^N$ as the space from which the noises $\epsilon=(\epsilon^0,..,\epsilon^N)$ are drawn the decision set $D$ with the set of allowable interventions (including non-interventions) and $F$ as the space in which $X=(X^0,...,X^N)$ lives. Then $M$ is a function from $D\times E\to F$. We can associate the function $M$ with the kernel $\kappa_M: D\times E\to \Delta(\mathcal{F})$ by $\iota_M:(d,e;A)\mapsto \delta_{M(d,e)}(A)$.
+
+An acyclic SEM $M$ with independent noises can be associated with a causal theory. Take a hypothesis class $\mathscr{H}\subset\Delta(\mathcal{E})$ such that for every $\mu\in\mathscr{H}$ the noises are jointly independent. Then we can associate such an SEM with the causal theory
+\begin{align}
+    \mathscr{T} = \{(\iota_M,(\mu\otimes \delta_*)\iota_M )|\mu\in\mathscr{H}\}
+\end{align}
+Where $\delta_*$ is the distribution over $D$ that assigns weight 1 to the non-intervention $*$.

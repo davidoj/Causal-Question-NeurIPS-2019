@@ -24,7 +24,19 @@ is a nonnegative measureable function $E\to \mathbb{R}$.
 
 If $L$ is a Markov kernel from $F\to \Delta(G)$, then
 \begin{align}
-    KL(B;x) = \int_F K(x;dy) L(y;B),\qquad x\in E, B\in \mathcal{G}
+    KL(x;B) = \int_F K(x;dy) L(y;B),\qquad x\in E, B\in \mathcal{G}
 \end{align}
 is a Markov kernel $KL:E\to \Delta(G)$. \cite{cinlar_probability_2011}
 \end{definition}
+
+In addition
+\begin{align}
+    \underline{K\otimes L}(x;A\times B) = \int_A K(x;dy) L(y;B),\qquad x\in E, A\in \mathcal{F}, B\in \mathcal{G} \label{eq:outer_product}
+\end{align}
+is a Markov kernel $\underline{K\otimes L}:E\to \Delta(\mathcal{F}\otimes\mathcal{G})$.
+
+$I_E:E\to \Delta(\mathcal{E})$ is the identity kernel $I_E:x\mapsto \delta_x$.
+
+We extend the underline notation to write, given random variables $\RV{X}:E\to X$ and $\RV{Y}:E\to Y$, $\underline{\RV{X}\otimes\RV{Y}}=\underline{(I_E\otimes I_E)}(\RV{X}\otimes \RV{Y})$. Given some $\mu\in \Delta(\mathcal{E})$, $\underline{\RV{X}\otimes\RV{Y}}_*\mu$ is the usual joint distribution of $\RV{X}$ and $\RV{Y}$.
+
+For proofreader's benefit, the notation $\underline{K\otimes L}$ actually represents the ordinary product $\splitter{0.15}(K\otimes L)$ where $\splitter{0.15}$ is a Markov kernel that makes two copies of its input, and this product yields the integral in Eq. \ref{eq:outer_product}.
