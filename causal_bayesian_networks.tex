@@ -97,6 +97,8 @@ The stipulation that the prior $\xi$ was such that the marginal distribution ove
 
 \section{Potential Outcomes}
 
+\textbf{Todo: } This story could be made stronger starting from the proposition that using PO or anything else, you still need to rate the desirability of available decisisons somehow.
+
 Potential outcomes provide an alternative means to discuss causal effects. The standard setup posits a joint distribution between observed data $\RV{X}$, a treatment $\RV{Z}$ taking values in $[N]$ and several ``potential outcomes'' $\RV{X}_i$, $i\in [N]\setminus\{0\}$. At a minimum, the consistency condition is usually asserted (\cite{richardson2013single}): $\RV{Z}=i$ implies $\RV{X}_i=\RV{X}$. 
 
 We modify this setup somewhat in order to analyse it in terms of a causal theory. We believe these choices are reasonable, but there is an element of interpretation involved here. For clarity every variable gets a subscript and $\RV{X}_{ob}$, $\RV{Z}_{ob}$ are random variables representing outcomes and treatments in the observed data. $\RV{X}_i, \RV{Z}_i$, $i\geq 0$ are random variables representing outcomes and treatments in consequence of choosing a decision $\RV{D}=i$ deterministically. Note that we do not necessarily have a ``passive decision'' as we did with CBNs. Finally, we work with a slightly weaker ``almost certain consistency'':
@@ -151,9 +153,10 @@ And random variables $\RV{X}_i$, $\RV{Z}_i$ and $\RV{D}$ as before. Then
 
 Which implies \ref{eq:consistency}.
 
-\subsubsection{Causal Theories and Generalised Causal Theoreis}
+\subsection{Causal Theories and Generalised Causal Theories}
 
-There is a straightforward way to construct a generalised causal decision problem from an ordinary causal decision problem. 
+
+A generalised causal decision problem is a causal decision problem featuring a generalised causal theory and a loss $L:\Delta(\mathcal{E}\otimes\mathcal{D}\otimes\mathcal{F})\to[0,\infty]$. There is a straightforward identification of causal theories with generalised causal theories, befitting the name. We might also ask when the extra structure of a generalised causal decision problem is needed.
 
 Given an ordinary consequence $\kappa:D\to \Delta(\mathcal{F})$, we can trivially construct a generalised consequence $\iota:(d,e;A)\mapsto \kappa(d;A)$. In addition, given a loss $L:\Delta(\mathcal{D}\otimes\mathcal{F})\to[0,\infty]$ we can construct $L':\Delta(\mathcal{E}\otimes \mathcal{D}\otimes\mathcal{F})\to[0,\infty]$ by $L':\mu\mapsto L(\mu(E\times \cdot \times \cdot \cdot))$.
 

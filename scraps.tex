@@ -36,3 +36,38 @@ Suppose, then, that
     \mu(0,0,0)\mu(1,0,1)-\mu(1,0,0)\mu(0,0,1)&<\epsilon\label{eq:eci0}\\
     \mu(0,1,0)\mu(1,1,1)-\mu(1,1,0)\mu(0,1,1)&<\epsilon \label{eq:eci1}
 \end{align}
+
+
+% Sequential approach to CBN
+
+A CBN is a non-trivial setup, so we need to define a number of moving parts to make the connection. Given a measurable space $(E,\mathcal{E})$ and a decision space $(D,\mathcal{D})$, a CBN is a causal theory $\Delta(\mathcal{E})\to (D\to \Delta(\mathcal{E}))$.
+
+Suppose we have a graph $\mathcal{G}=(V,\mathscr{E})$ where $V=\{V_i|i\in [N]\}$.
+
+Take some sequence of variables $\RV{X}:(E,\mathcal{E})\to (E,\mathcal{E})$ where $\RV{X} = \otimes\underline{[\RV{X}_j]}$, $j\in \mathbb{N}$, and suppose that they are jointly IID with respect to both $\mathscr{H}$ and $\mathscr{T}$ (that is, they are IID for all $\mu\in\mathscr{H}$ and all  $\tau(\mu)(d;\cdot)$ for $\tau \in \mathscr{T}$). Pick some $j\in \mathbb{N}$ and omit the subscript henceforth: $\RV{X}_j:=\RV{X}$. Suppose $\RV{X} = \otimes_{i\in[N]}\underline[\RV{X}^i]$. Take $\RV{X}^i:(E,\mathcal{E})\to \mathbb{R}$. The $\RV{X}^i$ represent the variables in a regular CBN.
+
+For each $i\in [N]$ define a random variable $\RV{D}^i:D\to \mathbb{R}\cup\{*\}$. The variable $\RV{D}^i$ represents a do-intervention on $\RV{X}^i$.
+
+A causal theory $\tau$ must satisfy three conditions in order to be a CBN with respect to $\mathcal{G}$.
+
+\begin{itemize}
+    \item For $x\in \mathbb{R}$, $\mu\in \mathscr{H}$, $\xi\in \Delta(\mathcal{D})$,  $P^{\xi \tau^\mu}(\RV{X}^i|\RV{D}^i=x)=\delta_x(\RV{X}^i)$ ($\RV{D}^i=x\in \mathbb{R}$ represents an active intervention on $\RV{X}^i$)
+    \item $P^{\xi \tau^\mu}(\RV{X}^i|\RV{D}_i=*,\PA{\mathcal{G}}{\RV{X}^i}) = P^\mu(\RV{X}^i|\PA{\mathcal{G}}{\RV{X}^i})$ ($\RV{D}^i=*$ represents a passive intervention on $\RV{X}^i$)
+    \item For all $\mu\in \mathscr{H}$, $d\in D$, $P^{\delta_d \tau^\mu}(\RV{X})$ is Markov with respect to $\mathcal{G}$
+\end{itemize}
+
+Given any distribution $\mu$ that is Markov with respect to $\mathcal{G}$, these conditions induce a map $\tau^\mu:D\to \Delta(\mathcal{E})$ given by\cite{pearl_causality:_2009}
+\begin{align}
+    \tau^\mu(d;B) = \prod_{i:\RV{D}^i(d)=*} \delta_{\RV{D}^i(d)} (\RV{X}^i(B)) \prod_{i:\RV{D}^i(d)\neq *} P^{\mu}_{\RV{X}^i|\PA{\mathcal{G}}{\RV{X}^i}} \left(\RV{X}^i(B)|\PA{\mathcal{G}}{\RV{X}^i(B)}\right)
+\end{align}
+Theorem \ref{th:cbn_MK} shows that provided $\mathcal{G}$ has a finite number of nodes, $\tau$ is a Markov kernel.
+
+\begin{theorem}\label{th:cbn_MK}
+The map $\tau^\mu:D\times \mathcal{E}\to [0,1]$ given by  is a Markov kernel.
+\end{theorem}
+
+\begin{proof}
+Given $d\in D$, the map $B\mapsto \tau^\mu(d;B)$ is clearly a probability measure on $(E,\mathcal{E})$.
+
+ 
+\end{proof}

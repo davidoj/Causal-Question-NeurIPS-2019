@@ -1,3 +1,169 @@
+@article{peters_identifiability_2012,
+	title = {Identifiability of {Causal} {Graphs} using {Functional} {Models}},
+	url = {https://arxiv.org/abs/1202.3757v1},
+	abstract = {This work addresses the following question: Under what assumptions on the
+data generating process can one infer the causal graph from the joint
+distribution? The approach taken by conditional independence-based causal
+discovery methods is based on two assumptions: the Markov condition and
+faithfulness. It has been shown that under these assumptions the causal graph
+can be identified up to Markov equivalence (some arrows remain undirected)
+using methods like the PC algorithm. In this work we propose an alternative by
+defining Identifiable Functional Model Classes (IFMOCs). As our main theorem we
+prove that if the data generating process belongs to an IFMOC, one can identify
+the complete causal graph. To the best of our knowledge this is the first
+identifiability result of this kind that is not limited to linear functional
+relationships. We discuss how the IFMOC assumption and the Markov and
+faithfulness assumptions relate to each other and explain why we believe that
+the IFMOC assumption can be tested more easily on given data. We further
+provide a practical algorithm that recovers the causal graph from finitely many
+data; experiments on simulated data support the theoretical findings.},
+	language = {en},
+	urldate = {2019-05-07},
+	author = {Peters, Jonas and Mooij, Joris and Janzing, Dominik and Schoelkopf, Bernhard},
+	month = feb,
+	year = {2012}
+}
+
+@inproceedings{tian2002general,
+  title={A general identification condition for causal effects},
+  author={Tian, Jin and Pearl, Judea},
+  year={2002}
+}
+
+@article{bongers_theoretical_2016,
+	title = {Theoretical {Aspects} of {Cyclic} {Structural} {Causal} {Models}},
+	url = {http://arxiv.org/abs/1611.06221},
+	abstract = {Structural causal models (SCMs), also known as (non-parametric) structural equation models (SEMs), are widely used for causal modeling purposes. A large body of theoretical results is available for the special case in which cycles are absent (i.e., acyclic SCMs, also known as recursive SEMs). However, in many application domains cycles are abundantly present, for example in the form of feedback loops. In this paper, we provide a general and rigorous theory of cyclic SCMs. The paper consists of two parts: the first part gives a rigorous treatment of structural causal models, dealing with measure-theoretic and other complications that arise in the presence of cycles. In contrast with the acyclic case, in cyclic SCMs solutions may no longer exist, or if they exist, they may no longer be unique, or even measurable in general. We give several sufficient and necessary conditions for the existence of (unique) measurable solutions. We show how causal reasoning proceeds in these models and how this differs from the acyclic case. Moreover, we give an overview of the Markov properties that hold for cyclic SCMs. In the second part, we address the question of how one can marginalize an SCM (possibly with cycles) to a subset of the endogenous variables. We show that under a certain condition, one can effectively remove a subset of the endogenous variables from the model, leading to a more parsimonious marginal SCM that preserves the causal and counterfactual semantics of the original SCM on the remaining variables. Moreover, we show how the marginalization relates to the latent projection and to latent confounders, i.e. latent common causes.},
+	urldate = {2019-02-06},
+	journal = {arXiv:1611.06221 [cs, stat]},
+	author = {Bongers, Stephan and Peters, Jonas and Schölkopf, Bernhard and Mooij, Joris M.},
+	month = nov,
+	year = {2016},
+	note = {arXiv: 1611.06221},
+	keywords = {Computer Science - Artificial Intelligence, Statistics - Methodology, Computer Science - Machine Learning},
+	annote = {Comment: Will probably be submitted to The Annals of Statistics},
+	file = {arXiv\:1611.06221 PDF:/home/users/u4533535/Zotero/storage/BIBWS6N9/Bongers et al. - 2016 - Theoretical Aspects of Cyclic Structural Causal Mo.pdf:application/pdf;arXiv.org Snapshot:/home/users/u4533535/Zotero/storage/F36XBBPJ/1611.html:text/html}
+}
+
+@inproceedings{dawid_beware_2010,
+	title = {Beware of the {DAG}!},
+	url = {http://proceedings.mlr.press/v6/dawid10a.html},
+	abstract = {Directed acyclic graph (DAG) models are popular tools for describing causal relationships and for guiding attempts to learn them from data.  They appear to supply a means of extracting causal concl...},
+	language = {en},
+	urldate = {2018-03-09},
+	booktitle = {Causality: {Objectives} and {Assessment}},
+	author = {Dawid, A. Philip},
+	month = feb,
+	year = {2010},
+	pages = {59--86},
+	file = {Full Text PDF:/home/users/u4533535/Zotero/storage/K2FLIM3E/Dawid - 2010 - Beware of the DAG!.pdf:application/pdf;Snapshot:/home/users/u4533535/Zotero/storage/3BBKAGH9/dawid10a.html:text/html}
+}
+
+@article{peters_structural_2015,
+	title = {Structural {Intervention} {Distance} for {Evaluating} {Causal} {Graphs}},
+	volume = {27},
+	issn = {0899-7667},
+	url = {https://doi.org/10.1162/NECO_a_00708},
+	doi = {10.1162/NECO_a_00708},
+	abstract = {Causal inference relies on the structure of a graph, often a directed acyclic graph (DAG). Different graphs may result in different causal inference statements and different intervention distributions. To quantify such differences, we propose a (pre-)metric between DAGs, the structural intervention distance (SID). The SID is based on a graphical criterion only and quantifies the closeness between two DAGs in terms of their corresponding causal inference statements. It is therefore well suited for evaluating graphs that are used for computing interventions. Instead of DAGs, it is also possible to compare CPDAGs, completed partially DAGs that represent Markov equivalence classes. The SID differs significantly from the widely used structural Hamming distance and therefore constitutes a valuable additional measure. We discuss properties of this distance and provide a (reasonably) efficient implementation with software code available on the first author’s home page.},
+	number = {3},
+	urldate = {2019-03-19},
+	journal = {Neural Computation},
+	author = {Peters, Jonas and Bühlmann, Peter},
+	month = jan,
+	year = {2015},
+	pages = {771--799}
+}
+
+@book{vapnik_nature_2013,
+	title = {The {Nature} of {Statistical} {Learning} {Theory}},
+	isbn = {978-1-4757-3264-1},
+	abstract = {The aim of this book is to discuss the fundamental ideas which lie behind the statistical theory of learning and generalization. It considers learning as a general problem of function estimation based on empirical data. Omitting proofs and technical details, the author concentrates on discussing the main results of learning theory and their connections to fundamental problems in statistics. These include: * the setting of learning problems based on the model of minimizing the risk functional from empirical data * a comprehensive analysis of the empirical risk minimization principle including necessary and sufficient conditions for its consistency * non-asymptotic bounds for the risk achieved using the empirical risk minimization principle * principles for controlling the generalization ability of learning machines using small sample sizes based on these bounds * the Support Vector methods that control the generalization ability when estimating function using small sample size. The second edition of the book contains three new chapters devoted to further development of the learning theory and SVM techniques. These include: * the theory of direct method of learning based on solving multidimensional integral equations for density, conditional probability, and conditional density estimation * a new inductive principle of learning. Written in a readable and concise style, the book is intended for statisticians, mathematicians, physicists, and computer scientists. Vladimir N. Vapnik is Technology Leader AT\&T Labs-Research and Professor of London University. He is one of the founders of statistical learning theory, and the author of seven books published in English, Russian, German, and Chinese.},
+	language = {en},
+	publisher = {Springer Science \& Business Media},
+	author = {Vapnik, Vladimir},
+	month = jun,
+	year = {2013},
+	note = {Google-Books-ID: EqgACAAAQBAJ},
+	keywords = {Computers / Intelligence (AI) \& Semantics, Mathematics / Probability \& Statistics / General, Science / General}
+}
+
+
+@techreport{gordon_comparison_2018,
+	address = {Rochester, NY},
+	type = {{SSRN} {Scholarly} {Paper}},
+	title = {A {Comparison} of {Approaches} to {Advertising} {Measurement}: {Evidence} from {Big} {Field} {Experiments} at {Facebook}},
+	shorttitle = {A {Comparison} of {Approaches} to {Advertising} {Measurement}},
+	url = {https://papers.ssrn.com/abstract=3033144},
+	abstract = {Measuring the causal effects of digital advertising remains challenging despite the availability of granular data. Unobservable factors make exposure endogenous, and advertising’s effect on outcomes tends to be small. In principle, these concerns could be addressed using randomized controlled trials (RCTs). In practice, few online ad campaigns rely on RCTs, and instead use observational methods to estimate ad effects. We assess empirically whether the variation in data typically available in the advertising industry enables observational methods to recover the causal effects of online advertising. Using data from 15 US advertising experiments at Facebook comprising 500 million user-experiment observations and 1.6 billion ad impressions, we contrast the experimental results to those obtained from multiple observational models. The observational methods often fail to produce the same effects as the randomized experiments, even after conditioning on extensive demographic and behavioral variables. In our setting, advances in causal inference methods do not allow us to isolate the exogenous variation needed to estimate the treatment effects. We also characterize the incremental explanatory power our data would require to enable observational methods to successfully measure advertising effects. Our findings suggest that commonly used observational approaches based on the data usually available in the industry often fail to accurately measure the true effect of advertising.},
+	language = {en},
+	number = {ID 3033144},
+	urldate = {2019-02-07},
+	institution = {Social Science Research Network},
+	author = {Gordon, Brett R. and Zettelmeyer, Florian and Bhargava, Neha and Chapsky, Dan},
+	month = sep,
+	year = {2018},
+	keywords = {causal inference, advertising effects, digital advertising, field experiments, observational methods},
+	file = {Full Text PDF:/home/users/u4533535/Zotero/storage/BKFEMWA8/Gordon et al. - 2018 - A Comparison of Approaches to Advertising Measurem.pdf:application/pdf;Snapshot:/home/users/u4533535/Zotero/storage/NK2L98R6/papers.html:text/html}
+}
+
+@techreport{heckman_randomization_1991,
+	address = {Rochester, NY},
+	type = {{SSRN} {Scholarly} {Paper}},
+	title = {Randomization and {Social} {Policy} {Evaluation}},
+	url = {https://papers.ssrn.com/abstract=995151},
+	abstract = {This paper considers the recent case for randomized social experimentation and contrasts it with older cases for social experimentation. The recent case eschews behavioral models, assumes that certain mean differences in outcomes are the parameters of interest to evaluators and assumes that randomization does not disrupt the social program being analyzed. Conditions under which program disruption effects are of no consequence are presented. Even in the absence of randomization bias, ideal experimental data cannot estimate median (other quantile) differences between treated and untreated persons without invoking supplementary statistical assumptions. The recent case for randomized experimentation does not address the choice of the appropriate stage in a multistage program at which randomization should be conducted. Evidence on randomization bias is presented.},
+	language = {en},
+	number = {ID 995151},
+	urldate = {2019-02-04},
+	institution = {Social Science Research Network},
+	author = {Heckman, James J.},
+	month = jul,
+	year = {1991},
+	keywords = {James J. Heckman, Randomization and Social Policy Evaluation, SSRN},
+	file = {Full Text PDF:/home/users/u4533535/Zotero/storage/2J6VCTJD/Heckman - 1991 - Randomization and Social Policy Evaluation.pdf:application/pdf;Snapshot:/home/users/u4533535/Zotero/storage/NPXF69CD/papers.html:text/html}
+}
+
+@article{lemeire_replacing_2013,
+	title = {Replacing {Causal} {Faithfulness} with {Algorithmic} {Independence} of {Conditionals}},
+	volume = {23},
+	issn = {0924-6495, 1572-8641},
+	url = {https://link.springer.com/article/10.1007/s11023-012-9283-1},
+	doi = {10.1007/s11023-012-9283-1},
+	abstract = {Independence of Conditionals (IC) has recently been proposed as a basic rule for causal structure learning. If a Bayesian network represents the causal structure, its Conditional Probability Distributions (CPDs) should be algorithmically independent. In this paper we compare IC with causal faithfulness (FF), stating that only those conditional independences that are implied by the causal Markov condition hold true. The latter is a basic postulate in common approaches to causal structure learning. The common spirit of FF and IC is to reject causal graphs for which the joint distribution looks ‘non-generic’. The difference lies in the notion of genericity: FF sometimes rejects models just because one of the CPDs is simple, for instance if the CPD describes a deterministic relation. IC does not behave in this undesirable way. It only rejects a model when there is a non-generic relation between different CPDs although each CPD looks generic when considered separately. Moreover, it detects relations between CPDs that cannot be captured by conditional independences. IC therefore helps in distinguishing causal graphs that induce the same conditional independences (i.e., they belong to the same Markov equivalence class). The usual justification for FF implicitly assumes a prior that is a probability density on the parameter space. IC can be justified by Solomonoff’s universal prior, assigning non-zero probability to those points in parameter space that have a finite description. In this way, it favours simple CPDs, and therefore respects Occam’s razor. Since Kolmogorov complexity is uncomputable, IC is not directly applicable in practice. We argue that it is nevertheless helpful, since it has already served as inspiration and justification for novel causal inference algorithms.},
+	language = {en},
+	number = {2},
+	urldate = {2018-05-24},
+	journal = {Minds and Machines},
+	author = {Lemeire, Jan and Janzing, Dominik},
+	month = may,
+	year = {2013},
+	pages = {227--249},
+	file = {Full Text PDF:/home/users/u4533535/Zotero/storage/VSRYINKU/Lemeire and Janzing - 2013 - Replacing Causal Faithfulness with Algorithmic Ind.pdf:application/pdf;Snapshot:/home/users/u4533535/Zotero/storage/DCRU8TNB/s11023-012-9283-1.html:text/html}
+}
+
+@book{spirtes_causation_1993,
+	title = {Causation, {Prediction}, and {Search}},
+	volume = {81},
+	abstract = {What assumptions and methods allow us to turn observations into causal knowledge, and how can even incomplete causal knowledge be used in planning and prediction to influence and control our environment? In this book Peter Spirtes, Clark Glymour, and Richard Scheines address these questions using the formalism of Bayes networks, with results that have been applied in diverse areas of research in the social, behavioral, and physical sciences. The authors show that although experimental and observational study designs may not always permit the same inferences, they are subject to uniform principles. They axiomatize the connection between causal structure and probabilistic independence, explore several varieties of causal indistinguishability, formulate a theory of manipulation, and develop asymptotically reliable procedures for searching over equivalence classes of causal models, including models of categorical data and structural equation models with and without latent variables. The authors show that the relationship between causality and probability can also help to clarify such diverse topics in statistics as the comparative power of experimentation versus observation, Simpson's paradox, errors in regression models, retrospective versus prospective sampling, and variable selection. The second edition contains a new introduction and an extensive survey of advances and applications that have appeared since the first edition was published in 1993.},
+	author = {Spirtes, Peter and Glymour, Clark and Scheines, Richard},
+	month = jan,
+	year = {1993},
+	doi = {10.1007/978-1-4612-2748-9},
+	file = {Full Text PDF:/home/users/u4533535/Zotero/storage/Q5VT529X/Spirtes et al. - 1993 - Causation, Prediction, and Search.pdf:application/pdf}
+}
+
+@book{wald_statistical_1950,
+	address = {Oxford, England},
+	series = {Statistical decision functions},
+	title = {Statistical decision functions},
+	abstract = {In 5 chapters the general theory of statistical decision functions is presented. The decision problem is shown to be interpretable as a zero sum two-person game in von Neumann's theory. A generalization of this game type is basic to the development of the general theory. Chapter 4 considers the "case of a sequence of identically and independently distributed chance variables." Special illustrative problems are discussed in Chapter 5. 76-item bibliography. (PsycINFO Database Record (c) 2016 APA, all rights reserved)},
+	publisher = {Wiley},
+	author = {Wald, Abraham},
+	year = {1950},
+	file = {Snapshot:/home/users/u4533535/Zotero/storage/DAIIQKBL/1951-01400-000.html:text/html}
+}
+
 @article{richardson2013single,
   title={Single world intervention graphs (SWIGs): A unification of the counterfactual and graphical approaches to causality},
   author={Richardson, Thomas S and Robins, James M},

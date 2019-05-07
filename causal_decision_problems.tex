@@ -229,8 +229,8 @@ For any $\kappa'\in\mathscr{K}$. The map $g:\mathscr{T}\to\mathscr{H}$ given by 
 \end{proof}
 
 
-\begin{definition}[$\mathscr{H}$-Universal conditional independence]\label{def:univ_indep}
-Given measurable spaces $(E,\mathcal{E})$ and $(F,\mathcal{F})$, a kernel $K:E\times\mathcal{F}\to[0,1]$ and random variables $\RV{W}:(E\times F,\mathcal{E}\otimes\mathcal{F})\to (W,\mathcal{W})$, $\RV{X}:(E\times F,\mathcal{E}\otimes\mathcal{F})\to (X,\mathcal{X})$ and $\RV{Y}:(E\times F,\mathcal{E}\otimes \mathcal{F})\to (Y,\mathcal{Y})$. $\mathscr{H}\subset\Delta(\mathcal{E})$ is a class of distributions. We say that $\RV{W}$ and $\RV{Y}$ are $\mathscr{H}$-universally independent with respect to $K$ conditional on $\RV{X}$ iff for all $\mu\in \mathscr{H}$, $\RV{W}\CI_{\mu \overline{K}} \RV{Y} |\RV{X}$. We write this $\RV{Y} \CII_K \RV{W} | \RV{X}$. 
-
-If $\RV{X}$ is a constant (i.e. it induces the trivial $\sigma$-algebra) we have $\mathscr{H}$-universal independence, written $\RV{Y}\CII_K \RV{W}$.
+\begin{definition}[Universal conditional independence]\label{def:univ_indep}
+Given a measurable space $(E,\mathcal{E})$, a hypothesis class $\mathscr{H}\subset\Delta(\mathcal{E})$ and random variables $\RV{X}:E\to X$, $\RV{Y}:E\to Y$ and $\RV{W}:E\to W$, we say $\RV{X}$ is universally independent of $\RV{Y}$ conditional on $\RV{W}$ if for all $\mu\in\mathscr{H}$ we have $\RV{X}\CI_\mu \RV{Y} | \RV{W}$. We write this $\RV{X} \CII_\mathscr{H} \RV{Y} | \RV{W}$.
 \end{definition}
+
+Suppose $(E,\mathcal{E}) = (F\times G, \mathcal{F}\otimes \mathcal{G})$ and we have a kernel $\kappa:F\to \Delta(\mathcal{G})$ and a hypothesis class $\mathscr{J}\subset\Delta(\mathcal{F})$. Then define $\mathscr{H}\underline{\kappa}=\{\mu\underline{(I_F\otimes \kappa)}|\mu\in \mathscr{H}\}$. Universal conditional independence with respect to $\kappa$ and $\mathscr{J}$ is written $\RV{X}\CII_{\mathscr{J}\underline{\kappa}} \RV{Y} | \RV{W}$.
