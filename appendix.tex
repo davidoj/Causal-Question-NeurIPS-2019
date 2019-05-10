@@ -1,19 +1,63 @@
 \section{Appendix: CBN is a causal theory}\label{app:cbn_ct}
 
 \begin{theorem}
-Given a graph $\mathcal{G}$, a measurable set $(E,\mathcal{E})$ and a decision set $D=\times_{i\in [N]} X^i\cup\{*\}$ with the $\sigma$-algebra $\mathcal{D}=\sigma(\otimes_{i\in [N]} \mathcal{X}^i\cup\{*\})$, let $P^x\in \Delta(\mathcal{E})$ be an interventional distribution compatible with $\mathcal{G}$ as defined in Definition \ref{def:CBN}. 
+Given a graph $\mathcal{G}$, a measurable set $(E,\mathcal{E})$ and a decision set $D=\times_{i\in [N]} X^i\cup\{*\}$ with the $\sigma$-algebra $\mathcal{D}=\otimes_{i\in [N]} \sigma(\mathcal{X}^i\cup\{*\})$, let $P^x\in \Delta(\mathcal{E})$ be an interventional distribution compatible with $\mathcal{G}$ as defined in Definition \ref{def:CBN}. 
 
 Then the map $\kappa_{\mathcal{G}}:D\to \Delta(\mathcal{X})$ given by $x\mapsto P^x$ is a Markov kernel.
 \end{theorem}
 
 \begin{proof}
-For each pair $(\RV{X}^i,\PA{\mathcal{G}}{\RV{X}^i})$, there is a Markov kernel $\kappa_i:\{X^j|j\in \PA{\mathcal{G}{i}}\}\to \Delta(\mathcal{X}^i)$ that is a version of $P^*(\RV{X}^i|\PA{\mathcal{G}}{\RV{X}^i}$ (\cite{cinlar_probability_2011}). Consider $\kappa'_i:D\times \{X^j|j\in \PA{\mathcal{G}{i}}\} \to \Delta(\mathcal{X}^i)$ given by \begin{align}
-    \kappa'_i: (*,pa^i;A)&\mapsto \kappa_i(pa^i;A)&\\
-               (d,pa^i;A)&\mapsto \delta_{\RV{D}^i(d)}(A)&d\neq *
+For each pair $(\RV{X}^i,\PA{\mathcal{G}}{\RV{X}^i})$, there is a Markov kernel $\kappa_i:\{X^j|j\in \PA{\mathcal{G}}{i}\}\to \Delta(\mathcal{X}^i)$ that is a version of $P^*(\RV{X}^i|\PA{\mathcal{G}}{\RV{X}^i}$ (\cite{cinlar_probability_2011}). 
+
+Let $\PA{\mathcal{G}}{X^i} = \{X^j|\RV{X}^j\in \PA{\mathcal{G}}{\RV{X}^i}\}$.
+
+Consider $\kappa'_i:D\times \PA{\mathcal{G}}{X^i} \to \Delta(\mathcal{X}^i)$ given by \begin{align}
+    \kappa'_i: (*,pa^i;A)&\mapsto \kappa_i(pa^i;A)&\label{eq:passive}\\
+               (d,pa^i;A)&\mapsto \delta_{\RV{D}^i(d)}(A)&d\neq *\label{eq:npassive}
 \end{align}
 
-Clearly for every $(d,pa^i) \in \{X^j|j\in \PA{\mathcal{G}}{i}\}\cup D$ the map $A\mapsto \kappa'_i(d,pa^i;A)$ is a probability distribution on $\mathcal{X}^i$.
+Clearly for every $(d,pa^i) \in \PA{\mathcal{G}}{X^i}\cup D$ the map $A\mapsto \kappa'_i(d,pa^i;A)$ is a probability distribution on $\mathcal{X}^i$. Fix $B\in\mathcal{X}_i$ and let $\kappa'^B_i=\kappa'_i(\cdot;B)$.
 
+Then for any $A\in \mathcal{B}([0,1])$
+\begin{align}
+    [\kappa'^B_i]^{-1}(A) &= \{*\}\times[\kappa^B_i]^{-1}(A) &\text{if }0,1\not\in A\\
+    &= \{*\}\times[\kappa^B_i]^{-1}(A)\cup \PA{\mathcal{G}}{X^i}\times A &\text{if }1\in A\land 0\not\in A\\
+    &= \{*\}\times[\kappa^B_i]^{-1}(A)\cup \PA{\mathcal{G}}{X^i}\times A^C &\text{if }0\in A\land 1\not\in A\\
+    &= \{*\}\times[\kappa^B_i]^{-1}(A)\cup \PA{\mathcal{G}}{X^i}\times X^i &\text{if }0\in A\land 1\in A
+\end{align}
+In every case, the result is clearly an element of $\otimes_{j\in \PA{\mathcal{G}}{X^i}} \mathcal{X}^j \otimes \sigma(\mathcal{X}^i\cup\{*\})$.
 
+Without loss of generality, suppose the ordering $X^0,...,X^N$ is compatible with the graph $\mathcal{G}$. Then $\iota_{\mathcal{G}}:D\to \Delta(\mathcal{X})$ defined below is a Markov kernel.
+\begin{align}
+    \iota_{\mathcal{G}}:d\mapsto \int_{A^0} \kappa'_0(\RV{D}^0(d);dx^0) ... \int_{A^{N-1}} \kappa'_{N-1}(\RV{D}^{N-1}(d),x^{n-2};dx^{n-1}) \kappa'_N(\RV{D}^N(d),x^{n-1};A^N) \label{eq:bigproduct}
+\end{align}
+
+for $d\in D$, $(A^0,...,A^N)\in X^0\times...\times X^N$ and where $\RV{D}^i(d)$ projects the $i$-th element of $d$.
+
+From Equation \ref{eq:bigproduct} and \ref{eq:passive} we can verify that, given some $i\in N$, if $\RV{D}^i(d)=\{*\}$ then $\iota_{\mathcal{G},\RV{X}^i|\PA{\mathcal{G}}{\RV{X}^i}}(d;\cdot) = \kappa_i$ and if $\RV{D}^i(d)\neq\{*\}$ then $\iota_{\mathcal{G},\RV{X}^i|\PA{\mathcal{G}}{\RV{X}^i}}(d;\cdot) = I_{\RV{D^i}(d)}$. These properties are equivalent to truncated factorisation, which is in turn equivalent to \ref{def:CBN}. Therefore $\iota_\mathcal{G}=\kappa_\mathcal{G}$.
+\end{proof}
+
+\section{Appendix: Cardinality Blues}
+
+\begin{lemma}
+The set $\Delta(B(\mathbb{R}))$ (where $B(\mathbb{R})$ is the Borel $\sigma$-algebra) has the cardinality $2^{\aleph_0}$.
+\end{lemma}
+
+\begin{proof}
+Probability measures on the Borel $\sigma$-algebra are determined by their values on $\{(-\infty,r)|r\in \mathbb{Q}\}$. Therefore the cardinality of $\Delta(B(\mathbb{R}))$ is $(2^{\aleph_0})^{\aleph_0}=2^{\aleph_0}$.
+\end{proof}
+
+\begin{lemma}
+The set of Markov kernels $\mathbb{R}\to \Delta(B(\mathbb{R})$ has the cardinality $2^{\aleph_0}$.
+\end{lemma}
+
+\begin{proof}
+Consider some $\kappa:\mathbb{R}\to \Delta(B(\mathbb{R})$.
+
+Because $\kappa(x;\cdot)$ is a probability measure for every $x\in \mathbb{R}$, $\kappa(x;\cdot)$ is determined by the values of $\kappa(x;A)$ for $A\in \{(-\infty,r)|r\in \mathbb{Q}\}$.
+
+Fix $x'\in \mathbb{R}$ and consider the set $[\kappa(x;\cdot)]^{-1} = \{x|\forall A\in \{(-\infty,r)|r\in \mathbb{Q}\}:\kappa(x;A) = \kappa(x';A)\}$. By the above, this is equal to $\{x|\forall A\in B(\mathbb{R}):\kappa(x;A) = \kappa(x';A)\}$, so if, for all $x\in \mathbb{R}$, $[\kappa(x;\cdot)]^{-1}=[\iota(x;\cdot)]^{-1}$ then $\kappa=\iota$. 
+
+$[\kappa(x;\cdot)]^{-1}$ is also a countable intersection of open sets, so it is itself in $B(\mathbb{R})$.
 
 \end{proof}
