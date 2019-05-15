@@ -58,13 +58,16 @@
 \newcommand{\ND}[2]{\ensuremath{\text{ND}_{#1}(#2)}}
 \newcommand{\CH}[2]{\ensuremath{\text{Ch}_{#1}(#2)}}
 \newcommand{\DE}[2]{\ensuremath{\text{De}_{#1}(#2)}}
+\makeatletter
+\newcommand*\bigcdot{\mathpalette\bigcdot@{.5}}
+\newcommand*\bigcdot@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
+\makeatother
 
 \newcommand\splitter[1]{%
 \begin{tikzpicture}[scale=#1]
 \draw (0,-1) -- (0,0);
 \draw (0,0) to [bend right] (1,1);
 \draw (0,0) to [bend left] (-1,1);
-
 \end{tikzpicture}
 }
 
@@ -72,7 +75,6 @@
 \begin{tikzpicture}[scale=#1]
 \draw (0,-1) -- (0,0);
 \node (E) at (0,0) {$\bigcdot$};
-
 \end{tikzpicture}
 }
 
@@ -148,6 +150,7 @@
 \include{markov_kernels}
 \include{causal_decision_problems}
 \include{causal_bayesian_networks}
+\include{counterfactuals}
 
 \include{appendix}
 

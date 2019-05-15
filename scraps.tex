@@ -71,3 +71,91 @@ Given $d\in D$, the map $B\mapsto \tau^\mu(d;B)$ is clearly a probability measur
 
  
 \end{proof}
+
+
+
+
+We modify this setup somewhat in order to analyse it in terms of a causal theory. We believe these choices are reasonable, but there is an element of interpretation involved here. For clarity every variable gets a subscript and $\RV{X}_{ob}$, $\RV{Z}_{ob}$ are random variables representing outcomes and treatments in the observed data. $\RV{X}_i, \RV{Z}_i$, $i\geq 0$ are random variables representing outcomes and treatments in consequence of choosing a decision $\RV{D}=i$ deterministically; that is, $P(\RV{Z}_i) = \delta_i(\RV{Z}_i)$. Note that we do not necessarily have a ``passive decision'' as we did with CBNs. Finally, we work with a slightly weaker ``almost certain consistency'':
+
+\begin{align}
+    P(\RV{X}_i,\RV{X}_{ob}|\RV{Z}_{ob}=i,\RV{Z}_i=i)&=\mathds{1}_{\RV{X}_{ob}=\RV{X}_i} \label{eq:consistency}\\
+    \implies P(\RV{X}_i,\RV{X}_{ob}|\RV{Z}_{ob}=i)&=\mathds{1}_{\RV{X}_{ob}=\RV{X}_i}
+\end{align}
+
+It is usually not possible to represent a joint distribution obeying condition \ref{eq:consistency} with a causal theory. For example, take the spaces $D,X,Z=\{0,1\}$ and suppose we have a causal theory $\mathscr{T}$ consisting of pairs $(\kappa,\mu)$ where $\mu\in\Delta(\mathcal{X}\otimes\mathcal{Z})$ and $\kappa$ is a Markov kernel from $D\to \Delta(\mathcal{X}\otimes\mathcal{Z})$. To construct a joint distribution between $\RV{X}_{ob}$ and $\RV{X}_i$ for $i\in \{0,1\}$ we take some deterministic decision function $J_i:X\times Z\to \Delta(\mathcal{D})$ where $J_i:(x,z;d)\mapsto \delta_i(d)$. For $A,C\in \Delta(\mathcal{X}\otimes\mathcal{Z})$, $B\in \Delta(\mathcal{D})$ we compose the objects as 
+\begin{align}
+    \xi(A\times B\times C) =  \int_B \int_A  \kappa(y; C) \delta_i(dy) \mu(dx\times dz)
+\end{align}
+
+For $\alpha\in\{ob,0,1\}$ take random variables $\RV{X}_\alpha:(X\times Z)^2\times D\to X$, $\RV{Z}_\alpha:(X\times Z)^2\times D\to X$ and $\RV{D}:(X\times Z)^2\times D\to D$ defined by projections $\RV{X}_\alpha:((x_{ob},z_{ob}),(x_i,z_i),d)\mapsto x_\alpha$, $\RV{Z}_\alpha$ similarly and $\RV{D}:((x_{ob},z_{ob}),(x_i,z_i),d)\mapsto d$. It is then straightforward to show that $(x,z,d))\mapsto \kappa(d; C)$ is a version of the conditional probability $P^\xi(\RV{X}_i|\RV{D},\RV{X}_{ob},\RV{Z}_{ob})$, which implies 
+\begin{align}
+    \RV{X}_i&\CI_\xi \RV{X}_{ob}|\RV{D}, \RV{Z}_{ob}
+\end{align}
+For any choice of $J_i,\mu,\kappa$. Noting that $J_i$ is deterministic, we also have
+\begin{align}
+    \RV{X}_i&\CI_\xi \RV{X}_{ob}|\RV{Z}_{ob} \label{eq:decision_d_sep}
+\end{align}
+Conditions \ref{eq:consistency} and \ref{eq:decision_d_sep} can hold simultaneously only if $\RV{X}_{ob}$ is deterministic conditional on $\RV{Z}_{ob}$. This is usually not the case.
+
+
+
+In order to facilitate nontrival joint distributions between obsevations and potential outcomes, we introduce a \emph{generalised consequence}:
+
+\begin{definition}[Generalised consequence]
+Given a measurable consequence space $(F,\mathcal{F})$, a sample space $(E,\mathcal{E})$ and a measurable decision set $(D,\mathcal{D})$, a Markov kernel $\kappa:D\times E \to \Delta(\mathcal{F})$ is a generalised consequence.
+\end{definition}
+
+\begin{definition}[Generalised causal theory]
+A generalised causal theory is the analogue of a causal theory with the consequence replaced by a generalised consequence.
+\end{definition}
+
+Given $D,X,Z$ as before, we provide an explicit construction respecting \ref{eq:consistency}. Here, for convenience, we identify $E=F=X\times Z$. For $x\in X$, $z\in Z$, $d\in D$ and $G\in \mathcal{X}$, $H\in \mathcal{Z}$ consider the kernel
+
+\begin{align}
+    \iota: (d,x,z;G\times H) \mapsto \delta_d(H)(\delta_z(H) \delta_x(G) + (1-\delta_z(H)) \iota'(d,x,z;G))
+\end{align}
+
+Where $\iota'$ is an arbitrary Markov kernel $D\times X\times Z\to \Delta(\mathcal{X}\otimes\mathcal{Z})$. It is straightforward to check that $\iota$ is a Markov kernel. Take the Consider the distribution given by
+\begin{align}
+    \zeta (A\times B\times C) =  \int_B \int_A  \iota(y,x,z; C) \delta_i(dy) \mu(dx\times dz)
+\end{align}
+And random variables $\RV{X}_i$, $\RV{Z}_i$ and $\RV{D}$ as before. Then
+\begin{align}
+    P^\zeta(\RV{X}_i=j,\RV{X}_{ob}=k|\RV{Z}_{ob}=i)P^\zeta(\RV{Z}_{ob}=i) &= \sum_{m,n} \iota(n,k,i;\{j,m\}) \delta_i(\{n\}) \mu(k,i)\\
+     &= \sum_{m,n} \delta_n(m)[\delta_i(m) \delta_k(j) + (1-\delta_i(m))\iota'(n,k,i;\{j,m\})]\delta_i(\{n\}) \mu(k,i)\\
+     &= \delta_k(j) \mu(k,i)
+\end{align}
+
+Which implies \ref{eq:consistency}.
+
+\subsection{Causal Theories and Generalised Causal Theories}
+
+
+A generalised causal decision problem is a causal decision problem featuring a generalised causal theory and a loss $L:\Delta(\mathcal{E}\otimes\mathcal{D}\otimes\mathcal{F})\to[0,\infty]$. There is a straightforward identification of causal theories with generalised causal theories, befitting the name. We might also ask when the extra structure of a generalised causal decision problem is needed.
+
+Given an ordinary consequence $\kappa:D\to \Delta(\mathcal{F})$, we can trivially construct a generalised consequence $\iota:(d,e;A)\mapsto \kappa(d;A)$. In addition, given a loss $L:\Delta(\mathcal{D}\otimes\mathcal{F})\to[0,\infty]$ we can construct $L':\Delta(\mathcal{E}\otimes \mathcal{D}\otimes\mathcal{F})\to[0,\infty]$ by $L':\mu\mapsto L(\mu(E\times \cdot \times \cdot \cdot))$.
+
+Given a generalised consequence $\iota:D\times E\to \Delta(\mathcal{F})$ and a hypothesis class $\mathscr{H}\subset\Delta(\mathcal{F})$, we can construct a causal theory $\mathscr{T}_{\iota,\mathscr{H}} = \{(d\mapsto (\mu\otimes \delta_d)\iota,\mu)|\mu\in \mathscr{H}\}$. This causal theory ``forgets'' the joint structure induced by $\iota$. For many practical problems, this extra structure is unnecessary.
+
+Suppose $E=F=\{0,1\}^\mathbb{N}$ and $\RV{X}_{<N}=\otimes_{i\in [N-1]} \underline{\RV{X}_i}$ represents the ``past'' data while $\RV{X}_{\geq N}=\otimes_{i\geq N} \underline{\RV{X}_i}$ represents ``future'' data. Then, given some loss $L':\Delta(\mathcal{E}\otimes \mathcal{D}\otimes\mathcal{F})\to[0,\infty]$ that depends only on the distribution of the future data $\RV{X}_{\geq N}$ and $\RV{D}$, and if 
+
+If a loss function over $\Delta(\mathcal{D}\otimes\mathcal{F})$ is sufficient to describe our preferences then any counterfactual decision problem can be posed as a regular causal decision problem.
+
+\subsubsection{Acyclic Structural Equation Models}
+
+An acyclic structural equation model can be understood as a special case of a generalised consequence. Recall that an acyclic structural equation model is a set of equations $M=\{X^i = f(X^{<i},\epsilon^i)|i\in[N]\}$ along with an intervention operation that replaces the right hand side of an arbitrary subset of equations with an arbitrary set of (allowable) chosen values. Identify the sample space $E=\mathbb{R}^N$ as the space from which the noises $\epsilon=(\epsilon^0,..,\epsilon^N)$ are drawn the decision set $D$ with the set of allowable interventions (including non-interventions) and $F$ as the space in which $X=(X^0,...,X^N)$ lives. Then $M$ is a function from $D\times E\to F$. We can associate the function $M$ with the kernel $\kappa_M: D\times E\to \Delta(\mathcal{F})$ by $\iota_M:(d,e;A)\mapsto \delta_{M(d,e)}(A)$.
+
+An acyclic SEM $M$ with independent noises can be associated with a causal theory. Take a hypothesis class $\mathscr{H}\subset\Delta(\mathcal{E})$ such that for every $\mu\in\mathscr{H}$ the noises are jointly independent. Then we can associate such an SEM with the causal theory
+\begin{align}
+    \mathscr{T} = \{(\iota_M,(\mu\otimes \delta_*)\iota_M )|\mu\in\mathscr{H}\}
+\end{align}
+Where $\delta_*$ is the distribution over $D$ that assigns weight 1 to the non-intervention $*$.
+
+
+\begin{align}
+    L((\kappa,\mu),\gamma) = \sup_{\gamma'\in\Delta(\mathcal{D})} \mathbb{E}_{\gamma'\underline{(I_D\otimes \kappa)}}[u] - \mathbb{E}_{\gamma\underline{(I_D\otimes \kappa)}}[u]
+\end{align}
+For $(\kappa,\mu)\in \mathscr{T}$ and $\gamma\in \Delta(\mathcal{D})$. This is well defined wherever $U$ is bounded above. Note that $L$ does not depend on the data generating distribution $\mu$; henceforth we will suppress this argument and write $L(\kappa,\gamma):= L((\kappa,\mu),\gamma)$.
+
+
+For an example of a pseudo utility that is not ordinary, consider $U(\xi) = \text{Var}_{\xi}(\RV{E})$ for $\xi\in\Delta(\mathcal{D}\otimes\mathcal{E})$ with $D=E=\{0,1\}$ and $\RV{E}:D\times E\to E$ is the projection $(d,e)\mapsto e$.
