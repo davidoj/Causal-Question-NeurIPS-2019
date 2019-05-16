@@ -159,3 +159,27 @@ For $(\kappa,\mu)\in \mathscr{T}$ and $\gamma\in \Delta(\mathcal{D})$. This is w
 
 
 For an example of a pseudo utility that is not ordinary, consider $U(\xi) = \text{Var}_{\xi}(\RV{E})$ for $\xi\in\Delta(\mathcal{D}\otimes\mathcal{E})$ with $D=E=\{0,1\}$ and $\RV{E}:D\times E\to E$ is the projection $(d,e)\mapsto e$.
+
+
+\begin{example}
+\begin{align}
+    \mathscr{T}_{\mathscr{M}}^{\mathrm{marg}} = \{(d\mapsto \mu F_{M(d,\cdot)},\mu F_{M(*,\cdot)})|\mu\in \mathscr{H}\} 
+\end{align}
+
+and the full-blown theory
+
+\begin{align}
+        \mathscr{T}_{\mathscr{M}}^{\mathrm{fb}} = \{(d\mapsto \mu \underline{(I_E\otimes F_{M(d,\cdot)})},\mu \underline{(I_E\otimes F_{M(*,\cdot)})})|\mu\in \mathscr{H}\}
+\end{align}
+
+We can define counterfactual random variables $\RV{X}^i_k:E\times D\to X^i$ for $k\in D$ by $\RV{X}^i_k=\RV{X}^i(\cdot,k)$; this is consistent with the approach in, for example, \cite{balke_counterfactual_1994}. Defining observational variables $\RV{X}^i:E\times X\to X^i$ by the projection, it is straightforward to see that $\mathscr{T}^{\mathrm{fb}}_{\mathscr{M}}$ satisfies consequence consistency with respect to these definitions (Equation \ref{eq:oc_consist}).
+
+
+
+These two examples do not exhaust the set of causal theories that can be constructed from $\mathscr{M}$. For example, some philosophers believe that it is sometimes appropriate to allow a decision to provide evidence about the state of the world; we could model this with a kernel $\theta:D\to \Delta(\mathcal{E})$ and generate the ``evidential'' theory
+
+\begin{align}
+        \mathscr{T}_{\mathscr{M}}^{\mathrm{ev}} = \{(\theta  F_{M},\delta_{*}\theta F_{M})|\mu\in \mathscr{H}\}
+\end{align}
+
+\end{example}

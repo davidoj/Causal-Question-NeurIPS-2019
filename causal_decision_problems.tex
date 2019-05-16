@@ -18,6 +18,10 @@ If the set $\mathscr{S}$ is equipped with a $\sigma$-algebra $\mathcal{S}$, then
     a^*_{ba} = \argmin_{a\in A} \int_{\mathcal{S}} L(s,a) \xi(ds) \label{eq:ba_soln}
 \end{align}
 
+\begin{definition}[Reduction]\label{def:red_sdp_cdp}
+A normal form two person game $\alpha = \langle \mathscr{S}^\alpha, A, L^\alpha\rangle$ can be reduced to a different game sharing the same action set $\beta = \langle \mathscr{S}^\beta, A, L^\beta \rangle$ if there is a surjective function $g:\mathscr{S}^\alpha\to \mathscr{S}^\beta$ such that for every $a\in A$, $s\in \mathscr{S}^\alpha$, $L^\alpha(s,a) = L^\beta(g(s),a)$.
+\end{definition}
+
 A statistical decision problem is an instance of a normal form two person game.
 
 \begin{definition}[Statistical Decision Problem]
@@ -92,9 +96,26 @@ where $l^\kappa:D\to [0,\infty)$ is defined by
 \end{align}
 \end{definition}
 
-\begin{definition}[SDP and CDP reduction]\label{def:red_sdp_cdp}
-Given a statistical decision problem $\alpha$ with an induced game $\langle \mathscr{H}, \mathscr{D}, R\rangle$ and a causal decision problem $\beta$ with induced game $\langle \mathscr{T}, \mathscr{D}, R'\rangle$ where the set of decision functions $\mathscr{D}$ is shared, $\alpha$ is reducible to $\beta$ if there is a surjective function $g:\mathscr{H}\to \mathscr{T}$ such that for all $\mu\in \mathscr{H}$ and $J\in \mathscr{D}$ we have $R(J,\mu)=R'(J,g(\mu))$ and $\beta$ is reducible to $\alpha$ if there is some surjective function $h:\mathscr{T}\to \mathscr{H}$ such that for all $\kappa,\mu\in \mathscr{T}'$ we have $R(J,h(\kappa,\mu))=R'(J,\kappa,\mu)$.
-\end{definition}
+
+
+
+\begin{theorem}[Reduction of problems with observable utility]\label{th:scdp_obu_red}
+A statistical causal decision problem $\alpha=\langle (\mathscr{T}^\alpha,(E,\mathcal{E})),D,\RV{X},U\rangle$ where, for $\zeta\in \Delta(\mathcal{E}\otimes\mathcal{D})$, $U(\zeta)=U'(\zeta (\stopper{0.15} \otimes F_{\RV{Y}}))$ for some $\RV{Y}:E\to Y$ and $U':\Delta(\mathcal{Y})\to \mathbb{R}$ has $\RV{Y}$-\emph{observable utility}. Such a problem can be reduced to a problem $\beta=\langle (\mathscr{T}^\beta,(E,\sigma(\RV{X}\otimes\RV{Y}))),D,\RV{X},U\rangle$.
+\end{theorem}
+
+\begin{proof}
+Consider the mapping $g:\mathscr{T}^\alpha\to\mathscr{T}^\beta$ given by $(\kappa,\mu)\mapsto (\kappa F_{\underline{(\RV{X}\otimes\RV{Y})}},\mu F_{\underline{(\RV{X}\otimes\RV{Y})}})$. Note that $\kappa F_{\underline{(\RV{X}\otimes\RV{Y})}}$ and $\mu F_{\underline{(\RV{X}\otimes\RV{Y})}}$ are in $\Delta(\sigma(\RV{X}\otimes\RV{Y}))$ and $\Delta(\sigma(\RV{X}\otimes\RV{Y}))^D$.
+
+We have for $J\in \mathscr{D}$, $(\kappa,\mu)\in\mathscr{T}^\alpha$
+\begin{align}
+    R^\alpha(J,\kappa,\mu) &= \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\underline{(I_D\otimes\kappa)}) - U(\mu F_{\RV{X}} J\underline{(I_D\otimes\kappa)})\\
+                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U'(\gamma'\splitter{0.15}(I_D\otimes\kappa)(\stopper{0.15}\otimes F_{\RV{Y}}) - U(\mu F_{\RV{X}} J\splitter{0.15} (I_D\otimes\kappa))(\stopper{0.15}\otimes F_{\RV{Y}}))\\
+                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U'(\gamma'\kappa F_{\RV{Y}}) - U'(\mu F_{\RV{X}} J\kappa F_{\RV{Y}})\\
+                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U'(\gamma'\kappa F_{\underline{(\RV{X}\otimes\RV{Y})}} F_{\RV{Y}}) - U'(\mu F_{\underline{(\RV{X}\otimes\RV{Y})}} F_{\RV{X}} J\kappa F_{\underline{(\RV{X}\otimes\RV{Y})}} F_{\RV{Y}})\\
+                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\kappa F_{\underline{(\RV{X}\otimes\RV{Y})}}) - U(\mu F_{\underline{(\RV{X}\otimes\RV{Y})}} F_{\RV{X}} J\kappa F_{\underline{(\RV{X}\otimes\RV{Y})}})\\
+                           &= R^\beta (J,g(\kappa,\mu))
+\end{align}
+\end{proof}
 
 The intuition behind this definition is that, if one problem can be reduced to another, then for every (decision, state of nature) pair in the first problem there is a state of nature in the second problem assigning the same risk to the same decision.
 

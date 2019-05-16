@@ -1,43 +1,29 @@
 
 \section{Potential Outcomes}
 
-Potential Outcomes is a major rival to the approach typified by Causal Bayesian Networks for formulating causal questions and hypotheses. Causal queries in the Potential Outcomes framework concern the distribution of random variables $\RV{X}_0, \RV{X}_1$ representing potential outcomes, or ``the value $\RV{X}$ would take if action 0 or 1 were taken respectively''. Because they are built on a probability distribution, queries in the Potential Outcomes framework resemble ordinary statistical decision problems, and indeed it is possible to formulate an ordinary statistical decision problem featuring potential outcomes. This has an important implication for the present discussion: suppose we approach a causal query as a statistical decision problem $\langle (\mathscr{H}, E),D,\RV{X},\ell\rangle$ where $\ell$ depends on the distribution in $\mathscr{H}$ via some random variables $\RV{X}_0,\RV{X}_1$ representing potential outcomes. Then, by the reduction given in Theorem \ref{th:sdp_to_cdp} we can construct a Causal Decision Problem that makes the same risk assignments \emph{by assuming decisions have no effect on outcomes}. 
+Potential Outcomes is a major rival to the approach typified by Causal Bayesian Networks for formulating causal questions and hypotheses. Causal queries in the Potential Outcomes framework concern the distribution of random variables $\RV{Y}_0, \RV{Y}_1$ representing potential outcomes, or ``the value $\RV{Y}$ would take if action 0 or 1 were taken respectively'' (\cite{angrist_mastering_2014}). 
 
-We proposed Causal Decision Problems to model situations where the loss is underwritten by a known utility over outcomes, but where the outcomes themselves were uncertain. If we suppose that the loss $\ell$ above is indeed underwritten by a utility over outcomes, then the relationship between decisions and outcomes must already be ``baked in'' to the definition of $\ell$. The CDP one obtains via Theorem \ref{th:sdp_to_cdp} is therefore uninteresting.
+Queries based on the Potential Outcomes framework concern properties of the joint distribution over observations and potential outcome variables - that is, they resemble ordinary statistical decision problems. If, as we have supposed, our starting point is preferences over outcomes then the identification of a causal effect in this framework does not automatically allow for us to determine preferences over decisions, as the Potential Outcomes framework does not formally specify a canonical consequence map given a particular joint distribution over potential outcome variables. 
 
-If we are to find an interesting representation of a problem posed via Potential Outcomes as a Causal Decision Problem, we must therefore do some reverse engineering to determine the consequence map represented by a distribution over potential outcomes and the utility underwriting the loss function. It seems clear from the interpretation of potential outcomes above that the consequence map $\kappa:D\to\Delta(\mathcal{E})$ should have the consequence consistency property:
+We do have an informal notion of how this should be constructed - namely that the potential outcome $\RV{Y}_1$ is the value $\RV{Y}$ would take if action 1 were taken. We can formalise this with the notion of consequence consistency. Let $\Delta(\mathcal{Y}_\circ)$ be the space of joint distributions over real and potential outcomes of $\RV{Y}$. A consequence map $\kappa:D\to \Delta(\mathcal{Y}_\circ)$ is consequence consistent if
 \begin{align}
-    \kappa(i;(\RV{X}_i-\RV{X})^{-1}(A))=\delta_0(A) \label{eq:oc_consist}
+    \kappa(i;(\RV{Y}_i-\RV{Y})^{-1}(A))=\delta_0(A) \label{eq:oc_consist}
 \end{align} 
-where we understand $\RV{X}$ to represent any quantities that are actually observed. This is similar to the common consistency condition (e.g., see \cite{richardson2013single}) but it is not equivalent. Note that this condition precludes an ordinary CBN from modelling the consequences for a problem posed via potential outcomes as we cannot assert independent control of $\RV{X}_i$ and $\RV{X}$. It may also be desirable to assume $\kappa(i;\RV{X}_i^{-1}(A))=\mu(\RV{X}_i^{-1}(A))$ - that is, the distribution of potential outcomes in the given data is the same as the distribution of potential outcomes in consequence of any decision $i$.
+Consequence consistency is similar to the consistency condition (e.g., see \cite{richardson2013single}).
 
-Potential outcomes is usually associated with a much more complicated hypothesis class than any approach that associates a distributions over observable variables with consequences. We can analogise the notion of a reduction introduced in Definition \ref{def:red_sdp_cdp} to introduce a weak notion of equivalence between ``simple'' SCDPs and counterfactual SCDPs.
-
-\begin{definition}[Reduction]\label{def:red_scdp}
-Given a statistical causal decision problem $\alpha$ with an induced game $\langle \mathscr{T}^\alpha, \mathscr{D}, R^\alpha \rangle$ and a second statistical causal decision problem $\beta$ with induced game $\langle \mathscr{T}^\beta, \mathscr{D}, R^\beta\rangle$ where the set of decision functions $\mathscr{D}$ is shared, $\alpha$ is reducible to $\beta$ if there is a surjective function $g:\mathscr{T}^\alpha\to \mathscr{T}^\beta$ such that for all $(\kappa,\mu)\in \mathscr{H}$ and $J\in \mathscr{D}$ we have $R^\alpha(J,\kappa,\mu)=R^\beta(J,g(\kappa,\mu))$.
-\end{definition}
-
-\begin{theorem}[Reduction of problems with observable utility]\label{th:scdp_obu_red}
-A statistical causal decision problem $\alpha=\langle (\mathscr{T}^\alpha,(E,\mathcal{E})),D,\RV{X},U\rangle$ where, for $\zeta\in \Delta(\mathcal{E}\otimes\mathcal{D})$, $U(\zeta)=U'(\zeta (\stopper{0.15} \otimes F_{\RV{Y}}))$ for some $\RV{Y}:E\to Y$ and $U':\Delta(\mathcal{Y})\to \mathbb{R}$ has $\RV{Y}$-\emph{observable utility}. Such a problem can be reduced to a problem $\beta=\langle (\mathscr{T}^\beta,(E,\sigma(\RV{X}\otimes\RV{Y}))),D,\RV{X},U\rangle$.
-\end{theorem}
-
-\begin{proof}
-Consider the mapping $g:\mathscr{T}^\alpha\to\mathscr{T}^\beta$ given by $(\kappa,\mu)\mapsto (\kappa F_{\underline{(\RV{X}\otimes\RV{Y})}},\mu F_{\underline{(\RV{X}\otimes\RV{Y})}})$. Note that $\kappa F_{\underline{(\RV{X}\otimes\RV{Y})}}$ and $\mu F_{\underline{(\RV{X}\otimes\RV{Y})}}$ are in $\Delta(\sigma(\RV{X}\otimes\RV{Y}))$ and $\Delta(\sigma(\RV{X}\otimes\RV{Y}))^D$.
-
-We have for $J\in \mathscr{D}$, $(\kappa,\mu)\in\mathscr{T}^\alpha$
+A causal theory $\mathscr{T}^{cc}$ that is consequence consistent need not require any particular relationship between an ``observed'' distribution $\mu\in \Delta(\mathcal{Y}_\circ)$ and an associated consequence $\kappa$. A straightforward option for making this connection is to assert equality of distributions; a causal theory $\mathscr{T}^{cc,eq}$ is consequence consistent and counterfactually equal if for all $(\mu,\kappa)\in\mathscr{T}^{cc,eq}$
 \begin{align}
-    R^\alpha(J,\kappa,\mu) &= \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\underline{(I_D\otimes\kappa)}) - U(\mu F_{\RV{X}} J\underline{(I_D\otimes\kappa)})\\
-                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U'(\gamma'\splitter{0.15}(I_D\otimes\kappa)(\stopper{0.15}\otimes F_{\RV{Y}}) - U(\mu F_{\RV{X}} J\splitter{0.15} (I_D\otimes\kappa))(\stopper{0.15}\otimes F_{\RV{Y}}))\\
-                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U'(\gamma'\kappa F_{\RV{Y}}) - U'(\mu F_{\RV{X}} J\kappa F_{\RV{Y}})\\
-                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U'(\gamma'\kappa F_{\underline{(\RV{X}\otimes\RV{Y})}} F_{\RV{Y}}) - U'(\mu F_{\underline{(\RV{X}\otimes\RV{Y})}} F_{\RV{X}} J\kappa F_{\underline{(\RV{X}\otimes\RV{Y})}} F_{\RV{Y}})\\
-                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\kappa F_{\underline{(\RV{X}\otimes\RV{Y})}}) - U(\mu F_{\underline{(\RV{X}\otimes\RV{Y})}} F_{\RV{X}} J\kappa F_{\underline{(\RV{X}\otimes\RV{Y})}})\\
-                           &= R^\beta (J,g(\kappa,\mu))
+    \kappa(i;\RV{X}_i^{-1}(A))=\mu(\RV{X}_i^{-1}(A))
 \end{align}
-\end{proof}
+There are many choices that could be made here, as can be seen in Example \ref{ex:nonst_distn}.
 
-Theorem \ref{th:scdp_obu_red} tells us that any statistical causal decision problem that represents uncertainty over unobservable counterfactual quantities can be reduced to a problem that represents uncertainty over only observed quantities provided the utility only depends on observed quantities. Note that there are some quantities considered in the counterfactual literature such as ``the effect of treatment on the treated'' (ETT) that depends on counterfactual quantities and has some relevance to decision preferences \cite{rubin_estimating_1974}, though it has been suggested that where this quantity can be determined it does not actually depend on anything counterfactual \cite{geneletti2007defining}. Furthermore, we are not aware of any discussion of whether ETT (or variants) is ultimately underwritten by purely counterfactual preferences, or is simply a proxy for ordinary preferences. The legal standard of no harm ``but for'' the defendant's negligence, on the other hand, does seem to invoke fundamentally counterfactual considerations \cite{pearl_causality:_2009}.
+\begin{example}[Nonstationary distribution]\label{ex:nonst_distn}
 
-An alternative way to connect SCDPs to the counterfactual framework is to suppose that counterfactual variables are random variables on some distribution defined by some canonical construction similar to Theorem \ref{th:red_cdp}. The precise nature of this canonical construction is not at all obvious, nor is the general nature of (pseudo) utilities that demand such a construction. Nonparametric Structural Equation Models (NPSEMs) are nonetheless considered by many to be appropriate tools for the construction of counterfactual distributions \cite{pearl_causality:_2009,richardson2013single}. Without proving this to be the case, we offer some examples of constructing causal theories with an NPSEM.
+\end{example}
+
+A causal theory for Potential Outcomes is associated with a much larger hypothesis class than any causal theory that works only with distributions over observable variables. Theorem \ref{th:scdp_obu_red} shows that given any SCDP based on Potential Outcomes, provided that the potential outcome variables are unobserved and the utility does not depend on them, a reduced SCDP can be constructed by marginalising over potential outcomes. While these conditions may seem reasonable, there are some examples of problems where one does apparently care about the values of potential outcome variables. The \emph{effect of treatment on the treated} (ETT) that depends on counterfactual quantities and has some relevance to decision preferences \cite{rubin_estimating_1974}, though it is controversial whether this dependence is necessary \cite{geneletti2007defining}. More straightforwardly, the legal standard of ``no harm but for the defendant's negligence'' does seem to invoke fundamentally counterfactual considerations \cite{pearl_causality:_2009}.
+
+Recall that we have proposed making the connection between data, decisions and outcomes in two steps: firstly a causal theory relates data to possible consequences (the ``inference'' step), and secondly a consequence then relates decisions to outcomes (the ``control'' step). We could consider a generalised consequence $D\times E\to \mathscr{P}(\Delta(\mathcal{X}))$ that jointly performs the inference and control steps. We speculate that this generalisation provides an alternative connection between SCDPs and counterfactual reasoning; in particular, Nonparametric Structural Equation Models (NPSEMs) which are often considered appropriate tools for modelling counterfactual distributions (\cite{pearl_causality:_2009,richardson2013single}) can be seen as a special case of generalised consequences.
 
 \begin{definition}[NPSEM]\label{def:NPSEM}
 A non-parametric structural equation model (NPSEM) is a tuple $\langle \{\RV{X}^i, \RV{U}^i, f^i\}_{i\in[N]}, (D,\mathcal{D}), (E,\mathcal{E})\rangle$ where, for all $i\in N$, $\RV{X}^i:E\times D \to X^i$, $\RV{U}^i:E\to U^i$, $\mathscr{H}\subset\Delta(\mathcal{E}$ and $D=\times_{i\in[N]} X^i\cup\{*\}$ and $f^i:\times_{j<i} X^i\times U^i\to X^i$ are functions measurable with respect to the implied product sigma algebras. The $\RV{X}^i$ are given by
@@ -50,28 +36,4 @@ A non-parametric structural equation model (NPSEM) is a tuple $\langle \{\RV{X}^
 Where $\RV{X}^{<i}(e,d)=[\RV{X}^0(e,d),...\RV{X}^{i-1}(e,d)]$.
 \end{definition}
 
-\begin{example}[Causal Theories from an NPSEM]
-Given an NPSEM $\mathscr{M}:\langle \{\RV{X}_i, \RV{U}_i, f_i\}_{i\in[N]}, (D,\mathcal{D}), (E,\mathcal{E})\rangle$ we can let $\RV{X}$ be the joint space of all the $\RV{X}_i$ and an NPSEM induces a measurable function $M:D\times E\to X$. In general there are many NPSEMs that induce the same measurable function in this manner. For example $f_0:e\mapsto e$ and $f_1:(x_0,e)\mapsto x_0$ induces the same function $E\to X_0\times X_1$ as $f_0:e\mapsto e$ and $f_1:(x_0,e)\mapsto e$. If consider all NPSEMs inducing the same function $M$ to be equivalent and further suppose there is some hypothesis class $\mathscr{H}\subset\Delta(\mathcal{E})$ (which is common in practical uses of NPSEMs), we can propose the marginal theory:
-
-\begin{align}
-    \mathscr{T}_{\mathscr{M}}^{\mathrm{marg}} = \{(d\mapsto \mu F_{M(d,\cdot)},\mu F_{M(*,\cdot)})|\mu\in \mathscr{H}\} 
-\end{align}
-
-and the full-blown theory
-
-\begin{align}
-        \mathscr{T}_{\mathscr{M}}^{\mathrm{fb}} = \{(d\mapsto \mu \underline{(I_E\otimes F_{M(d,\cdot)})},\mu \underline{(I_E\otimes F_{M(*,\cdot)})})|\mu\in \mathscr{H}\}
-\end{align}
-
-We can define counterfactual random variables $\RV{X}^i_k:E\times D\to X^i$ for $k\in D$ by $\RV{X}^i_k=\RV{X}^i(\cdot,k)$; this is consistent with the approach in, for example, \cite{balke_counterfactual_1994}. Defining observational variables $\RV{X}^i:E\times X\to X^i$ by the projection, it is straightforward to see that $\mathscr{T}^{\mathrm{fb}}_{\mathscr{M}}$ satisfies consequence consistency with respect to these definitions (Equation \ref{eq:oc_consist}).
-
-
-
-These two examples do not exhaust the set of causal theories that can be constructed from $\mathscr{M}$. For example, some philosophers believe that it is sometimes appropriate to allow a decision to provide evidence about the state of the world; we could model this with a kernel $\theta:D\to \Delta(\mathcal{E})$ and generate the ``evidential'' theory
-
-\begin{align}
-        \mathscr{T}_{\mathscr{M}}^{\mathrm{ev}} = \{(\theta  F_{M},\delta_{*}\theta F_{M})|\mu\in \mathscr{H}\}
-\end{align}
-
-\end{example}
-
+Given an NPSEM $\mathscr{M}:\langle \{\RV{X}_i, \RV{U}_i, f_i\}_{i\in[N]}, (D,\mathcal{D}), (E,\mathcal{E})\rangle$ we can let $\RV{X}$ be the joint space of all the $\RV{X}_i$ and an NPSEM induces a measurable function $M:D\times E\to X$. In general there are many NPSEMs that induce the same measurable function in this manner. For example $f_0:e\mapsto e$ and $f_1:(x_0,e)\mapsto x_0$ induces the same function $E\to X_0\times X_1$ as $f_0:e\mapsto e$ and $f_1:(x_0,e)\mapsto e$. If consider all NPSEMs inducing the same function $M$ to be equivalent, then we can, abusing terminology somewhat, consider an NPSEM to be a measurable function $D\times E\to X$. A straightforward generalisation of this is a stochastic NPSEM $D\times E\to \Delta(\mathscr{X})$, and a set of stochastic NSPEMs induces a set valued stochastic map $D\times E\to \mathscr{P}(\Delta(\mathcal{X}))$.
