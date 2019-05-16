@@ -46,3 +46,8 @@ Repository for "How to Ask a Causal Question" submission for NeurIPS 2019
     * Strictness of causal theories as superset of generalised CBNs
     * Graph learning
  * 
+ 
+
+### Appendix
+
+ * Can dispense with set F
