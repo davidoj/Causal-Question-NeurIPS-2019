@@ -183,3 +183,42 @@ These two examples do not exhaust the set of causal theories that can be constru
 \end{align}
 
 \end{example}
+
+
+
+\begin{definition}[Universal conditional independence]\label{def:univ_indep}
+Given a measurable space $(E,\mathcal{E})$, a hypothesis class $\mathscr{H}\subset\Delta(\mathcal{E})$ and random variables $\RV{X}:E\to X$, $\RV{Y}:E\to Y$ and $\RV{W}:E\to W$, we say $\RV{X}$ is universally independent of $\RV{Y}$ conditional on $\RV{W}$ if for all $\mu\in\mathscr{H}$ we have $\RV{X}\CI_\mu \RV{Y} | \RV{W}$. We write this $\RV{X} \CII_\mathscr{H} \RV{Y} | \RV{W}$.
+\end{definition}
+
+Suppose $(E,\mathcal{E}) = (F\times G, \mathcal{F}\otimes \mathcal{G})$ and we have a kernel $\kappa:F\to \Delta(\mathcal{G})$ and a hypothesis class $\mathscr{J}\subset\Delta(\mathcal{F})$. Then define $\mathscr{H}\underline{\kappa}=\{\mu\underline{(I_F\otimes \kappa)}|\mu\in \mathscr{H}\}$. Universal conditional independence with respect to $\kappa$ and $\mathscr{J}$ is written $\RV{X}\CII_{\mathscr{J}\underline{\kappa}} \RV{Y} | \RV{W}$.
+
+
+A more straightforward reduction can be made if the causal decision problem is \emph{identifiable}. A causal decision problem is identifiable if the risk of a given decision function is unique given a distribution over the observed data.
+
+\begin{definition}[Identifiability]
+A causal decision problem $\langle (\mathscr{T}, E), D, \RV{X}, L \rangle$ is risk-identifiable iff for each $J\in \mathscr{D}$ and $\mu\in \Delta(\mathcal{E})$, $|\{R(J,\kappa,\mu)|(\kappa,\mu)\in \mathscr{T}\}|=1$.
+
+A causal theory $\mathscr{T}$ is identifiable iff for each $\mu\in \Delta(\mathcal{E})$, $|\{(\kappa,\mu)|(\kappa,\mu)\in\mathscr{T}\}|=1$.
+\end{definition}
+
+\begin{theorem}[Reduction of identifiable problems]
+A risk-identifiable causal decision problem $\langle (\mathscr{T}, E), D, \RV{X}, L \rangle$ where the loss is an ordinary utility can be reduced to a statistical decision problem.
+\end{theorem}
+
+\begin{proof}
+
+
+Choose an arbitrary $(\kappa,\mu)\in\mathscr{T}$ and define $L':\mathscr{H}\times D\to [0,\infty)$ by
+\begin{align}
+    L'(\nu,y) &= L(\delta_y\underline{[I_D\otimes \kappa]})\\
+              &= \int_F \ell(z,y) \kappa(y;dz)
+\end{align}
+
+Then the risk $R'$ associated with the statistical decision problem $\langle (\mathscr{H},E),D,\RV{X},L'\rangle$ is given by 
+\begin{align}
+    R'(J,\mu) &= \int_E \int_F \ell(z,y)  \kappa (y;dz) \mu K_{\RV{X}} J(dy)\\
+              &= R(J,\mu,\kappa')
+\end{align}
+For any $\kappa'\in\mathscr{K}$. The map $g:\mathscr{T}\to\mathscr{H}$ given by $(\mu,\kappa)\mapsto \mu$ is the required surjection.
+\end{proof}
+
