@@ -17,23 +17,17 @@ A causal theory $\mathscr{T}^{cc}$ that is consequence consistent need not requi
 \end{align}
 There are many choices that could be made here, as can be seen in Example \ref{ex:nonst_distn}.
 
-\begin{example}[Nonstationary distribution]\label{ex:nonst_distn}
+\begin{example}[Performance bias]\label{ex:nonst_distn}
+Suppose we have a randomised experiment $(E,\mathcal{E},\mu)$ with random variables $\RV{X}$, $\RV{X}_0$ and $\RV{X}_1$ and have determined $\mathbb{E}_\mu[\RV{X}_0]$ and $\mathbb{E}_\mu[\RV{X}_1]$ via ignorability. Consequence consistency is assumed, but performance bias is suspected - that is, we believe the value of $\delta_i \kappa \RV{X}_i$ may differ from $\RV{X}_i$ (performance bias is defined by \cite{collaboration_cochrane_nodate}). There are many ways to handle this suspicion:
+\begin{itemize}
+    \item Assume performance bias is absent $\delta_i \kappa \RV{X}_i = \mathbb{E}_\mu[\RV{X}_i]$
+    \item Assume performance bias has a uniform additive effect: $\delta_i \kappa \RV{X}_i = \mathbb{E}_\mu[\RV{X}_i]+k$; in this case the average treatment effect is still known $\delta_1 \kappa \RV{X}_1 - \delta_0\kappa\RV{X}_0 = \mathbb{E}[\RV{X}_1]-\mathbb{E}[\RV{X}_0]$
+    \item Assume performance bias has a bounded additive effect: $\delta_i \kappa \RV{X}_i = \mathbb{E}_\mu[\RV{X}_i]+k_i$, $|k_i|<l$; then bounds can be placed on the average treatment effect.
+    \item Apply a prior probability to possible values of performance bias.
+    \item Avoid assumptions about the effect of performance bias; then there is no particular relationship between $\mu F_{\RV{X}_i}$ and $\delta_i \kappa F_{\RV{X}_i}$.
+\end{itemize}
 
 \end{example}
 
 A causal theory for Potential Outcomes is associated with a much larger hypothesis class than any causal theory that works only with distributions over observable variables. Theorem \ref{th:scdp_obu_red} shows that given any SCDP based on Potential Outcomes, provided that the potential outcome variables are unobserved and the utility does not depend on them, a reduced SCDP can be constructed by marginalising over potential outcomes. While these conditions may seem reasonable, there are some examples of problems where one does apparently care about the values of potential outcome variables. The \emph{effect of treatment on the treated} (ETT) that depends on counterfactual quantities and has some relevance to decision preferences \cite{rubin_estimating_1974}, though it is controversial whether this dependence is necessary \cite{geneletti2007defining}. More straightforwardly, the legal standard of ``no harm but for the defendant's negligence'' does seem to invoke fundamentally counterfactual considerations \cite{pearl_causality:_2009}.
 
-Recall that we have proposed making the connection between data, decisions and outcomes in two steps: firstly a causal theory relates data to possible consequences (the ``inference'' step), and secondly a consequence then relates decisions to outcomes (the ``control'' step). We could consider a generalised consequence $D\times E\to \mathscr{P}(\Delta(\mathcal{X}))$ that jointly performs the inference and control steps. We speculate that this generalisation provides an alternative connection between SCDPs and counterfactual reasoning; in particular, Nonparametric Structural Equation Models (NPSEMs) which are often considered appropriate tools for modelling counterfactual distributions (\cite{pearl_causality:_2009,richardson2013single}) can be seen as a special case of generalised consequences.
-
-\begin{definition}[NPSEM]\label{def:NPSEM}
-A non-parametric structural equation model (NPSEM) is a tuple $\langle \{\RV{X}^i, \RV{U}^i, f^i\}_{i\in[N]}, (D,\mathcal{D}), (E,\mathcal{E})\rangle$ where, for all $i\in N$, $\RV{X}^i:E\times D \to X^i$, $\RV{U}^i:E\to U^i$, $\mathscr{H}\subset\Delta(\mathcal{E}$ and $D=\times_{i\in[N]} X^i\cup\{*\}$ and $f^i:\times_{j<i} X^i\times U^i\to X^i$ are functions measurable with respect to the implied product sigma algebras. The $\RV{X}^i$ are given by
-
-\begin{align}
-    \RV{X}^i(e,d) = \begin{cases} f^i(\RV{X}^{<i}(e,d),\RV{U}^i(e)) &\RV{D}^i(d)=*\\ 
-    \RV{D}^i(d)  &\RV{D}^i(d)\neq * \end{cases}
-\end{align}
-
-Where $\RV{X}^{<i}(e,d)=[\RV{X}^0(e,d),...\RV{X}^{i-1}(e,d)]$.
-\end{definition}
-
-Given an NPSEM $\mathscr{M}:\langle \{\RV{X}_i, \RV{U}_i, f_i\}_{i\in[N]}, (D,\mathcal{D}), (E,\mathcal{E})\rangle$ we can let $\RV{X}$ be the joint space of all the $\RV{X}_i$ and an NPSEM induces a measurable function $M:D\times E\to X$. In general there are many NPSEMs that induce the same measurable function in this manner. For example $f_0:e\mapsto e$ and $f_1:(x_0,e)\mapsto x_0$ induces the same function $E\to X_0\times X_1$ as $f_0:e\mapsto e$ and $f_1:(x_0,e)\mapsto e$. If consider all NPSEMs inducing the same function $M$ to be equivalent, then we can, abusing terminology somewhat, consider an NPSEM to be a measurable function $D\times E\to X$. A straightforward generalisation of this is a stochastic NPSEM $D\times E\to \Delta(\mathscr{X})$, and a set of stochastic NSPEMs induces a set valued stochastic map $D\times E\to \mathscr{P}(\Delta(\mathcal{X}))$.

@@ -222,3 +222,26 @@ Then the risk $R'$ associated with the statistical decision problem $\langle (\m
 For any $\kappa'\in\mathscr{K}$. The map $g:\mathscr{T}\to\mathscr{H}$ given by $(\mu,\kappa)\mapsto \mu$ is the required surjection.
 \end{proof}
 
+
+\begin{lemma}
+The set $\Delta(B(\mathbb{R}))$ (where $B(\mathbb{R})$ is the Borel $\sigma$-algebra) has the cardinality $2^{\aleph_0}$.
+\end{lemma}
+
+\begin{proof}
+Probability measures on the Borel $\sigma$-algebra are determined by their values on $\{(-\infty,r)|r\in \mathbb{Q}\}$. Therefore the cardinality of $\Delta(B(\mathbb{R}))$ is $(2^{\aleph_0})^{\aleph_0}=2^{\aleph_0}$.
+\end{proof}
+
+\begin{lemma}
+The set of Markov kernels $\mathbb{R}\to \Delta(B(\mathbb{R})$ has the cardinality $2^{\aleph_0}$.
+\end{lemma}
+
+\begin{proof}
+Consider some $\kappa:\mathbb{R}\to \Delta(B(\mathbb{R})$.
+
+Because $\kappa(x;\cdot)$ is a probability measure for every $x\in \mathbb{R}$, $\kappa(x;\cdot)$ is determined by the values of $\kappa(x;A)$ for $A\in \{(-\infty,r)|r\in \mathbb{Q}\}$.
+
+Fix $x'\in \mathbb{R}$ and consider the set $[\kappa(x;\cdot)]^{-1} = \{x|\forall A\in \{(-\infty,r)|r\in \mathbb{Q}\}:\kappa(x;A) = \kappa(x';A)\}$. By the above, this is equal to $\{x|\forall A\in B(\mathbb{R}):\kappa(x;A) = \kappa(x';A)\}$, so if, for all $x\in \mathbb{R}$, $[\kappa(x;\cdot)]^{-1}=[\iota(x;\cdot)]^{-1}$ then $\kappa=\iota$. 
+
+$[\kappa(x;\cdot)]^{-1}$ is also a countable intersection of open sets, so it is itself in $B(\mathbb{R})$.
+
+\end{proof}

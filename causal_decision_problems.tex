@@ -37,7 +37,7 @@ Denote by $\mathscr{D}$ the set of decision kernels $X\to \Delta(\mathcal{D})$. 
 \end{align}
 
 
-Denoting by $\mathscr{D}$  the set of kernels $X\to \Delta(\mathcal{D})$, the triple $\langle \mathscr{H}, \mathscr{D}, R\rangle$ forms a two player normal form game. The concepts of the minimax and Bayes solutions (Eq. \ref{eq:mm_soln} and \ref{eq:bayes_soln}) apply to this game.
+Denoting by $\mathscr{D}$  the set of kernels $X\to \Delta(\mathcal{D})$, the triple $\langle \mathscr{H}, \mathscr{D}, R\rangle$ forms a two player normal form game. The concepts of the minimax and Bayes solutions (Eq. \ref{eq:mm_soln} and \ref{eq:ba_soln}) apply to this game.
 \end{definition}
 
 The loss function $\ell$ expresses preferences over (state, decision) pairs. However, it may be the case that our preferences don't naturally apply directly to such pairs. For a doctor deciding whether to prescribe a treatment to a patient, it is clear that this patient being healthy in the future is preferable to them being sick. While it may be possible to build a state for which it makes sense to evaluate the desirability of a (state, treatment) pair (for example, such a state may describe both the patient's illness and their responsiveness to treatment), such a description appears to be derived from the more basic preferences over future states of the patient's health.
@@ -236,7 +236,7 @@ The class of nonramdomized decision functions is not essentially complete for SC
 
 Theorem \ref{th:red_cdp} reduces a SCDP to a CDPs by associating each pair $(\mu,\kappa)$ in the causal theory with a distribution over $E\times F\times D$. Given some $\xi\in \Delta(\mathcal{E}\otimes\mathcal{F} \mathcal{D})$ an intuitive association proceeds by identifying $\mu(A)=\xi(A\times E\times D)$ and $\kappa$ with the conditional probability $P^\xi_{\RV{F}|\RV{D}}$ where $\RV{F}_1:E\times F\times D\to F$ is the ``outcome'' projection. One might read this as licensing the interpretation of $\kappa$ as a conditional probability, as in \cite{dawid_beware_2010}, but this is complicated by the fact that conditional probability under the standard definition is not in general unique and cannot be unique if the set $D$ is uncountable \cite{hajek_what_2003}. 
 
-Theorem \ref{th:cdp_to_sdp} does not in fact require $\kappa$ be associated with any conditional probability, however, merely that a surjective map exist. There may be no sensible way to interpret this map.
+Theorem \ref{th:red_cdp} does not in fact require $\kappa$ be associated with any conditional probability, however, merely that a surjective map exist. There may be no sensible way to interpret this map.
 
 \begin{theorem}\label{th:red_cdp}
 Given a causal decision problem $\beta=\langle (\mathscr{T},E,\RV{X}),D,(U,F)\rangle$ where $U$ is an ordinary pseudo-utility, let $\mathscr{K}=\{\kappa|(\kappa,\mu)\in \mathscr{T}\}$ be the set of consequences. $\beta$ is reducible to a statistical decision problem on the measurable space $(E\times F\times D,\mathcal{E}\otimes \mathcal{F}\otimes \mathcal{D})$ if there is some surjective map $m:\Delta(\mathcal{F}\otimes\mathcal{D})\to \mathscr{K}$.

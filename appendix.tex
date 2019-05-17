@@ -37,27 +37,21 @@ for $d\in D$, $(A^0,...,A^N)\in X^0\times...\times X^N$ and where $\RV{D}^i(d)$ 
 From Equation \ref{eq:bigproduct} and \ref{eq:passive} we can verify that, given some $i\in N$, if $\RV{D}^i(d)=\{*\}$ then $\iota_{\mathcal{G},\RV{X}^i|\PA{\mathcal{G}}{\RV{X}^i}}(d;\cdot) = \kappa_i$ and if $\RV{D}^i(d)\neq\{*\}$ then $\iota_{\mathcal{G},\RV{X}^i|\PA{\mathcal{G}}{\RV{X}^i}}(d;\cdot) = I_{\RV{D^i}(d)}$. These properties are equivalent to truncated factorisation, which is in turn equivalent to \ref{def:CBN}. Therefore $\iota_\mathcal{G}=\kappa_\mathcal{G}$.
 \end{proof}
 
-\section{Appendix: Cardinality Blues}
+\section{Appendix: Counterfactuals and one-shot inference}
 
-\begin{lemma}
-The set $\Delta(B(\mathbb{R}))$ (where $B(\mathbb{R})$ is the Borel $\sigma$-algebra) has the cardinality $2^{\aleph_0}$.
-\end{lemma}
+Recall that we have proposed making the connection between data, decisions and outcomes in two steps: firstly a causal theory relates data to possible consequences (the ``inference'' step), and secondly a consequence then relates decisions to outcomes (the ``control'' step). We could consider a generalised consequence $D\times E\to \mathscr{P}(\Delta(\mathcal{X}))$ that jointly performs the inference and control steps. We speculate that this generalisation provides an alternative connection between SCDPs and counterfactual reasoning; in particular, Nonparametric Structural Equation Models (NPSEMs) which are often considered appropriate tools for modelling counterfactual distributions (\cite{pearl_causality:_2009,richardson2013single}) can be seen as a special case of generalised consequences.
 
-\begin{proof}
-Probability measures on the Borel $\sigma$-algebra are determined by their values on $\{(-\infty,r)|r\in \mathbb{Q}\}$. Therefore the cardinality of $\Delta(B(\mathbb{R}))$ is $(2^{\aleph_0})^{\aleph_0}=2^{\aleph_0}$.
-\end{proof}
+\begin{definition}[NPSEM]\label{def:NPSEM}
+A non-parametric structural equation model (NPSEM) is a tuple $\langle \{\RV{X}^i, \RV{U}^i, f^i\}_{i\in[N]}, (D,\mathcal{D}), (E,\mathcal{E})\rangle$ where, for all $i\in N$, $\RV{X}^i:E\times D \to X^i$, $\RV{U}^i:E\to U^i$, $\mathscr{H}\subset\Delta(\mathcal{E}$ and $D=\times_{i\in[N]} X^i\cup\{*\}$ and $f^i:\times_{j<i} X^i\times U^i\to X^i$ are functions measurable with respect to the implied product sigma algebras. The $\RV{X}^i$ are given by
 
-\begin{lemma}
-The set of Markov kernels $\mathbb{R}\to \Delta(B(\mathbb{R})$ has the cardinality $2^{\aleph_0}$.
-\end{lemma}
+\begin{align}
+    \RV{X}^i(e,d) = \begin{cases} f^i(\RV{X}^{<i}(e,d),\RV{U}^i(e)) &\RV{D}^i(d)=*\\ 
+    \RV{D}^i(d)  &\RV{D}^i(d)\neq * \end{cases}
+\end{align}
 
-\begin{proof}
-Consider some $\kappa:\mathbb{R}\to \Delta(B(\mathbb{R})$.
+Where $\RV{X}^{<i}(e,d)=[\RV{X}^0(e,d),...\RV{X}^{i-1}(e,d)]$.
+\end{definition}
 
-Because $\kappa(x;\cdot)$ is a probability measure for every $x\in \mathbb{R}$, $\kappa(x;\cdot)$ is determined by the values of $\kappa(x;A)$ for $A\in \{(-\infty,r)|r\in \mathbb{Q}\}$.
+Given an NPSEM $\mathscr{M}:\langle \{\RV{X}_i, \RV{U}_i, f_i\}_{i\in[N]}, (D,\mathcal{D}), (E,\mathcal{E})\rangle$ we can let $\RV{X}$ be the joint space of all the $\RV{X}_i$ and an NPSEM induces a measurable function $M:D\times E\to X$. In general there are many NPSEMs that induce the same measurable function in this manner. For example $f_0:e\mapsto e$ and $f_1:(x_0,e)\mapsto x_0$ induces the same function $E\to X_0\times X_1$ as $f_0:e\mapsto e$ and $f_1:(x_0,e)\mapsto e$. If consider all NPSEMs inducing the same function $M$ to be equivalent, then we can, abusing terminology somewhat, consider an NPSEM to be a measurable function $D\times E\to X$. A straightforward generalisation of this is a stochastic NPSEM $D\times E\to \Delta(\mathscr{X})$, and a set of stochastic NSPEMs induces a set valued stochastic map $D\times E\to \mathscr{P}(\Delta(\mathcal{X}))$.
 
-Fix $x'\in \mathbb{R}$ and consider the set $[\kappa(x;\cdot)]^{-1} = \{x|\forall A\in \{(-\infty,r)|r\in \mathbb{Q}\}:\kappa(x;A) = \kappa(x';A)\}$. By the above, this is equal to $\{x|\forall A\in B(\mathbb{R}):\kappa(x;A) = \kappa(x';A)\}$, so if, for all $x\in \mathbb{R}$, $[\kappa(x;\cdot)]^{-1}=[\iota(x;\cdot)]^{-1}$ then $\kappa=\iota$. 
 
-$[\kappa(x;\cdot)]^{-1}$ is also a countable intersection of open sets, so it is itself in $B(\mathbb{R})$.
-
-\end{proof}

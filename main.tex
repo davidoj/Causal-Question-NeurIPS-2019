@@ -131,11 +131,7 @@
 \maketitle
 
 \begin{abstract}
-  The abstract paragraph should be indented \nicefrac{1}{2}~inch (3~picas) on
-  both the left- and right-hand margins. Use 10~point type, with a vertical
-  spacing (leading) of 11~points.  The word \textbf{Abstract} must be centered,
-  bold, and in point size 12. Two line spaces precede the abstract. The abstract
-  must be limited to one paragraph.
+There are multiple competing approaches to the handling of causality in statistical inference including Causal Bayesian Networks and Potential Outcomes which differ in part in their underlying conceptions of causality. In an approach similar to Dawid, we develop the notion of a statistical causal decision problem patterned after the statistical decision theory of Wald. Our approach is motivated by a simple consideration: suppose we have a dataset, some set of available decisions and we know what state we would like the world to occupy, but we are uncertain about how our decisions affect the state of the world. We introduce the notion of consequence maps that relate decisions to states of the world and causal theories that relate observations to consequences. These definitions are not motivated by any causal considerations, but by the need to connect observations, decisions and consequences. We connect statistical causal decision problems to statistical decision problems via a reduction that allows results from the latter to sometimes be imported to the former. We show that Causal Bayesian Networks and Potential Outcomes both have a natural mapping to causal theories, and demonstrate a straightforward example of a causal theory that cannot be unambiguously represented by either. We argue by example that, given this more general perspective, the standard understanding of a Causal Bayesian Network is only justified under additional nontrivial assumptions. Finally, we conclude with a long list of open questions raised by this new approach.
 \end{abstract}
 
 \section{Notation}
@@ -152,9 +148,24 @@
 \include{causal_bayesian_networks}
 \include{counterfactuals}
 
-\include{appendix}
+\section{Discussion}
+
+One of the possibly controversial choices in this scheme is the separation of the decision set $D$ from the sample space $E$ of the observed data. Almost universally, the causal inference literature identifies actions with some known impact on some observed variable (for example, deterministically setting some variable to a given value). If a problem is to be non-trivial we must accept some means of relating observed data to consequences.
+
+This choice was made because there are many ways to specify prior knowledge about the relationship between decisions and outcomes, and different options are frequently chosen in practice. Within the graphical models literature one can find a wide variety of intervention types such as hard interventions, soft interventions, activity interventions and policy interventions. Given this, the requirement to specify prior knowledge about the outcomes of decisions \emph{somehow} is at least not an extra requirement.
+
+Avoiding prescription here is also consistent with the project of describing the minimal set of elements necessary to describe a statistical causal decision problem. While we do not have a clean set of axioms that compel the construction given in this work, an informal case can be made for the necessity of the choices here. Taking the starting point that we are given some preferences over outcomes described by a utility function, a set of available decisions and a dataset and we want to determine preferences over possible decision functions, it appears necessary that we have some means of relating decisions to outcomes (given here by \emph{consequence mappings}) and some means of relating the given data to such consequence mappings (given here by \emph{causal theories}). It is not necessary, however, to suppose any particular canonical relationship between decisions, the given data and the outcomes. No preferences among possible decisions may be a trivial result, but it is not invalid.
+
+
+
+\section{Conclusion}
+
+
 
 \bibliographystyle{plainnat}
 \bibliography{references}
+
+
+\include{appendix}
 
 \end{document}

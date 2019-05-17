@@ -31,14 +31,3 @@ In order to connect decisions with preferences, we therefore require a stochasti
 We develop connections between causal decision problems and statistical decision problems, and show that a causal theory is a generalization of a causal Bayesian network. We show that a CBN, in general, leads to an underspecified causal theory with different choices of theory leading to very different behaviour. The counterfactual case requires an extension of the notion of a consequence, which we connect with a number of existing representations of counterfactual distributions including single world intervention graphs and structural equation models.
 
 
-\section{Discussion}
-
-One of the possibly controversial choices in this scheme is the separation of the decision set $D$ from the sample space $E$ of the observed data. Almost universally, the causal inference literature identifies actions with some known impact on some observed variable (for example, deterministically setting some variable to a given value). If a problem is to be non-trivial we must accept some means of relating observed data to consequences.
-
-This choice was made because there are many ways to specify prior knowledge about the relationship between decisions and outcomes, and different options are frequently chosen in practice. Within the graphical models literature one can find a wide variety of intervention types such as hard interventions, soft interventions, activity interventions and policy interventions. Given this, the requirement to specify prior knowledge about the outcomes of decisions \emph{somehow} is at least not an extra requirement.
-
-Avoiding prescription here is also consistent with the project of describing the minimal set of elements necessary to describe a statistical causal decision problem. While we do not have a clean set of axioms that compel the construction given in this work, an informal case can be made for the necessity of the choices here. Taking the starting point that we are given some preferences over outcomes described by a utility function, a set of available decisions and a dataset and we want to determine preferences over possible decision functions, it appears necessary that we have some means of relating decisions to outcomes (given here by \emph{consequence mappings}) and some means of relating the given data to such consequence mappings (given here by \emph{causal theories}). It is not necessary, however, to suppose any particular canonical relationship between decisions, the given data and the outcomes. No preferences among possible decisions may be a trivial result, but it is not invalid.
-
-
-
-\section{Conclusion}
