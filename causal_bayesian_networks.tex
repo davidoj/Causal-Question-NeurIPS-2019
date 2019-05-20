@@ -1,41 +1,48 @@
 \section{Causal Bayesian Networks}
 
-A causal Bayesian network is an example of an identifiable causal theory. Given a measurable space $(X,\mathcal{X})$ where $X=\times_{i\in [N]} X^i$, a decision space $D = \times_{i\in [N]} X^i\cup\{*\}$ and a causal graph $\mathcal{G}$ over nodes $\mathbf{V}=\{V^i|i\in [N]\}$, the graph $\mathcal{G}$ maps each probability distribution $\mu\in \Delta(\mathcal{X})$ to a unique consequence $D\to \Delta(\mathcal{X})$.
-
-The CBN convention is to call the elements of the decision space $D$ ``interventions'' and denote then with $P(\cdot|do(\cdot\cdot))$ notation. In the first definition below, we instead denote interventions with indices on the probability distribution, and introduce the special $*$ object to denote a passive intervention.
+There is a natural identification of a causal Bayesian network (CBN) associated with a graph $\mathcal{G}$ and a causal theory $\mathscr{T}_{\mathcal{G}}$ where we consider \emph{do}-interventions defined with respect to the CBN to correspond to decisions in the causal theory. The CBN convention is to denote an interventional distribution with $P(\cdot|do(\RV{X}^i=a))$ notation. Here we associate every allowable intervention with the decision space $(D,\mathcal{D})$ equipped with random variables $\{\RV{D}^i\}_{i\in[N]}$ such that for $y\in D$, $P^y(\cdot) := P(\cdot|[do(\RV{X}^j=\RV{D}^i(y))]_{i\in N})$. The special element $*$ corresponds to a passive intervention which is denoted by the absence of a $do()$ statement in regular CBN notation.
 
 \begin{definition}[Causal Bayesian Network]\label{def:CBN}
-The definition here follows \cite{pearl_causality:_2009}.
+Consider a directed acyclic graph $\mathcal{G}$ with nodes $\mathbf{X}=\{\RV{X}^i|i\in [N]\}$, a measurable space $(E,\mathcal{E})$ and a set of random variables $\RV{X}^i:E\to X^i$ and $X=\times_{i\in[N]} X^i$ along with decision space $(D,\mathcal{D})$ and random variables $\{\RV{D}^i\}_{i\in [N]}$ where $\RV{D}^i:D\to X^i\cup\{*\}$.
 
-Consider a directed acyclic graph $\mathcal{G}$ with nodes $\mathbf{X}=\{\RV{X}^i|i\in [N]\}$, a measurable space $(E,\mathcal{E})$ and a set of random variables $\RV{X}^i:E\to X^i$ and let $X=\times_{i\in[N]} X^i$. For each $x\in \times_{i\in [N]} X^i\cup \{*\}$ suppose we have an \emph{interventional distribution} $P^{x}\in \Delta(\mathcal{E})$, and let the set of all such distributions be denoted $\mathbf{P}^{X\cup\{*\}}$. Let $P^*$ be the passive distribution given by the intervention $x = (*,...,*)$.
-
-Given any $x\in X\cup\{*\}$ let $S(x)\subset[N]$ be the set of all indices $i$ such that $x^i\neq *$. The graph $\mathcal{G}$ is a causal Bayesian network compatible with $\mathbf{P}^{X\cup\{*\}}$ iff for all $x\in X$ and $S(x)\subset [N]$:
+Given any $y\in D$ let $S(y)\subset[N]$ be the set of all indices $i$ such that $\RV{D}^i(y)\neq *$. Let $\mathscr{H}_\mathcal{G}\subset\Delta(\mathcal{X})$ be the set of distributions compatible with $\mathcal{G}$. Given arbitrary $\mu\in \mathscr{H}_\mathcal{G}$ and $y\in D$ the $\mathcal{G},\mu,y$-interventional distribution denoted $\mu^{\mathcal{G},y}$ is given by the following two conditions:
 \begin{enumerate}
-    \item $P^{x}_{\RV{X}}$ is compatible with $\mathcal{G}$ for all $x\in \cup_{i\in [N]} X^i\cup \{*\}$
-    \item $P^x_{\RV{X}}(\RV{X}^{S(x)})=\delta_{x^{S(x)}}(\RV{X}^{S(x)})$
-    \item For $i\in S^C$, $P^x_{\RV{X}}(\RV{X}^i|\PA{\mathcal{G}}{\RV{X}^i})=P^*_\RV{X}(\RV{X}^i|\PA{\mathcal{G}}{\RV{X}^i})$, $P^x$-almost surely
+    \item $\mu^{\mathcal{G},y}\splitter{0.15}(\otimes_{i\in S(y)} F_{\RV{X}^i})=\prod_{i\in S(y)} \delta_{\RV{D}^i(y)} F_{\RV{X}^i}$
+    \item $\mu^{\mathcal{G},y}_{\PA{\mathcal{G}}{\RV{X}^i}} \splitter{0.15}(\otimes_{i\not\in S(y)} F_{\RV{X}^i})=\mu_{\PA{\mathcal{G}}{\RV{X}^i}}\splitter{0.15}(\otimes_{i\not\in S(y)} F_{\RV{X}^i}) $, $\mu^{\mathcal{G},y}$-almost surely
 \end{enumerate}
 \end{definition}
 
-The above three conditions are sufficient that, given some graph $\mathcal{G}$ and $P^*_{\RV{X}}\in \Delta(\mathcal{X})$, one obtains a unique set of interventional distributions $\mathbf{P}_{\mathcal{G}}^{X\cup\{*\}}$ (this follows from the truncated factorisation property given by \cite{pearl_causality:_2009}). Identifying the decision set $D$ with $\times_{i\in [N]} X^i\cup\{*\}$, the map $\kappa^P_\mathcal{G}:D\to \Delta(\mathcal{X})$ given by $d\mapsto P^d_{\mathcal{G}}$ looks like a consequence map, which in fact it is (as established by Theorem \ref{th:cbn_MK}). Defining $\mathscr{H}_{\mathcal{G}}\subset\Delta(\mathcal{X})$ to be the set of distributions compatible with $\mathcal{G}$, the set of pairs $\{(P^*_{\RV{X}}, \kappa^P_\mathcal{G})|P^*_{\RV{X}}\in \mathscr{H}_{\mathcal{G}}\}$ is then a causal theory $\mathscr{T}_\mathcal{G}$.
+$\PA{\mathcal{G}}{\RV{X}^i}$ are the parents of $\RV{X}^i$ with respect to the graph $\mathcal{G}$ and $\mu_{\PA{\mathcal{G}}{\RV{X}^i}}$ is the conditional probability with respect to $\mu$ and the $\sigma$-algebra generated by the set $\PA{\mathcal{G}}{\RV{X}^i}$. Recall that $\mu \splitter{0.15}(\otimes_{i\not\in S(y)} F_{\RV{X}^i})$ is the joint distribution of $\{\RV{X}^i|i\in S(y)\}$.
+
+To establish that the map $\kappa^{\mathcal{G},\mu}:D\to \Delta(\mathcal{X})$ given by $y\mapsto \mu^{\mathcal{G},y}$ is a consequence map, we must shown that it is measurable with respect to the $\sigma$-algebra generated by the set of variables $\RV{D}^i$; this is shown by Theorem \ref{th:cbn_MK}. 
+
+Defining $\mathscr{H}_{\mathcal{G}}\subset\Delta(\mathcal{X})$ to be the set of distributions compatible with $\mathcal{G}$, the set of pairs $\{(\mu, \kappa^\mu)|\mu\in \mathscr{H}_{\mathcal{G}}\}$ is the causal theory $\mathscr{T}_\mathcal{G}$.
 
 \begin{theorem}\label{th:cbn_MK}
-Given a graph $\mathcal{G}$, a measurable set $(E,\mathcal{E})$ and a decision set $D=\times_{i\in [N]} X^i\cup\{*\}$, let $P^x\in \Delta(\mathcal{E})$ be an interventional distribution compatible with $\mathcal{G}$ as defined in Definition \ref{def:CBN}. 
+Given a graph $\mathcal{G}$, a measurable set $(E,\mathcal{E})$ and a decision set $(D,\mathcal{D})$, let $\mu^D_\mathcal{G}$ be the set of interventional distributions compatible with $\mathcal{G}$ as defined in Definition \ref{def:CBN}. 
 
-Then the map $\kappa_{\mathcal{G}}:D\to \Delta(\mathcal{X})$ given by $x\mapsto P^x$ is a Markov kernel.
+Then the map $\kappa_{\mathcal{G}}:D\to \Delta(\mathcal{X})$ given by $y\mapsto \mu^y$ is a Markov kernel.
 \end{theorem}
 
 The proof is given in Appendix \ref{app:cbn_ct}.
 
+
+
 \subsection{Extending the theory induced by a CBN}
 
-The causal theory $T_{\mathcal{G}}$ defined above associates a consequence with every probability distribution compatible with $\mathcal{G}$ but not every probability distribution in $\mathcal{G}$ (this follows from condition 1 of Definition \ref{def:CBN}). It may be the case that it is not considered reasonable to assume \emph{a priori} that the conditional independences implied by $\mathcal{G}$ hold in the observed data - indeed, such an assumption is usually considered unreasonable. It has been suggested by \cite{pearl_causality:_2009} that if a conditional independence implied by a graph $\mathcal{G}$ is not considered to hold by a test on the given data, the graph $\mathcal{G}$ should be considered to be false. This is perhaps akin to setting up an SCDP $\langle (\mathscr{T}_{\mathcal{G}},E,\RV{X}),D,(U,F)\rangle$ featuring the theory $\mathscr{T}_{\mathcal{G}}$. Given some $\nu\not\in \mathscr{H}_{\mathcal{G}}$, the question ``what is the risk associated with $J\in\mathscr{J}$ given that we know the data are distributed according to $\nu$'' cannot be answered; the set $\{R(J,\kappa,\nu)|(\nu,\kappa)\in\mathscr{T}_{\mathcal{G}}\}$ is empty. The problem so defined is therefore unsuitable for comparing different decision functions if we believe that it is possible the observed data are not distributed according to any distribution in $\mathscr{H}_{\mathcal{G}}$.
+The causal theory $T_{\mathcal{G}}$ defined above associates a consequence with every probability distribution compatible with $\mathcal{G}$ but not every probability distribution in $\Delta(\mathcal{X})$ (this follows from condition 1 of Definition \ref{def:CBN}). It may be the case that it is not considered reasonable to assume \emph{a priori} that the conditional independences implied by $\mathcal{G}$ hold in the observed data - indeed, such an assumption is usually considered unreasonable.
 
-We therefore need to extend the theory $\mathscr{T}_{\mathcal{G}}$ to account for the possibility of incompatible distributions. There are many choices for how this may be done, none are obviously correct and different extensions will generally induce very different risk sets. Example \ref{ex:extn_cbn} is an example of this.
+We therefore need to extend the theory $\mathscr{T}_{\mathcal{G}}$ to account for the possibility of incompatible distributions. There are many choices for how this may be done, none are obviously correct and different extensions will generally induce very different risk sets, as shown by Example \ref{ex:extn_cbn}.
 
 \begin{example}[Extension of a CBN]\label{ex:extn_cbn}
 
-A graph $\mathcal{G}$ is given in figure \ref{fig:simple_cbn}. With this, we will associate the simplified sample space $(E,\mathcal{E})=(\{0,1\}^3,\mathscr{P}(\{0,1\}^3)$ (where $\mathscr{P}$ denotes the power set) and the random variables $\RV{A},\RV{B}$ and $\RV{C}$ taking values in $\{0,1\}$ defined by projections from $E$. The set of distributions $\Delta(\mathcal{E})$ is the categorical distribution with 8 outcomes.
+A graph $\mathcal{G}$ is given in figure \ref{fig:simple_cbn}. Suppose the three associated random variables $\RV{A}$, $\RV{B}$ and $\RV{C}$ each take values in $\{0,1\}$ and suppose (unrealistically) we know the following holds for all $\mu$ in the set of possible joint distributions $\mathscr{H}$:
+\begin{align}
+    \mu_{\{\RV{A}\}} F_{\RV{B}} &= \iota \qquad \text{for some }\iota:\{0,1\}^3\to \Delta(\mathcal{B})\\
+    \max_{x\in\{0,1\}^3,y\in\{0,1\}}\left|\mu_{\{\RV{A},\RV{C}\}} F_{\RV{B}}(x;\{y\}) - \iota(x;\{y\}) \right| &< \epsilon \label{eq:app_ci}
+\end{align}
+
+That is, we know the conditional probability of $\RV{B}$ given $\RV{A}$ and we know that $\RV{B}$ is ``almost'' independent of $\RV{A}$ given $\RV{C}$.
 
 \begin{figure}
     \centering
@@ -56,12 +63,10 @@ A graph $\mathcal{G}$ is given in figure \ref{fig:simple_cbn}. With this, we wil
     \label{fig:simple_cbn}
 \end{figure}
 
-We will define a causal theory $\mathscr{T}_{\mathcal{G}}$ from $\mathcal{G}$ where, for simplicity, we suppose that only $A$ can be intervened on. The decision space $D=A\cup\{*\}$ with the decision $\RV{D}_A=x$ for $x\in A$ having the usual interpretation as a hard intervention on $A$. Suppose also that the utility $U(\zeta)=\mathbb{E}_{\zeta}[\RV{B}]$ for $\zeta\in\Delta(\mathcal{E}\otimes\mathcal{D})$.
-
-$\mathcal{G}$ implies a single conditional independence: $\RV{A}\CI \RV{C} | \RV{B}$. As in the construction above, $\mathscr{T}_{\mathcal{G}}$ is the set of pairs
+Suppose that only interventions on $\RV{A}$ are possible and only $\RV{B}$ is relevant to the utility. We restrict our attention to the subset of decisions $D'=\{y|\RV{D}_\RV{B}(y)=\RV{D}_\RV{C}(y)=*\}$ and define the causal theory $\mathscr{T}_{\mathcal{G}}$ from $\mathcal{G}$ and the set of compatible distributions $\mathscr{H}_\mathcal{G}\subset\mathscr{H}$
 
 \begin{align}
-    (\mu,x\mapsto \mu_{\mathcal{G}}^x ) \qquad \mu\in\Delta(\mathcal{E}):\RV{A}\CI_{\mu}\RV{B}|\RV{C} \label{eq:ocbn}
+    (\mu,y\mapsto \mu_{\mathcal{G}}^x ) \qquad \mu\in\Delta(\mathcal{E}):\RV{A}\CI_{\mu}\RV{B}|\RV{C} \label{eq:ocbn}
 \end{align}
 
 Consider three options for extending this to distributions $\nu$ incompatible with $\mathcal{G}$, noting that one could imagine many additional possibilities:

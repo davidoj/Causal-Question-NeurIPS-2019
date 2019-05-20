@@ -245,3 +245,103 @@ Fix $x'\in \mathbb{R}$ and consider the set $[\kappa(x;\cdot)]^{-1} = \{x|\foral
 $[\kappa(x;\cdot)]^{-1}$ is also a countable intersection of open sets, so it is itself in $B(\mathbb{R})$.
 
 \end{proof}
+
+\section{Appendix: Counterfactuals and one-shot inference}
+
+Recall that we have proposed making the connection between data, decisions and outcomes in two steps: firstly a causal theory relates data to possible consequences (the ``inference'' step), and secondly a consequence then relates decisions to outcomes (the ``control'' step). We could consider a generalised consequence $D\times E\to \mathscr{P}(\Delta(\mathcal{X}))$ that jointly performs the inference and control steps. We speculate that this generalisation provides an alternative connection between SCDPs and counterfactual reasoning; in particular, Nonparametric Structural Equation Models (NPSEMs) which are often considered appropriate tools for modelling counterfactual distributions (\cite{pearl_causality:_2009,richardson2013single}) can be seen as a special case of generalised consequences.
+
+\begin{definition}[NPSEM]\label{def:NPSEM}
+A non-parametric structural equation model (NPSEM) is a tuple $\langle \{\RV{X}^i, \RV{U}^i, f^i\}_{i\in[N]}, (D,\mathcal{D}), (E,\mathcal{E})\rangle$ where, for all $i\in N$, $\RV{X}^i:E\times D \to X^i$, $\RV{U}^i:E\to U^i$, $\mathscr{H}\subset\Delta(\mathcal{E}$ and $D=\times_{i\in[N]} X^i\cup\{*\}$ and $f^i:\times_{j<i} X^i\times U^i\to X^i$ are functions measurable with respect to the implied product sigma algebras. The $\RV{X}^i$ are given by
+
+\begin{align}
+    \RV{X}^i(e,d) = \begin{cases} f^i(\RV{X}^{<i}(e,d),\RV{U}^i(e)) &\RV{D}^i(d)=*\\ 
+    \RV{D}^i(d)  &\RV{D}^i(d)\neq * \end{cases}
+\end{align}
+
+Where $\RV{X}^{<i}(e,d)=[\RV{X}^0(e,d),...\RV{X}^{i-1}(e,d)]$.
+\end{definition}
+
+Given an NPSEM $\mathscr{M}:\langle \{\RV{X}_i, \RV{U}_i, f_i\}_{i\in[N]}, (D,\mathcal{D}), (E,\mathcal{E})\rangle$ we can let $\RV{X}$ be the joint space of all the $\RV{X}_i$ and an NPSEM induces a measurable function $M:D\times E\to X$. In general there are many NPSEMs that induce the same measurable function in this manner. For example $f_0:e\mapsto e$ and $f_1:(x_0,e)\mapsto x_0$ induces the same function $E\to X_0\times X_1$ as $f_0:e\mapsto e$ and $f_1:(x_0,e)\mapsto e$. If consider all NPSEMs inducing the same function $M$ to be equivalent, then we can, abusing terminology somewhat, consider an NPSEM to be a measurable function $D\times E\to X$. A straightforward generalisation of this is a stochastic NPSEM $D\times E\to \Delta(\mathscr{X})$, and a set of stochastic NSPEMs induces a set valued stochastic map $D\times E\to \mathscr{P}(\Delta(\mathcal{X}))$.
+
+
+
+\subsection{Extending the theory induced by a CBN}
+
+The causal theory $T_{\mathcal{G}}$ defined above associates a consequence with every probability distribution compatible with $\mathcal{G}$ but not every probability distribution in $\Delta(\mathcal{X})$ (this follows from condition 1 of Definition \ref{def:CBN}). It may be the case that it is not considered reasonable to assume \emph{a priori} that the conditional independences implied by $\mathcal{G}$ hold in the observed data - indeed, such an assumption is usually considered unreasonable.
+
+We therefore need to extend the theory $\mathscr{T}_{\mathcal{G}}$ to account for the possibility of incompatible distributions. There are many choices for how this may be done, none are obviously correct and different extensions will generally induce very different risk sets, as shown by Example \ref{ex:extn_cbn}.
+
+\begin{example}[Extension of a CBN]\label{ex:extn_cbn}
+
+A graph $\mathcal{G}$ is given in figure \ref{fig:simple_cbn}. With this, we will associate the simplified sample space $(E,\mathcal{E})=(\{0,1\}^3,\mathscr{P}(\{0,1\}^3)$ (where $\mathscr{P}$ denotes the power set) and the random variables $\RV{A},\RV{B}$ and $\RV{C}$ taking values in $\{0,1\}$ defined by projections from $E$. The set of distributions $\Delta(\mathcal{E})$ is the categorical distribution with 8 outcomes.
+
+\begin{figure}
+    \centering
+     \begin{tikzpicture}[-latex,auto ,node distance =1 cm and 2cm ,on grid ,
+    semithick ,
+    vb/.style ={ circle ,top color =white , 
+    draw , text=blue , minimum width =0.6 cm},
+    kernel/.style={rectangle,draw}
+    ]
+
+    \node[vb] (A) {$A$};
+    \node[vb] (B) [right = of A] {$B$};
+    \node[vb] (C) [right = of B] {$C$};
+    \draw (A) -- (B);
+    \draw (B) -- (C);
+    \end{tikzpicture}
+    \caption{Simple causal Bayesian network $\mathcal{G}$}
+    \label{fig:simple_cbn}
+\end{figure}
+
+We will define a causal theory $\mathscr{T}_{\mathcal{G}}$ from $\mathcal{G}$ where, for simplicity, we suppose that only $A$ can be intervened on. The decision space $D=A\cup\{*\}$ with the decision $\RV{D}_A=x$ for $x\in A$ having the usual interpretation as a hard intervention on $A$. Suppose also that the utility $U(\zeta)=\mathbb{E}_{\zeta}[\RV{B}]$ for $\zeta\in\Delta(\mathcal{E}\otimes\mathcal{D})$.
+
+$\mathcal{G}$ implies a single conditional independence: $\RV{A}\CI \RV{C} | \RV{B}$. As in the construction above, $\mathscr{T}_{\mathcal{G}}$ is the set of pairs
+
+\begin{align}
+    (\mu,x\mapsto \mu_{\mathcal{G}}^x ) \qquad \mu\in\Delta(\mathcal{E}):\RV{A}\CI_{\mu}\RV{B}|\RV{C} \label{eq:ocbn}
+\end{align}
+
+Consider three options for extending this to distributions $\nu$ incompatible with $\mathcal{G}$, noting that one could imagine many additional possibilities:
+\begin{itemize}
+    \item $\mathscr{T}_{\mathcal{G}}^\circ$ assigns the causal states given by the union over all DAGs on the set of nodes $\{A, B, C\}$
+    \item $\mathscr{T}_{\mathcal{G}}^\subset$ assigns the causal states given by the union over all graphs $\mathcal{G}'$ on $\{A, B, C\}$ such that of $\mathcal{G}\subset \mathcal{G}'$ (that is, every edge in $\mathcal{G}$ is also in $\mathcal{G}'$)
+    \item $\mathscr{T}_{\mathcal{G}}^\mathrm{stubborn}$ assigns the causal states given by $\mathcal{G}$ to all distributions in $\Delta(\mathcal{E})$
+\end{itemize}
+
+Finally, we will suppose some prior $\xi$ on $\Delta(\mathcal{E})$ that is absolutely continuous with respect to the Lebesgue measure on the probability simplex $\{[p_1,..p_8]|\sum_i p_i=1,0\leq p_i \leq 1\}\subset\mathbb{R}^8$ that parametrises $\Delta(\mathcal{E})$ and, whenever a theory admits multiple consequences for a given distribution, assigns these consequences equal weight. Note that the set of distributions $\mathscr{H}_{\mathcal{G}}$ for which $\RV{A}\CI \RV{C} | \RV{B}$ holds therefore has measure 0 with respect to $xi$\cite{meek_strong_1995}. The Bayes risk of any decision function $J\in \mathscr{J}$, therefore, will depend entirely on the chosen theory's behaviour on $\mathscr{H}_{\mathcal{G}}^c$.
+
+Noe that the theory $\mathscr{T}_{\mathcal{G}}^\circ$ admits consequences on $\mathscr{H}_{\mathcal{G}}^c$ associated with:
+\begin{enumerate}
+    \item DAGs featuring $A\to B$
+    \item DAGs featuring $B\to A$ (in equal number to the first set of DAGs)
+    \item DAGs featuring no arrow between $B$ and $A$ (featuring one additional DAG to the first two types)
+\end{enumerate} 
+Therefore the calculation for the Bayes risk given by $\mathscr{T}_{\mathcal{G}}^\circ$ will always feature a weight of more than $\tfrac{2}{3}$ on the possibility that the marginal distribution of $\RV{B}$ is independent of whatever decision $\RV{D}_A$ is chosen. For many priors this will be very different to $\mathscr{T}_{\mathcal{G}}^\mathrm{stubborn}$.
+
+The theory $\mathscr{T}_{\mathcal{G}}^\subset$, on the other hand, yields a set consequences that are ``close'' to the consequence admitted by the original theory $\mathscr{T}_{\mathcal{G}}$ if the distribution $\nu$ is sufficiently ``close'' to a distribution $\mu$ for which $\RV{A} \CI_\mu \RV{C} | \RV{B}$. Marginalising over $\RV{A}$ and $\RV{C}$ and ignoring the passive action, the theory $\mathscr{T}^\subset_{\mathcal{G}}$ associates exactly two consequences with every incompatible $\nu$:
+\begin{align}
+    &(\nu,x\mapsto \nu(\RV{B}|\RV{A}=x) )\label{eq:cbn_s1}\\
+    &(\nu,x \mapsto \sum_c \nu(\RV{B}|\RV{A}=x,\RV{C}=c)\nu(\RV{C}=c)) \label{eq:cbn_s2}
+\end{align}
+
+Note that \ref{eq:cbn_s1} is the same pattern as the states given by $\mathscr{T}_{\mathcal{G}}$ - see Eq. \ref{eq:ocbn}. Define the consequences $\kappa^\mathcal{G}_\nu := x\mapsto \nu(\RV{B}|\RV{A}=x)$ and $\kappa^\subset_\nu:= x \mapsto \sum_c \nu(\RV{B}|\RV{A}=x,\RV{C}=c)\nu(\RV{C}=c))$.
+
+Consider some $\nu$ for which $\RV{A} \CI_\nu \RV{C} | \RV{B}$ holds approximately. That is, for some $\epsilon>0$ and all $x\in\{0,1\}$
+\begin{align}
+    \left|\sum_{c\in\{0,1\}} \nu(\RV{B}|\RV{A}=x,\RV{C}=c)\nu(\RV{C}=c)-\nu(B|A=x)\right| &< \epsilon \label{eq:app_ci}
+\end{align}
+
+Recalling the utility $U(\zeta)=\mathbb{E}_\zeta[\RV{B}]$, and that $\mathscr{T}^\subset_\mathcal{G}$ and $\mathscr{T}^\mathrm{stubborn}_\mathcal{G}$ agree on $\kappa^\mathcal{G}$, we can bound the disagreement between the two theories with
+\begin{align}
+    |R(J,\kappa^\subset,\nu) - R(J,\kappa^\mathcal{G},\nu)| &=  \left|\mathbb{E}_{\nu J \kappa^\subset} [\RV{B}] - \mathbb{E}_{\nu J \kappa^\mathcal{G}} [\RV{B}]\right|\\
+        &\leq \max_x \left|\sum_c P^\nu(\RV{B}|\RV{A}=x,\RV{C}=c)P^\nu(\RV{C}=c)-P^\nu(B|A=x) \right|\\
+        &< \epsilon
+\end{align}
+
+Given the assumption of a prior $\xi$ that is uniformly continuous with respect to the Lebesgue measure, $\mathscr{T}_{\mathcal{G}}^\subset$ but not $\mathscr{T}_{\mathcal{G}}^\circ$ gives us the property that for distributions where $\RV{A} \CI_\nu \RV{C} | \RV{B}$ almost holds, the theory $\mathscr{T}_{\mathscr{G}}^{\mathrm{stubborn}}$ can yield ``almost'' correct results. Note that $\mathscr{T}_{\mathscr{G}}^{\mathrm{stubborn}}$ is precisely the theory that actually uses the graph $\mathcal{G}$ to calculate consequences.
+\end{example}
+
+This example is somewhat contrived. The stipulation that the prior $\xi$ is absolutely continuous with respect to the Lebesgue measure may be considered strong, as may the assumption of equal weight given to different consequences where multiple consequences were allowed. Bayesian methods of graph learning, for example, may use priors that are not absolutely continuous with respect to the Lebesgue measure \cite{chickering_optimal_2003}. At the same time, it is not obviously unreasonable; it is consistent with the notion that ``there are no true parametric zeros'' endorsed by many statisticians (for example  \cite{gelman_bayesian_2010,meehl_theory-testing_1967,berkson_difficulties_1938}) and a similar assumption is invoked in support of the faithfulness hypothesis in causal graph learning \cite{meek_strong_1995}. A prior that assigns nonzero weight to the set of distributions for which $\RV{A} \CI_\nu \RV{C} | \RV{B}$ will also not resolve the question of whether or not it is reasonable to calculate consequences according to $\mathcal{G}$ if $\RV{A} \CI_\nu \RV{C} | \RV{B}$ is in fact violated by a very small amount.
+
+Even in the apparently simple case of a known causal graph $\mathcal{G}$, determining the associated causal theory is not a simple matter. The standard practice of computing consequences according to $\mathcal{G}$ if we do not reject the hypothesis that the observed data are compatible with $\mathcal{G}$ appears to rely on a prior with particular properties, a particular extension of the associated theory $\mathscr{T}_{\mathcal{G}}$, or both.

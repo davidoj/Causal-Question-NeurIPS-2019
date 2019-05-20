@@ -1,0 +1,191 @@
+\section{Appendix: Causal Statistical Decision Problems}\label{app:csdps}
+
+
+
+
+\begin{lemma}[Reduction preserves admissibility]\label{lem:red_adm_app}
+If a CSDP $\beta$ with induced game $\langle \mathscr{T},\mathscr{J}, R\rangle$ can be reduced to a statistical decision problem $\alpha$ with induced game $\langle \mathscr{H},\mathscr{J},R' \rangle$ then a decision function $J\in \mathscr{J}$ is admissible in $\beta$ iff it is admissible in $\alpha$.
+\end{lemma}
+
+
+\begin{proof}
+Suppose $J\in\mathscr{J}$ is inadmissible in $\alpha$. Then there is some $J'\in\mathscr{J}$, $\mu\in\mathscr{H}$ such that $R'(J',\mu)<R'(J,\mu)$ and $R'(J',\nu)\leq R'(J,\nu)$ for all $\nu\in \mathscr{H}$. Let $h$ be the function that witnesses the reduction. Then we have for all $\tau\in h^{-1}(\mu)$, $R(J',\tau)=R'(J',\mu)<R(J,\tau)=R'(J,\nu)$ and for all $\nu\in \mathscr{H}$, $\chi\in h^{-1}(\nu)$, $R(J',\chi)=R'(J',\nu)\leq R(J,\chi)=R'(J,\nu)$. The set $\bigcup_{\nu\in\mathscr{H}} h^{-1}(\nu)=\mathscr{T}$, so $J$ is inadmissible in $\beta$.
+
+Suppose $J\in \mathscr{J}$ is admissible in $\beta$. Then there is some $J'\in\mathscr{J}$, $\tau\in\mathscr{T}$ such that $R(J',\tau)<R(J,\tau)$ and $R(J',\chi)\leq R(J,\chi)$ for all $\chi\in \mathscr{T}$. Then we have $R'(J',h(\tau))=R(J',\tau)<R(J,\tau)=R'(J,h(\tau))$ and $R'(J',h(\chi))=R(J',\chi)\leq R(J,\chi)=R'(J,h(\chi))$. Because $h$ is surjective, $J$ is admissible in $\alpha$.
+\end{proof}
+
+\begin{corollary}[Reduction preserves completeness]\label{cor:red_comp}
+If a causal decision problem $\beta$ with induced game $\langle \mathscr{T},\mathscr{J}, R\rangle$ can be reduced to a statistical decision problem $\alpha$ with induced game $\langle \mathscr{H},\mathscr{J},R' \rangle$, then an (essentially) complete class with respect to $\alpha$ is (essentially) complete with respect to $\beta$.
+\end{corollary}
+
+\begin{lemma}[Induced Bayes rule]\label{lem:IB_rule}
+If a CSDP $\beta$ with induced game $\langle \mathscr{T},\mathscr{J}, R\rangle$ can be reduced to a statistical decision problem $\alpha$ with induced game $\langle \mathscr{H},\mathscr{J},R' \rangle$ witnessed by $h:\mathscr{T}\to\mathscr{H}$ and $J_{ba}^\xi\in \mathscr{J}$ is a Bayes rule with respect to the problem $\alpha$ and the prior $\xi$ (Equation \ref{eq:ba_soln}) then $J_{ba}^\xi$ is a Bayes rule with respect to the problem $\beta$ and the induced prior $\xi_h$.
+\end{lemma}
+
+\begin{proof}
+For any $J\in\mathscr{J}$, $\tau\in \mathscr{T}$, by the properties of the push-forward measure
+\begin{align}
+    \int_{\mathscr{T}} R(J,\tau) d\xi_h = \int_\mathscr{H} R'(J,h(\tau)) d\xi
+\end{align}
+
+And therefore, if a Bayes rule exists,
+\begin{align}
+    \argmin_{J\in\mathscr{J}} \int_{\mathscr{T}} R(J,\tau) d\xi_h =  \argmin_{J\in\mathscr{J}}\int_\mathscr{H} R'(J,h(\tau) d\xi
+\end{align}
+
+\end{proof}
+
+\begin{theorem}[Complete class theorem (CSDP)]\label{th:complete_class}
+Given an CSDP $\alpha:=\langle (\mathscr{T},E),D,\RV{X},U\rangle$ with risk $R$, if there is a reduction to an SDP $\beta:=\langle (\mathscr{H},F),D,\RV{Y},\ell \rangle$ with risk $R'$ such that $|\mathscr{H}|<\infty$ and $\inf_{J\in\mathscr{J},\mu\in\mathscr{H}} R'(J,\mu)<-\infty$ then the set of all Bayes decision functions is a complete class and the set of all admissible Bayes decision functions is a minimal complete class.
+\end{theorem}
+
+\begin{proof}
+Given the conditions, the Bayes decision functions in $\beta$ form a complete class and admissible Bayes rules a minimal complete class \citep{toutenburg_ferguson_1970}.
+
+By Corollary \ref{cor:red_comp} the Bayes rules for $\beta$ are complete in $\alpha$, and the admissible Bayes rules for $\beta$ are essentially complete in $\alpha$.
+
+Every (admissible) Bayes rule for $\beta$ is a(n admissible) Bayes rule for $\alpha$, so the set of (admissible) Bayes rules for $\alpha$ is also (essentially) complete in $\alpha$.
+\end{proof}
+
+\begin{theorem}[Reduction of a CSDP on observations]\label{th:CSDP_ob_red}
+A CSDP $\alpha=\langle (\mathscr{T}^\alpha,(E,\mathcal{E}),\RV{X}),D,(U,(F,\mathcal{F}))\rangle$ where, for $\zeta\in \Delta(\mathcal{E}\otimes\mathcal{D})$ can be reduced to a problem $\beta=\langle (\mathscr{T}^\beta,(X,\mathcal{X}),\mathrm{id}_X),D,(U,(F,\mathcal{F})\rangle$ by marginalization.
+\end{theorem}
+
+\begin{proof}
+Consider the mapping $g:\mathscr{T}^\alpha\to\mathscr{T}^\beta$ given by $(\kappa,\mu)\mapsto (\kappa ,\mu F_{\RV{X}})$.
+
+For $J\in \mathscr{J}$, $(\kappa,\mu)\in\mathscr{T}^\alpha$
+\begin{align}
+    R^\alpha(J,\kappa,\mu) &= \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_D\otimes\kappa)) - U(\mu F_{\RV{X}} J\splitter{0.15}(I_D\otimes\kappa))\\
+                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_D\otimes\kappa) - U(\mu F_{\RV{X}} F_{\RV{X}} J\splitter{0.15} (I_D\otimes\kappa)))\\
+                           &= R^\beta (J,g(\kappa,\mu))
+\end{align}
+\end{proof}
+
+\begin{theorem}[Reduction of a CSDP on the utilty]\label{th:CSDP_u_red}
+Given a CSDP $\alpha=\langle (\mathscr{T}^\alpha,(E,\mathcal{E}),\RV{X}),D,(U,(F,\mathcal{F}))\rangle$ where, for $\zeta\in \Delta(\mathcal{E}\otimes\mathcal{D})$, if $U(\zeta)=U'(\zeta(I_D\otimes F_{\RV{Y}}) ))$ for some $\RV{Y}: F\to Y$ and $U':\Delta(\mathcal{Y})\to \mathbb{R}$ then $\alpha$ has $\RV{Y}$-\emph{observable utility}. Such a problem can be reduced to a problem $\beta=\langle (\mathscr{T}^\beta,(E,\mathcal{E}),\RV{X}),D,(U',(Y,\mathcal{Y})\rangle$ by marginalization. 
+\end{theorem}
+
+\begin{proof}
+Consider the mapping $g:\mathscr{T}^\alpha\to\mathscr{T}^\beta$ given by $(\kappa,\mu)\mapsto (\kappa F_{\RV{Y}},\mu)$.
+
+We have for $J\in \mathscr{J}$, $(\kappa,\mu)\in\mathscr{T}^\alpha$
+\begin{align}
+    R^\alpha(J,\kappa,\mu) &= \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_D\otimes\kappa)) - U(\mu F_{\RV{X}} J\splitter{0.15}(I_D\otimes\kappa))\\
+                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U'(\gamma'\splitter{0.15}(I_D\otimes\kappa)(I_D \otimes  F_{\RV{Y}})) - U'(\mu F_{\RV{X}} J\splitter{0.15} (I_D\otimes\kappa))(I_{\RV{D}}\otimes F_{\RV{Y}}))\\
+                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U'(\gamma'\splitter{0.15}(I_D\otimes \kappa F_{\RV{Y}})) - U'(\mu F_{\RV{X}} J\splitter{0.15}(I_D\otimes \kappa F_{\RV{Y}}))\\
+                           &= R^\beta (J,g(\kappa,\mu))
+\end{align}
+\end{proof}
+
+\begin{theorem}\label{th:sdp_to_CSDP}
+Every SDP $\langle (\mathscr{H},E,\RV{X}),D,\ell\rangle$ can be reduced to a CSDP.
+\end{theorem}
+\begin{proof}
+Take $\RV{D}$ to be the projection from $D\times E$ to $D$. For each $\mu\in \mathscr{H}$ define the consequence $\kappa_\mu:d\mapsto \mu$ for all $d\in D$. Take the causal theory $\mathscr{T}=\{(\kappa_\mu,\mu)|\mu\in \mathscr{H}\}$ for some $\pi\in \Delta(\mathcal{D})$ and the pseudo-utility $U(\nu) = -\mathbb{E}_\nu \left[\ell(P^\nu_\RV{E},\RV{D})\right]$ to construct the CSDP $\langle (\mathscr{T},E,\RV{X}),D,(U,E)\rangle$. We will show that the original problem can be reduced to this.
+
+For $\gamma\in \Delta(\mathcal{D})$ the induced loss $L$ is
+\begin{align}
+    L(\kappa_\mu,\gamma) &= -\sup_{\gamma'\in \Delta(\mathcal{D})} \mathbb{E}_{\gamma' \splitter{0.15}(I_D\otimes \kappa_\mu)_{\RV{E}}}[\ell(\gamma'\splitter{0.15}(I_D\otimes \kappa_\mu)_{\RV{E}},\RV{D})] + \mathbb{E}_{\gamma \splitter{0.15}(I_D\otimes \kappa_\mu)}[\ell(\gamma \splitter{0.15}(I_D\otimes \kappa_\mu)_{\RV{E}},\RV{D})]\\
+                     &= \mathbb{E}_{\gamma}[\ell(\mu,\RV{D})]
+\end{align}
+
+For the surjective map, take $g:\mathscr{H}\to \mathscr{T}$ defined by $g(\mu)=\kappa_\mu$.
+
+Denote by $R$ the risk associated with the SDP $\langle (\mathscr{H},E),D,\RV{X},\ell\rangle$ and by $R'$ the risk associated with the CSDP $\langle (\mathscr{T},E),D,\RV{X},U\rangle$. Then
+\begin{align}
+    R'(J,\kappa,\mu) &= \int_D \ell(\mu, y) \mu_{\RV{X}} J(dy)\\
+                   &=R(J,g(\kappa,\mu))
+\end{align}
+\end{proof}
+
+\begin{theorem}\label{th:red_CSDP}
+Given a CSDP $\beta=\langle (\mathscr{T},E,\RV{X}),D,(U,F)\rangle$ where $U$ is an ordinary pseudo-utility, let $\mathscr{K}=\{\kappa|(\kappa,\mu)\in \mathscr{T}\}$ be the set of consequences. $\beta$ is reducible to a statistical decision problem on the measurable space $(E\times F\times D,\mathcal{E}\otimes \mathcal{F}\otimes \mathcal{D})$ if there is some surjective map $m:\Delta(\mathcal{F}\otimes\mathcal{D})\to \mathscr{K}$.
+\end{theorem}
+
+\begin{proof}
+Let $\mathscr{H}\subset \Delta(\mathcal{E}\otimes \mathcal{F}\otimes \mathcal{D})$ be some hypothesis class and let $m^\dagger$ be a right inverse of $m$. Define $h:\mathscr{T}\to \mathscr{H}$ by $(\kappa,\mu)\mapsto \mu \otimes m^{\dagger}(\kappa)$.
+
+Let $k:\Delta(\mathcal{F})^D\times D\to \mathbb{R}$ be the differential loss induced by the ordinary pseudo-utility $U$ (see Equation \ref{eq:induced_l}).
+
+Given the projections $\RV{F}:E\times F\times D\to F$ and $\RV{D}:E\times F \times D\to D$ and arbitrary $\xi\in\Delta(\mathcal{E}\otimes \mathcal{F} \otimes\mathcal{D})$ define $\ell:\mathscr{H}\times D\to [0,\infty)$ by
+\begin{align}
+    \ell(\xi,y) = k(m(\xi F_{\splitter{0.15}(\RV{F}\otimes\RV{D})}),y)
+\end{align}
+
+Note that
+\begin{align}
+    \ell(h(\kappa,\mu),y) = k(\kappa,y)
+\end{align}
+
+Define $\RV{X}':E\times F \times D\to X$ by $(a,b,c)\mapsto \RV{X}(a)$.
+
+Then, given the statistical decision problem $\langle(\mathscr{H},E\times F\times D,\RV{X}'),D,\ell\rangle$, we have for all $J\in \mathscr{J}$, $(\kappa,\mu)\in\mathscr{T}$ the risk
+\begin{align}
+    R'(J,h(\kappa,\mu)) &= \int_D \ell (h(\kappa,\mu),y)  h(\kappa,\mu) F_{\RV{X}'} J(dy) \\
+                        &= \int_D \ell (h(\kappa,\mu),y)  (\mu\otimes m^\dagger(\kappa)) F_{\RV{X}'} J(dy) \\
+                        &= \int_D k(\kappa,y) \mu F_{\RV{X}} J(dy)\\
+                        &= R(J,\kappa,\mu)
+\end{align}
+\end{proof}
+
+
+\begin{example}[Irreducible CSDP]\label{ex:ired_csdp}
+The choice of decision function in an SDP does not affect the state, while this choice does affect the outcome in an CSDP. For an SDP, then, the risk of a mixed decision function is equal to the mixture of risks of each atomic decision function but this is not true in general for an CSDP.
+
+Take the CSDP $\langle (\mathscr{T}, E), D, \RV{X}, U \rangle$ where $E=D=\{0,1\}$, $\RV{Y}:E\to \{0,1\}$ is the identity function, $U:\mu\mapsto -\text{Var}_\mu[\RV{Y}]$ and $\mathscr{T}=\{(d\mapsto \delta_d,\nu)|\nu\in \Delta(\mathcal{E})\}$.
+
+For any $(\kappa,\mu)\in \mathscr{T}$ and $J\in\mathscr{J}$ we have
+\begin{align}
+    R(J,\kappa,\mu) = 0.25-\text{Var}_{\mu F_{\RV{X}} J}(\RV{Y})
+\end{align}
+
+Consider the forgetful decision functions $J_0:x\mapsto \text{Bernoulli(0)}$ and $J_{1/2}:x\mapsto \mathrm{Bernoulli(\tfrac{1}{2})}$ and $J_1:x\mapsto \mathrm{Bernoulli(1)}$ for all $x\in X$. Note that $J_{1/2}(x;A) = \tfrac{1}{2}(J_0(x;A)+J_1(x;A))$ for all $x\in X$, $A\in \mathcal{D}$. For any statistical decision problem with risk $R'$,
+\begin{align}
+    R'(J_{1/2},\mu) &= \int_D \ell(\mu,y) \mu F_{\RV{X}} J_{1/2}(dy)\\
+                    &= \frac{1}{2}\left(\int_D \ell(\mu,y) \mu F_{\RV{X}} J_{0}(dy) + \int_D \ell(\mu,y) \mu F_{\RV{X}} J_{1}(dy)\right)
+                    &= \frac{1}{2}\left(R'(J_0,\mu) + R'(J_1,\mu) \right)
+\end{align}
+
+But
+\begin{align}
+    R(J_{1/2},\kappa,\mu) &= 0\\
+                          &\neq \frac{1}{2}\left(R(J_0,\kappa,\mu) + R(J_1,\kappa,\mu)\right)
+\end{align}
+
+\end{example}
+
+\begin{corollary}
+The class of nonrandomized decision functions is not essentially complete for CSDPs. The stochastic decision function $J_{1/2}$ is strictly better than any deterministic function in the above example.
+\end{corollary}
+
+
+\begin{theorem}\label{th:red_CSDP}
+Given a CSDP $\beta=\langle (\mathscr{T},E,\RV{X}),D,(U,F)\rangle$ where $U$ is an ordinary pseudo-utility, let $\mathscr{K}=\{\kappa|(\kappa,\mu)\in \mathscr{T}\}$ be the set of consequences. $\beta$ is reducible to a statistical decision problem on the measurable space $(E\times F\times D,\mathcal{E}\otimes \mathcal{F}\otimes \mathcal{D})$ if there is some surjective map $m:\Delta(\mathcal{F}\otimes\mathcal{D})\to \mathscr{K}$.
+\end{theorem}
+
+\begin{proof}
+Let $\mathscr{H}\subset \Delta(\mathcal{E}\otimes \mathcal{F}\otimes \mathcal{D})$ be some hypothesis class and let $m^\dagger$ be a right inverse of $m$. Define $h:\mathscr{T}\to \mathscr{H}$ by $(\kappa,\mu)\mapsto \mu \otimes m^{\dagger}(\kappa)$.
+
+Let $k:\Delta(\mathcal{F})^D\times D\to \mathbb{R}$ be the differential loss induced by the ordinary pseudo-utility $U$ (see Equation \ref{eq:induced_l}).
+
+Given the projections $\RV{F}:E\times F\times D\to F$ and $\RV{D}:E\times F \times D\to D$ and arbitrary $\xi\in\Delta(\mathcal{E}\otimes \mathcal{F} \otimes\mathcal{D})$ define $\ell:\mathscr{H}\times D\to [0,\infty)$ by
+\begin{align}
+    \ell(\xi,y) = k(m(\xi F_{\splitter{0.15}(\RV{F}\otimes\RV{D})}),y)
+\end{align}
+
+Note that
+\begin{align}
+    \ell(h(\kappa,\mu),y) = k(\kappa,y)
+\end{align}
+
+Define $\RV{X}':E\times F \times D\to X$ by $(a,b,c)\mapsto \RV{X}(a)$.
+
+Then, given the statistical decision problem $\langle(\mathscr{H},E\times F\times D,\RV{X}'),D,\ell\rangle$, we have for all $J\in \mathscr{J}$, $(\kappa,\mu)\in\mathscr{T}$ the risk
+\begin{align}
+    R'(J,h(\kappa,\mu)) &= \int_D \ell (h(\kappa,\mu),y)  h(\kappa,\mu) F_{\RV{X}'} J(dy) \\
+                        &= \int_D \ell (h(\kappa,\mu),y)  (\mu\otimes m^\dagger(\kappa)) F_{\RV{X}'} J(dy) \\
+                        &= \int_D k(\kappa,y) \mu F_{\RV{X}} J(dy)\\
+                        &= R(J,\kappa,\mu)
+\end{align}
+\end{proof}
