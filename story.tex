@@ -1,6 +1,6 @@
 \section{Introduction}
 
-The decision theoretic approach to statistics plays a role of fundamental importance in modern machine learning; loss engineering plays a key role in the development of algorithms, and the analysis of losses plays a key role in the theoretical treatment of learning algorithms.
+The decision theoretic approach to statistics plays a role of fundamental importance in modern machine learning; loss functions underpin the development of algorithms, and the analysis of losses is critical to the theoretical treatment of learning algorithms.
 
 Problems of causal inference make different demands to statistical problems, though statistical inference often plays a role in addressing them (\cite{pearl_causality:_2009}). There are two broad approaches to causality, one based on graphical models and one based on the joint distribution of observations and ``potential outcomes''. While both approaches can be applied to decision making problems, such applications require decision theoretic interpretation of notions more basic to the causal frameworks such as ``causal effect'' and ``treatment effect''.
 
@@ -8,16 +8,16 @@ The identification of causal effects under either framework typically requires s
 
 In contrast, substantial progress in machine learning has been the result of developing generic principles and learning techniques that are relevant to many datasets from many domains and are less reliant on the judgement of domain experts. There is substantial interest in discovering and studying analogous generic principles of causal inference. Generic approaches cannot be expected to yield results as strong as approaches that involve expert input. For example, the non-generic assumption of ignorability is often licenced by knowledge of experimental design that is not itself to be found in the data in question, so any learner equipped with only generic assumptions and the data in question must be starting at a disadvantage. Nonetheless, this does not exclude the possibility that generic approaches may yield nontrivial results in the right circumstances.
 
-Two key approaches to generic causal inference feature, respectively, the assumptions of \emph{faithfulness} and the \emph{independence of cause and mechanism}. The assumption of faithfulness (together with the Causal Markov Condition) facilitates the exclusion of some graphical models on the basis of conditional independences found in the data \cite{spirtes_causation_1993} while the principle of independence of cause and mechanism uses a number of special purpose techniques to assess the \emph{algorithmic independence} of marginal and conditional distributions which leads to preferment of some graphical models over others \cite{lemeire_replacing_2013, peters_identifiability_2012}.
+There are two main assumptions used so far in pursuing generic causal inference: \emph{faithfulness} and the \emph{independence of cause and mechanism}. The assumption of faithfulness (together with the Causal Markov Condition) facilitates the exclusion of some graphical models on the basis of conditional independences found in the data \citep{spirtes_causation_1993} while the principle of independence of cause and mechanism enables the use of a number of special purpose techniques to assess the \emph{algorithmic independence} of marginal and conditional distributions which leads to preferment of some graphical models over others \citep{lemeire_replacing_2013, peters_identifiability_2012}.
 
 
 
 Both faithfulness and the independence of cause and mechanism are employed in learning causal Bayesian networks. While these are undoubtedly useful tools for causal reasoning, causal Bayesian networks are not ideal objects for the analysis of causal learning at a very general level:
 \begin{itemize}
-    \item There are causal models which cannot be captured by a DAG \cite{dawid_beware_2010,bongers_theoretical_2016}
-    \item There is controversy over how causal Bayesian networks should be adapted to answer counterfactual questions \cite{richardson2013single}
-    \item Under appropriate conditions, different graphs may induce the same set of interventional distributions \cite{peters_structural_2015}
-    \item A standard causal Bayesian network posits an intervention operation for every variable under consideration, while the actions to be evaluated may be much more limited. Learning such a graph appears to run afoul of Vapnik's precept: \emph{When solving a given problem, try to avoid solving a more general problem as an intermediate step} \cite{vapnik_nature_2013}
+    \item There are causal models which cannot be captured by a DAG \citep{dawid_beware_2010,bongers_theoretical_2016}
+    \item There is controversy over how causal Bayesian networks should be adapted to answer counterfactual questions \citep{richardson2013single}
+    \item Under appropriate conditions, different graphs may induce the same set of interventional distributions \citep{peters_structural_2015}
+    \item A standard causal Bayesian network posits an intervention operation for every variable under consideration, while the actions to be evaluated may be much more limited. Learning such a graph appears to run afoul of Vapnik's precept: \emph{When solving a given problem, try to avoid solving a more general problem as an intermediate step} \citep{vapnik_nature_2013}
 \end{itemize}
 
 We propose a general account of causal inference problems motivated by a decision theoretic approach. While we do not claim that such an approach subsumes every causal question that someone may be interested in, we do claim that a very large number of causal questions have a natural decision theoretic formulation.

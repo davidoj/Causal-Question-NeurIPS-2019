@@ -1,44 +1,69 @@
 \section{Definitions}
-\begin{definition}[Markov kernel]
-Given two measureable sets $(E,\mathcal{E})$ and $(F,\mathcal{F})$, a Markov kernel $K$ is a map $E\times \mathcal{F} \to [0,1]$ where
+Given two measureable sets $(E,\mathcal{E})$ and $(F,\mathcal{F})$, a \emph{Markov kernel} $K$ is a map $E\times \mathcal{F} \to [0,1]$ where
 \begin{enumerate}
     \item The map $x\mapsto K(x;B)$ is $\mathcal{E}$-measurable for every $B\in\mathcal{F}$
     \item The map $B\mapsto K(x;B)$ is a probability measure on $(F,\mathcal{F})$ for every $x\in E$ 
 \end{enumerate}
 
-We will give Markov kernels the alternate type signature $K:E\to \Delta(\mathcal{F})$ to emphasize part 2 of this definition, bearing in mind that they must also satisfy the measurability of part 1.
-\end{definition}
+Abusing notation somewhat, we will give Markov kernels the alternate type signature $K:E\to \Delta(\mathcal{F})$ to emphasize part 2 of this definition, noting that part 1 adds additional restrictions. We will sometimes write the set of Markov kernels of type $E\to \Delta(\mathcal{F})$ as $\Delta(\mathcal{F})^D$, noting again that given the measurability restriction of part 1, the set of Markov kernels of this type may be smaller than $\Delta(\mathcal{F})^D$.
 
-\begin{definition}[Measure-kernel-function product]\label{def:kernel_products}
-If $K$ is a Markov kernel from $E\to \Delta(F)$ and $\mu$ is a probability measure on $(E,\mathcal{E})$, then
+\subsection{Operations with Markov kernels}
+
+For the following, assume $K$ is a Markov kernel from $E\to \Delta(\mathcal{F})$, $K'$ a kernel $E\to \Delta(\mathcal{H})$, L is a Markov kernel $F\to \Delta(\mathcal{G})$, $\mu$ is a probability measure on $(E,\mathcal{E})$, $\nu$ is a probability measure on $(F,\mathcal{F})$ and $f$ is a nonnegative measurable function $F\to \mathbb{F}$.
+
+The notation here borrows heavily from \cite{cinlar_probability_2011} and \cite{fong_causal_2013}.
+
+\subsubsection{Kernel products}
+
+$KL$ is a Markov kernel $E\to \Delta(\mathcal{G})$ such that
+\begin{align}
+    KL(x;B):= \int_F K(x;dy) L(y;B),\qquad x\in E, B\in \mathcal{G}
+\end{align}
+
+$\mu K$ is a probability measure on $(F,\mathcal{F})$ such that
 \begin{align}
     \mu K(B)=\int_E \mu(dx) K(x;B),\qquad B\in\mathcal{F}
 \end{align}
-defines a probability measure $\mu K$ on $(F,\mathcal{F})$.
 
-If $f$ is a nonnegative measurable function $F\to \mathbb{R}$ then
+$Kf$ is a nonnegative measurable function $E\to \mathbb{R}$ such that
 \begin{align}
-    Kf(x) = \int_F K(x;dy)f(y), \qquad x\in E
+    Kf(x) := \int_F K(x;dy)f(y), \qquad x\in E
 \end{align}
-is a nonnegative measureable function $E\to \mathbb{R}$.
 
-If $L$ is a Markov kernel from $F\to \Delta(G)$, then
+\subsubsection{Special kernels and operations}
+
+$I_E$ is a kernel $E\to \Delta(\mathcal{E})$ defined by $x\mapsto \delta_x$. It has the properties $\mu I_E=\mu$, $KI_F = K$, $I_E K = K$, $I_F f=f$.
+
+$\splitter{0.15}_E$ is a kernel $E\to \Delta(\mathcal{E}\otimes\mathcal{E})$ defined by $x\mapsto \delta_{(x,x)}$. We will subsequently leave the space implicit.
+
+Given $M:H\to \Delta(\mathcal{I})$, $K\otimes M$ is a Markov kernel $E\times H\to \Delta(\mathcal{F}\otimes\mathcal{I})$ where
 \begin{align}
-    KL(x;B) = \int_F K(x;dy) L(y;B),\qquad x\in E, B\in \mathcal{G}
+    K\otimes M(x,y;A\times B) := K(x;A) M(y;B)
 \end{align}
-is a Markov kernel $KL:E\to \Delta(G)$. \cite{cinlar_probability_2011}
-\end{definition}
 
-In addition
+Given $N:I\to \Delta(\mathcal{J})$, it can be verified that $(K\otimes M)(L\otimes N)=KL\otimes MN$.
+
+$\splitter{0.15}(K\otimes K')$ is a Markov kernel $E\to \Delta(\mathcal{F}\otimes\mathcal{H})$ and
+
 \begin{align}
-    \underline{K\otimes L}(x;A\times B) = \int_A K(x;dy) L(y;B),\qquad x\in E, A\in \mathcal{F}, B\in \mathcal{G} \label{eq:outer_product}
+    \splitter{0.15}(K\otimes K')(x;A\times B) &= \int_E K(x';A)K'(x'';B) \delta_{(x,x)} (dx'\times dx'')\\ 
+                                              &= K(x;A)K'(x;B) \label{eq:outer_product}
 \end{align}
-is a Markov kernel $\underline{K\otimes L}:E\to \Delta(\mathcal{F}\otimes\mathcal{G})$.
 
-$I_E:E\to \Delta(\mathcal{E})$ is the identity kernel $I_E:x\mapsto \delta_x$. 
+Let $(*,\{\emptyset,*\})$ be an indiscrete measurable set. $\stopper{0.15}_E$ is a kernel $E\to \Delta(\{\emptyset,*\})$ defined by $x\mapsto \mathds{1}_*$. We have $\splitter{0.15}(I\otimes \stopper{0.15}) = I$.
 
-Given some measurable function $g:E\to F$, the kernel $F_g:E\to \Delta(\mathcal{F})$ is defined by $x\mapsto \delta_{g(x)}$. For $\mu\in \Delta(\mathcal{E})$, the product $\mu F_g$ is the push forward $g_*\mu$.
+Given some measurable function $g:E\to F$, the kernel $F_g:E\to \Delta(\mathcal{F})$ is defined by $x\mapsto \delta_{g(x)}$. It is easy to check that $F_g F_g = F_g$. For $\mu\in \Delta(\mathcal{E})$, the product $\mu F_g$ is the push forward measure $g_*\mu$.
 
-We extend the underline notation to write, given random variables $\RV{X}:E\to X$ and $\RV{Y}:E\to Y$, $\underline{\RV{X}\otimes\RV{Y}}=\underline{(I_E\otimes I_E)}(\RV{X}\otimes \RV{Y})$. Given some $\mu\in \Delta(\mathcal{E})$, $\underline{\RV{X}\otimes\RV{Y}}_*\mu$ is the usual joint distribution of $\RV{X}$ and $\RV{Y}$.
+\begin{align}
+    \mu F_g (A) &= \int_E \delta_{g(x)}(A) d\mu\\
+                &= \mu(g^{-1}(A))\\
+                &= g_*\mu(A)
+\end{align}
 
-For proofreader's benefit, the notation $\underline{K\otimes L}$ actually represents the ordinary product $\splitter{0.15}(K\otimes L)$ where $\splitter{0.15}$ is a Markov kernel that makes two copies of its input, and this product yields the integral in Eq. \ref{eq:outer_product}.
+Given two random variables $\RV{X}:(E,\mathcal{E})\to (X,\mathcal{X})$ and $\RV{Y}:(E,\mathcal{E})\to (Y,\mathcal{Y})$, the product $\mu\splitter{0.15}(F_{\RV{X}}\otimes F_{\RV{Y}})$ is the joint distribution of $\RV{X}$ and $\RV{Y}$.
+
+\begin{align}
+    \mu \splitter{0.15}(F_{\RV{X}}\otimes F_{\RV{Y}}) (A\times B) &= \int_E \delta_{\RV{X}(x)}(A) \delta_{\RV{Y}(x)}(B) d\mu \\
+                        &= \mu(\RV{X}^{-1}(A)\cap \RV{Y}^{-1}(B))
+\end{align}
+
