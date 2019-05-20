@@ -1,4 +1,4 @@
-\section{Causal Decision Problems}
+\section{Causal Statistical Decision Problems}
 
 \begin{definition}[Two person game (normal form)]
 A normal form game is a triple $\langle \mathscr{S}, A, L\rangle$ where $\mathscr{S}$ and $A$ are arbitrary sets and $L:\mathscr{S}\times A\to [0,\infty)$ is a loss function.
@@ -16,7 +16,19 @@ If the set $\mathscr{S}$ is equipped with a $\sigma$-algebra $\mathcal{S}$, then
     a^*_{ba} = \argmin_{a\in A} \int_{\mathcal{S}} L(s,a) \xi(ds) \label{eq:ba_soln}
 \end{align}
 
-\begin{definition}[Reduction]\label{def:red_sdp_cdp}
+\begin{definition}[Admissible Action]
+Given a normal form two person game $\langle \mathscr{S}, A, L\rangle$, an action $a\in A$ is strictly better than $a'\in A$ iff $L(s,a)\leq L(s,a')$ for all $s\in\mathscr{S}$ and $L(s_0,a)<L(s_0,a')$ for some $s_0\in \mathscr{S}$. If only the first holds, then $a$ is as good as $a'$. An admissible action is an action $a\in A$ such that there is no action strictly better than $A$.
+\end{definition}
+
+\begin{definition}[Complete Class]
+A class $C$ of decisions is a complete class if for every $a\not\in C$ there is some $a'\in C$ that is strictly better than $a$.
+
+A class $C$ is an essentially complete class if for every $a\not\in C$ there is some $a'\in C$ that is as good as $a$.
+\end{definition}
+
+Reduction preserves admissibility and completeness as shown in Appendix \ref{app:csdps}
+
+\begin{definition}[Reduction]\label{def:red_sdp_CSDP}
 A normal form two person game $\alpha = \langle \mathscr{S}^\alpha, A, L^\alpha\rangle$ can be reduced to a different game sharing the same action set $\beta = \langle \mathscr{S}^\beta, A, L^\beta \rangle$ if there is a surjective function $g:\mathscr{S}^\alpha\to \mathscr{S}^\beta$ such that for every $a\in A$, $s\in \mathscr{S}^\alpha$, $L^\alpha(s,a) = L^\beta(g(s),a)$.
 \end{definition}
 
@@ -40,25 +52,24 @@ Denote by $\mathscr{J}$ the set of decision kernels $X\to \Delta(\mathcal{D})$. 
 Denoting by $\mathscr{J}$  the set of kernels $X\to \Delta(\mathcal{D})$, the triple $\langle \mathscr{H}, \mathscr{J}, R\rangle$ forms a two player normal form game. The concepts of the minimax and Bayes solutions (Eq. \ref{eq:mm_soln} and \ref{eq:ba_soln}) apply to this game.
 \end{definition}
 
-The loss function $\ell$ expresses preferences over (state, decision) pairs. However, it may be the case that our preferences don't naturally apply directly to such pairs. For a doctor deciding whether to prescribe a treatment to a patient, it is clear that this patient being healthy in the future is preferable to them being sick. While it may be possible to build a state for which it makes sense to evaluate the desirability of a (state, treatment) pair (for example, such a state may describe both the patient's illness and their responsiveness to treatment), such a description appears to be derived from the more basic preferences over future states of the patient's health.
+The loss function $\ell$ expresses preferences over (state, decision) pairs. However, it may be the case that our preferences don't naturally apply directly to such pairs. For a doctor deciding whether to prescribe a treatment to a patient, it is clear that this patient being healthy in the future is preferable to them being sick. 
 
-This motivates the definition of a causal decision problem, which proceeds from a preferences defined over outcomes rather than (state, decision) pairs. In order to compute the loss associated with a decision, then, a map from decisions to outcomes is required, which we term a \emph{consequence}. There is an extra bit of complication in this definition stemming from the fact that, in general, given a joint probability distribution the conditional probability is not unique. This means that we can proceed from a consequence to a joint probability distribution, but not in general in the reverse direction.
+This motivates the definition of a causal statistical decision problem, which proceeds from a preferences defined over outcomes rather than (state, decision) pairs. In order to compute the loss associated with a decision a map from decisions to outcomes is required, which we term a \emph{consequence}.
 
 \begin{definition}[Consequences]
 Given a measurable outcome space $(F,\mathcal{F})$ and a measurable decision space $(D,\mathcal{D})$, a Markov kernel $\kappa:D \to \Delta(\mathcal{F})$ is a \emph{consequence mapping}, or just a consequence for short.
 \end{definition}
 
 \begin{definition}[Causal state]
-Given a consequence $\kappa:D\to \Delta(\mathcal{F})$, a measurable observation space $(E,\mathcal{E})$ and some distribution $\mu\in \Delta(\mathcal{E})$, the pair $(\kappa,\mu):=\tau$ is a \emph{causal state} on $D, E$ and $F$. We refer to $\kappa$ as the consequence and $\mu$ as the observed state.
+Given a consequence $\kappa:D\to \Delta(\mathcal{F})$, a measurable observation space $(E,\mathcal{E})$ and some distribution $\mu\in \Delta(\mathcal{E})$, the pair $\tau:=(\kappa,\mu)$ is a \emph{causal state} on $D, E$ and $F$. We refer to $\kappa$ as the consequence and $\mu$ as the observed state.
 \end{definition}
 
 \begin{definition}[Causal Theory]\label{def:causal_theory}
 A causal theory $\mathscr{T}$ is a set of causal states sharing the same decision, observation and outcome spaces. 
 \end{definition}
 
-
-\begin{definition}[Causal Decision Problem]\label{def:CDP}
-A causal decision problem (CDP) is a tuple $\langle (\mathscr{T}, E, \RV{X}), D, (U,F) \rangle$. The sets $E,F$ and $D$ are equipped with $\sigma$-algebras $\mathcal{E},\mathcal{F}$ and $\mathcal{D}$ respectively.
+\begin{definition}[Causal Statistical Decision Problem]\label{def:CSDP}
+A causal statistical decision problem (CSDP) is a tuple $\langle (\mathscr{T}, E, \RV{X}), D, (U,F) \rangle$. The sets $E,F$ and $D$ are equipped with $\sigma$-algebras $\mathcal{E},\mathcal{F}$ and $\mathcal{D}$ respectively.
 
 \begin{itemize}
     \item $\mathscr{T}$ is a causal theory on $D, E$ and $F$
@@ -82,8 +93,6 @@ The triple $\langle \mathscr{T}, \mathscr{J}, R\rangle$ is a normal form two per
 
 If there exists some measurable $u:F\times D\to \mathbb{R}$ such that for all $\xi\in \Delta(\mathcal{F}\otimes\mathcal{D})$, $U(\xi)=\mathbb{E}_{\xi}[u]$ then we call $u$ an ordinary utility and by extension $U$ an ordinary pseudo-utility.
 
-For an example of a pseudo utility that is not ordinary, consider $U(\xi) = \text{Var}_{\xi}(\RV{F})$ for $\xi\in\Delta(\mathcal{D}\otimes\mathcal{F})$ with $D=F=\{0,1\}$ and $\RV{F}:D\times F\to F$ is the projection $(d,f)\mapsto f$.
-
 An ordinary utility induces a loss
 \begin{align}
     L(\kappa,\gamma) = \mathbb{E}_{\gamma}[l^\kappa]\\
@@ -94,198 +103,57 @@ where $l^\kappa:D\to [0,\infty)$ is defined by
 \end{align}
 \end{definition}
 
+Reduction from a CSDP to an ordinary SDP is sufficient to import results from statistical decision theory such as Theorem \ref{th:complete_class}.
 
-The intuition behind this definition is that, if one problem can be reduced to another, then for every (decision, state of nature) pair in the first problem there is a state of nature in the second problem assigning the same risk to the same decision.
-
-The following theorems show that reduction indeed preserves important properties of the risk set.
-
-\begin{definition}[Admissible Action]
-Given a normal form two person game $\langle \mathscr{S}, A, L\rangle$, an action $a\in A$ is strictly better than $a'\in A$ iff $L(s,a)\leq L(s,a')$ for all $s\in\mathscr{S}$ and $L(s_0,a)<L(s_0,a')$ for some $s_0\in \mathscr{S}$. If only the first holds, then $a$ is as good as $a'$.
-
-An admissible action is an action $a\in A$ such that there is no action strictly better than $A$.
-\end{definition}
-
-\begin{definition}[Complete Class]
-A class $C$ of decisions is a complete class if for every $a\not\in C$ there is some $a'\in C$ that is strictly better than $a$.
-
-A class $C$ is an essentially complete class if for every $a\not\in C$ there is some $a'\in C$ that is as good as $a$.
-\end{definition}
-
-\begin{lemma}[Reduction preserves admissibility]\label{lem:red_adm}
-If a causal decision problem $\beta$ with induced game $\langle \mathscr{T},\mathscr{J}, R\rangle$ can be reduced to a statistical decision problem $\alpha$ with induced game $\langle \mathscr{H},\mathscr{J},R' \rangle$ then a decision function $J\in \mathscr{J}$ is admissible in $\beta$ iff it is admissible in $\alpha$.
-\end{lemma}
-
-
-\begin{proof}
-Suppose $J\in\mathscr{J}$ is inadmissible in $\alpha$. Then there is some $J'\in\mathscr{J}$, $\mu\in\mathscr{H}$ such that $R'(J',\mu)<R'(J,\mu)$ and $R'(J',\nu)\leq R'(J,\nu)$ for all $\nu\in \mathscr{H}$. Let $h$ be the function that witnesses the reduction. Then we have for all $\tau\in h^{-1}(\mu)$, $R(J',\tau)=R'(J',\mu)<R(J,\tau)=R'(J,\nu)$ and for all $\nu\in \mathscr{H}$, $\chi\in h^{-1}(\nu)$, $R(J',\chi)=R'(J',\nu)\leq R(J,\chi)=R'(J,\nu)$. The set $\bigcup_{\nu\in\mathscr{H}} h^{-1}(\nu)=\mathscr{T}$, so $J$ is inadmissible in $\beta$.
-
-Suppose $J\in \mathscr{J}$ is admissible in $\beta$. Then there is some $J'\in\mathscr{J}$, $\tau\in\mathscr{T}$ such that $R(J',\tau)<R(J,\tau)$ and $R(J',\chi)\leq R(J,\chi)$ for all $\chi\in \mathscr{T}$. Then we have $R'(J',h(\tau))=R(J',\tau)<R(J,\tau)=R'(J,h(\tau))$ and $R'(J',h(\chi))=R(J',\chi)\leq R(J,\chi)=R'(J,h(\chi))$. Because $h$ is surjective, $J$ is admissible in $\alpha$.
-\end{proof}
-
-\begin{corollary}[Reduction preserves completeness]\label{cor:red_comp}
-If a causal decision problem $\beta$ with induced game $\langle \mathscr{T},\mathscr{J}, R\rangle$ can be reduced to a statistical decision problem $\alpha$ with induced game $\langle \mathscr{H},\mathscr{J},R' \rangle$, then an (essentially) complete class with respect to $\alpha$ is (essentially) complete with respect to $\beta$.
-\end{corollary}
-
-\begin{definition}[Induced prior]
-If a causal decision problem $\beta$ with induced game $\langle \mathscr{T},\mathscr{J}, R\rangle$ can be reduced to a statistical decision problem $\alpha$ with induced game $\langle \mathscr{H},\mathscr{J},R' \rangle$ witnessed by $h:\mathscr{T}\to\mathscr{H}$ then given a prior $\xi$ on $(\mathscr{H},\mathcal{H})$ the induced prior $\xi_h$ on $(\mathscr{T},\sigma(h))$ is defined by the push forward measure $\xi_h(h^{-1}(A)) = \xi(A)$ for $A\in \mathcal{H}$.
-\end{definition}
-
-\begin{lemma}[Induced Bayes rule]\label{lem:IB_rule}
-If a causal decision problem $\beta$ with induced game $\langle \mathscr{T},\mathscr{J}, R\rangle$ can be reduced to a statistical decision problem $\alpha$ with induced game $\langle \mathscr{H},\mathscr{J},R' \rangle$ witnessed by $h:\mathscr{T}\to\mathscr{H}$, $\mathscr{H}$ is countable and $J_{ba}^\xi\in \mathscr{J}$ is a Bayes rule with respect to the problem $\alpha$ and the prior $\xi$ (Equation \ref{eq:ba_soln}) then $J_{ba}^\xi$ is a Bayes rule with respect to the problem $\beta$ and the induced prior $\xi_h$.
-\end{lemma}
-
-\begin{proof}
-For any $J\in\mathscr{J}$, $\tau\in \mathscr{T}$, by the properties of the push-forward measure
-\begin{align}
-    \int_{\mathscr{T}} R(J,\tau) d\xi_h = \int_\mathscr{H} R'(J,h(\tau))
-\end{align}
-
-And therefore, if a Bayes rule exists,
-\begin{align}
-    \argmin_{J\in\mathscr{J}} \int_{\mathscr{T}} R(J,\tau) d\xi_h =  \argmin_{J\in\mathscr{J}}\int_\mathscr{H} R'(J,h(\tau)
-\end{align}
-
-\end{proof}
-
-\begin{theorem}[Complete class theorem (SCDP)]\label{th:complete_class}
-Given an SCDP $\alpha:=\langle (\mathscr{T},E),D,\RV{X},U\rangle$ with risk $R$, if there is a reduction to an SDP $\beta:=\langle (\mathscr{H},F),D,\RV{Y},\ell \rangle$ with risk $R'$ such that $\mathscr{H}$ is finite and the risk set $S=\{R'(J,\mu)|J\in\mathscr{J},\mu\in \mathscr{H}\}$ is bounded from below then the set of all Bayes decision functions is a complete class and the set of all admissible Bayes decision functions is a minimal complete class.
+\begin{theorem}[Complete class theorem (CSDP)]\label{th:complete_class}
+Given an CSDP $\alpha:=\langle (\mathscr{T},E),D,\RV{X},U\rangle$ with risk $R$, if there is a reduction to an SDP $\beta:=\langle (\mathscr{H},F),D,\RV{Y},\ell \rangle$ with risk $R'$ such that $|\mathscr{H}|<\infty$ and $\inf_{J\in\mathscr{J},\mu\in\mathscr{H}} R'(J,\mu)<-\infty$ then the set of all Bayes decision functions is a complete class and the set of all admissible Bayes decision functions is a minimal complete class.
 \end{theorem}
 
 \begin{proof}
-Given the conditions, the Bayes decision functions in $\beta$ form a complete class and admissible Bayes rules a minimal complete class \cite{toutenburg_ferguson_1970}.
-
-By Corollary \ref{cor:red_comp} the Bayes rules for $\beta$ are complete in $\alpha$, and the admissible Bayes rules for $\beta$ are essentially complete in $\alpha$.
-
-Every (admissible) Bayes rule for $\beta$ is a(n admissible) Bayes rule for $\alpha$, so the set of (admissible) Bayes rules for $\alpha$ is also (essentially) complete in $\alpha$.
+This follows from Lemmas \ref{cor:red_comp} and \ref{lem:IB_rule}. See appendix \ref{app:csdps}.
 \end{proof}
 
+Any statistical decision problem can be reduced to a CSDP where decisions have no effect.
 
-Theorem \ref{th:scdp_obu_red} says that, without loss of generality, if $U$ depends on $F$ only via some random variable $\RV{Y}$, we can consider the statistical decision problems $\langle (\mathscr{T}^\beta,(E,\sigma(\RV{X})),\RV{X}),D,\RV{X},(U,(F,\sigma(\RV{Y}))\rangle$.
+\begin{theorem}\label{th:sdp_to_CSDP}
+Every SDP $\langle (\mathscr{H},E,\RV{X}),D,\ell\rangle$ can be reduced to a CSDP.
+\end{theorem}
+\begin{proof}
+We choose a theory that matches every probability measure $\mu\in\Delta(\mathcal{E})$ with a consequence map that itself always yields $\mu$. We then construct a utility $U$ that induces an identical risk. See Appendix \ref{app:csdps}.
+\end{proof}
 
-\begin{theorem}[Reduction of SCDPs]\label{th:scdp_obu_red}
-Given a statistical causal decision problem $\alpha=\langle (\mathscr{T}^\alpha,(E,\mathcal{E}),\RV{X}),D,\RV{X},(U,(F,\mathcal{F}))\rangle$ where, for $\zeta\in \Delta(\mathcal{E}\otimes\mathcal{D})$ and given $\RV{D}$ and $\RV{F}$ are the projections from $D\times F$ to $D$ and $F$ respectively, if $U(\zeta)=U'(\zeta\splitter{0.15}(F_\RV{D}\otimes F_{\RV{F}} F_{\RV{Y}}) ))$ for some $\RV{Y}: F\to Y$ and $U':\Delta(\mathcal{Y})\to \mathbb{R}$ then $\alpha$ has $\RV{Y}$-\emph{observable utility}. Such a problem can be reduced to a problem $\beta=\langle (\mathscr{T}^\beta,(E,\sigma(\RV{X})),\RV{X}),D,\RV{X},(U',(Y,\mathcal{Y})\rangle$.
+The triviality of this reduction relies on the generalised utility $U$ in the definition of the statistical CSDP. A reduction is sometimes possible to an CSDP featuring an ordinary utility by choosing consequences to represent the loss but whether this is always possible remains an open question.
+
+A CSDP cannot, in general, be reduced to a statistical decision problem - for example, if we choose the utililty to be the variance of some random variable we may be able to achieve higher utility through a randomised decision than any nonrandomised decision under conditions where a regular SDP cannot have this property (see Example \ref{ex:ired_csdp} in Appendix \ref{app:csdps}). It is an open question whether this reduction is generally possible if the problem features a normal utility.
+
+Theorem \ref{th:red_CSDP} reduces a CSDP to a SDP by associating each pair $(\mu,\kappa)$ in the causal theory with a distribution over $E\times F\times D$. This may be possible by finding a distribution on the product space for which $\mu$ is a marginal probability and $\kappa$ is a conditional distribution, but this is not necessary.
+
+\begin{theorem}\label{th:red_CSDP}
+Given a CSDP $\beta=\langle (\mathscr{T},E,\RV{X}),D,(U,F)\rangle$ where $U$ is an ordinary pseudo-utility, let $\mathscr{K}=\{\kappa|(\kappa,\mu)\in \mathscr{T}\}$ be the set of consequences. $\beta$ is reducible to a statistical decision problem on the measurable space $(E\times F\times D,\mathcal{E}\otimes \mathcal{F}\otimes \mathcal{D})$ if there is some surjective map $m:\Delta(\mathcal{F}\otimes\mathcal{D})\to \mathscr{K}$.
 \end{theorem}
 
 \begin{proof}
-Consider the mapping $g:\mathscr{T}^\alpha\to\mathscr{T}^\beta$ given by $(\kappa,\mu)\mapsto (\kappa F_{\RV{Y}},\mu F_{\RV{X}})$.
-
-We have for $J\in \mathscr{J}$, $(\kappa,\mu)\in\mathscr{T}^\alpha$
-\begin{align}
-    R^\alpha(J,\kappa,\mu) &= \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_D\otimes\kappa)) - U(\mu F_{\RV{X}} J\splitter{0.15}(I_D\otimes\kappa))\\
-                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U'(\gamma'\splitter{0.15}(I_D\otimes\kappa)(I_D \otimes  F_{\RV{Y}})) - U'(\mu F_{\RV{X}} J\splitter{0.15} (I_D\otimes\kappa))(I_{\RV{D}}\otimes F_{\RV{Y}}))\\
-                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U'(\gamma'\splitter{0.15}(I_D\otimes \kappa F_{\RV{Y}})) - U'(\mu F_{\RV{X}} J\splitter{0.15}(I_D\otimes \kappa F_{\RV{Y}}))\\
-                           &= R^\beta (J,g(\kappa,\mu))
-\end{align}
-\end{proof}
-
-Any statistical decision problem can be reduced to a causal decision problem where decisions have no effect.
-
-\begin{theorem}\label{th:sdp_to_cdp}
-Every statistical decision problem $\langle (\mathscr{H},E,\RV{X}),D,\ell\rangle$ can be reduced to a causal decision problem.
-\end{theorem}
-\begin{proof}
-Take $\RV{D}$ to be the projection from $D\times E$ to $D$. For each $\mu\in \mathscr{H}$ define the consequence $\kappa_\mu:d\mapsto \mu$ for all $d\in D$. Take the causal theory $\mathscr{T}=\{(\kappa_\mu,\mu)|\mu\in \mathscr{H}\}$ for some $\pi\in \Delta(\mathcal{D})$ and the pseudo-utility $U(\nu) = -\mathbb{E}_\nu \left[\ell(P^\nu_\RV{E},\RV{D})\right]$ to construct the causal decision problem $\langle (\mathscr{T},E,\RV{X}),D,(U,E)\rangle$. We will show that the original problem can be reduced to this.
-
-For $\gamma\in \Delta(\mathcal{D})$ the induced loss $L$ is
-\begin{align}
-    L(\kappa_\mu,\gamma) &= -\sup_{\gamma'\in \Delta(\mathcal{D})} \mathbb{E}_{\gamma' \splitter{0.15}(I_D\otimes \kappa_\mu)_{\RV{E}}}[\ell(\gamma'\splitter{0.15}(I_D\otimes \kappa_\mu)_{\RV{E}},\RV{D})] + \mathbb{E}_{\gamma \splitter{0.15}(I_D\otimes \kappa_\mu)}[\ell(\gamma \splitter{0.15}(I_D\otimes \kappa_\mu)_{\RV{E}},\RV{D})]\\
-                     &= \mathbb{E}_{\gamma}[\ell(\mu,\RV{D})]
-\end{align}
-
-For the surjective map, take $g:\mathscr{H}\to \mathscr{T}$ defined by $g(\mu)=\kappa_\mu$.
-
-Denote by $R$ the risk associated with the SDP $\langle (\mathscr{H},E),D,\RV{X},\ell\rangle$ and by $R'$ the risk associated with the SCDP $\langle (\mathscr{T},E),D,\RV{X},U\rangle$. Then
-\begin{align}
-    R'(J,\kappa,\mu) &= \int_D \ell(\mu, y) \mu_{\RV{X}} J(dy)\\
-                   &=R(J,g(\kappa,\mu))
-\end{align}
-\end{proof}
-
-The triviality of this reduction relies on the generalised utility $U$ in the definition of the statistical causal decision problem. A reduction is sometimes possible to an SCDP featuring an ordinary utility by choosing consequences to represent the loss but whether this is always possible remains an open question.
-
-A causal decision problem cannot, in general, be reduced to a statistical decision problem. It is an open question whether this reduction is generally possible if the problem features a normal utility.
-
-\begin{example}[Irreducible SCDP]
-The choice of decision function in an SDP does not affect the state, while this choice does affect the outcome in an SCDP. For an SDP, then, the risk of a mixed decision function is equal to the mixture of risks of each atomic decision function but this is not true in general for an SCDP.
-
-Take the causal decision problem $\langle (\mathscr{T}, E), D, \RV{X}, U \rangle$ where $E=D=\{0,1\}$, $\RV{Y}:E\to \{0,1\}$ is the identity function, $U:\mu\mapsto -\text{Var}_\mu[\RV{Y}]$ and $\mathscr{T}=\{(d\mapsto \delta_d,\nu)|\nu\in \Delta(\mathcal{E})\}$.
-
-For any $(\kappa,\mu)\in \mathscr{T}$ and $J\in\mathscr{J}$ we have
-\begin{align}
-    R(J,\kappa,\mu) = 0.25-\text{Var}_{\mu F_{\RV{X}} J}(\RV{Y})
-\end{align}
-
-Consider the forgetful decision functions $J_0:x\mapsto \text{Bernoulli(0)}$ and $J_{1/2}:x\mapsto \mathrm{Bernoulli(\tfrac{1}{2})}$ and $J_1:x\mapsto \mathrm{Bernoulli(1)}$ for all $x\in X$. Note that $J_{1/2}(x;A) = \tfrac{1}{2}(J_0(x;A)+J_1(x;A))$ for all $x\in X$, $A\in \mathcal{D}$. For any statistical decision problem with risk $R'$,
-\begin{align}
-    R'(J_{1/2},\mu) &= \int_D \ell(\mu,y) \mu F_{\RV{X}} J_{1/2}(dy)\\
-                    &= \frac{1}{2}\left(\int_D \ell(\mu,y) \mu F_{\RV{X}} J_{0}(dy) + \int_D \ell(\mu,y) \mu F_{\RV{X}} J_{1}(dy)\right)
-                    &= \frac{1}{2}\left(R'(J_0,\mu) + R'(J_1,\mu) \right)
-\end{align}
-
-But
-\begin{align}
-    R(J_{1/2},\kappa,\mu) &= 0\\
-                          &\neq \frac{1}{2}\left(R(J_0,\kappa,\mu) + R(J_1,\kappa,\mu)\right)
-\end{align}
-
-\end{example}
-
-\begin{corollary}
-The class of nonramdomized decision functions is not essentially complete for SCDPs. The stochastic decision function $J_{1/2}$ is strictly better than any deterministic function in the above example.
-\end{corollary}
-
-Theorem \ref{th:red_cdp} reduces a SCDP to a CDPs by associating each pair $(\mu,\kappa)$ in the causal theory with a distribution over $E\times F\times D$. Given some $\xi\in \Delta(\mathcal{E}\otimes\mathcal{F} \mathcal{D})$ an intuitive association proceeds by identifying $\mu(A)=\xi(A\times E\times D)$ and $\kappa$ with the conditional probability $P^\xi_{\RV{F}|\RV{D}}$ where $\RV{F}_1:E\times F\times D\to F$ is the ``outcome'' projection. One might read this as licensing the interpretation of $\kappa$ as a conditional probability, as in \cite{dawid_beware_2010}, but this is complicated by the fact that conditional probability under the standard definition is not in general unique and cannot be unique if the set $D$ is uncountable \cite{hajek_what_2003}. 
-
-Theorem \ref{th:red_cdp} does not in fact require $\kappa$ be associated with any conditional probability, however, merely that a surjective map exist. There may be no sensible way to interpret this map.
-
-\begin{theorem}\label{th:red_cdp}
-Given a causal decision problem $\beta=\langle (\mathscr{T},E,\RV{X}),D,(U,F)\rangle$ where $U$ is an ordinary pseudo-utility, let $\mathscr{K}=\{\kappa|(\kappa,\mu)\in \mathscr{T}\}$ be the set of consequences. $\beta$ is reducible to a statistical decision problem on the measurable space $(E\times F\times D,\mathcal{E}\otimes \mathcal{F}\otimes \mathcal{D})$ if there is some surjective map $m:\Delta(\mathcal{F}\otimes\mathcal{D})\to \mathscr{K}$.
-\end{theorem}
-
-\begin{proof}
-Let $\mathscr{H}\subset \Delta(\mathcal{E}\otimes \mathcal{F}\otimes \mathcal{D})$ be some hypothesis class and let $m^\dagger$ be a right inverse of $m$. Define $h:\mathscr{T}\to \mathscr{H}$ by $(\kappa,\mu)\mapsto \mu \otimes m^{\dagger}(\kappa)$.
-
-Let $k:\Delta(\mathcal{F})^D\times D\to \mathbb{R}$ be the differential loss induced by the ordinary pseudo-utility $U$ (see Equation \ref{eq:induced_l}).
-
-Given the projections $\RV{F}:E\times F\times D\to F$ and $\RV{D}:E\times F \times D\to D$ and arbitrary $\xi\in\Delta(\mathcal{E}\otimes \mathcal{F} \otimes\mathcal{D})$ define $\ell:\mathscr{H}\times D\to [0,\infty)$ by
-\begin{align}
-    \ell(\xi,y) = k(m(\xi F_{\splitter{0.15}(\RV{F}\otimes\RV{D})}),y)
-\end{align}
-
-Note that
-\begin{align}
-    \ell(h(\kappa,\mu),y) = k(\kappa,y)
-\end{align}
-
-Define $\RV{X}':E\times F \times D\to X$ by $(a,b,c)\mapsto \RV{X}(a)$.
-
-Then, given the statistical decision problem $\langle(\mathscr{H},E\times F\times D,\RV{X}'),D,\ell\rangle$, we have for all $J\in \mathscr{J}$, $(\kappa,\mu)\in\mathscr{T}$ the risk
-\begin{align}
-    R'(J,h(\kappa,\mu)) &= \int_D \ell (h(\kappa,\mu),y)  h(\kappa,\mu) F_{\RV{X}'} J(dy) \\
-                        &= \int_D \ell (h(\kappa,\mu),y)  (\mu\otimes m^\dagger(\kappa)) F_{\RV{X}'} J(dy) \\
-                        &= \int_D k(\kappa,y) \mu F_{\RV{X}} J(dy)\\
-                        &= R(J,\kappa,\mu)
-\end{align}
+We construct the map $h$ based on the map $m$ and show that, given an ordinary utility $U$, it is possible to construct a loss $\ell$ such that the resulting SDP features the same risk assignments as the original CSDP. See Appendix \ref{app:csdps}.
 \end{proof}
 
 \begin{corollary}\label{cor:card_reduc}
-If the cardinality of $\Delta(\mathcal{F}\otimes\mathcal{D})$ is at least as large as the cardinality of the set of Markov kernels $D\to \Delta(\mathcal{F})$ then an SCDP with an ordinary utility can always be reduced to a SDP.
+If the cardinality of $\Delta(\mathcal{F}\otimes\mathcal{D})$ is at least as large as the cardinality of the set of Markov kernels $D\to \Delta(\mathcal{F})$ then an CSDP with an ordinary utility can always be reduced to a SDP.
 \end{corollary}
 
 \begin{proof}
-This follows from Theorem \ref{th:red_cdp} and the definition of cardinality.
+This follows from Theorem \ref{th:red_CSDP} and the definition of cardinality.
 \end{proof}
 
-A major open question, then, is if $(E,\mathcal{E})$ and $(D,\mathcal{D})$ are standard measurable spaces, the conditions for Corollary \ref{cor:card_reduc} hold in general. Corollary \ref{cor:cdp_to_sdp} shows that the reduction can be made in general if $D$ is a denumerable set.
+A major open question, then, is if $(E,\mathcal{E})$ and $(D,\mathcal{D})$ are standard measurable spaces, the conditions for Corollary \ref{cor:card_reduc} hold in general. Corollary \ref{cor:CSDP_to_sdp} shows that the reduction can be made in general if $D$ is a denumerable set.
 
-\begin{corollary}\label{cor:cdp_to_sdp}
-A causal decision problem $\langle (\mathscr{T},E,\RV{X}),D,(U,F)\rangle$ where $D$ is a denumerable set and  $U$ is an ordinary pseudo-utility can be reduced to a statistical decision problem.
+\begin{corollary}\label{cor:CSDP_to_sdp}
+A CSDP $\langle (\mathscr{T},E,\RV{X}),D,(U,F)\rangle$ where $D$ is a denumerable set and  $U$ is an ordinary pseudo-utility can be reduced to a statistical decision problem.
 \end{corollary}
 
 \begin{proof}
 Take some test distribution $\pi\in \Delta(\mathcal{D})$ such that $\pi(\{y\})>0$ for all $y\in D$. Such a $\pi$ exists by the denumerability of $\mathcal{D}$.
 
-The map $m:\Delta(\mathcal{F}\otimes\mathcal{D})\to \mathscr{K}$ given by $m(\xi) = \frac{\xi(F\times \cdot\times \{y\})}{\pi(\{y\})}$ is surjective. The result follows from Theorem \ref{th:red_cdp}.
+The map $m:\Delta(\mathcal{F}\otimes\mathcal{D})\to \mathscr{K}$ given by $m(\xi) = \frac{\xi(F\times \cdot\times \{y\})}{\pi(\{y\})}$ is surjective. The result follows from Theorem \ref{th:red_CSDP}.
 \end{proof}
 
 This reduction is not particularly practically useful, but it is sufficient to lift results such as Theorem \ref{th:complete_class} from the theory of statistical decision functions.
