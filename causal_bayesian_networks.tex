@@ -1,12 +1,15 @@
 \section{Causal Bayesian Networks}
 
+In all following discussion, we assume the observed data represented by $\RV{X}$ is a sequence of independent and identically distributed random variables $\RV{X}=(\RV{X}_t)_{t\in T}$. We identify distributions over the sequence $\RV{X}$ with distributions over the initial observation $\RV{X}_0$ and subsequently drop the subscript.
+
 There is a natural identification of a causal Bayesian network (CBN) associated with a graph $\mathcal{G}$ and a causal theory $\mathscr{T}_{\mathcal{G}}$ where we consider \emph{do}-interventions defined with respect to the CBN to correspond to decisions in the causal theory. The CBN convention is to denote an interventional distribution with $P(\cdot|do(\RV{X}^i=a))$ notation. Here we associate every allowable intervention with the decision space $(D,\mathcal{D})$ equipped with random variables $\{\RV{D}^i\}_{i\in[N]}$ such that for $y\in D$, $P^y(\cdot) := P(\cdot|[do(\RV{X}^j=\RV{D}^i(y))]_{i\in N})$. The special element $*$ corresponds to a passive intervention which is denoted by the absence of a $do()$ statement in regular CBN notation.
 
 \begin{definition}[Causal Bayesian Network]\label{def:CBN}
 Consider a directed acyclic graph $\mathcal{G}$ with nodes $\mathbf{X}=\{\RV{X}^i|i\in [N]\}$, a measurable space $(E,\mathcal{E})$ and a set of random variables $\RV{X}^i:E\to X^i$ and $X=\times_{i\in[N]} X^i$ along with decision space $(D,\mathcal{D})$ and random variables $\{\RV{D}^i\}_{i\in [N]}$ where $\RV{D}^i:D\to X^i\cup\{*\}$.
 
-Given any $y\in D$ let $S(y)\subset[N]$ be the set of all indices $i$ such that $\RV{D}^i(y)\neq *$. Let $\mathscr{H}_\mathcal{G}\subset\Delta(\mathcal{X})$ be the set of distributions compatible with $\mathcal{G}$. Given arbitrary $\mu\in \mathscr{H}_\mathcal{G}$ and $y\in D$ the $\mathcal{G},\mu,y$-interventional distribution denoted $\mu^{\mathcal{G},y}$ is given by the following two conditions:
+Given any $y\in D$ let $S(y)\subset[N]$ be the set of all indices $i$ such that $\RV{D}^i(y)\neq *$. Let $\mathscr{H}_\mathcal{G}\subset\Delta(\mathcal{X})$ be the set of distributions compatible with $\mathcal{G}$. Given arbitrary $\mu\in \mathscr{H}_\mathcal{G}$ and $y\in D$ the $\mathcal{G},\mu,y$-interventional distribution denoted $\mu^{\mathcal{G},y}$ is given by the following three conditions:
 \begin{enumerate}
+    \item $\mu^{\mathcal{G},y}$ is compatible with $\mathcal{G}$
     \item For all $i\in S(y)$, $\mu^{\mathcal{G},y}F_{\RV{X}^i}=\delta_{\RV{D}^i(y)} F_{\RV{X}^i}$
     \item For all $i\not \in S(y)$, $\mu^{\mathcal{G},y}_{\PA{\mathcal{G}}{\RV{X}^i}} F_{\RV{X}^i}=\mu_{\PA{\mathcal{G}}{\RV{X}^i}}F_{\RV{X}^i} $, $\mu^{\mathcal{G},y}$-almost surely
 \end{enumerate}
@@ -30,9 +33,9 @@ The proof is given in Appendix \ref{app:cbn_ct}.
 
 \subsection{Extending the theory induced by a CBN}
 
-The causal theory $T_{\mathcal{G}}$ defined above associates a consequence with every probability distribution compatible with $\mathcal{G}$ but not every probability distribution in $\Delta(\mathcal{X})$ (this follows from condition 1 of Definition \ref{def:CBN}). It may be the case that it is not considered reasonable to assume \emph{a priori} that the conditional independences implied by $\mathcal{G}$ hold in the observed data - indeed, such an assumption is usually considered unreasonable.
+The causal theory $T_{\mathcal{G}}$ defined above associates a consequence with every probability distribution compatible with $\mathcal{G}$ but not every probability distribution in $\Delta(\mathcal{X})$ (this follows from condition 1 of Definition \ref{def:CBN}). It may be the case that it is not considered reasonable to assume \emph{a priori} that the conditional independences implied by $\mathcal{G}$ hold in the observed data.
 
-We therefore need to extend the theory $\mathscr{T}_{\mathcal{G}}$ to account for the possibility of incompatible distributions. There are many choices for how this may be done, none are obviously correct and different extensions will generally induce very different risk sets, as shown by Example \ref{ex:extn_cbn}.
+We therefore need to extend the theory $\mathscr{T}_{\mathcal{G}}$ to account for the possibility of incompatible distributions. There are many meaningfully different choices for how this may be done as shown by Example \ref{ex:extn_cbn}.
 
 \begin{example}[Extension of a CBN]\label{ex:extn_cbn}
 
@@ -42,11 +45,12 @@ A graph $\mathcal{G}$ is given in figure \ref{fig:simple_cbn}, which implies a s
 \end{align}
 Suppose the three associated random variables $\RV{A}$, $\RV{B}$ and $\RV{C}$ each take values in $\{0,1\}$ and suppose (unrealistically) we know the following holds for all $\mu$ in the set of possible joint distributions $\mathscr{H}$:
 \begin{align}
+    \mu F_{\RV{B}} &= \zeta \qquad \text{for some } \zeta\in \Delta(\{0,1\})\\
     \mu_{\{\RV{A}\}} F_{\RV{B}} &= \iota \qquad \text{for some }\iota:\{0,1\}^3\to \Delta(\mathcal{B})\\
     \max_{x\in\{0,1\}^3,y\in\{0,1\}}\left|\mu_{\{\RV{A},\RV{C}\}} F_{\RV{B}}(x;\{y\}) - \iota(x;\{y\}) \right| &< \epsilon \label{eq:app_ci}
 \end{align}
 
-That is, we know the conditional probability of $\RV{B}$ given $\RV{A}$ and we know that $\RV{B}$ is ``almost'' independent of $\RV{A}$ given $\RV{C}$.
+That is, we know the marginal probability of $\RV{B}$, the conditional probability of $\RV{B}$ given $\RV{A}$ and we know that $\RV{C}$ is ``almost'' independent of $\RV{A}$ given $\RV{B}$.
 
 \begin{figure}
     \centering
@@ -69,13 +73,13 @@ That is, we know the conditional probability of $\RV{B}$ given $\RV{A}$ and we k
 
 Suppose that only interventions on $\RV{A}$ are possible and only $\RV{B}$ is relevant to the utility. We restrict our attention to the subset of decisions $D'=\{y|\RV{D}_\RV{B}(y)=\RV{D}_\RV{C}(y)=*\}$ and marginal distributions over $\RV{B}$ for the consequence maps. Define $\kappa^{\mathcal{G}}$ by
 \begin{align}
-    \kappa_{\mathcal{G}}(y;Z) = \begin{cases} \iota(y;Z) & \RV{D}_\RV{A}(y) \neq *\\
+    \kappa^{\mathcal{G}}(y;Z) = \begin{cases} \iota(y;Z) & \RV{D}_\RV{A}(y) \neq *\\
                                               I_{\{0,1\}^3} F_{\RV{B}} & \RV{D}_\RV{A}(y) = *\end{cases}
 \end{align}
 
 It can be verified that the causal theory $\mathscr{T}_{\mathcal{G}}$ induced by $\mathcal{G}$ and the set of compatible distributions $\mathscr{H}_\mathcal{G}\subset\mathscr{H}$ is
 \begin{align}
-    (\mu,\kappa^{\mathcal{G}} ) \qquad \mu\in \mathscr{H}_{\mathcal{G}} \label{eq:ocbn}
+    (\nu,\kappa^{\mathcal{G}} ) \qquad \nu\in \mathscr{H}_{\mathcal{G}} \label{eq:ocbn}
 \end{align}
 
 Consider two options for extending this to distributions $\nu\in \mathscr{H}$ but not in $\mathscr{H}_{\mathcal{G}}$, noting that one could imagine many additional possibilities:
@@ -88,11 +92,11 @@ The theory $\mathscr{T}_{\mathcal{G}}^\subset$ features only graphs where $\RV{A
 
 $\mathscr{T}_{\mathcal{G}}^\circ$ is the set of states associated with three types of graph: those featuring no arrow $\RV{A}\to\RV{B}$, those featuring $\RV{A}\to \RV{B}$ but not $\RV{C}\to\RV{A}$ and $\RV{C}\to \RV{B}$ and the graph with $\RV{A}\to \RV{B}$, $\RV{C}\to \RV{A}$ and $\RV{C}\to \RV{B}$. These graphs are associated with three types of states, and so $\mathscr{T}_{\mathcal{G}}^\circ$ is given by their union:
 \begin{align}
-    \{(\nu,I_{\{0,1\}^3} F_{\RV{B}})\} \cup \{(\nu,\kappa^\mathcal{G})\} \cup \{(\nu,\eta) \}\qquad \nu\in \mathscr{H}_{\mathcal{G}}
+    \{(\mu,y\mapsto \mu F_{\RV{B}})\} \cup \{(\mu,\kappa^\mathcal{G})\} \cup \{(\mu,\eta) \}\qquad \mu\in \mathscr{H}_{\mathcal{G}}
 \end{align}
 Where $\eta$ is a kernel given by backdoor adjustment (see for example \cite{maathuis_estimating_2009}) the details of which are not essential here. 
 
-Note that states of the first type - $(\nu,I_{\{0,1\}^3} F_{\RV{B}})$ - posit consequences that are independent of $\epsilon$. No matter how small $\epsilon$ is, $\mathscr{T}_{\mathcal{G}}^\circ$ admits the possibility that interventions on $\RV{A}$ have no effect on $\RV{B}$. If we suppose only $\RV{B}$ and interventions $\RV{D}_A$ are relevant to the utility $U$, it is not difficult to construct a utility such that $\mathscr{T}_{\mathcal{G}}^\circ$ and $\mathscr{T}_{\mathcal{G}}^\subset$ yield very different risk sets.
+Note that states of the first type - $(\mu,y\mapsto \mu F_{\RV{B}})$ - posit consequences that are by construction independent of $\epsilon$. No matter how small $\epsilon$ is, $\mathscr{T}_{\mathcal{G}}^\circ$ admits the possibility that interventions on $\RV{A}$ have no effect on $\RV{B}$. If we suppose only $\RV{B}$ and interventions $\RV{D}_A$ are relevant to the utility $U$, it is not difficult to construct a utility such that $\mathscr{T}_{\mathcal{G}}^\circ$ and $\mathscr{T}_{\mathcal{G}}^\subset$ yield very different risk sets.
 
 It is not particularly obvious how a theory ought to behave in cases where compatibility with $\mathcal{G}$ holds ``approximately''. Many statisticians are of the opinion that it is very unusual for exact conditional independence to hold \citep{gelman_bayesian_2010,meehl_theory-testing_1967,berkson_difficulties_1938}, while theoretical treatments of the faithfulness assumption usually work with exact conditional independences \citep{meek_strong_1995}. If theories such as $\mathscr{T}_{\mathcal{G}}$ happen to be reliable where compatibility holds only approximately, then methods based on a confidence parameter such as the PC algorithm may exhibit the unusual characteristic of worsening behaviour as the sample size increases. In at least one application, users of the PC algorithm have found it desirable to accept conditional independences unless a confidence level of $\alpha=0.01$ is exceeded [\cite{maathuis_predicting_2010}, supplementary material], a setting that will obviously accept many spurious conditional independences. 
 \end{example}
