@@ -1,10 +1,15 @@
 \section{Causal Statistical Decision Problems}
 
+\cheng{Can we split this section into two? Statistical decision theory, perhaps move back to the previous section, and call that section ``Background: Statistical Decision Theory''. Clarify your introduced concepts and notation in terms of existing work. We want to have a section which contains all the new results. Right now, it is unclear what is known, what is known (but expressed in a new way), and what you are proposing.}
+
 \begin{definition}[Two person game (normal form)]
 A normal form game is a triple $\langle \mathscr{S}, A, L\rangle$ where $\mathscr{S}$ and $A$ are arbitrary sets and $L:\mathscr{S}\times A\to [0,\infty)$ is a loss function.
 
 By way of interpretation, we will identify the set $\mathscr{S}$ with a set of possible states that the environment may occupy and $A$ with a set of actions some decision maker may take. The decision maker seeks an action in $A$ that minimises the loss $L$.
 \end{definition}
+
+\cheng{Justify why you need a game. Seems to be needed for reduction of states.}
+
 
 The definition presented here does not generally admit a unique best action. A minimax solution chooses an action that minimises the worst case loss:
 \begin{align}
@@ -52,7 +57,9 @@ Denote by $\mathscr{J}$ the set of decision kernels $X\to \Delta(\mathcal{D})$. 
 Denoting by $\mathscr{J}$  the set of kernels $X\to \Delta(\mathcal{D})$, the triple $\langle \mathscr{H}, \mathscr{J}, R\rangle$ forms a two player normal form game. The concepts of the minimax and Bayes solutions (Eq. \ref{eq:mm_soln} and \ref{eq:ba_soln}) apply to this game.
 \end{definition}
 
-The loss function $\ell$ expresses preferences over (state, decision) pairs. However, it may be the case that our preferences don't naturally apply directly to such pairs. For a doctor deciding whether to prescribe a treatment to a patient, it is clear that this patient being healthy in the future is preferable to them being sick. 
+The loss function $\ell$ expresses preferences over (state, decision) pairs. However, it may be the case that our preferences don't naturally apply directly to such pairs. For a doctor deciding whether to prescribe a treatment to a patient, it is clear that this patient being healthy in the future is preferable to them being sick.
+
+\cheng{You should justify why you have $E$ and $F$, and not just one thing. This is a major departure from statistical decision problems.}
 
 This motivates the definition of a causal statistical decision problem, which proceeds from a preferences defined over outcomes rather than (state, decision) pairs. In order to compute the loss associated with a decision a map from decisions to outcomes is required, which we term a \emph{consequence}.
 
@@ -65,8 +72,14 @@ Given a consequence $\kappa:D\to \Delta(\mathcal{F})$, a measurable observation 
 \end{definition}
 
 \begin{definition}[Causal Theory]\label{def:causal_theory}
-A causal theory $\mathscr{T}$ is a set of causal states sharing the same decision, observation and outcome spaces. 
+A causal theory $\mathscr{T}$ is a set of causal states sharing the same decision, observation and outcome spaces.
 \end{definition}
+
+\cheng{You need to define the different uses of ``utility''. E.g. utility, pseudo-utility, ordinary utility, generalized utility, normal utility. Or perhaps be more careful with your usage.}
+
+\cheng{The change from loss $\ell$ to $(U,F)$ is a surprising, so you need to explain why you need to do so.}
+
+\cheng{The following definition is too long. Defines too many things.}
 
 \begin{definition}[Causal Statistical Decision Problem]\label{def:CSDP}
 A causal statistical decision problem (CSDP) is a tuple $\langle (\mathscr{T}, E, \RV{X}), D, (U,F) \rangle$. The sets $E,F$ and $D$ are equipped with $\sigma$-algebras $\mathcal{E},\mathcal{F}$ and $\mathcal{D}$ respectively.
@@ -86,7 +99,7 @@ For $(\kappa,\mu)\in \mathscr{T}$ and $\gamma\in \Delta(\mathcal{D})$. This is w
 
 Given a decision function $J\in\mathscr{J}$ and $(\kappa,\mu)\in \mathscr{T}$, we define the risk $R(J,\kappa,\mu)$
 \begin{align}
-    R(J,\kappa,\mu) = L(\kappa,\mu F_{\RV{X}} J) 
+    R(J,\kappa,\mu) = L(\kappa,\mu F_{\RV{X}} J)
 \end{align}
 
 The triple $\langle \mathscr{T}, \mathscr{J}, R\rangle$ is a normal form two person game.
@@ -103,7 +116,11 @@ where $l^\kappa:D\to [0,\infty)$ is defined by
 \end{align}
 \end{definition}
 
+\cheng{Create a table that summarises the similarities and differences between the two decision problems.}
+
 Reduction from a CSDP to an ordinary SDP is sufficient to import results from statistical decision theory such as Theorem \ref{th:complete_class}.
+
+\cheng{Explain why complete class is important.}
 
 \begin{theorem}[Complete class theorem (CSDP)]\label{th:complete_class}
 Given an CSDP $\alpha:=\langle (\mathscr{T},E),D,\RV{X},U\rangle$ with risk $R$, if there is a reduction to an SDP $\beta:=\langle (\mathscr{H},F),D,\RV{Y},\ell \rangle$ with risk $R'$ such that $|\mathscr{H}|<\infty$ and $\inf_{J\in\mathscr{J},\mu\in\mathscr{H}} R'(J,\mu)<-\infty$ then the set of all Bayes decision functions is a complete class and the set of all admissible Bayes decision functions is a minimal complete class.
@@ -112,6 +129,8 @@ Given an CSDP $\alpha:=\langle (\mathscr{T},E),D,\RV{X},U\rangle$ with risk $R$,
 \begin{proof}
 This follows from Lemmas \ref{cor:red_comp} and \ref{lem:IB_rule}. See appendix \ref{app:csdps}.
 \end{proof}
+
+\cheng{Justify the choice of word ``reduce''.}
 
 Any statistical decision problem can be reduced to a CSDP where decisions have no effect.
 
