@@ -7,8 +7,8 @@ Consider a directed acyclic graph $\mathcal{G}$ with nodes $\mathbf{X}=\{\RV{X}^
 
 Given any $y\in D$ let $S(y)\subset[N]$ be the set of all indices $i$ such that $\RV{D}^i(y)\neq *$. Let $\mathscr{H}_\mathcal{G}\subset\Delta(\mathcal{X})$ be the set of distributions compatible with $\mathcal{G}$. Given arbitrary $\mu\in \mathscr{H}_\mathcal{G}$ and $y\in D$ the $\mathcal{G},\mu,y$-interventional distribution denoted $\mu^{\mathcal{G},y}$ is given by the following two conditions:
 \begin{enumerate}
-    \item $\mu^{\mathcal{G},y}\splitter{0.15}(\otimes_{i\in S(y)} F_{\RV{X}^i})=\prod_{i\in S(y)} \delta_{\RV{D}^i(y)} F_{\RV{X}^i}$
-    \item $\mu^{\mathcal{G},y}_{\PA{\mathcal{G}}{\RV{X}^i}} \splitter{0.15}(\otimes_{i\not\in S(y)} F_{\RV{X}^i})=\mu_{\PA{\mathcal{G}}{\RV{X}^i}}\splitter{0.15}(\otimes_{i\not\in S(y)} F_{\RV{X}^i}) $, $\mu^{\mathcal{G},y}$-almost surely
+    \item For all $i\in S(y)$, $\mu^{\mathcal{G},y}F_{\RV{X}^i}=\delta_{\RV{D}^i(y)} F_{\RV{X}^i}$
+    \item For all $i\not \in S(y)$, $\mu^{\mathcal{G},y}_{\PA{\mathcal{G}}{\RV{X}^i}} F_{\RV{X}^i}=\mu_{\PA{\mathcal{G}}{\RV{X}^i}}F_{\RV{X}^i} $, $\mu^{\mathcal{G},y}$-almost surely
 \end{enumerate}
 \end{definition}
 
@@ -36,7 +36,11 @@ We therefore need to extend the theory $\mathscr{T}_{\mathcal{G}}$ to account fo
 
 \begin{example}[Extension of a CBN]\label{ex:extn_cbn}
 
-A graph $\mathcal{G}$ is given in figure \ref{fig:simple_cbn}. Suppose the three associated random variables $\RV{A}$, $\RV{B}$ and $\RV{C}$ each take values in $\{0,1\}$ and suppose (unrealistically) we know the following holds for all $\mu$ in the set of possible joint distributions $\mathscr{H}$:
+A graph $\mathcal{G}$ is given in figure \ref{fig:simple_cbn}, which implies a single conditional independence:
+\begin{align}
+    \RV{A}\CI \RV{C}|\RV{B} \label{eq:g_ci}
+\end{align}
+Suppose the three associated random variables $\RV{A}$, $\RV{B}$ and $\RV{C}$ each take values in $\{0,1\}$ and suppose (unrealistically) we know the following holds for all $\mu$ in the set of possible joint distributions $\mathscr{H}$:
 \begin{align}
     \mu_{\{\RV{A}\}} F_{\RV{B}} &= \iota \qquad \text{for some }\iota:\{0,1\}^3\to \Delta(\mathcal{B})\\
     \max_{x\in\{0,1\}^3,y\in\{0,1\}}\left|\mu_{\{\RV{A},\RV{C}\}} F_{\RV{B}}(x;\{y\}) - \iota(x;\{y\}) \right| &< \epsilon \label{eq:app_ci}
@@ -63,52 +67,32 @@ That is, we know the conditional probability of $\RV{B}$ given $\RV{A}$ and we k
     \label{fig:simple_cbn}
 \end{figure}
 
-Suppose that only interventions on $\RV{A}$ are possible and only $\RV{B}$ is relevant to the utility. We restrict our attention to the subset of decisions $D'=\{y|\RV{D}_\RV{B}(y)=\RV{D}_\RV{C}(y)=*\}$ and define the causal theory $\mathscr{T}_{\mathcal{G}}$ from $\mathcal{G}$ and the set of compatible distributions $\mathscr{H}_\mathcal{G}\subset\mathscr{H}$
-
+Suppose that only interventions on $\RV{A}$ are possible and only $\RV{B}$ is relevant to the utility. We restrict our attention to the subset of decisions $D'=\{y|\RV{D}_\RV{B}(y)=\RV{D}_\RV{C}(y)=*\}$ and marginal distributions over $\RV{B}$ for the consequence maps. Define $\kappa^{\mathcal{G}}$ by
 \begin{align}
-    (\mu,y\mapsto \mu_{\mathcal{G}}^x ) \qquad \mu\in\Delta(\mathcal{E}):\RV{A}\CI_{\mu}\RV{B}|\RV{C} \label{eq:ocbn}
+    \kappa_{\mathcal{G}}(y;Z) = \begin{cases} \iota(y;Z) & \RV{D}_\RV{A}(y) \neq *\\
+                                              I_{\{0,1\}^3} F_{\RV{B}} & \RV{D}_\RV{A}(y) = *\end{cases}
 \end{align}
 
-Consider three options for extending this to distributions $\nu$ incompatible with $\mathcal{G}$, noting that one could imagine many additional possibilities:
+It can be verified that the causal theory $\mathscr{T}_{\mathcal{G}}$ induced by $\mathcal{G}$ and the set of compatible distributions $\mathscr{H}_\mathcal{G}\subset\mathscr{H}$ is
+\begin{align}
+    (\mu,\kappa^{\mathcal{G}} ) \qquad \mu\in \mathscr{H}_{\mathcal{G}} \label{eq:ocbn}
+\end{align}
+
+Consider two options for extending this to distributions $\nu\in \mathscr{H}$ but not in $\mathscr{H}_{\mathcal{G}}$, noting that one could imagine many additional possibilities:
 \begin{itemize}
-    \item $\mathscr{T}_{\mathcal{G}}^\circ$ assigns the causal states given by the union over all DAGs on the set of nodes $\{A, B, C\}$
-    \item $\mathscr{T}_{\mathcal{G}}^\subset$ assigns the causal states given by the union over all graphs $\mathcal{G}'$ on $\{A, B, C\}$ such that of $\mathcal{G}\subset \mathcal{G}'$ (that is, every edge in $\mathcal{G}$ is also in $\mathcal{G}'$)
-    \item $\mathscr{T}_{\mathcal{G}}^\mathrm{stubborn}$ assigns the causal states given by $\mathcal{G}$ to all distributions in $\Delta(\mathcal{E})$
+    \item $\mathscr{T}_{\mathcal{G}}^\subset$ is the union of causal states given by all graphs $\mathcal{G}'$ on $\{A, B, C\}$ such that $\mathcal{G}\subset \mathcal{G}'$ (that is, every edge in $\mathcal{G}$ is also in $\mathcal{G}'$)
+    \item $\mathscr{T}_{\mathcal{G}}^\circ$ is the union of causal states given by the all DAGs on the set of nodes $\{A, B, C\}$
 \end{itemize}
 
-Finally, we will suppose some prior $\xi$ on $\Delta(\mathcal{E})$ that is absolutely continuous with respect to the Lebesgue measure on the probability simplex $\{[p_1,..p_8]|\sum_i p_i=1,0\leq p_i \leq 1\}\subset\mathbb{R}^8$ that parametrises $\Delta(\mathcal{E})$ and, whenever a theory admits multiple consequences for a given distribution, assigns these consequences equal weight. Note that the set of distributions $\mathscr{H}_{\mathcal{G}}$ for which $\RV{A}\CI \RV{C} | \RV{B}$ holds therefore has measure 0 with respect to $xi$\cite{meek_strong_1995}. The Bayes risk of any decision function $J\in \mathscr{J}$, therefore, will depend entirely on the chosen theory's behaviour on $\mathscr{H}_{\mathcal{G}}^c$.
+The theory $\mathscr{T}_{\mathcal{G}}^\subset$ features only graphs where $\RV{A}\to \RV{B}$ but not $\RV{C}\to\RV{A}$ or $\RV{C}\to \RV{B}$. $\mathscr{T}_{\mathcal{G}}^\subset$ and is therefore identical to $\mathscr{T}_\mathcal{G}$.
 
-Noe that the theory $\mathscr{T}_{\mathcal{G}}^\circ$ admits consequences on $\mathscr{H}_{\mathcal{G}}^c$ associated with:
-\begin{enumerate}
-    \item DAGs featuring $A\to B$
-    \item DAGs featuring $B\to A$ (in equal number to the first set of DAGs)
-    \item DAGs featuring no arrow between $B$ and $A$ (featuring one additional DAG to the first two types)
-\end{enumerate} 
-Therefore the calculation for the Bayes risk given by $\mathscr{T}_{\mathcal{G}}^\circ$ will always feature a weight of more than $\tfrac{2}{3}$ on the possibility that the marginal distribution of $\RV{B}$ is independent of whatever decision $\RV{D}_A$ is chosen. For many priors this will be very different to $\mathscr{T}_{\mathcal{G}}^\mathrm{stubborn}$.
-
-The theory $\mathscr{T}_{\mathcal{G}}^\subset$, on the other hand, yields a set consequences that are ``close'' to the consequence admitted by the original theory $\mathscr{T}_{\mathcal{G}}$ if the distribution $\nu$ is sufficiently ``close'' to a distribution $\mu$ for which $\RV{A} \CI_\mu \RV{C} | \RV{B}$. Marginalising over $\RV{A}$ and $\RV{C}$ and ignoring the passive action, the theory $\mathscr{T}^\subset_{\mathcal{G}}$ associates exactly two consequences with every incompatible $\nu$:
+$\mathscr{T}_{\mathcal{G}}^\circ$ is the set of states associated with three types of graph: those featuring no arrow $\RV{A}\to\RV{B}$, those featuring $\RV{A}\to \RV{B}$ but not $\RV{C}\to\RV{A}$ and $\RV{C}\to \RV{B}$ and the graph with $\RV{A}\to \RV{B}$, $\RV{C}\to \RV{A}$ and $\RV{C}\to \RV{B}$. These graphs are associated with three types of states, and so $\mathscr{T}_{\mathcal{G}}^\circ$ is given by their union:
 \begin{align}
-    &(\nu,x\mapsto \nu(\RV{B}|\RV{A}=x) )\label{eq:cbn_s1}\\
-    &(\nu,x \mapsto \sum_c \nu(\RV{B}|\RV{A}=x,\RV{C}=c)\nu(\RV{C}=c)) \label{eq:cbn_s2}
+    \{(\nu,I_{\{0,1\}^3} F_{\RV{B}})\} \cup \{(\nu,\kappa^\mathcal{G})\} \cup \{(\nu,\eta) \}\qquad \nu\in \mathscr{H}_{\mathcal{G}}
 \end{align}
+Where $\eta$ is a kernel given by backdoor adjustment (see for example \cite{maathuis_estimating_2009}) the details of which are not essential here. 
 
-Note that \ref{eq:cbn_s1} is the same pattern as the states given by $\mathscr{T}_{\mathcal{G}}$ - see Eq. \ref{eq:ocbn}. Define the consequences $\kappa^\mathcal{G}_\nu := x\mapsto \nu(\RV{B}|\RV{A}=x)$ and $\kappa^\subset_\nu:= x \mapsto \sum_c \nu(\RV{B}|\RV{A}=x,\RV{C}=c)\nu(\RV{C}=c))$.
+Note that states of the first type - $(\nu,I_{\{0,1\}^3} F_{\RV{B}})$ - posit consequences that are independent of $\epsilon$. No matter how small $\epsilon$ is, $\mathscr{T}_{\mathcal{G}}^\circ$ admits the possibility that interventions on $\RV{A}$ have no effect on $\RV{B}$. If we suppose only $\RV{B}$ and interventions $\RV{D}_A$ are relevant to the utility $U$, it is not difficult to construct a utility such that $\mathscr{T}_{\mathcal{G}}^\circ$ and $\mathscr{T}_{\mathcal{G}}^\subset$ yield very different risk sets.
 
-Consider some $\nu$ for which $\RV{A} \CI_\nu \RV{C} | \RV{B}$ holds approximately. That is, for some $\epsilon>0$ and all $x\in\{0,1\}$
-\begin{align}
-    \left|\sum_{c\in\{0,1\}} \nu(\RV{B}|\RV{A}=x,\RV{C}=c)\nu(\RV{C}=c)-\nu(B|A=x)\right| &< \epsilon \label{eq:app_ci}
-\end{align}
-
-Recalling the utility $U(\zeta)=\mathbb{E}_\zeta[\RV{B}]$, and that $\mathscr{T}^\subset_\mathcal{G}$ and $\mathscr{T}^\mathrm{stubborn}_\mathcal{G}$ agree on $\kappa^\mathcal{G}$, we can bound the disagreement between the two theories with
-\begin{align}
-    |R(J,\kappa^\subset,\nu) - R(J,\kappa^\mathcal{G},\nu)| &=  \left|\mathbb{E}_{\nu J \kappa^\subset} [\RV{B}] - \mathbb{E}_{\nu J \kappa^\mathcal{G}} [\RV{B}]\right|\\
-        &\leq \max_x \left|\sum_c P^\nu(\RV{B}|\RV{A}=x,\RV{C}=c)P^\nu(\RV{C}=c)-P^\nu(B|A=x) \right|\\
-        &< \epsilon
-\end{align}
-
-Given the assumption of a prior $\xi$ that is uniformly continuous with respect to the Lebesgue measure, $\mathscr{T}_{\mathcal{G}}^\subset$ but not $\mathscr{T}_{\mathcal{G}}^\circ$ gives us the property that for distributions where $\RV{A} \CI_\nu \RV{C} | \RV{B}$ almost holds, the theory $\mathscr{T}_{\mathscr{G}}^{\mathrm{stubborn}}$ can yield ``almost'' correct results. Note that $\mathscr{T}_{\mathscr{G}}^{\mathrm{stubborn}}$ is precisely the theory that actually uses the graph $\mathcal{G}$ to calculate consequences.
+It is not particularly obvious how a theory ought to behave in cases where compatibility with $\mathcal{G}$ holds ``approximately''. Many statisticians are of the opinion that it is very unusual for exact conditional independence to hold \citep{gelman_bayesian_2010,meehl_theory-testing_1967,berkson_difficulties_1938}, while theoretical treatments of the faithfulness assumption usually work with exact conditional independences \citep{meek_strong_1995}. If theories such as $\mathscr{T}_{\mathcal{G}}$ happen to be reliable where compatibility holds only approximately, then methods based on a confidence parameter such as the PC algorithm may exhibit the unusual characteristic of worsening behaviour as the sample size increases. In at least one application, users of the PC algorithm have found it desirable to accept conditional independences unless a confidence level of $\alpha=0.01$ is exceeded [\cite{maathuis_predicting_2010}, supplementary material], a setting that will obviously accept many spurious conditional independences. 
 \end{example}
-
-This example is somewhat contrived. The stipulation that the prior $\xi$ is absolutely continuous with respect to the Lebesgue measure may be considered strong, as may the assumption of equal weight given to different consequences where multiple consequences were allowed. Bayesian methods of graph learning, for example, may use priors that are not absolutely continuous with respect to the Lebesgue measure \cite{chickering_optimal_2003}. At the same time, it is not obviously unreasonable; it is consistent with the notion that ``there are no true parametric zeros'' endorsed by many statisticians (for example  \cite{gelman_bayesian_2010,meehl_theory-testing_1967,berkson_difficulties_1938}) and a similar assumption is invoked in support of the faithfulness hypothesis in causal graph learning \cite{meek_strong_1995}. A prior that assigns nonzero weight to the set of distributions for which $\RV{A} \CI_\nu \RV{C} | \RV{B}$ will also not resolve the question of whether or not it is reasonable to calculate consequences according to $\mathcal{G}$ if $\RV{A} \CI_\nu \RV{C} | \RV{B}$ is in fact violated by a very small amount.
-
-Even in the apparently simple case of a known causal graph $\mathcal{G}$, determining the associated causal theory is not a simple matter. The standard practice of computing consequences according to $\mathcal{G}$ if we do not reject the hypothesis that the observed data are compatible with $\mathcal{G}$ appears to rely on a prior with particular properties, a particular extension of the associated theory $\mathscr{T}_{\mathcal{G}}$, or both.

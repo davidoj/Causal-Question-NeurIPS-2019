@@ -22,12 +22,8 @@ Suppose we have a randomised experiment $(E,\mathcal{E},\mu)$ with random variab
 \begin{itemize}
     \item Assume performance bias is absent $\delta_i \kappa \RV{X}_i = \mathbb{E}_\mu[\RV{X}_i]$
     \item Assume performance bias has a uniform additive effect: $\delta_i \kappa \RV{X}_i = \mathbb{E}_\mu[\RV{X}_i]+k$; in this case the average treatment effect is still known $\delta_1 \kappa \RV{X}_1 - \delta_0\kappa\RV{X}_0 = \mathbb{E}[\RV{X}_1]-\mathbb{E}[\RV{X}_0]$
-    \item Assume performance bias has a bounded additive effect: $\delta_i \kappa \RV{X}_i = \mathbb{E}_\mu[\RV{X}_i]+k_i$, $|k_i|<l$; then bounds can be placed on the average treatment effect.
-    \item Apply a prior probability to possible values of performance bias.
     \item Avoid assumptions about the effect of performance bias; then there is no particular relationship between $\mu F_{\RV{X}_i}$ and $\delta_i \kappa F_{\RV{X}_i}$.
 \end{itemize}
 
 \end{example}
-
-A causal theory for Potential Outcomes is associated with a much larger hypothesis class than any causal theory that works only with distributions over observable variables. Theorem \ref{th:scdp_obu_red} shows that given any SCDP based on Potential Outcomes, provided that the potential outcome variables are unobserved and the utility does not depend on them, a reduced SCDP can be constructed by marginalising over potential outcomes. While these conditions may seem reasonable, there are some examples of problems where one does apparently care about the values of potential outcome variables. The \emph{effect of treatment on the treated} (ETT) that depends on counterfactual quantities and has some relevance to decision preferences \cite{rubin_estimating_1974}, though it is controversial whether this dependence is necessary \cite{geneletti2007defining}. More straightforwardly, the legal standard of ``no harm but for the defendant's negligence'' does seem to invoke fundamentally counterfactual considerations \cite{pearl_causality:_2009}.
 

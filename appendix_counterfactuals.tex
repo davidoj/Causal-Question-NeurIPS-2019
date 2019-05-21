@@ -1,0 +1,32 @@
+
+A causal theory for Potential Outcomes is associated with a much larger hypothesis class than any causal theory that works only with distributions over observable variables. Theorem \ref{th:scdp_obu_red} shows that given any SCDP based on Potential Outcomes, provided that the potential outcome variables are unobserved and the utility does not depend on them, a reduced SCDP can be constructed by marginalising over potential outcomes. While these conditions may seem reasonable, there are some examples of problems where one does apparently care about the values of potential outcome variables. The \emph{effect of treatment on the treated} (ETT) that depends on counterfactual quantities and has some relevance to decision preferences \cite{rubin_estimating_1974}, though it is controversial whether this dependence is necessary \cite{geneletti2007defining}. More straightforwardly, the legal standard of ``no harm but for the defendant's negligence'' does seem to invoke fundamentally counterfactual considerations \cite{pearl_causality:_2009}.
+
+\begin{theorem}\label{th:red_CSDP}
+Given a CSDP $\beta=\langle (\mathscr{T},E,\RV{X}),D,(U,F)\rangle$ where $U$ is an ordinary pseudo-utility, let $\mathscr{K}=\{\kappa|(\kappa,\mu)\in \mathscr{T}\}$ be the set of consequences. $\beta$ is reducible to a statistical decision problem on the measurable space $(E\times F\times D,\mathcal{E}\otimes \mathcal{F}\otimes \mathcal{D})$ if there is some surjective map $m:\Delta(\mathcal{F}\otimes\mathcal{D})\to \mathscr{K}$.
+\end{theorem}
+
+\begin{proof}
+Let $\mathscr{H}\subset \Delta(\mathcal{E}\otimes \mathcal{F}\otimes \mathcal{D})$ be some hypothesis class and let $m^\dagger$ be a right inverse of $m$. Define $h:\mathscr{T}\to \mathscr{H}$ by $(\kappa,\mu)\mapsto \mu \otimes m^{\dagger}(\kappa)$.
+
+Let $k:\Delta(\mathcal{F})^D\times D\to \mathbb{R}$ be the differential loss induced by the ordinary pseudo-utility $U$ (see Equation \ref{eq:induced_l}).
+
+Given the projections $\RV{F}:E\times F\times D\to F$ and $\RV{D}:E\times F \times D\to D$ and arbitrary $\xi\in\Delta(\mathcal{E}\otimes \mathcal{F} \otimes\mathcal{D})$ define $\ell:\mathscr{H}\times D\to [0,\infty)$ by
+\begin{align}
+    \ell(\xi,y) = k(m(\xi F_{\splitter{0.15}(\RV{F}\otimes\RV{D})}),y)
+\end{align}
+
+Note that
+\begin{align}
+    \ell(h(\kappa,\mu),y) = k(\kappa,y)
+\end{align}
+
+Define $\RV{X}':E\times F \times D\to X$ by $(a,b,c)\mapsto \RV{X}(a)$.
+
+Then, given the statistical decision problem $\langle(\mathscr{H},E\times F\times D,\RV{X}'),D,\ell\rangle$, we have for all $J\in \mathscr{J}$, $(\kappa,\mu)\in\mathscr{T}$ the risk
+\begin{align}
+    R'(J,h(\kappa,\mu)) &= \int_D \ell (h(\kappa,\mu),y)  h(\kappa,\mu) F_{\RV{X}'} J(dy) \\
+                        &= \int_D \ell (h(\kappa,\mu),y)  (\mu\otimes m^\dagger(\kappa)) F_{\RV{X}'} J(dy) \\
+                        &= \int_D k(\kappa,y) \mu F_{\RV{X}} J(dy)\\
+                        &= R(J,\kappa,\mu)
+\end{align}
+\end{proof}
