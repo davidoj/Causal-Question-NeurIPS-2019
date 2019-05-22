@@ -33,6 +33,7 @@
 \usepackage{graphicx}
 \usepackage {tikz}
 \usetikzlibrary {positioning}
+\usetikzlibrary{shapes.misc}
 \usepackage{amsthm}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -43,13 +44,13 @@
 \usepackage{wasysym}
 
 \theoremstyle{plain}
-\newtheorem{theorem}{Theorem}
+\newtheorem{theorem}{Theorem}[section]
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{lemma}[theorem]{Lemma}
 
 \theoremstyle{definition}
-\newtheorem{definition}{Definition}[section]
-\newtheorem{example}{Example}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
 
 \newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
 \newcommand{\CII}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp\mkern-10mu\perp$}}}}
@@ -86,7 +87,7 @@
 \newcommand{\cheng}[1]{ {\color{purple}[{\bf Cheng:~{#1}}]} }
 
 
-\title{How to ask a causal question}
+\title{Causal Statistical Decision Problems}
 
 % The \author macro works with any number of authors. There are two commands
 % used to separate the names and addresses of multiple authors: \And and \AND.
@@ -98,19 +99,17 @@
 
 \author{%
   David Johnston \\
-  College of Engineering and Computer Science\\
-  Australian National University and DATA61\\
-  ACT, Australia 0200 \\
+    ANU and DATA61\\
   \texttt{david.johnston1@anu.edu.au} \\
   % examples of more authors
    \And
   Cheng Soon Ong\\
-  DATA61 and Australian National University\\
+  DATA61 and ANU\\
   % Address \\
   % \texttt{email} \\
    \And
    Robert Williamson \\
-   Australian National University and DATA61\\
+   ANU and DATA61\\
   % Address \\
   % \texttt{email} \\
   % \And
@@ -131,7 +130,7 @@
 \maketitle
 
 \begin{abstract}
-There are multiple competing approaches to the handling of causality in statistical inference, including Causal Bayesian Networks and Potential Outcomes which differ in part in their underlying conceptions of causality. In an approach similar to Dawid, we develop the notion of a causal statistical decision problem patterned after the statistical decision theory of Wald. Our approach is motivated by a simple consideration: suppose we have a dataset, some set of available decisions and we know what state we would like the world to occupy, but we are uncertain about how our decisions affect the state of the world. We introduce the notion of \emph{consequence } that relate decisions to states of the world, and \emph{causal theories} that relate observations to consequences. These definitions are not motivated by minimal ``causal'' considerations, save the need to connect observations, decisions and consequences. We connect causal statistical decision problems to statistical decision problems via a reduction that allows results from the latter to sometimes be imported to the former. We show that Causal Bayesian Networks and Potential Outcomes both have a natural mapping to causal theories, and demonstrate a straightforward example of a causal theory that cannot be unambiguously represented by either. We argue by example that, given this more general perspective, the standard understanding of a Causal Bayesian Network is only justified under additional nontrivial assumptions. Finally, we conclude with a long list of open questions raised by this new perspective.
+There are multiple competing approaches to the handling of causality in statistical inference, including Causal Bayesian Networks (CBN) and Potential Outcomes (PO) which differ in part in their underlying conceptions of causality. In an approach similar to Dawid, we develop the notion of a causal statistical decision problem patterned after the statistical decision theory of Wald. Our approach is motivated by a simple consideration: suppose we have a dataset, some set of available decisions and we know what state we would like the world to occupy, but we are uncertain about how our decisions affect the state of the world. We introduce the notion of \emph{consequence } that relate decisions to states of the world, and \emph{causal theories} that relate observations to consequences. These definitions are not motivated by minimal ``causal'' considerations, save the need to connect observations, decisions and consequences. We connect causal statistical decision problems to statistical decision problems. We show that Causal Bayesian Networks and Potential Outcomes both have a natural mapping to causal theories, and demonstrate a straightforward example of a causal theory that cannot be unambiguously represented by either. We argue by example that, given this more general perspective, the standard understanding of a Causal Bayesian Network is only justified under additional nontrivial assumptions. Finally, we conclude with a long list of open questions raised by this new perspective.
 \end{abstract}
 
 \input{story}
@@ -146,14 +145,7 @@ We have formally specified a causal statistical decision problem proceeding as a
 
 The existing approaches of Causal Bayesian Networks and Potential Outcomes have natural interpretations as causal theories. We have argued for the utility of a more general approach via two examples. First, we show that a causal theory associated with a CBN $\mathcal{G}$ may be extended to cover distributions incompatible with $\mathcal{G}$ in different ways that yield very different results. Secondly, we show that the possibility of \emph{performance bias} is a natural consideration in CSDPs while it is often treated informally in other systems.
 
-This perspective raises many questions:
-\begin{itemize}
-    \item Under what conditions do versions of the No-Free Lunch theorems hold for CSDPs?
-    \item Example \ref{ex:extn_cbn} deals with a crude notion of ``continuity'' of a causal theory. Generally, what properties may be used to characterise the learnability of a causal theory?
-    \item Do alternative approaches to causal inference such as Identifiable Functional Model Classes (IFMOCs) or invariance based methods have natural representations as causal theories?
-    \item The notation here borrows heavily from \citep{fong_causal_2013}, who has developed a diagrammatic representation of Markov kernel itself closely related to the directed acyclic graphs associated with CBNs. This raises the question: beyond CBNs, can consequence maps be generically and informatively be represented using DAG-like diagrams?
-    \item We have proposed consequence maps and causal theories as ``relatively minimal'' objects to satisfy the need to connect data, decisions and outcomes. Are there strictly more general objects that may be used instead, and if so under what assumptions are consequence maps and causal theories necessary?
-\end{itemize}
+This perspective raises many questions, for example: 1) Under what conditions do versions of the No-Free Lunch theorems hold for CSDPs? 2) Example \ref{ex:extn_cbn} deals with a crude notion of ``continuity'' of a causal theory. Generally, what properties may be used to characterise the learnability of a causal theory? 3) Do alternative approaches to causal inference such as Identifiable Functional Model Classes (IFMOCs) or invariance based methods have natural representations as causal theories? 4) The notation here borrows heavily from \citep{fong_causal_2013}, who has developed a diagrammatic representation of Markov kernel itself closely related to the directed acyclic graphs associated with CBNs. Consequence maps be generically and informatively be represented using diagrams similar to DAGs? 5) We have proposed consequence maps and causal theories as ``relatively minimal'' objects to satisfy the need to connect data, decisions and outcomes. Are there strictly more general objects that may be used instead, and if so under what assumptions are consequence maps and causal theories necessary?
 
 The general perspective proposed in this paper naturally incorporates the two major causal inference frameworks and, for the first time to our knowledge, allows a range of fundamental questions to be formally posed, such as \emph{what are the characteristics of a causal statistical decision problem that make it ``learnable”?} Whilst we don’t have all the answers, at least we have opened the way to ask such foundational questions!
 
@@ -164,5 +156,6 @@ The general perspective proposed in this paper naturally incorporates the two ma
 \include{appendix_MK}
 \include{appendix_CSDP}
 \include{appendix_CB}
+\include{appendix_counterfactuals}
 
 \end{document}

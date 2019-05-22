@@ -1,25 +1,19 @@
 \section{Causal Statistical Decision Problems}
 
+Following \citep{toutenburg_ferguson_1970}, we consider a statistical decision problems and causal statistical decision problems to represent normal form two person games. If two problems represent ``essentially'' the same game from the perspective of the decision maker, we say that one game can be reduced to the other.
+
 \cheng{Can we split this section into two? Statistical decision theory, perhaps move back to the previous section, and call that section ``Background: Statistical Decision Theory''. Clarify your introduced concepts and notation in terms of existing work. We want to have a section which contains all the new results. Right now, it is unclear what is known, what is known (but expressed in a new way), and what you are proposing.}
+
 
 \begin{definition}[Two person game (normal form)]
 A normal form game is a triple $\langle \mathscr{S}, A, L\rangle$ where $\mathscr{S}$ and $A$ are arbitrary sets and $L:\mathscr{S}\times A\to [0,\infty)$ is a loss function.
-
-By way of interpretation, we will identify the set $\mathscr{S}$ with a set of possible states that the environment may occupy and $A$ with a set of actions some decision maker may take. The decision maker seeks an action in $A$ that minimises the loss $L$.
 \end{definition}
+The set $\mathscr{S}$ is a set of possible states that the environment may occupy and $A$ is a set of actions the decision maker may take. The decision maker seeks an action in $A$ that minimises the loss $L$. Generally there is no action that minimises the loss for all environment states. A minimax solution is an action that minimises the worst case loss: $a^*_{mm} = \argmin_{a\in A} [\sup_{s\in \mathscr{S}} L(s,a)]$.
 
+If the set $\mathscr{S}$ is equipped with a $\sigma$-algebra $\mathcal{S}$ and a probability measure $\xi\in \Delta(\mathcal{S})$ which we will call a ``prior'', a Bayes solution minimizes the expected risk with respect to $\xi$: $a^*_{ba} = \argmin_{a\in A} \int_{\mathcal{S}} L(s,a) \xi(ds)$.
+=======
 \cheng{Justify why you need a game. Seems to be needed for reduction of states.}
 
-
-The definition presented here does not generally admit a unique best action. A minimax solution chooses an action that minimises the worst case loss:
-\begin{align}
-    a^*_{mm} = \argmin_{a\in A} [\sup_{s\in \mathscr{S}} L(s,a)]\label{eq:mm_soln}
-\end{align}
-
-If the set $\mathscr{S}$ is equipped with a $\sigma$-algebra $\mathcal{S}$, then given a probability measure $\xi\in \Delta(\mathcal{S})$ which we will call a ``prior'', the Bayes solution minimizes the expected risk with respect to $\xi$:
-\begin{align}
-    a^*_{ba} = \argmin_{a\in A} \int_{\mathcal{S}} L(s,a) \xi(ds) \label{eq:ba_soln}
-\end{align}
 
 \begin{definition}[Admissible Action]
 Given a normal form two person game $\langle \mathscr{S}, A, L\rangle$, an action $a\in A$ is strictly better than $a'\in A$ iff $L(s,a)\leq L(s,a')$ for all $s\in\mathscr{S}$ and $L(s_0,a)<L(s_0,a')$ for some $s_0\in \mathscr{S}$. If only the first holds, then $a$ is as good as $a'$. An admissible action is an action $a\in A$ such that there is no action strictly better than $A$.
@@ -31,37 +25,27 @@ A class $C$ of decisions is a complete class if for every $a\not\in C$ there is 
 A class $C$ is an essentially complete class if for every $a\not\in C$ there is some $a'\in C$ that is as good as $a$.
 \end{definition}
 
-Reduction preserves admissibility and completeness as shown in Appendix \ref{app:csdps}
-
 \begin{definition}[Reduction]\label{def:red_sdp_CSDP}
 A normal form two person game $\alpha = \langle \mathscr{S}^\alpha, A, L^\alpha\rangle$ can be reduced to a different game sharing the same action set $\beta = \langle \mathscr{S}^\beta, A, L^\beta \rangle$ if there is a surjective function $g:\mathscr{S}^\alpha\to \mathscr{S}^\beta$ such that for every $a\in A$, $s\in \mathscr{S}^\alpha$, $L^\alpha(s,a) = L^\beta(g(s),a)$.
 \end{definition}
 
-A statistical decision problem is an instance of a normal form two person game.
+Reduction preserves admissibility and completeness as shown in Appendix \ref{app:csdps}
+
+A statistical decision problem represents a normal form two-person game where the available actions are \emph{decision functions} that output a decision given data, the states of the environment are associated with probability measures on some measurable space and we assume a loss expressing preferences over decisions and states is known.
 
 \begin{definition}[Statistical Decision Problem]
-A statistical decision problem (SDP) is defined by a tuple $\langle (\mathscr{H},E, \RV{X}), D, \ell\rangle$.
-\begin{itemize}
-    \item Given a $\sigma$-algebra $\mathcal{E}$ on $E$, $\mathscr{H}\subset\Delta(\mathcal{E})$ is a hypothesis class.
-    \item The set $D$, which is equipped with a $\sigma$-algebra $\mathcal{D}$, is a set of decisions
-    \item $\RV{X}:E\to X$ is a random variable representing the information available for the statistician to make a decision
-    \item $\ell:\mathcal{H}\times D\to [0,\infty)$ is a loss function
-\end{itemize}
+A statistical decision problem (SDP) is defined by a tuple $\langle (\mathscr{H},(E,\mathcal{E}), \RV{X}), (D,\mathcal{D}), \ell\rangle$. $\mathscr{H}\subset\Delta(\mathcal{E})$ is a hypothesis class representing possible states of the environment, $D$ is the set of available decisions, $\RV{X}:(E,\mathcal{E})\to (X,\mathcal{X})$ is a random variable representing the information available for the statistician to make a decision and $\ell:\mathcal{H}\times D\to [0,\infty)$ is a loss function.
 
-Denote by $\mathscr{J}$ the set of decision kernels $X\to \Delta(\mathcal{D})$. Recall that $\mu F_{\RV{X}}(A)=\mu(\RV{X}^{-1}(A))$. For $J\in \mathscr{J}$ and $\mu\in \mathcal{H}$, the risk is defined as:
-\begin{align}
-    R(J,\mu) = \int_D \ell(\mu,y) \mu F_{\RV{X}} J(dy)
-\end{align}
+Denote by $\mathscr{J}$ the set of decision kernels $X\to \Delta(\mathcal{D})$. Recall that $\mu F_{\RV{X}}(A)=\mu(\RV{X}^{-1}(A))$. For $J\in \mathscr{J}$ and $\mu\in \mathcal{H}$, the risk $R:\mathscr{J}\times\mathscr{H}\to [0,\infty)$ is defined as $R(J,\mu) = \int_D \ell(\mu,y) \mu F_{\RV{X}} J(dy)$.
 
-
-Denoting by $\mathscr{J}$  the set of kernels $X\to \Delta(\mathcal{D})$, the triple $\langle \mathscr{H}, \mathscr{J}, R\rangle$ forms a two player normal form game. The concepts of the minimax and Bayes solutions (Eq. \ref{eq:mm_soln} and \ref{eq:ba_soln}) apply to this game.
+Denoting by $\mathscr{J}$  the set of kernels $X\to \Delta(\mathcal{D})$, the triple $\langle \mathscr{H}, \mathscr{J}, R\rangle$ forms a two player normal form game.
 \end{definition}
 
-The loss function $\ell$ expresses preferences over (state, decision) pairs. However, it may be the case that our preferences don't naturally apply directly to such pairs. For a doctor deciding whether to prescribe a treatment to a patient, it is clear that this patient being healthy in the future is preferable to them being sick.
+
+The loss function $\ell$ expresses preferences over (state, decision) pairs. However, it may be the case that our preferences don't naturally apply directly to such pairs. For a doctor deciding whether to prescribe a treatment to a patient, it is clear that this patient being healthy in the future is preferable to them being sick. This motivates the definition of a causal statistical decision problem, utilising a preferences defined over outcomes rather than (state, decision) pairs. In order to compute the loss associated with a decision a map from decisions to outcomes is required, which we term a \emph{consequence}.
 
 \cheng{You should justify why you have $E$ and $F$, and not just one thing. This is a major departure from statistical decision problems.}
 
-This motivates the definition of a causal statistical decision problem, which proceeds from a preferences defined over outcomes rather than (state, decision) pairs. In order to compute the loss associated with a decision a map from decisions to outcomes is required, which we term a \emph{consequence}.
 
 \begin{definition}[Consequences]
 Given a measurable outcome space $(F,\mathcal{F})$ and a measurable decision space $(D,\mathcal{D})$, a Markov kernel $\kappa:D \to \Delta(\mathcal{F})$ is a \emph{consequence mapping}, or just a consequence for short.
@@ -82,37 +66,24 @@ A causal theory $\mathscr{T}$ is a set of causal states sharing the same decisio
 \cheng{The following definition is too long. Defines too many things.}
 
 \begin{definition}[Causal Statistical Decision Problem]\label{def:CSDP}
-A causal statistical decision problem (CSDP) is a tuple $\langle (\mathscr{T}, E, \RV{X}), D, (U,F) \rangle$. The sets $E,F$ and $D$ are equipped with $\sigma$-algebras $\mathcal{E},\mathcal{F}$ and $\mathcal{D}$ respectively.
-
-\begin{itemize}
-    \item $\mathscr{T}$ is a causal theory on $D, E$ and $F$
-    \item $(D,\mathcal{D})$ is a measurable decision set
-    \item $\RV{X}:E\to X$ is a random variable representing the given information
-    \item $U:\Delta(\mathcal{F}\otimes \mathcal{D})\to \mathbb{R}$ is a pseudo-utility expressing preference over joint distributions of decisions and outcomes which we assume is bounded above
-\end{itemize}
+A causal statistical decision problem (CSDP) is a tuple $\langle (\mathscr{T}, (E,\mathcal{E}) \RV{X}), (D,\mathcal{D}), (U,(F,\mathcal{F})) \rangle$. $\mathscr{T}$ is a causal theory on $D, E$ and $F$, $D$ is the decision set, $\RV{X}:(E,\mathcal{E})\to (X,\mathcal{X})$ is a random variable representing the given information and $U:\Delta(\mathcal{F}\otimes \mathcal{D})\to \mathbb{R}$ is a pseudo-utility expressing preference over joint distributions of decisions and outcomes which we assume is bounded above.
 
 From the pseudo-utility $U$ we can define a loss $L:\mathscr{T}\times\Delta(\mathcal{D})\to [0,\infty]$ by
 \begin{align}
-    L((\kappa,\mu),\gamma) = \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_D\otimes \kappa)) - U(\gamma\splitter{0.15}(I_D\otimes \kappa))\label{eq:canonical_loss}
+    L((\kappa,\mu),\gamma) := \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_D\otimes \kappa)) - U(\gamma\splitter{0.15}(I_D\otimes \kappa))\label{eq:canonical_loss}
 \end{align}
 For $(\kappa,\mu)\in \mathscr{T}$ and $\gamma\in \Delta(\mathcal{D})$. This is well defined wherever $U$ is bounded above. Note that $L$ does not depend on the data generating distribution $\mu$; henceforth we will suppress this argument and write $L(\kappa,\gamma):= L((\kappa,\mu),\gamma)$.
 
-Given a decision function $J\in\mathscr{J}$ and $(\kappa,\mu)\in \mathscr{T}$, we define the risk $R(J,\kappa,\mu)$
-\begin{align}
-    R(J,\kappa,\mu) = L(\kappa,\mu F_{\RV{X}} J)
-\end{align}
+Given a decision function $J\in\mathscr{J}$ and $(\kappa,\mu)\in \mathscr{T}$, we define the risk $R:\mathscr{J}\times \mathscr{T}\to [0,\infty)$ by $R(J,\kappa,\mu) := L(\kappa,\mu F_{\RV{X}} J)$.
 
 The triple $\langle \mathscr{T}, \mathscr{J}, R\rangle$ is a normal form two person game.
 
 If there exists some measurable $u:F\times D\to \mathbb{R}$ such that for all $\xi\in \Delta(\mathcal{F}\otimes\mathcal{D})$, $U(\xi)=\mathbb{E}_{\xi}[u]$ then we call $u$ an ordinary utility and by extension $U$ an ordinary pseudo-utility.
 
-An ordinary utility induces a loss
-\begin{align}
-    L(\kappa,\gamma) = \mathbb{E}_{\gamma}[l^\kappa]\\
-\end{align}
+An ordinary utility induces a loss $L(\kappa,\gamma) = \mathbb{E}_{\gamma}[l^\kappa]$
 where $l^\kappa:D\to [0,\infty)$ is defined by
 \begin{align}
-    l^\kappa(d) := \sup_{\gamma'\in \Delta(\mathcal{D})} \mathbb{E}_{\gamma'\splitter{0.15}(I_D\otimes \kappa)}[u] - \mathbb{E}_{\kappa(d;\cdot)}[u(\cdot,d)]\label{eq:induced_l}
+    l^\kappa(d) := \sup_{\gamma'\in \Delta(\mathcal{D})} \mathbb{E}_{\gamma'\splitter{0.08}(I_D\otimes \kappa)}[u] - \mathbb{E}_{\kappa(d;\cdot)}[u(\cdot,d)]\label{eq:induced_l}
 \end{align}
 \end{definition}
 
@@ -123,25 +94,26 @@ Reduction from a CSDP to an ordinary SDP is sufficient to import results from st
 \cheng{Explain why complete class is important.}
 
 \begin{theorem}[Complete class theorem (CSDP)]\label{th:complete_class}
-Given an CSDP $\alpha:=\langle (\mathscr{T},E),D,\RV{X},U\rangle$ with risk $R$, if there is a reduction to an SDP $\beta:=\langle (\mathscr{H},F),D,\RV{Y},\ell \rangle$ with risk $R'$ such that $|\mathscr{H}|<\infty$ and $\inf_{J\in\mathscr{J},\mu\in\mathscr{H}} R'(J,\mu)<-\infty$ then the set of all Bayes decision functions is a complete class and the set of all admissible Bayes decision functions is a minimal complete class.
+Given an CSDP $\alpha:=\langle (\mathscr{T},E),D,\RV{X},U\rangle$ with risk $R$, if there is a reduction to an SDP $\beta:=\langle (\mathscr{H},F),D,\RV{Y},\ell \rangle$ with risk $R'$ such that $|\mathscr{H}|<\infty$ and $\inf_{J\in\mathscr{J},\mu\in\mathscr{H}} R'(J,\mu)<-\infty$, then the set of all Bayes decision functions is a complete class for $\beta$ and the set of all admissible Bayes decision functions is a minimal complete class for $\beta$.
 \end{theorem}
 
 \begin{proof}
 This follows from Lemmas \ref{cor:red_comp} and \ref{lem:IB_rule}. See appendix \ref{app:csdps}.
 \end{proof}
 
+Any statistical decision problem can be reduced to a CSDP featuring a causal theory where decisions have no effect.
+
 \cheng{Justify the choice of word ``reduce''.}
 
-Any statistical decision problem can be reduced to a CSDP where decisions have no effect.
 
 \begin{theorem}\label{th:sdp_to_CSDP}
 Every SDP $\langle (\mathscr{H},E,\RV{X}),D,\ell\rangle$ can be reduced to a CSDP.
 \end{theorem}
 \begin{proof}
-We choose a theory that matches every probability measure $\mu\in\Delta(\mathcal{E})$ with a consequence map that itself always yields $\mu$. We then construct a utility $U$ that induces an identical risk. See Appendix \ref{app:csdps}.
+Choose a theory that matches every probability measure $\mu\in\Delta(\mathcal{E})$ with a consequence map that itself always yields $\mu$. Then construct a utility $U$ that induces an identical risk. See Appendix \ref{app:csdps}.
 \end{proof}
 
-The triviality of this reduction relies on the generalised utility $U$ in the definition of the statistical CSDP. A reduction is sometimes possible to an CSDP featuring an ordinary utility by choosing consequences to represent the loss but whether this is always possible remains an open question.
+The pseudo-utility $U$ enables Theorem \ref{th:sdp_to_CSDP}. A reduction is sometimes possible to an CSDP featuring an ordinary utility with a nontrivial theory, but whether this is always possible remains an open question.
 
 A CSDP cannot, in general, be reduced to a statistical decision problem - for example, if we choose the utililty to be the variance of some random variable we may be able to achieve higher utility through a randomised decision than any nonrandomised decision under conditions where a regular SDP cannot have this property (see Example \ref{ex:ired_csdp} in Appendix \ref{app:csdps}). It is an open question whether this reduction is generally possible if the problem features a normal utility.
 
@@ -166,13 +138,11 @@ This follows from Theorem \ref{th:red_CSDP} and the definition of cardinality.
 A major open question, then, is if $(E,\mathcal{E})$ and $(D,\mathcal{D})$ are standard measurable spaces, the conditions for Corollary \ref{cor:card_reduc} hold in general. Corollary \ref{cor:CSDP_to_sdp} shows that the reduction can be made in general if $D$ is a denumerable set.
 
 \begin{corollary}\label{cor:CSDP_to_sdp}
-A CSDP $\langle (\mathscr{T},E,\RV{X}),D,(U,F)\rangle$ where $D$ is a denumerable set and  $U$ is an ordinary pseudo-utility can be reduced to a statistical decision problem.
+A CSDP $\langle (\mathscr{T},(E,\mathcal{E}),\RV{X}),(D,\mathcal{D}),(U,(F,\mathcal{F}))\rangle$ where $D$ is a denumerable set and $U$ is an ordinary pseudo-utility can be reduced to a statistical decision problem.
 \end{corollary}
 
 \begin{proof}
-Take some test distribution $\pi\in \Delta(\mathcal{D})$ such that $\pi(\{y\})>0$ for all $y\in D$. Such a $\pi$ exists by the denumerability of $\mathcal{D}$.
-
-The map $m:\Delta(\mathcal{F}\otimes\mathcal{D})\to \mathscr{K}$ given by $m(\xi) = \frac{\xi(F\times \cdot\times \{y\})}{\pi(\{y\})}$ is surjective. The result follows from Theorem \ref{th:red_CSDP}.
+Take some probability measure $\pi\in \Delta(\mathcal{D})$ such that $\pi(\{y\})>0$ for all $y\in D$. Such a $\pi$ exists by the denumerability of $\mathcal{D}$. The map $m:\Delta(\mathcal{F}\otimes\mathcal{D})\to \mathscr{K}$ given by $m(\xi)(y;A) := \frac{\xi(A\times\{y\})}{\pi(\{y\})}$ is surjective. The result follows from Theorem \ref{th:red_CSDP}.
 \end{proof}
 
 This reduction is not particularly practically useful, but it is sufficient to lift results such as Theorem \ref{th:complete_class} from the theory of statistical decision functions.

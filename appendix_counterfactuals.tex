@@ -1,4 +1,6 @@
 
+\section{Appendix: Counterfactuals}\label{app:counfac}
+
 A causal theory for Potential Outcomes is associated with a much larger hypothesis class than any causal theory that works only with distributions over observable variables. Theorem \ref{th:scdp_obu_red} shows that given any SCDP based on Potential Outcomes, provided that the potential outcome variables are unobserved and the utility does not depend on them, a reduced SCDP can be constructed by marginalising over potential outcomes. While these conditions may seem reasonable, there are some examples of problems where one does apparently care about the values of potential outcome variables. The \emph{effect of treatment on the treated} (ETT) that depends on counterfactual quantities and has some relevance to decision preferences \cite{rubin_estimating_1974}, though it is controversial whether this dependence is necessary \cite{geneletti2007defining}. More straightforwardly, the legal standard of ``no harm but for the defendant's negligence'' does seem to invoke fundamentally counterfactual considerations \cite{pearl_causality:_2009}.
 
 \begin{theorem}\label{th:red_CSDP}
@@ -30,3 +32,20 @@ Then, given the statistical decision problem $\langle(\mathscr{H},E\times F\time
                         &= R(J,\kappa,\mu)
 \end{align}
 \end{proof}
+
+\begin{example}[Performance bias]\label{ex:nonst_distn}
+Suppose we have a CSDP $\langle (\mathscr{T}, E), D, \RV{X}, (U,E) \rangle$ where the observed data $\RV{X}$ is from a randomised controlled trial (RCT), $\RV{Y}_0:E\to Y$ and $\RV{Y}_1:E\to Y$ are random variables representing a particular outcome of interest under no treatment and treatment respectively and $\RV{Y}:E\to Y$ represents the ``realised'' outcome of interest and for $\xi\in \Delta(\mathcal{E})$, $U(\xi) = \mathbb{E}_{\xi}[\RV{Y}]$. 
+
+Under usual assumptions about RCTs, if we suppose the observed data are distributed according to $\mu \in \Delta(\mathcal{E})$ it is possible (given infinite data $\RV{X}$) to determine $\mathbb{E}_\mu[\RV{Y}_0]$ and $\mathbb{E}_\mu[\RV{Y}_1]$ \citep{rubin_causal_2005}.
+
+Consequence consistency is assumed, but performance bias is suspected, which can lead to $\delta_i \kappa \RV{Y}_i$ differing from $\mathbb{E}_\mu[\RV{Y}_i]$ \citep{mansournia_biases_2017}.
+\begin{enumerate}
+    \item Assume performance bias is absent, so the theory must satisfy $\delta_i \kappa \RV{Y}_i = \mathbb{E}_\mu[\RV{Y}_i]$
+    \item Assume performance bias has a uniform additive effect: the theory satisfies $\delta_i \kappa \RV{Y}_i = \mathbb{E}_\mu[\RV{Y}_i]+k$. In this case the average treatment effect can still be estimated from the data: $\delta_1 \kappa \RV{Y}_1 - \delta_0\kappa\RV{Y}_0 = \mathbb{E}[\RV{Y}_1]-\mathbb{E}[\RV{Y}_0]$ which may be sufficient to find a decision function minimising the risk
+    \item Avoid assumptions about the effect of performance bias; the theory satisfies no particular relationship between $\mathbb{E}_\mu[\RV{Y}_i]$ and $\delta_i \kappa \RV{Y}_i$ and we may therefore expect preferred decision function to ignore the data
+\end{enumerate}
+The question of specifying this relationship arises naturally when we consider connecting Potential Outcomes to CSDPs. Nonetheless, the possibility of deviations from option 1 above are often treated as ``external to the causal problem''. For example,  \cite{mansournia_biases_2017} states:
+\begin{quote}
+    In this case, it might be more appropriate to say that the intention-to-treat effect from the trial is not generalizable or transportable to other settings rather than saying that it is “biased”
+\end{quote}
+\end{example}

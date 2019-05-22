@@ -7,24 +7,8 @@ A natural connection between these informal notions of potential outcomes and co
 \begin{align}
     \kappa F_{\RV{Y}_i-\RV{Y}} (i;A)=\delta_0(A) \label{eq:oc_consist}
 \end{align} 
-Consequence consistency is similar to the consistency condition (e.g., see \cite{richardson2013single}), but the latter does not involve consequences.
+Consequence consistency is similar to the consistency condition \citep{richardson2013single}, but the latter does not involve consequences.
 
-A causal theory $\mathscr{T}^{cc}$ that is consequence consistent need not require any particular relationship between an ``observed'' distribution $\mu\in \Delta(\mathcal{Y}_\circ)$ and an associated consequence $\kappa$. Example \ref{ex:nonst_distn} shows that there are multiple choices that may be appropriate for making this connection.
+A causal theory $\mathscr{T}^{cc}$ that is consequence consistent need not have any particular relationship between an ``observed'' distribution $\mu\in \Delta(\mathcal{Y}_\circ)$ and an associated consequence $\kappa$; one choice to make this connection is equality of the distributions of potential outcomes $\mu F_{\RV{Y}_i} = \delta_i \kappa F_{\RV{Y}_i}$, $i\in D$. Example \ref{ex:nonst_distn} in Appendix \ref{app:counfac} shows that other choices may be preferred.
 
-\begin{example}[Performance bias]\label{ex:nonst_distn}
-Suppose we have a CSDP $\langle (\mathscr{T}, E), D, \RV{X}, (U,E) \rangle$ where the observed data $\RV{X}$ is from a randomised controlled trial (RCT), $\RV{Y}_0:E\to Y$ and $\RV{Y}_1:E\to Y$ are random variables representing a particular outcome of interest under no treatment and treatment respectively and $\RV{Y}:E\to Y$ represents the ``realised'' outcome of interest and for $\xi\in \Delta(\mathcal{E})$, $U(\xi) = \mathbb{E}_{\xi}[\RV{Y}]$. 
-
-Under usual assumptions about RCTs, if we suppose the observed data are distributed according to $\mu \in \Delta(\mathcal{E})$ it is possible (given infinite data $\RV{X}$) to determine $\mathbb{E}_\mu[\RV{Y}_0]$ and $\mathbb{E}_\mu[\RV{Y}_1]$ \citep{rubin_causal_2005}.
-
-Consequence consistency is assumed, but performance bias is suspected, which can lead to $\delta_i \kappa \RV{Y}_i$ differing from $\mathbb{E}_\mu[\RV{Y}_i]$ \citep{mansournia_biases_2017}.
-\begin{enumerate}
-    \item Assume performance bias is absent, so the theory must satisfy $\delta_i \kappa \RV{Y}_i = \mathbb{E}_\mu[\RV{Y}_i]$
-    \item Assume performance bias has a uniform additive effect: the theory satisfies $\delta_i \kappa \RV{Y}_i = \mathbb{E}_\mu[\RV{Y}_i]+k$. In this case the average treatment effect can still be estimated from the data: $\delta_1 \kappa \RV{Y}_1 - \delta_0\kappa\RV{Y}_0 = \mathbb{E}[\RV{Y}_1]-\mathbb{E}[\RV{Y}_0]$ which may be sufficient to find a decision function minimising the risk
-    \item Avoid assumptions about the effect of performance bias; the theory satisfies no particular relationship between $\mathbb{E}_\mu[\RV{Y}_i]$ and $\delta_i \kappa \RV{Y}_i$ and we may therefore expect preferred decision function to ignore the data
-\end{enumerate}
-The question of specifying this relationship arises naturally when we consider connecting Potential Outcomes to CSDPs. Nonetheless, the possibility of deviations from option 1 above are often treated as ``external to the causal problem''. For example,  \cite{mansournia_biases_2017} states:
-\begin{quote}
-    In this case, it might be more appropriate to say that the intention-to-treat effect from the trial is not generalizable or transportable to other settings rather than saying that it is “biased”
-\end{quote}
-\end{example}
 
