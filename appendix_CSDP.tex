@@ -1,12 +1,8 @@
 \section{Appendix: Causal Statistical Decision Problems}\label{app:csdps}
 
-
-
-
 \begin{lemma}[Reduction preserves admissibility]\label{lem:red_adm_app}
 If a CSDP $\beta$ with induced game $\langle \mathscr{T},\mathscr{J}, R\rangle$ can be reduced to a statistical decision problem $\alpha$ with induced game $\langle \mathscr{H},\mathscr{J},R' \rangle$ then a decision function $J\in \mathscr{J}$ is admissible in $\beta$ iff it is admissible in $\alpha$.
 \end{lemma}
-
 
 \begin{proof}
 Suppose $J\in\mathscr{J}$ is inadmissible in $\alpha$. Then there is some $J'\in\mathscr{J}$, $\mu\in\mathscr{H}$ such that $R'(J',\mu)<R'(J,\mu)$ and $R'(J',\nu)\leq R'(J,\nu)$ for all $\nu\in \mathscr{H}$. Let $h$ be the function that witnesses the reduction. Then we have for all $\tau\in h^{-1}(\mu)$, $R(J',\tau)=R'(J',\mu)<R(J,\tau)=R'(J,\nu)$ and for all $\nu\in \mathscr{H}$, $\chi\in h^{-1}(\nu)$, $R(J',\chi)=R'(J',\nu)\leq R(J,\chi)=R'(J,\nu)$. The set $\bigcup_{\nu\in\mathscr{H}} h^{-1}(\nu)=\mathscr{T}$, so $J$ is inadmissible in $\beta$.

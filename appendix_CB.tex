@@ -1,38 +1,36 @@
 \section{Appendix: CBN is a causal theory}\label{app:cbn_ct}
 
 \begin{theorem}\label{th:cbn_MK}
-Given a graph $\mathcal{G}$, a measurable set $(E,\mathcal{E})$ and a decision set $D=\times_{i\in [N]} X^i\cup\{*\}$ with the $\sigma$-algebra $\mathcal{D}=\otimes_{i\in [N]} \sigma(\mathcal{X}^i\cup\{*\})$, let $P^x\in \Delta(\mathcal{E})$ be an interventional distribution compatible with $\mathcal{G}$ as defined in Definition \ref{def:CBN}. 
+Given a measurable set $(E,\mathcal{E})$ and a graph $\mathcal{G}$ over a set of random variables $\{\RV{X}^i\}_{i\in[N]}$ where $\RV{X}^i:E\to X^i$, a decision set $(D,\mathcal{D})$ and random variables $\{\RV{D}^i\}_{i\in[N]}$ with $\RV{D}^i:(D,\mathcal{D})\to (X^i\cup\{*\},\sigma(\mathcal{X}^i\cup\{*\})$. Given $\mu\in \Delta(\mathcal{E})$, let $\mu^y$ be the $\mathcal{G},\mu,y$-interventional distribution (Definition \ref{def:CBN}). 
 
-Then the map $\kappa_{\mathcal{G}}:D\to \Delta(\mathcal{X})$ given by $x\mapsto P^x$ is a Markov kernel.
+Then the map $\kappa^{\mu,\mathcal{G}}:D\to \Delta(\mathcal{E})$ given by $y\mapsto \mu^y$ is a Markov kernel with respect to $(D,\mathcal{D})$ and $(E,\mathcal{E})$.
 \end{theorem}
 
 \begin{proof}
-For each pair $(\RV{X}^i,\PA{\mathcal{G}}{\RV{X}^i})$, there is a Markov kernel $\kappa_i:\{X^j|j\in \PA{\mathcal{G}}{i}\}\to \Delta(\mathcal{X}^i)$ that is a version of $P^*(\RV{X}^i|\PA{\mathcal{G}}{\RV{X}^i}$ (\cite{cinlar_probability_2011}). 
+Let $X^{\PA{\mathcal{G}}{i}}=\times_{i\in\PA{\mathcal{G}}{i}} X^i$ and let $\kappa^i:=\mu_{\PA{\mathcal{G}}{\RV{X}^i}} F_{\RV{X}^i}$.
 
-Let $\PA{\mathcal{G}}{X^i} = \{X^j|\RV{X}^j\in \PA{\mathcal{G}}{\RV{X}^i}\}$.
-
-Consider $\kappa'_i:D\times \PA{\mathcal{G}}{X^i} \to \Delta(\mathcal{X}^i)$ given by \begin{align}
-    \kappa'_i: (*,pa^i;A)&\mapsto \kappa_i(pa^i;A)&\label{eq:passive}\\
-               (d,pa^i;A)&\mapsto \delta_{\RV{D}^i(d)}(A)&d\neq *\label{eq:npassive}
+Consider $\kappa^{i,*}:D\times X^{\PA{\mathcal{G}}{i}} \to \Delta(\mathcal{X}^i)$ given by \begin{align}
+    \kappa^{i,*}(y,pa^i;A) := \begin{cases}\kappa^i(pa^i;A) &\RV{D}^i(y) = * \\
+    \delta_{\RV{D}^i(y)}(A) & \RV{D}^i(y) \neq *\end{cases}\label{eq:passive}
 \end{align}
 
-Clearly for every $(d,pa^i) \in \PA{\mathcal{G}}{X^i}\cup D$ the map $A\mapsto \kappa'_i(d,pa^i;A)$ is a probability distribution on $\mathcal{X}^i$. Fix $B\in\mathcal{X}_i$ and let $\kappa'^B_i=\kappa'_i(\cdot;B)$.
+Clearly for every $(d,pa^i) \in D\times X^{\PA{\mathcal{G}}{i}}$ the map $A\mapsto \kappa^{i,*}(d,pa^i;A)$ is a probability distribution on $\mathcal{X}^i$. Fix $B\in\mathcal{X}_i$ and let $\kappa^{i,*}_B=\kappa'_i(\cdot;B)$.
 
 Then for any $A\in \mathcal{B}([0,1])$
 \begin{align}
-    [\kappa'^B_i]^{-1}(A) &= \{*\}\times[\kappa^B_i]^{-1}(A) &\text{if }0,1\not\in A\\
-    &= \{*\}\times[\kappa^B_i]^{-1}(A)\cup \PA{\mathcal{G}}{X^i}\times A &\text{if }1\in A\land 0\not\in A\\
-    &= \{*\}\times[\kappa^B_i]^{-1}(A)\cup \PA{\mathcal{G}}{X^i}\times A^C &\text{if }0\in A\land 1\not\in A\\
-    &= \{*\}\times[\kappa^B_i]^{-1}(A)\cup \PA{\mathcal{G}}{X^i}\times X^i &\text{if }0\in A\land 1\in A
+    [\kappa^{i,*}_B]^{-1}(A) &= [\RV{D}^i]^{-1}(\{*\})\times[\kappa^B_i]^{-1}(A) &\text{if }0,1\not\in A\\
+    &= [\RV{D}^i]^{-1}(\{*\})\times[\kappa^B_i]^{-1}(A)\cup [\RV{D}^i]^{-1}(B)\times X^{\PA{\mathcal{G}}{i}} &\text{if }1\in A\land 0\not\in A\\
+    &= [\RV{D}^i]^{-1}(\{*\})\times[\kappa^B_i]^{-1}(A)\cup [\RV{D}^i]^{-1}(B^C)\times X^{\PA{\mathcal{G}}{i}} &\text{if }0\in A\land 1\not\in A\\
+    &= [\RV{D}^i]^{-1}(\{*\})\times[\kappa^B_i]^{-1}(A)\cup [\RV{D}^i]^{-1}(X^i)\times X^{\PA{\mathcal{G}}{i}} &\text{if }0\in A\land 1\in A
 \end{align}
-In every case, the result is clearly an element of $\otimes_{j\in \PA{\mathcal{G}}{X^i}} \mathcal{X}^j \otimes \sigma(\mathcal{X}^i\cup\{*\})$.
+Note that $\sigma(\PA{\mathcal{G}}{\RV{X}^i}\subset\mathcal{E}$ and $[\kappa^B_i]^{-1}(A)\in \sigma(\PA{\mathcal{G}}{\RV{X}^i}$. Further note that $\{*\}$, $B$ and $B^C$ are in $\sigma(\mathcal{X}^i\cup\{*\})$. Therefore, in every case the result is  an element of $\mathcal{E}\otimes\mathcal{D}$.
 
 Without loss of generality, suppose the ordering $X^0,...,X^N$ is compatible with the graph $\mathcal{G}$. Then $\iota_{\mathcal{G}}:D\to \Delta(\mathcal{X})$ defined below is a Markov kernel.
 \begin{align}
-    \iota_{\mathcal{G}}:d\mapsto \int_{A^0} \kappa'_0(\RV{D}^0(d);dx^0) ... \int_{A^{N-1}} \kappa'_{N-1}(\RV{D}^{N-1}(d),x^{n-2};dx^{n-1}) \kappa'_N(\RV{D}^N(d),x^{n-1};A^N) \label{eq:bigproduct}
+    \iota^{\mathcal{G}}:y\mapsto \int_{A^0} \kappa^{0,*}(y;dx^0) ... \int_{A^{N-1}} \kappa^{N-1,*}(y,x^{n-2};dx^{n-1}) \kappa^{N,*}(y,x^{n-1};A^N) \label{eq:bigproduct}
 \end{align}
 
-for $d\in D$, $(A^0,...,A^N)\in X^0\times...\times X^N$ and where $\RV{D}^i(d)$ projects the $i$-th element of $d$.
+for $y\in D$, and $A^i\in \times_{j<i} X^j$.
 
-From Equation \ref{eq:bigproduct} and \ref{eq:passive} we can verify that, given some $i\in N$, if $\RV{D}^i(d)=\{*\}$ then $\iota_{\mathcal{G},\RV{X}^i|\PA{\mathcal{G}}{\RV{X}^i}}(d;\cdot) = \kappa_i$ and if $\RV{D}^i(d)\neq\{*\}$ then $\iota_{\mathcal{G},\RV{X}^i|\PA{\mathcal{G}}{\RV{X}^i}}(d;\cdot) = I_{\RV{D^i}(d)}$. These properties are equivalent to truncated factorisation, which is in turn equivalent to \ref{def:CBN}. Therefore $\iota_\mathcal{G}=\kappa_\mathcal{G}$.
+From Equation \ref{eq:bigproduct} and \ref{eq:passive} we can verify that, given some $i\in N$, if $\RV{D}^i(y)=\{*\}$ then $[\delta_y \iota^{\mathcal{G}}]_{\PA{\mathcal{G}}{\RV{X}^i}} = \kappa_i = \mu_{\PA{\mathcal{G}}{\RV{X}^i}} F_{\RV{X}^i}$ and if $\RV{D}^i(y)\neq\{*\}$ then $\delta_y \iota^{\mathcal{G}} = \delta_{\RV{D^i}(y)} F_{\RV{X}^i}$. From Equation \ref{eq:bigproduct} and the compatibility of $\mu$ with $\mathcal{G}$ it further follows that $\delta_y\iota^\mathcal{G}$ is compatible with $\mathcal{G}$. Therefore $\delta_y \iota^\mathcal{G}=\mu^y$ and so $\iota^\mathcal{G}=\kappa^{\mu,\mathcal{G}}$.
 \end{proof}
