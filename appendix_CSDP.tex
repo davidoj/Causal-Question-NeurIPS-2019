@@ -19,7 +19,7 @@ If a causal decision problem $\beta$ with induced game $\langle \mathscr{T},\mat
 \end{corollary}
 
 \begin{lemma}[Induced Bayes rule]\label{lem:IB_rule}
-If a CSDP $\beta$ with induced game $\langle \mathscr{T},\mathscr{J}, R\rangle$ can be reduced to a statistical decision problem $\alpha$ with induced game $\langle \mathscr{H},\mathscr{J},R' \rangle$ witnessed by $h:\mathscr{T}\to\mathscr{H}$ and $J_{ba}^\xi\in \mathscr{J}$ is a Bayes rule with respect to the problem $\alpha$ and the prior $\xi$ (Equation \ref{eq:ba_soln}) then $J_{ba}^\xi$ is a Bayes rule with respect to the problem $\beta$ and the induced prior $\xi_h$.
+If a CSDP $\beta$ with induced game $\langle \mathscr{T},\mathscr{J}, R\rangle$ can be reduced to a statistical decision problem $\alpha$ with induced game $\langle \mathscr{H},\mathscr{J},R' \rangle$ witnessed by $h:\mathscr{T}\to\mathscr{H}$ and $J_{ba}^\xi\in \mathscr{J}$ is a Bayes rule with respect to the problem $\alpha$ and the prior $\xi$ then $J_{ba}^\xi$ is a Bayes rule with respect to the problem $\beta$ and the induced prior $\xi_h$.
 \end{lemma}
 
 \begin{proof}
@@ -35,7 +35,7 @@ And therefore, if a Bayes rule exists,
 
 \end{proof}
 
-\begin{theorem}[Complete class theorem (CSDP)]\label{th:complete_class}
+\begin{theorem}[Complete class theorem (CSDP)]
 Given an CSDP $\alpha:=\langle (\mathscr{T},E),D,\RV{X},U\rangle$ with risk $R$, if there is a reduction to an SDP $\beta:=\langle (\mathscr{H},F),D,\RV{Y},\ell \rangle$ with risk $R'$ such that $|\mathscr{H}|<\infty$ and $\inf_{J\in\mathscr{J},\mu\in\mathscr{H}} R'(J,\mu)<-\infty$ then the set of all Bayes decision functions is a complete class and the set of all admissible Bayes decision functions is a minimal complete class.
 \end{theorem}
 
@@ -78,7 +78,7 @@ We have for $J\in \mathscr{J}$, $(\kappa,\mu)\in\mathscr{T}^\alpha$
 \end{align}
 \end{proof}
 
-\begin{theorem}\label{th:sdp_to_CSDP}
+\begin{theorem}
 Every SDP $\langle (\mathscr{H},E,\RV{X}),D,\ell\rangle$ can be reduced to a CSDP.
 \end{theorem}
 \begin{proof}
@@ -99,7 +99,7 @@ Denote by $R$ the risk associated with the SDP $\langle (\mathscr{H},E),D,\RV{X}
 \end{align}
 \end{proof}
 
-\begin{theorem}\label{th:red_CSDP}
+\begin{theorem}
 Given a CSDP $\beta=\langle (\mathscr{T},E,\RV{X}),D,(U,F)\rangle$ where $U$ is an ordinary pseudo-utility, let $\mathscr{K}=\{\kappa|(\kappa,\mu)\in \mathscr{T}\}$ be the set of consequences. $\beta$ is reducible to a statistical decision problem on the measurable space $(E\times F\times D,\mathcal{E}\otimes \mathcal{F}\otimes \mathcal{D})$ if there is some surjective map $m:\Delta(\mathcal{F}\otimes\mathcal{D})\to \mathscr{K}$.
 \end{theorem}
 
