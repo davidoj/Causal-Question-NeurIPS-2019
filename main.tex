@@ -106,11 +106,13 @@
    \And
   Cheng Soon Ong\\
   DATA61 and ANU\\
+  \texttt{chengsoon.ong@anu.edu.au} \\
   % Address \\
   % \texttt{email} \\
    \And
    Robert Williamson \\
    ANU and DATA61\\
+   \texttt{bob.williamson@anu.edu.au} \\
   % Address \\
   % \texttt{email} \\
   % \And
@@ -131,7 +133,9 @@
 \maketitle
 
 \begin{abstract}
-We develop the notion of a causal statistical decision problem as an extension of the statistical decision theory of Wald. Our approach is motivated by a simple consideration: suppose we have a dataset, some set of available decisions and we know what state we would like the world to occupy, but we are uncertain about how our decisions affect the state of the world. We introduce the notion of \emph{consequences} that relate decisions to states of the world, and \emph{causal theories} that relate observations to consequences. A strength of this perspective is that it is not motivated by causal considerations save (arguably) the notion that decisions have consequences. We connect causal statistical decision problems to statistical decision problems and show that two leading approaches to causality - Causal Bayesian Networks and Potential Outcomes - have natural representations as causal theories. We argue that the causal theory associated with a CBN may be considered incomplete and discuss how different extensions can lead to very different properties. We conclude with a list of open questions raised by this new perspective.
+
+We develop the notion of a causal statistical decision problem as an extension of the statistical decision theory of Wald. Suppose we have a dataset and a set of available decisions. Assume we know what state we would like the world to occupy, but we are uncertain about how our decisions affect the state of the world. We introduce the notion of \emph{consequences} that relate decisions to states of the world, and \emph{causal theories} that relate observations to consequences. A strength of this perspective is that it is not motivated by causal considerations save (arguably) the notion that decisions have consequences. We connect causal statistical decision problems to statistical decision problems and show that two leading approaches to causality - Causal Bayesian Networks and Potential Outcomes - have natural representations as causal theories. We argue that the causal theory associated with a CBN may be considered incomplete and discuss how different extensions can lead to very different properties. We conclude with a list of open questions raised by this new perspective.
+
 \end{abstract}
 
 \input{story}
@@ -142,7 +146,7 @@ We develop the notion of a causal statistical decision problem as an extension o
 
 \section{Conclusion}
 
-We have formally specified a causal statistical decision problem proceeding as a generalisation of statistical decision problems where our preferences over outcomes are known and the distribution over outcomes in consequence of a particular decision is uncertain. CSDPs may be connected to regular SDPs at a high level via a reduction, and this permits the theoretical treatment of risk minimisation in the context of causal problems. 
+We have formally specified a causal statistical decision problem proceeding as a generalisation of statistical decision problems where our preferences over outcomes are known and the distribution over outcomes in consequence of a particular decision is uncertain. CSDPs may be connected to regular SDPs at a high level via a reduction, and this permits the theoretical treatment of risk minimisation in the context of causal problems.
 
 The existing approaches of Causal Bayesian Networks and Potential Outcomes have natural interpretations as causal theories. We have argued for the utility of a more general approach via two examples. First, we show that a causal theory associated with a CBN $\mathcal{G}$ may be extended to cover distributions incompatible with $\mathcal{G}$ in different ways that yield very different results. Secondly, we show that the possibility of \emph{performance bias} is a natural consideration in CSDPs while it is often treated informally in other systems.
 
