@@ -5,32 +5,26 @@
  \hline
   & SDPs & CSDPs \\ 
  \hline
- State of the world & $\mathscr{H}$ & $\mathscr{T}$ \\ 
+ State of the world & $\mathscr{H}$, hypothesis class & $\mathscr{T}$, causal theory \\ 
  Observations & $\RV{X}$ & $\RV{X}$ \\ 
  Decisions & $D$ & $D$ \\
- Known preferences & $\ell$ & $U$ \\
- Derived preferences & $\ell$ & $L$\\
+ Known preferences & $\ell$, loss & $U$, pseudo-utility \\
+ Derived preferences & $\ell$, loss & $L$, causal loss\\
  \hline
 \end{tabular}
     \caption{Comparison of SDPs and CSDPs}
     \label{tab:sdp_cdp_comparison}
 \end{table}
 
+We develop causal statistical decision problems (CSDPs) as an extension of statistical decision problems (SDPs) where our preferences (i.e. utility or loss) are known less directly in former case. Following \citep{toutenburg_ferguson_1967}, we consider SDPs and causal statistical decision problems CSDPs to represent normal form two person games. The games represent at the most abstract level the options and possible payoffs available to the decision maker, and this representation allows us to compare the two types of problem. In their more detailed versions,  CSDPs and SDPs differ in their representation of the state of the world and in the type of function that represents preferences. These differences are summarised in Table \ref{tab:sdp_cdp_comparison}.
 
-
-Following \citep{toutenburg_ferguson_1967}, we consider a statistical decision problems and causal statistical decision problems to represent normal form two person games. The game represents at the highest level the options and possible payoffs available to the decision maker. If two problems represent ``essentially'' the same game from the perspective of the decision maker, we say that one game can be reduced to the other.
-
-\cheng{Can we split this section into two? Statistical decision theory, perhaps move back to the previous section, and call that section ``Background: Statistical Decision Theory''. Clarify your introduced concepts and notation in terms of existing work. We want to have a section which contains all the new results. Right now, it is unclear what is known, what is known (but expressed in a new way), and what you are proposing.}
-
-\begin{definition}[Two person game (normal form)]
+\begin{definition}[Normal form two person game]
 A normal form game is a triple $\langle \mathscr{S}, A, L\rangle$ where $\mathscr{S}$ and $A$ are arbitrary sets and $L:\mathscr{S}\times A\to [0,\infty)$ is a loss function.
+
 \end{definition}
 The set $\mathscr{S}$ is a set of possible states that the environment may occupy and $A$ is a set of actions the decision maker may take. The decision maker seeks an action in $A$ that minimises the loss $L$. Generally there is no action that minimises the loss for all environment states. A minimax solution is an action that minimises the worst case loss: $a^*_{mm} = \argmin_{a\in A} [\sup_{s\in \mathscr{S}} L(s,a)]$.
 
 If the set $\mathscr{S}$ is equipped with a $\sigma$-algebra $\mathcal{S}$ and a probability measure $\xi\in \Delta(\mathcal{S})$ which we will call a ``prior'', a Bayes solution minimizes the expected risk with respect to $\xi$: $a^*_{ba} = \argmin_{a\in A} \int_{\mathcal{S}} L(s,a) \xi(ds)$.
-=======
-\cheng{Justify why you need a game. Seems to be needed for reduction of states.}
-
 
 \begin{definition}[Admissible Action]
 Given a normal form two person game $\langle \mathscr{S}, A, L\rangle$, an action $a\in A$ is strictly better than $a'\in A$ iff $L(s,a)\leq L(s,a')$ for all $s\in\mathscr{S}$ and $L(s_0,a)<L(s_0,a')$ for some $s_0\in \mathscr{S}$. If only the first holds, then $a$ is as good as $a'$. An admissible action is an action $a\in A$ such that there is no action strictly better than $A$.
@@ -46,7 +40,7 @@ A class $C$ is an essentially complete class if for every $a\not\in C$ there is 
 A normal form two person game $\alpha = \langle \mathscr{S}^\alpha, A, L^\alpha\rangle$ can be reduced to a different game sharing the same action set $\beta = \langle \mathscr{S}^\beta, A, L^\beta \rangle$ if there is a surjective function $g:\mathscr{S}^\alpha\to \mathscr{S}^\beta$ such that for every $a\in A$, $s\in \mathscr{S}^\alpha$, $L^\alpha(s,a) = L^\beta(g(s),a)$.
 \end{definition}
 
-Reduction preserves admissibility and completeness as shown in Appendix \ref{app:csdps}
+Because CSDPs and SDPs posit states of nature of different types, they cannot represent exactly the same game. Reduction is a notion that allows us to say tht the game represented by a CSDP and an SDP are ``essentially'' the same. Reduction preserves the important properties of admissibility and completeness as shown in Appendix \ref{app:csdps}.
 
 A statistical decision problem represents a normal form two-person game where the available actions are \emph{decision functions} that output a decision given data, the states of the environment are associated with probability measures on some measurable space and we assume a loss expressing preferences over decisions and states is known.
 
@@ -60,9 +54,6 @@ Denoting by $\mathscr{J}$  the set of kernels $X\to \Delta(\mathcal{D})$, the tr
 
 
 The loss function $\ell$ expresses preferences over (state, decision) pairs. However, it may be the case that our preferences don't naturally apply directly to such pairs. For a doctor deciding whether to prescribe a treatment to a patient, it is clear that this patient being healthy in the future is preferable to them being sick. This motivates the definition of a causal statistical decision problem, utilising a preferences defined over outcomes rather than (state, decision) pairs. In order to compute the loss associated with a decision a map from decisions to outcomes is required, which we term a \emph{consequence}.
-
-\cheng{You should justify why you have $E$ and $F$, and not just one thing. This is a major departure from statistical decision problems.}
-
 
 \begin{definition}[Consequences]
 Given a measurable outcome space $(F,\mathcal{F})$ and a measurable decision space $(D,\mathcal{D})$, a Markov kernel $\kappa:D \to \Delta(\mathcal{F})$ is a \emph{consequence mapping}, or just a consequence for short.
