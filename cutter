@@ -1,0 +1,14 @@
+pdfjam main.pdf 1-10 -o causal-decision.pdf
+pdfjam main.pdf 11-17 -o causal-decision-supp-only.pdf
+zip causal-decision-supp-only.zip causal-decision-supp-only.pdf
+
+echo ""
+echo "MOVING TO INITIAL SUBMISSION FOLDER"
+echo ""
+
+rm neurips2019-submission/*
+mv causal-decision.pdf neurips2019-submission/
+mv causal-decision-supp-only.zip neurips2019-submission/
+rm causal-decision-supp-only.pdf
+
+ls -alt neurips2019-submission/*
