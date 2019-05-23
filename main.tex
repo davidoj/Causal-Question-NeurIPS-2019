@@ -49,6 +49,11 @@
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{lemma}[theorem]{Lemma}
 
+\newtheorem{innercustomthm}{Theorem}
+\newenvironment{customthm}[1]
+  {\renewcommand\theinnercustomthm{#1}\innercustomthm}
+  {\endinnercustomthm}
+
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
@@ -158,7 +163,7 @@ The general perspective proposed in this paper naturally incorporates the two ma
 \bibliographystyle{plainnat}
 \bibliography{references}
 
-
+\appendix
 \include{appendix_MK}
 \include{appendix_CSDP}
 \include{appendix_CB}
