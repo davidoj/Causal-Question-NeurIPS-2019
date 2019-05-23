@@ -1,4 +1,4 @@
-\section{Definitions \& Notation}
+\section{Definitions \& Notation}\label{sec:dfin}
 
 
 \begin{itemize}
@@ -12,13 +12,7 @@ A measurable space $(E,\mathcal{E})$ is a set $E$ and a $\sigma$-algebra $\mathc
 
 We assume all measurable spaces discussed are standard. That is, they are isomorphic to either a subset of $\mathbb{N}$ with the discrete $\sigma$-algebra, or $\mathbb{R}$ with the Borel $\sigma$-algebra.
 
-Given two measureable spaces $(E,\mathcal{E})$ and $(F,\mathcal{F})$, a \emph{Markov kernel} or \emph{stochastic map} $K:E\to \Delta(\mathcal{F})$ is a map where
-\begin{enumerate}
-    \item The map $x\mapsto K(x;B)$ is $\mathcal{E}$-measurable for every $B\in\mathcal{F}$
-    \item The map $B\mapsto K(x;B)$ is a probability measure on $(F,\mathcal{F})$ for every $x\in E$
-\end{enumerate}
-
-Abusing notation somewhat, we will write the set of Markov kernels of type $E\to \Delta(\mathcal{F})$ as $\Delta(\mathcal{F})^D$. 
+Given two measureable spaces $(E,\mathcal{E})$ and $(F,\mathcal{F})$, a \emph{Markov kernel} or \emph{stochastic map} $K:E\to \Delta(\mathcal{F})$ is a map where $x\mapsto K(x;B)$ is $\mathcal{E}$-measurable for every $B\in\mathcal{F}$ and $B\mapsto K(x;B)$ is a probability measure on $(F,\mathcal{F})$ for every $x\in E$. Abusing notation somewhat, we will write the set of Markov kernels of type $E\to \Delta(\mathcal{F})$ as $\Delta(\mathcal{F})^D$. 
 
 If we have two random variables $\RV{X}:\_\to X$ and $\RV{Y}:\_\to Y$, the conditional probability $P(\RV{Y}|\RV{X})$ is a Markov kernel $X\to \Delta(\mathcal{Y})$. Formally, given $\mu\in \Delta(\mathcal{E})$ and a sub-$\sigma$-algebra $\mathcal{E}'\subset\mathcal{E}$, there is a Markov kernel $\mu_{\mathcal{E}'}:E\to\Delta(\mathcal{E})$ such that for $A\in\mathcal{E}$ and $B\in \mathcal{E}'$, $\int_B \mu_{\RV{E}'}(y;A) d\mu(y) = \mu(A\cap B)$. $\mu_{\mathcal{E}'}$ is a \emph{conditional probability distribution} with respect to $\mathcal{E}'$. This result may not hold if $(E,\mathcal{E})$ is not a standard measureable space \citep{cinlar_probability_2011}.
 

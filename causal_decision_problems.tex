@@ -8,7 +8,7 @@
  State of the world & $\mathscr{H}$, hypothesis class & $\mathscr{T}$, causal theory \\ 
  Observations & $\RV{X}$ & $\RV{X}$ \\ 
  Decisions & $D$ & $D$ \\
- Known preferences & $\ell$, loss & $U$, pseudo-utility \\
+ Known preferences & $\ell$, loss & $U$, generalised utility \\
  Derived preferences & $\ell$, loss & $L$, causal loss\\
  \hline
 \end{tabular}
@@ -53,7 +53,7 @@ Denoting by $\mathscr{J}$  the set of kernels $X\to \Delta(\mathcal{D})$, the tr
 \end{definition}
 
 
-The loss function $\ell$ expresses preferences over (state, decision) pairs. However, it may be the case that our preferences don't naturally apply directly to such pairs. For a doctor deciding whether to prescribe a treatment to a patient, it is clear that this patient being healthy in the future is preferable to them being sick. This motivates the definition of a causal statistical decision problem, utilising a preferences defined over outcomes rather than (state, decision) pairs. In order to compute the loss associated with a decision a map from decisions to outcomes is required, which we term a \emph{consequence}.
+The loss function $\ell$ expresses preferences over (state, decision) pairs. However, it may be the case that our preferences don't naturally apply directly to such pairs. For a doctor deciding whether to prescribe a treatment to a patient, it is clear that this patient being healthy in the future is preferable to them being sick. This motivates the definition of a causal statistical decision problem, utilising a preferences defined over outcomes represented by a generalised utility rather than (state, decision) pairs. A generalised utility, as opposed to an ordinary utility, allows for a simple reduction from CSDPs to SDPs. In order to compute the loss associated with a decision a map from decisions to outcomes is required, which we term a \emph{consequence}.
 
 \begin{definition}[Consequences]
 Given a measurable outcome space $(F,\mathcal{F})$ and a measurable decision space $(D,\mathcal{D})$, a Markov kernel $\kappa:D \to \Delta(\mathcal{F})$ is a \emph{consequence mapping}, or just a consequence for short.
@@ -63,20 +63,16 @@ Given a measurable outcome space $(F,\mathcal{F})$ and a measurable decision spa
 Given a consequence $\kappa:D\to \Delta(\mathcal{F})$, a measurable observation space $(E,\mathcal{E})$ and some distribution $\mu\in \Delta(\mathcal{E})$, the pair $\tau:=(\kappa,\mu)$ is a \emph{causal state} on $D, E$ and $F$. We refer to $\kappa$ as the consequence and $\mu$ as the observed state.
 \end{definition}
 
+We allow the ``observation'' space $E$ and the ``outcome'' space $F$ to differ as it it may be desirable to avoid modelling consequences on variables that are observed but irrelevant to preferences (see Theorems \ref{th:CSDP_u_red} and \ref{th:CSDP_ob_red}). In practice these spaces often coincide.
+
 \begin{definition}[Causal Theory]\label{def:causal_theory}
 A causal theory $\mathscr{T}$ is a set of causal states sharing the same decision, observation and outcome spaces.
 \end{definition}
 
-\cheng{You need to define the different uses of ``utility''. E.g. utility, pseudo-utility, ordinary utility, generalized utility, normal utility. Or perhaps be more careful with your usage.}
-
-\cheng{The change from loss $\ell$ to $(U,F)$ is a surprising, so you need to explain why you need to do so.}
-
-\cheng{The following definition is too long. Defines too many things.}
-
 \begin{definition}[Causal Statistical Decision Problem]\label{def:CSDP}
-A causal statistical decision problem (CSDP) is a tuple $\langle (\mathscr{T}, (E,\mathcal{E}) \RV{X}), (D,\mathcal{D}), (U,(F,\mathcal{F})) \rangle$. $\mathscr{T}$ is a causal theory on $D, E$ and $F$, $D$ is the decision set, $\RV{X}:(E,\mathcal{E})\to (X,\mathcal{X})$ is a random variable representing the given information and $U:\Delta(\mathcal{F}\otimes \mathcal{D})\to \mathbb{R}$ is a pseudo-utility expressing preference over joint distributions of decisions and outcomes which we assume is bounded above.
+A causal statistical decision problem (CSDP) is a tuple $\langle (\mathscr{T}, (E,\mathcal{E}) \RV{X}), (D,\mathcal{D}), (U,(F,\mathcal{F})) \rangle$. $\mathscr{T}$ is a causal theory on $D, E$ and $F$, $D$ is the decision set, $\RV{X}:(E,\mathcal{E})\to (X,\mathcal{X})$ is a random variable representing the given information and $U:\Delta(\mathcal{F}\otimes \mathcal{D})\to \mathbb{R}$ is a generalised utility expressing preference over joint distributions of decisions and outcomes which we assume is bounded above.
 
-From the pseudo-utility $U$ we can define a loss $L:\mathscr{T}\times\Delta(\mathcal{D})\to [0,\infty]$ by
+From the generalised utility $U$ we can define a loss $L:\mathscr{T}\times\Delta(\mathcal{D})\to [0,\infty]$ by
 \begin{align}
     L((\kappa,\mu),\gamma) := \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_D\otimes \kappa)) - U(\gamma\splitter{0.15}(I_D\otimes \kappa))\label{eq:canonical_loss}
 \end{align}
@@ -86,20 +82,16 @@ Given a decision function $J\in\mathscr{J}$ and $(\kappa,\mu)\in \mathscr{T}$, w
 
 The triple $\langle \mathscr{T}, \mathscr{J}, R\rangle$ is a normal form two person game.
 
-If there exists some measurable $u:F\times D\to \mathbb{R}$ such that for all $\xi\in \Delta(\mathcal{F}\otimes\mathcal{D})$, $U(\xi)=\mathbb{E}_{\xi}[u]$ then we call $u$ an ordinary utility and by extension $U$ an ordinary pseudo-utility.
+If there exists some measurable $u:F\times D\to \mathbb{R}$ such that for all $\xi\in \Delta(\mathcal{F}\otimes\mathcal{D})$, $U(\xi)=\mathbb{E}_{\xi}[u]$ then we call $U$ an ordinary utility.
 
-An ordinary utility induces a loss $L(\kappa,\gamma) = \mathbb{E}_{\gamma}[l^\kappa]$
+An ordinary  induces a loss $L(\kappa,\gamma) = \mathbb{E}_{\gamma}[l^\kappa]$
 where $l^\kappa:D\to [0,\infty)$ is defined by
 \begin{align}
     l^\kappa(d) := \sup_{\gamma'\in \Delta(\mathcal{D})} \mathbb{E}_{\gamma'\splitter{0.08}(I_D\otimes \kappa)}[u] - \mathbb{E}_{\kappa(d;\cdot)}[u(\cdot,d)]\label{eq:induced_l}
 \end{align}
 \end{definition}
 
-\cheng{Create a table that summarises the similarities and differences between the two decision problems.}
-
-Reduction from a CSDP to an ordinary SDP is sufficient to import results from statistical decision theory such as Theorem \ref{th:complete_class}.
-
-\cheng{Explain why complete class is important.}
+Reduction from a CSDP to an ordinary SDP is sufficient to import results from statistical decision theory such as Theorem \ref{th:complete_class}. The complete class theorem along with Corollary \ref{cor:CSDP_to_sdp} show that, at least for CSDPs with countable decision sets, finite causal theories and ordinary utilities, any admissible decision rule is a Bayes rule given \emph{some} prior on $\mathscr{T}$. Stronger versions of Theorem \ref{th:complete_class} exist for SDPs, and stronger versions are likely to exist for CSDPs as well.
 
 \begin{theorem}[Complete class theorem (CSDP)]\label{th:complete_class}
 Given an CSDP $\alpha:=\langle (\mathscr{T},E),D,\RV{X},U\rangle$ with risk $R$, if there is a reduction to an SDP $\beta:=\langle (\mathscr{H},F),D,\RV{Y},\ell \rangle$ with risk $R'$ such that $|\mathscr{H}|<\infty$ and $\inf_{J\in\mathscr{J},\mu\in\mathscr{H}} R'(J,\mu)<-\infty$, then the set of all Bayes decision functions is a complete class for $\beta$ and the set of all admissible Bayes decision functions is a minimal complete class for $\beta$.
@@ -111,24 +103,21 @@ This follows from Lemmas \ref{cor:red_comp} and \ref{lem:IB_rule}. See appendix 
 
 Any statistical decision problem can be reduced to a CSDP featuring a causal theory where decisions have no effect.
 
-\cheng{Justify the choice of word ``reduce''.}
-
-
 \begin{theorem}\label{th:sdp_to_CSDP}
 Every SDP $\langle (\mathscr{H},E,\RV{X}),D,\ell\rangle$ can be reduced to a CSDP.
 \end{theorem}
 \begin{proof}
-Choose a theory that matches every probability measure $\mu\in\Delta(\mathcal{E})$ with a consequence map that itself always yields $\mu$. Then construct a utility $U$ that induces an identical risk. See Appendix \ref{app:csdps}.
+Choose a theory that matches every probability measure $\mu\in\Delta(\mathcal{E})$ with a consequence map that itself always yields $\mu$. Then construct a generalised utility $U$ that induces an identical risk. See Appendix \ref{app:csdps}.
 \end{proof}
 
-The pseudo-utility $U$ enables Theorem \ref{th:sdp_to_CSDP}. A reduction is sometimes possible to an CSDP featuring an ordinary utility with a nontrivial theory, but whether this is always possible remains an open question.
+The generalised utility $U$ enables Theorem \ref{th:sdp_to_CSDP}. A reduction is sometimes possible to an CSDP featuring an ordinary utility with a nontrivial theory, but whether this is always possible remains an open question.
 
-A CSDP cannot, in general, be reduced to a statistical decision problem - for example, if we choose the utililty to be the variance of some random variable we may be able to achieve higher utility through a randomised decision than any nonrandomised decision under conditions where a regular SDP cannot have this property (see Example \ref{ex:ired_csdp} in Appendix \ref{app:csdps}). It is an open question whether this reduction is generally possible if the problem features a normal utility.
+A CSDP cannot, in general, be reduced to a statistical decision problem - for example, if we choose the utililty to be the variance of some random variable we may be able to achieve higher utility through a randomised decision than any nonrandomised decision under conditions where a regular SDP cannot have this property (see Example \ref{ex:ired_csdp} in Appendix \ref{app:csdps}). It is an open question whether this reduction is generally possible if the problem features a ordinary utility.
 
 Theorem \ref{th:red_CSDP} reduces a CSDP to a SDP by associating each pair $(\mu,\kappa)$ in the causal theory with a distribution over $E\times F\times D$. This may be possible by finding a distribution on the product space for which $\mu$ is a marginal probability and $\kappa$ is a conditional distribution, but this is not necessary.
 
 \begin{theorem}\label{th:red_CSDP}
-Given a CSDP $\beta=\langle (\mathscr{T},E,\RV{X}),D,(U,F)\rangle$ where $U$ is an ordinary pseudo-utility, let $\mathscr{K}=\{\kappa|(\kappa,\mu)\in \mathscr{T}\}$ be the set of consequences. $\beta$ is reducible to a statistical decision problem on the measurable space $(E\times F\times D,\mathcal{E}\otimes \mathcal{F}\otimes \mathcal{D})$ if there is some surjective map $m:\Delta(\mathcal{F}\otimes\mathcal{D})\to \mathscr{K}$.
+Given a CSDP $\beta=\langle (\mathscr{T},E,\RV{X}),D,(U,F)\rangle$ where $U$ is an ordinary generalised utility, let $\mathscr{K}=\{\kappa|(\kappa,\mu)\in \mathscr{T}\}$ be the set of consequences. $\beta$ is reducible to a statistical decision problem on the measurable space $(E\times F\times D,\mathcal{E}\otimes \mathcal{F}\otimes \mathcal{D})$ if there is some surjective map $m:\Delta(\mathcal{F}\otimes\mathcal{D})\to \mathscr{K}$.
 \end{theorem}
 
 \begin{proof}
@@ -139,18 +128,12 @@ We construct the map $h$ based on the map $m$ and show that, given an ordinary u
 If the cardinality of $\Delta(\mathcal{F}\otimes\mathcal{D})$ is at least as large as the cardinality of the set of Markov kernels $D\to \Delta(\mathcal{F})$ then an CSDP with an ordinary utility can always be reduced to a SDP.
 \end{corollary}
 
-\begin{proof}
-This follows from Theorem \ref{th:red_CSDP} and the definition of cardinality.
-\end{proof}
-
 A major open question, then, is if $(E,\mathcal{E})$ and $(D,\mathcal{D})$ are standard measurable spaces, the conditions for Corollary \ref{cor:card_reduc} hold in general. Corollary \ref{cor:CSDP_to_sdp} shows that the reduction can be made in general if $D$ is a denumerable set.
 
 \begin{corollary}\label{cor:CSDP_to_sdp}
-A CSDP $\langle (\mathscr{T},(E,\mathcal{E}),\RV{X}),(D,\mathcal{D}),(U,(F,\mathcal{F}))\rangle$ where $D$ is a denumerable set and $U$ is an ordinary pseudo-utility can be reduced to a statistical decision problem.
+A CSDP $\langle (\mathscr{T},(E,\mathcal{E}),\RV{X}),(D,\mathcal{D}),(U,(F,\mathcal{F}))\rangle$ where $D$ is a denumerable set and $U$ is an ordinary generalised utility can be reduced to a statistical decision problem.
 \end{corollary}
 
 \begin{proof}
 Take some probability measure $\pi\in \Delta(\mathcal{D})$ such that $\pi(\{y\})>0$ for all $y\in D$. Such a $\pi$ exists by the denumerability of $\mathcal{D}$. The map $m:\Delta(\mathcal{F}\otimes\mathcal{D})\to \mathscr{K}$ given by $m(\xi)(y;A) := \frac{\xi(A\times\{y\})}{\pi(\{y\})}$ is surjective. The result follows from Theorem \ref{th:red_CSDP}.
 \end{proof}
-
-This reduction is not particularly practically useful, but it is sufficient to lift results such as Theorem \ref{th:complete_class} from the theory of statistical decision functions.
