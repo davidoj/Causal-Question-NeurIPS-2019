@@ -1,4 +1,5 @@
 \section{Causal Statistical Decision Problems}
+\vspace{-3mm}
 \begin{table}[ht]
     \centering
 \begin{tabular}{ |c|c|c| } 
@@ -16,7 +17,9 @@
     \label{tab:sdp_cdp_comparison}
 \end{table}
 
-We develop causal statistical decision problems (CSDPs) as an extension of statistical decision problems (SDPs) where our preferences (i.e. utility or loss) are known less directly in former case. Following \citep{toutenburg_ferguson_1967}, we consider SDPs and causal statistical decision problems CSDPs to represent normal form two person games. The games represent at the most abstract level the options and possible payoffs available to the decision maker, and this representation allows us to compare the two types of problem. In their more detailed versions,  CSDPs and SDPs differ in their representation of the state of the world and in the type of function that represents preferences. These differences are summarised in Table \ref{tab:sdp_cdp_comparison}.
+We develop causal statistical decision problems (CSDPs) inspired by statistical decision problems (SDPs) of \citet{wald_statistical_1950}. CSDPs differ from SDPs in that our preferences (i.e. utility or loss) are known less directly in former case. We show that every SDP can be represented by a CSDP and that the converse is sometimes but not always possible. We show that an analogoue of the fundamental \emph{complete class theorem} of SDPs applies to the class of CSDPs that can be represented by SDPs, but whether such a theorem applies more generally is an open question.
+
+Following \citep{toutenburg_ferguson_1967}, we consider SDPs and CSDPs to represent normal form two person games. At the most abstract level the games represent the options and possible payoffs available to the decision maker, and this representation allows us to compare the two types of problem. In their more detailed versions,  CSDPs and SDPs differ in their representation of the state of the world and in the type of function that represents preferences. These differences are summarised in Table \ref{tab:sdp_cdp_comparison}.
 
 \begin{definition}[Normal form two person game]
 A normal form game is a triple $\langle \mathscr{S}, A, L\rangle$ where $\mathscr{S}$ and $A$ are arbitrary sets and $L:\mathscr{S}\times A\to [0,\infty)$ is a loss function.
@@ -27,13 +30,13 @@ The set $\mathscr{S}$ is a set of possible states that the environment may occup
 If the set $\mathscr{S}$ is equipped with a $\sigma$-algebra $\mathcal{S}$ and a probability measure $\xi\in \Delta(\mathcal{S})$ which we will call a ``prior'', a Bayes solution minimizes the expected risk with respect to $\xi$: $a^*_{ba} = \argmin_{a\in A} \int_{\mathcal{S}} L(s,a) \xi(ds)$.
 
 \begin{definition}[Admissible Action]
-Given a normal form two person game $\langle \mathscr{S}, A, L\rangle$, an action $a\in A$ is strictly better than $a'\in A$ iff $L(s,a)\leq L(s,a')$ for all $s\in\mathscr{S}$ and $L(s_0,a)<L(s_0,a')$ for some $s_0\in \mathscr{S}$. If only the first holds, then $a$ is as good as $a'$. An admissible action is an action $a\in A$ such that there is no action strictly better than $A$.
+Given a normal form two person game $\langle \mathscr{S}, A, L\rangle$, an action $a\in A$ is \emph{strictly better} than $a'\in A$ iff $L(s,a)\leq L(s,a')$ for all $s\in\mathscr{S}$ and $L(s_0,a)<L(s_0,a')$ for some $s_0\in \mathscr{S}$. If only the first holds, then $a$ is as good as $a'$. An \emph{admissible action} is an action $a\in A$ such that there is no action strictly better than $A$.
 \end{definition}
 
 \begin{definition}[Complete Class]
-A class $C$ of decisions is a complete class if for every $a\not\in C$ there is some $a'\in C$ that is strictly better than $a$.
+A class $C$ of decisions is a \emph{complete class} if for every $a\not\in C$ there is some $a'\in C$ that is strictly better than $a$.
 
-A class $C$ is an essentially complete class if for every $a\not\in C$ there is some $a'\in C$ that is as good as $a$.
+$C$ is an \emph{essentially complete} class if for every $a\not\in C$ there is some $a'\in C$ that is as good as $a$.
 \end{definition}
 
 \begin{definition}[Reduction]\label{def:red_sdp_CSDP}
@@ -47,9 +50,7 @@ A statistical decision problem represents a normal form two-person game where th
 \begin{definition}[Statistical Decision Problem]
 A statistical decision problem (SDP) is defined by a tuple $\langle (\mathscr{H},(E,\mathcal{E}), \RV{X}), (D,\mathcal{D}), \ell\rangle$. $\mathscr{H}\subset\Delta(\mathcal{E})$ is a hypothesis class representing possible states of the environment, $D$ is the set of available decisions, $\RV{X}:(E,\mathcal{E})\to (X,\mathcal{X})$ is a random variable representing the information available for the statistician to make a decision and $\ell:\mathcal{H}\times D\to [0,\infty)$ is a loss function.
 
-Denote by $\mathscr{J}$ the set of decision kernels $X\to \Delta(\mathcal{D})$. Recall that $\mu F_{\RV{X}}(A)=\mu(\RV{X}^{-1}(A))$. For $J\in \mathscr{J}$ and $\mu\in \mathcal{H}$, the risk $R:\mathscr{J}\times\mathscr{H}\to [0,\infty)$ is defined as $R(J,\mu) = \int_D \ell(\mu,y) \mu F_{\RV{X}} J(dy)$.
-
-Denoting by $\mathscr{J}$  the set of kernels $X\to \Delta(\mathcal{D})$, the triple $\langle \mathscr{H}, \mathscr{J}, R\rangle$ forms a two player normal form game.
+Denote by $\mathscr{J}$ the set of decision kernels $X\to \Delta(\mathcal{D})$. Recall that $\mu F_{\RV{X}}(A)=\mu(\RV{X}^{-1}(A))$. For $J\in \mathscr{J}$ and $\mu\in \mathcal{H}$, the risk $R:\mathscr{J}\times\mathscr{H}\to [0,\infty)$ is defined as $R(J,\mu) = \int_D \ell(\mu,y) \mu F_{\RV{X}} J(dy)$. The triple $\langle \mathscr{H}, \mathscr{J}, R\rangle$ forms a two player normal form game.
 \end{definition}
 
 
@@ -78,14 +79,9 @@ From the generalised utility $U$ we can define a loss $L:\mathscr{T}\times\Delta
 \end{align}
 For $(\kappa,\mu)\in \mathscr{T}$ and $\gamma\in \Delta(\mathcal{D})$. This is well defined wherever $U$ is bounded above. Note that $L$ does not depend on the data generating distribution $\mu$; henceforth we will suppress this argument and write $L(\kappa,\gamma):= L((\kappa,\mu),\gamma)$.
 
-Given a decision function $J\in\mathscr{J}$ and $(\kappa,\mu)\in \mathscr{T}$, we define the risk $R:\mathscr{J}\times \mathscr{T}\to [0,\infty)$ by $R(J,\kappa,\mu) := L(\kappa,\mu F_{\RV{X}} J)$.
+Given a decision function $J\in\mathscr{J}$ and $(\kappa,\mu)\in \mathscr{T}$, we define the risk $R:\mathscr{J}\times \mathscr{T}\to [0,\infty)$ by $R(J,\kappa,\mu) := L(\kappa,\mu F_{\RV{X}} J)$. The triple $\langle \mathscr{T}, \mathscr{J}, R\rangle$ is a normal form two person game.
 
-The triple $\langle \mathscr{T}, \mathscr{J}, R\rangle$ is a normal form two person game.
-
-If there exists some measurable $u:F\times D\to \mathbb{R}$ such that for all $\xi\in \Delta(\mathcal{F}\otimes\mathcal{D})$, $U(\xi)=\mathbb{E}_{\xi}[u]$ then we call $U$ an ordinary utility.
-
-An ordinary  induces a loss $L(\kappa,\gamma) = \mathbb{E}_{\gamma}[l^\kappa]$
-where $l^\kappa:D\to [0,\infty)$ is defined by
+If there exists some measurable $u:F\times D\to \mathbb{R}$ such that for all $\xi\in \Delta(\mathcal{F}\otimes\mathcal{D})$, $U(\xi)=\mathbb{E}_{\xi}[u]$ then we call $U$ an ordinary utility. An ordinary  induces a loss $L(\kappa,\gamma) = \mathbb{E}_{\gamma}[l^\kappa]$ where $l^\kappa:D\to [0,\infty)$ is defined by
 \begin{align}
     l^\kappa(d) := \sup_{\gamma'\in \Delta(\mathcal{D})} \mathbb{E}_{\gamma'\splitter{0.08}(I_D\otimes \kappa)}[u] - \mathbb{E}_{\kappa(d;\cdot)}[u(\cdot,d)]\label{eq:induced_l}
 \end{align}
