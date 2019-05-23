@@ -1,10 +1,8 @@
 \section{Definitions \& Notation}\label{sec:dfin}
 
-Standard notation: $[N]$ refers to the set of natural numbers $\{1,...,N\}$. Sets are ordinary capital letters $X$ while $\sigma$-algebras are calligraphic capitals $\mathcal{X}$ and random variables are sans serif capitals $\RV{X}:\_\to X$. The calligraphic $\mathcal{G}$ refers to a directed acyclic graph rather than a $\sigma$-algebra. Sets of probability measures or stochastic maps are script capitals: $\mathscr{H}$, $\mathscr{T}$, $\mathscr{J}$.
+We use the following standard notation: $[N]$ refers to the set of natural numbers $\{1,...,N\}$. Sets are ordinary capital letters $X$ while $\sigma$-algebras are calligraphic capitals $\mathcal{X}$ and random variables are sans serif capitals $\RV{X}:\_\to X$. The calligraphic $\mathcal{G}$ refers to a directed acyclic graph rather than a $\sigma$-algebra. Sets of probability measures or stochastic maps are script capitals: $\mathscr{H}$, $\mathscr{T}$, $\mathscr{J}$.
 
-A measurable space $(E,\mathcal{E})$ is a set $E$ and a $\sigma$-algebra $\mathcal{E}\subset\mathcal{P}(\mathcal{E})$ containing the measurable sets. A probability measure $\mu\in \Delta(\mathcal{E})$ is a nonnegative map $\mathcal{E}\to[0,1]$ such that $\mu(\emptyset)=0$, $\mu(E)=1$ and for countable $\{E_i\}\in \mathcal{E}$, $\mu(\cup_i E_i) = \sum_i \mu(E_i)$.
-
-We assume all measurable spaces discussed are standard. That is, they are isomorphic to either a subset of $\mathbb{N}$ with the discrete $\sigma$-algebra, or $\mathbb{R}$ with the Borel $\sigma$-algebra.
+A measurable space $(E,\mathcal{E})$ is a set $E$ and a $\sigma$-algebra $\mathcal{E}\subset\mathcal{P}(\mathcal{E})$ containing the measurable sets. A probability measure $\mu\in \Delta(\mathcal{E})$ is a nonnegative map $\mathcal{E}\to[0,1]$ such that $\mu(\emptyset)=0$, $\mu(E)=1$ and for countable $\{E_i\}\in \mathcal{E}$, $\mu(\cup_i E_i) = \sum_i \mu(E_i)$. We assume all measurable spaces discussed are standard. That is, they are isomorphic to either a subset of $\mathbb{N}$ with the discrete $\sigma$-algebra, or $\mathbb{R}$ with the Borel $\sigma$-algebra.
 
 Given two measureable spaces $(E,\mathcal{E})$ and $(F,\mathcal{F})$, a \emph{Markov kernel} or \emph{stochastic map} $K:E\to \Delta(\mathcal{F})$ is a map where $x\mapsto K(x;B)$ is $\mathcal{E}$-measurable for every $B\in\mathcal{F}$ and $B\mapsto K(x;B)$ is a probability measure on $(F,\mathcal{F})$ for every $x\in E$. Abusing notation somewhat, we will write the set of Markov kernels of type $E\to \Delta(\mathcal{F})$ as $\Delta(\mathcal{F})^D$. 
 
@@ -15,19 +13,13 @@ Given a set of random variables $\mathbf{X}=\{\RV{X}^i\}_{i\in [N]}$ with domain
 Two Markov kernels $K:E\to \Delta(\mathcal{F})$ and $K':E\to \Delta(\mathcal{F})$ are $\mu$-almost surely equivalent given $\mu\in \Delta(\mathcal{E})$ if for all $A\in \mathcal{E}, B\in\mathcal{F}$, $\int_A K(x;B) d\mu = \int_A K'(x;B)$.
 
 
-\subsection{Kernel products}
+\paragraph*{Kernel products:} Kernel products allow common operations to be written compactly. The notation here borrows heavily from \cite{cinlar_probability_2011} and \cite{fong_causal_2013}. More details can be found in Appendix \ref{app:markov_kernels}. For the following, assume $K:E\to \Delta(\mathcal{F})$, $L:F\to \Delta(\mathcal{G})$, and $M:G\to \Delta(\mathcal{H})$ are Markov kernels, $\mu$ is a probability measure on $(E,\mathcal{E})$. 
 
-Kernel products allow common operations to be written compactly. The notation here borrows heavily from \cite{cinlar_probability_2011} and \cite{fong_causal_2013}. More details can be found in Appendix \ref{app:markov_kernels}.
+The \emph{kernel-kernel} product $KL$ is a Markov kernel $E\to \Delta(\mathcal{G})$ such that $KL(x;B):= \int_F K(x;dy) L(y;B),\qquad x\in E, B\in \mathcal{G}$. Kernel-kernel products are associative: $(KL)M=K(LM)$.
 
-For the following, assume $K:E\to \Delta(\mathcal{F})$, $L:F\to \Delta(\mathcal{G})$, and $M:G\to \Delta(\mathcal{H})$ are Markov kernels, $\mu$ is a probability measure on $(E,\mathcal{E})$. 
+The \emph{measure-kernel} product of $\mu$ and $K$, $\mu K$ is a probability measure on $(F,\mathcal{F})$ such that $\mu K(B)=\int_E \mu(dx) K(x;B),\qquad B\in\mathcal{F}$. Measure-kernel products are also associative: $(\mu K)L = \mu (KL)$.
 
-The kernel-kernel product $KL$ is a Markov kernel $E\to \Delta(\mathcal{G})$ such that $KL(x;B):= \int_F K(x;dy) L(y;B),\qquad x\in E, B\in \mathcal{G}$. Kernel-kernel products are associative: $(KL)M=K(LM)$.
-
-The measure-kernel product of $\mu$ and $K$, $\mu K$ is a probability measure on $(F,\mathcal{F})$ such that $\mu K(B)=\int_E \mu(dx) K(x;B),\qquad B\in\mathcal{F}$. Measure-kernel products are also associative: $(\mu K)L = \mu (KL)$.
-
-\subsection{Special kernels}
-
-$I_E$ is the identity kernel $E\to \Delta(\mathcal{E})$ defined by $x\mapsto \delta_x$. It has the properties $\mu I_E=\mu$, $KI_F = K$, $I_E K = K$.
+\paragraph*{Special kernels:} $I_E$ is the identity kernel $E\to \Delta(\mathcal{E})$ defined by $x\mapsto \delta_x$. It has the properties $\mu I_E=\mu$, $KI_F = K$, $I_E K = K$.
 
 Given some measurable function $g:E\to F$, the kernel $F_g:E\to \Delta(\mathcal{F})$ is defined by $x\mapsto \delta_{g(x)}$. It is easy to check that $F_g F_g = F_g$. For $\mu\in \Delta(\mathcal{E})$, $\mu F_g (A) = \mu(g^{-1}(A))$. This notation allows us to consistently represent a marginal distribution $\mu F_\RV{X}$ and a marginal kernel $\kappa F_{\RV{X}}$.
 
