@@ -15,6 +15,8 @@ $\mu$ is compatible with $\mathcal{G}$ if $\RV{X}^i\perp_{\mathcal{G}} \RV{X}^j 
 \end{definition}
 
 \begin{definition}[Causal Bayesian Network]\label{def:CBN}
+\todo{A CBN has a graph $\mathcal{G}$ with edges $\{V^i\}_{[N]}$, random variables $\{\RV{X}^i\}_{[N]}$ and decision variables $\{\RV{D}^i\}_{[N]}$ which are all associated with one another in the obvious way. It would be nice to have a simple way of expressing this bundle of things and the corresponding associations}
+
 Consider a directed acyclic graph $\mathcal{G}$ with nodes $\mathbf{X}=\{\RV{X}^i|i\in [N]\}$, a measurable space $(E,\mathcal{E})$ and a set of random variables $\RV{X}^i:E\to X^i$ and $X=\times_{i\in[N]} X^i$ along with decision space $(D,\mathcal{D})$ and random variables $\{\RV{D}^i\}_{i\in [N]}$ where $\RV{D}^i:D\to X^i\cup\{*\}$.
 
 Given any $y\in D$ let $S(y)\subset[N]$ be the set of all indices $i$ such that $\RV{D}^i(y)\neq *$. Let $\mathscr{H}_\mathcal{G}\subset\Delta(\mathcal{X})$ be the set of distributions compatible with $\mathcal{G}$. Given arbitrary $\mu\in \mathscr{H}_\mathcal{G}$ and $y\in D$ the $\mathcal{G},\mu,y$-interventional distribution denoted $\mu^{\mathcal{G},y}$ is given by the following three conditions:

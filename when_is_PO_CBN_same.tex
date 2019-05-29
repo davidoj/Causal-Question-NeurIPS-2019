@@ -1,0 +1,75 @@
+\section{Equivalence of causal problems}
+
+We might want tUnder what conditions is a causal theory $\mathscr{T}^{po}$ posed under Potential Outcomes (i.e. a theory on decision space $D$ and shared observation/outcome space $E$ ``potential outcome'' variables and consequence consistency along with additional assumptions) ``equivalent'' to some causal theory $\mathscr{T}^{ba}$?
+
+The question we address here is whether,  $\alpha$ and $\beta$ is the existence of a reduction from $\alpha$ to $\beta$ or from $\beta$ to $\alpha$. 
+
+% \begin{definition}[The map $\mathrm{CBN}()$]
+% Given a graph $\mathcal{G}=(V,W)$ where $V=\{V^i|i\in [N]\}$ and there exist random variables $\{\RV{X}^i\}_{i\in [N]}$ on some space $(E,\mathcal{E})$ where $\RV{X}:=\splitter{0.13}(\otimes_{i\in[N]}\RV{X}^i)$, let $\mathscr{H}_\mathcal{G}\subset\Delta(\mathcal{E})$ be the set of distributions compatible with $\mathcal{G}$ with respect to $\RV{X}$. Take some decision set $D$ suppose there exist random varaibles $\RV{D}^i:D\to \{*\}\cup X^i$ for $i\in [N]$. Given arbitrary $\mu\in \mathscr{H}_\mathcal{G}$ and $y\in D$ the $\mathcal{G},\mu,y$-interventional distribution denoted $\mu^{\mathcal{G},y}$ is given by the standard CBN conditions (Definition \ref{def:CBN}).
+% Let the Markov kernel $D\to \Delta(\mathcal{X})$ given by $y\mapsto \mu^{\mathcal{G},y}$ be denoted $\mathrm{CBN}(\mathcal{G},\mu)$.
+% \end{definition}
+
+\begin{definition}[Potential Outcomes CSDP]
+A CSDP $\langle (\mathscr{T},(E,\mathcal{E}),\RV{X}),(D,\mathcal{D}), (U,(F,\mathcal{F})\rangle$ is a ``Potential Outcomes'' problem if $E=F$, $D$ is denumerable and for each $i\in D$ there exists a random variable $\RV{X}_i:E\to X$ such that every $\kappa\in \mathscr{K}$ is consequence consistent: $\kappa F_{\RV{X}_i-\RV{X}}(A) = \delta_0(A)$.
+\end{definition}
+
+\begin{definition}[CBN CSDP]
+A CSDP $\langle (\mathscr{T},(E,\mathcal{E}),\RV{X}),(D,\mathcal{D}), (U,(F,\mathcal{F})\rangle$ is a ``Causal Bayesian Network'' CSDP with respect to some finite DAG $\mathcal{G}=(V,W)$ if $E=F$ and $\mathscr{T}$ is the theory induced by $\mathcal{G}$ \todo{(...and all the other stuff you need).}
+
+
+% ,  and for each node $V^k\in V$, $k\in[N]$ there exist $M$ random variables $\RV{X}^k_j:E\to X^k$, $j\in [M]$ such that $\RV{X}=\splitter{0.13}(\otimes_{k\in [N], j\in [M]} \RV{X}^k_j)$, for each $(\kappa,\mu)\in\mathscr{T}$, $i,j\in [M]$ we have 
+% \begin{enumerate}
+%     \item $\mu F_{\splitter{0.13}(\otimes_{k\in[N]} \RV{X}^k_i)} = \mu F_{\splitter{0.13}(\otimes_{k\in[N]} \RV{X}^k_j)}$ and $\kappa F_{\splitter{0.13}(\otimes_{k\in[N]} \RV{X}^k_i)} = \kappa F_{\splitter{0.13}(\otimes_{k\in[N]} \RV{X}^k_j)}$
+%     \item $\kappa F_{\splitter{0.13}(\otimes_{k\in[N]} \RV{X}^k_i)} = \mathrm{CBN}(G,\mu F_{\splitter{0.13}(\otimes_{k\in[N]} \RV{X}^k_i)})$ with respect to the random variables $\RV{D}^k:D\to \{*\}\cup X^k$ for $k\in [N]$.
+% \end{enumerate}
+
+% 1) is the requirement that $\RV{X}$ is a sequence of IID random variables, appropriately generalised to causal theories and 2) is the requirement that the theory $\mathscr{T}$ is the theory induced by the CBN $\mathcal{G}$.
+\end{definition}
+
+\begin{theorem}[Reduction to PO]\label{th:red_to_PO}
+A CSDP $\alpha=\langle (\mathscr{T},E,\RV{X}),D,(U,E) \rangle$ where $D$ is denumerable can be reduced to a PO CSDP.
+\end{theorem}
+
+\begin{proof}
+Suppose $D=[M]$ or $D=\mathbb{N}^+$. Take $E' = E\times E^D$ and for $i\in D\cup\{0\}$, $x:=(x_0,x_1,...)\in E'$ define the potential outcome variable $\RV{X}_i(x_0,x_1,...) = \RV{X}(x_y)$. 
+
+Take a map $f$ from $\mathscr{T}$ to causal states on $E'$ such that, letting $(\kappa',\mu'):=f(\kappa,\mu)$, for all $y\in D$ and $A_0,A_1, ...\in\mathcal{E}$:
+\begin{align}
+    \mu^{po}(A_1\times...) &:= \prod_{y'\in D} \delta_{y'} \kappa (A_{y'})\\
+    \kappa' (y; A_0\times A_1\times...) &:= \int_{A_1\times ...} \delta_{x_y} (A_0) \mu^{po}(dx) \\
+    &= \prod_{y'\in D\setminus\{y\}} \delta_{y'} \kappa (A_{y'}) \int_{A_y} \delta_{x_y} (A_0) \delta_y \kappa(dx_y)\\
+    \mu' ( A_0\times A_1\times...) &:= \prod_{y'\in D\setminus\{y\}} \delta_{y'} \kappa (A_{y'}) \int_{A_y} \delta_{x_y} (A_0) \mu(dx_y) \label{eq:consist}
+\end{align}
+It can be verified that $\kappa'$ is a Markov kernel, and consequence consistent with respect to $\RV{X}_0$ and the Potential Outcome variables $\RV{X}_y$ (Equation \ref{eq:oc_consist}).
+
+For $B\in \mathcal{X}$:
+\begin{align}
+    \kappa' F_{\RV{X}_0} (y;B) &= \int_E \delta_{z} (\RV{X}^{-1}(B)) \delta_y \kappa (dz)\\
+                               &= \int_{\RV{X}^{-1}(B)} \kappa(y;dz)\\
+                               &= \kappa F_{\RV{X}} (y;B)
+\end{align}
+
+
+By the definition of a CBN CSDP, the convention that $1\in D$ is the ``totally passive'' action, $\delta_1 \kappa (A) =\mu (A)$. Therefore
+\begin{align}
+    \mu' F_{\RV{X}_0} (B) &= \kappa F_{\RV{X}} (1;B)\\
+                          &= \mu F_{\RV{X}} (B)
+\end{align}
+
+For all $J\in \mathscr{J}$ we have
+\begin{align}
+    U(\mu F_{\RV{X}} J(I_D\otimes \kappa)) = U(\mu F_{\RV{X}_0} J(I_D\otimes \kappa F_{\RV{X}}))\\
+\end{align}
+
+Therefore, given the PO CSDP $\beta=\langle (\mathscr{T}',E',\RV{X}_0),D,(U,E) \rangle$, for all $J\in \mathscr{J}$, $R^\alpha(J,\kappa,\mu)=R^\beta(J,f(\kappa,\mu))$. Thus $\beta$  is a reduction of $\alpha$ witnessed by $f$.
+\end{proof}
+
+\begin{corollary}
+A CBN CSDP for which $D$ is a denumerable set can be reduced to a PO CSDP.
+\end{corollary}
+
+Given Theorem \ref{th:red_to_PO}, it is perhaps not surprising that, supposing $D$ is denumerable, PO CSDPs are a more general class than CBN CSDPs. Take some PO CSDP $\alpha=\langle (\mathscr{T},E,\RV{X}),D,(U,E) \rangle$ and suppose there is no $\RV{X}^i:E\to X^i$ and $k\in D$ such that $\delta_k\kappa F_{\RV{X}^i} (A) = \delta_{l} (A)$ for some $l\in X^i$. Then it is straightforward to see that $\alpha$ cannot in general be reduced to a CBN CSDP; condition 3 of Definition \ref{def:CBN} cannot be satisfied. It is also possible to pose a PO CSDP with no passive decision, so condition 2 of Definition \ref{def:CBN} cannot be satisfied. Condition 1 of Definition \ref{def:CBN} can always be satisfied by choosing a graph $\mathcal{G}$ that is fully connected.
+
+In practice, PO is typically used in conjunction with a number of additional assumptions in order to facilitate inference. In simple cases these are the assumptions of strong ignorability and the stable unit treatment value assumption \citep{rubin_causal_2005}. As with consequence consistency (Equation \ref{eq:oc_consist}), we require auxhiliary assumptions in order to pose a CSDP. 
+
+\todo[inline]{But I haven't done that yet.}
