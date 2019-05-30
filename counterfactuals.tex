@@ -1,14 +1,14 @@
 
 \section{Potential Outcomes}
 
-Potential Outcomes is an alternative to the approach typified by Causal Bayesian Networks for formulating causal questions and hypotheses. Causal queries in the Potential Outcomes framework concern the distribution of random variables $\RV{Y}_0, \RV{Y}_1$ representing potential outcomes, or ``the value $\RV{Y}$ would have taken if action 0 or 1 were taken respectively'' (\cite{hernan_causal_2018}). This is similar, but not the same, as the question answered by a consequence map which is ``what is the distribution of $\RV{Y}$ if I take actions 0 or 1?''
+Potential Outcomes is an alternative to the approach typified by Causal Bayesian Networks for formulating causal questions and hypotheses. Causal queries in the Potential Outcomes framework concern the distribution of random variables $\RV{X}_0, \RV{X}_1$ representing potential outcomes, or ``the value $\RV{X}$ would have taken if action 0 or 1 were taken respectively'' (\cite{hernan_causal_2018}). This is similar, but not the same, as the question answered by a consequence map which is ``what is the distribution of $\RV{X}$ if I take actions 0 or 1?''
 
-A natural connection between these informal notions of potential outcomes and consequence maps is given by the notion of consequence consistency. Let $\Delta(\mathcal{Y}_\circ)$ be the space of joint distributions over real and potential outcomes of $\RV{Y}$. A consequence map $\kappa:D\to \Delta(\mathcal{Y}_\circ)$ is consequence consistent if
+A natural connection between these informal notions of potential outcomes and consequence maps is given by the notion of consequence consistency. Let $\Delta(\mathcal{Y}_\circ)$ be the space of joint distributions over real and potential outcomes of $\RV{X}$. A consequence map $\kappa:D\to \Delta(\mathcal{Y}_\circ)$ is consequence consistent if
 \begin{align}
-    (\delta_i\kappa)_{\RV{Y}_i} F_{\RV{Y}} (y_i;A)=\delta_{y_i}(A) \label{eq:oc_consist}
+    (\delta_i\kappa)_{\RV{X}_i} F_{\RV{X}} (w;A)=\delta_{\RV{X}_i(w)}(A) \label{eq:oc_consist}
 \end{align} 
 Consequence consistency is similar to the consistency condition \citep{richardson2013single}, but the latter does not involve consequences.
 
-A causal theory that is consequence consistent need not have any particular relationship between an ``observed'' distribution $\mu\in \Delta(\mathcal{Y}_\circ)$ and an associated consequence $\kappa$; one choice to make this connection is equality of the distributions of potential outcomes $\mu F_{\RV{Y}_i} = \delta_i \kappa F_{\RV{Y}_i}$, $i\in D$. Example \ref{ex:nonst_distn} in Appendix \ref{app:counfac} shows that other choices may be preferred.
+A causal theory that is consequence consistent need not have any particular relationship between an ``observed'' distribution $\mu\in \Delta(\mathcal{Y}_\circ)$ and an associated consequence $\kappa$; one choice to make this connection is equality of the distributions of potential outcomes $\mu F_{\RV{X}_i} = \delta_i \kappa F_{\RV{X}_i}$, $i\in D$. Example \ref{ex:nonst_distn} in Appendix \ref{app:counfac} shows that other choices may be preferred.
 
 
