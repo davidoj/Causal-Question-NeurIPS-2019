@@ -48,7 +48,7 @@ Because CSDPs and SDPs posit states of nature of different types, they cannot re
 A statistical decision problem represents a normal form two-person game where the available actions are \emph{decision functions} that output a decision given data, the states of the environment are associated with probability measures on some measurable space and we assume a loss expressing preferences over decisions and states is known.
 
 \begin{definition}[Statistical Decision Problem]
-A statistical decision problem (SDP) is defined by a tuple $\langle (\mathscr{H},(E,\mathcal{E}), \RV{X}), (D,\mathcal{D}), \ell\rangle$. $\mathscr{H}\subset\Delta(\mathcal{E})$ is a hypothesis class representing possible states of the environment, $D$ is the set of available decisions, $\RV{X}:(E,\mathcal{E})\to (X,\mathcal{X})$ is a random variable representing the information available for the statistician to make a decision and $\ell:\mathcal{H}\times D\to [0,\infty)$ is a loss function.
+A statistical decision problem (SDP) is a triple $\langle \mathscr{H}, D, \ell\rangle$. $\mathscr{H}\subset\Delta(\mathcal{E})$ is a hypothesis class representing possible states of the environment, $D$ is the set of available decisions, $\RV{X}:(E,\mathcal{E})\to (X,\mathcal{X})$ is a random variable representing the information available for the statistician to make a decision and $\ell:\mathcal{H}\times D\to [0,\infty)$ is a loss function.
 
 Denote by $\mathscr{J}$ the set of decision kernels $X\to \Delta(\mathcal{D})$. Recall that $\mu F_{\RV{X}}(A)=\mu(\RV{X}^{-1}(A))$. For $J\in \mathscr{J}$ and $\mu\in \mathcal{H}$, the risk $R:\mathscr{J}\times\mathscr{H}\to [0,\infty)$ is defined as $R(J,\mu) = \int_D \ell(\mu,y) \mu F_{\RV{X}} J(dy)$. The triple $\langle \mathscr{H}, \mathscr{J}, R\rangle$ forms a two player normal form game.
 \end{definition}
@@ -67,7 +67,7 @@ Given a consequence $\kappa:D\to \Delta(\mathcal{F})$, a measurable observation 
 We allow the ``observation'' space $E$ and the ``outcome'' space $F$ to differ as it it may be desirable to avoid modelling consequences on variables that are observed but irrelevant to preferences (see Theorems \ref{th:CSDP_u_red} and \ref{th:CSDP_ob_red}). In practice these spaces often coincide.
 
 \begin{definition}[Causal Theory]\label{def:causal_theory}
-A causal theory $\mathscr{T}$ is a set of causal states sharing the same decision, observation and outcome spaces.
+A causal theory $\mathscr{T}$ is a set of causal states sharing the same decision, observation and outcome spaces. We abuse notation to assign the ``type signature'' $\mathscr{T}:E\times D\rightarrowTriangle F$ for a causal theory with observed distributions in $\Delta(\mathcal{E})$ and consequences $D\to \Delta(\mathcal{F})$.
 \end{definition}
 
 \begin{definition}[Causal Statistical Decision Problem]\label{def:CSDP}
