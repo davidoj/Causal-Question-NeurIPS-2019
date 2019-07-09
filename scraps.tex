@@ -1,6 +1,6 @@
 To fully define the respective CDPs, suppose in both cases the loss is $L:\xi\mapsto 0.6\mathbb{E}_\xi[g(\RV{D}_A)] - \mathbb{E}_{\xi}[\RV{B}] - l^*$ where $g:\{0,1,*\}\to \{0,1\}$ is given by $g:x\mapsto x$ for $x\in \{0,1\}$ and $*\mapsto 0$. That is, $\RV{B}=1$ is desirable and setting $\RV{D}_A=1$ is a costly action. $l^*$ is some constant that ensures the minimal loss is 0.
 
-Finally, suppose the given data is are IID samples from some distribution $\pi\in \Delta(\sigma(\{0,1\}^3))$ such that $P^\pi(\RV{B}|\RV{A}=a)=\delta_a(\RV{B})$. A naive application of $\mathcal{G}$ would then suggest that the consequence $\kappa$ were such that for any stochastic decision $\eta\in \Delta(\mathcal{D})$, $P^{\eta {(I_D\otimes \kappa)}}(\RV{B}|\RV{D}_A = x) =\delta_x(\RV{B})$ for $x\in\{0,1\}$. If $P^\pi(A=1)<0.4$ we then have $\delta_1(\RV{D}_A)$ as the optimal decision.
+Finally, suppose the given data is are IID samples from some distribution $\pi\in \Delta(\sigma(\{0,1\}^3))$ such that $P^\pi(\RV{B}|\RV{A}=a)=\delta_a(\RV{B})$. A naive application of $\mathcal{G}$ would then suggest that the consequence $\kappa$ were such that for any stochastic decision $\eta\in \Delta(\mathcal{D})$, $P^{\eta {(I_{(D)}\otimes \kappa)}}(\RV{B}|\RV{D}_A = x) =\delta_x(\RV{B})$ for $x\in\{0,1\}$. If $P^\pi(A=1)<0.4$ we then have $\delta_1(\RV{D}_A)$ as the optimal decision.
 
 Consider the Bayes risk for such a problem (a similar problem can be constructed, but is more complicated, using Bayes risk), and suppose we have a learning rule that  This requires assigning a prior to causal states in $\mathscr{T}_{\mathcal{G}}'$ and $\mathscr{T}_{\mathcal{G}}^\square$- we will suppose that this prior that admits a density on the 8-simplex $\Delta(\sigma(\{0,1\}^3))$. In particular, the prior assigns 0 weight to any set $\mathscr{P}\subset\Delta(\sigma(\{0,1\}^3))$ with 0 volume. This is not an uncontroversial choice, but it is compatible with the view that ``there are no true parametric zeros'' endorsed by many statisticians (for example  \cite{gelman_bayesian_2010,meehl_theory-testing_1967,berkson_difficulties_1938}). Where a theory contains more than one state with a given distribution, we give these states equal weight. 
 
@@ -153,7 +153,7 @@ Where $\delta_*$ is the distribution over $D$ that assigns weight 1 to the non-i
 
 
 \begin{align}
-    L((\kappa,\mu),\gamma) = \sup_{\gamma'\in\Delta(\mathcal{D})} \mathbb{E}_{\gamma'\underline{(I_D\otimes \kappa)}}[u] - \mathbb{E}_{\gamma\underline{(I_D\otimes \kappa)}}[u]
+    L((\kappa,\mu),\gamma) = \sup_{\gamma'\in\Delta(\mathcal{D})} \mathbb{E}_{\gamma'\underline{(I_{(D)}\otimes \kappa)}}[u] - \mathbb{E}_{\gamma\underline{(I_{(D)}\otimes \kappa)}}[u]
 \end{align}
 For $(\kappa,\mu)\in \mathscr{T}$ and $\gamma\in \Delta(\mathcal{D})$. This is well defined wherever $U$ is bounded above. Note that $L$ does not depend on the data generating distribution $\mu$; henceforth we will suppress this argument and write $L(\kappa,\gamma):= L((\kappa,\mu),\gamma)$.
 
@@ -169,7 +169,7 @@ For an example of a pseudo utility that is not ordinary, consider $U(\xi) = \tex
 and the full-blown theory
 
 \begin{align}
-        \mathscr{T}_{\mathscr{M}}^{\mathrm{fb}} = \{(d\mapsto \mu \underline{(I_E\otimes F_{M(d,\cdot)})},\mu \underline{(I_E\otimes F_{M(*,\cdot)})})|\mu\in \mathscr{H}\}
+        \mathscr{T}_{\mathscr{M}}^{\mathrm{fb}} = \{(d\mapsto \mu \underline{(I_{(E)}\otimes F_{M(d,\cdot)})},\mu \underline{(I_{(E)}\otimes F_{M(*,\cdot)})})|\mu\in \mathscr{H}\}
 \end{align}
 
 We can define counterfactual random variables $\RV{X}^i_k:E\times D\to X^i$ for $k\in D$ by $\RV{X}^i_k=\RV{X}^i(\cdot,k)$; this is consistent with the approach in, for example, \cite{balke_counterfactual_1994}. Defining observational variables $\RV{X}^i:E\times X\to X^i$ by the projection, it is straightforward to see that $\mathscr{T}^{\mathrm{fb}}_{\mathscr{M}}$ satisfies consequence consistency with respect to these definitions (Equation \ref{eq:oc_consist}).
@@ -190,7 +190,7 @@ These two examples do not exhaust the set of causal theories that can be constru
 Given a measurable space $(E,\mathcal{E})$, a hypothesis class $\mathscr{H}\subset\Delta(\mathcal{E})$ and random variables $\RV{X}:E\to X$, $\RV{Y}:E\to Y$ and $\RV{W}:E\to W$, we say $\RV{X}$ is universally independent of $\RV{Y}$ conditional on $\RV{W}$ if for all $\mu\in\mathscr{H}$ we have $\RV{X}\CI_\mu \RV{Y} | \RV{W}$. We write this $\RV{X} \CII_\mathscr{H} \RV{Y} | \RV{W}$.
 \end{definition}
 
-Suppose $(E,\mathcal{E}) = (F\times G, \mathcal{F}\otimes \mathcal{G})$ and we have a kernel $\kappa:F\to \Delta(\mathcal{G})$ and a hypothesis class $\mathscr{J}\subset\Delta(\mathcal{F})$. Then define $\mathscr{H}\underline{\kappa}=\{\mu\underline{(I_F\otimes \kappa)}|\mu\in \mathscr{H}\}$. Universal conditional independence with respect to $\kappa$ and $\mathscr{J}$ is written $\RV{X}\CII_{\mathscr{J}\underline{\kappa}} \RV{Y} | \RV{W}$.
+Suppose $(E,\mathcal{E}) = (F\times G, \mathcal{F}\otimes \mathcal{G})$ and we have a kernel $\kappa:F\to \Delta(\mathcal{G})$ and a hypothesis class $\mathscr{J}\subset\Delta(\mathcal{F})$. Then define $\mathscr{H}\underline{\kappa}=\{\mu\underline{(I_{(F)}\otimes \kappa)}|\mu\in \mathscr{H}\}$. Universal conditional independence with respect to $\kappa$ and $\mathscr{J}$ is written $\RV{X}\CII_{\mathscr{J}\underline{\kappa}} \RV{Y} | \RV{W}$.
 
 
 A more straightforward reduction can be made if the causal decision problem is \emph{identifiable}. A causal decision problem is identifiable if the risk of a given decision function is unique given a distribution over the observed data.
@@ -210,7 +210,7 @@ A risk-identifiable causal decision problem $\langle (\mathscr{T}, E), D, \RV{X}
 
 Choose an arbitrary $(\kappa,\mu)\in\mathscr{T}$ and define $L':\mathscr{H}\times D\to [0,\infty)$ by
 \begin{align}
-    L'(\nu,y) &= L(\delta_y\underline{[I_D\otimes \kappa]})\\
+    L'(\nu,y) &= L(\delta_y\underline{[I_{(D)}\otimes \kappa]})\\
               &= \int_F \ell(z,y) \kappa(y;dz)
 \end{align}
 

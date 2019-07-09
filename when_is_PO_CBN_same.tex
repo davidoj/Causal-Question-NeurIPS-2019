@@ -29,10 +29,6 @@ We can specify causal theories with a CBN $\mathcal{G}$ that are not potential o
 
 Rather than demand that we can represent the same theory with a CBN and with PO, we might ask instead if a problem featuring a PO theory can in general be reduced to a problem featuring a CBN theory and vise versa. This is in keeping with our approach that a CSDP represents at a high level a two person game and the latter determines the decision-relevant aspects of the problem.
 
-% \begin{definition}[The map $\mathrm{CBN}()$]
-% Given a graph $\mathcal{G}=(V,W)$ where $V=\{V^i|i\in [N]\}$ and there exist random variables $\{\RV{X}^i\}_{i\in [N]}$ on some space $(E,\mathcal{E})$ where $\RV{X}:=\splitter{0.13}(\otimes_{i\in[N]}\RV{X}^i)$, let $\mathscr{H}_\mathcal{G}\subset\Delta(\mathcal{E})$ be the set of distributions compatible with $\mathcal{G}$ with respect to $\RV{X}$. Take some decision set $D$ suppose there exist random varaibles $\RV{D}^i:D\to \{*\}\cup X^i$ for $i\in [N]$. Given arbitrary $\mu\in \mathscr{H}_\mathcal{G}$ and $y\in D$ the $\mathcal{G},\mu,y$-interventional distribution denoted $\mu^{\mathcal{G},y}$ is given by the standard CBN conditions (Definition \ref{def:CBN}).
-% Let the Markov kernel $D\to \Delta(\mathcal{X})$ given by $y\mapsto \mu^{\mathcal{G},y}$ be denoted $\mathrm{CBN}(\mathcal{G},\mu)$.
-% \end{definition}
 
 \begin{definition}[Potential Outcomes CSDP]
 A CSDP $\langle (\mathscr{T},(E,\mathcal{E}),\RV{X}),(D,\mathcal{D}), (U,(F,\mathcal{F})\rangle$ is a \emph{Potential Outcomes CSDP} (POCSDP) if $E=F$, $D$ is denumerable and there exists a set of potential outcome variables $\RV{X}_i:E\to X$, $i\in D$ with respect to which $\mathscr{T}$ is a Potential Outcomes causal theory.
@@ -93,7 +89,7 @@ For all $B\in\mathscr{X}$
 
 For all $J\in \mathscr{J}$ we have
 \begin{align}
-    U(\mu F_{\RV{X}} J\splitter{0.13}(I_D\otimes \kappa) &= U(\mu' F_{\RV{X}_0} J\splitter{0.13}(I_D\otimes \kappa' F_{\RV{P}_0}))\\
+    U(\mu F_{\RV{X}} J\splitter{0.13}(I_{(D)}\otimes \kappa) &= U(\mu' F_{\RV{X}_0} J\splitter{0.13}(I_{(D)}\otimes \kappa' F_{\RV{P}_0}))\\
 \end{align}
 
 Therefore, given the PO CSDP $\beta=\langle (\mathscr{T}',E',\RV{X}_0),D,(U,E) \rangle$, for all $J\in \mathscr{J}$, $R^\alpha(J,\kappa,\mu)=R^\beta(J,f(\kappa,\mu))$. Thus $\beta$  is a reduction of $\alpha$ witnessed by $f$.

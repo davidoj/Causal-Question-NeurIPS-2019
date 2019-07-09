@@ -75,7 +75,7 @@ A causal statistical decision problem (CSDP) is a tuple $\langle (\mathscr{T}, (
 
 From the generalised utility $U$ we can define a loss $L:\mathscr{T}\times\Delta(\mathcal{D})\to [0,\infty]$ by
 \begin{align}
-    L((\kappa,\mu),\gamma) := \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_D\otimes \kappa)) - U(\gamma\splitter{0.15}(I_D\otimes \kappa))\label{eq:canonical_loss}
+    L((\kappa,\mu),\gamma) := \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_{(D)}\otimes \kappa)) - U(\gamma\splitter{0.15}(I_{(D)}\otimes \kappa))\label{eq:canonical_loss}
 \end{align}
 For $(\kappa,\mu)\in \mathscr{T}$ and $\gamma\in \Delta(\mathcal{D})$. This is well defined wherever $U$ is bounded above. Note that $L$ does not depend on the data generating distribution $\mu$; henceforth we will suppress this argument and write $L(\kappa,\gamma):= L((\kappa,\mu),\gamma)$.
 
@@ -83,7 +83,7 @@ Given a decision function $J\in\mathscr{J}$ and $(\kappa,\mu)\in \mathscr{T}$, w
 
 If there exists some measurable $u:F\times D\to \mathbb{R}$ such that for all $\xi\in \Delta(\mathcal{F}\otimes\mathcal{D})$, $U(\xi)=\mathbb{E}_{\xi}[u]$ then we call $U$ an ordinary utility. An ordinary  induces a loss $L(\kappa,\gamma) = \mathbb{E}_{\gamma}[l^\kappa]$ where $l^\kappa:D\to [0,\infty)$ is defined by
 \begin{align}
-    l^\kappa(d) := \sup_{\gamma'\in \Delta(\mathcal{D})} \mathbb{E}_{\gamma'\splitter{0.08}(I_D\otimes \kappa)}[u] - \mathbb{E}_{\kappa(d;\cdot)}[u(\cdot,d)]\label{eq:induced_l}
+    l^\kappa(d) := \sup_{\gamma'\in \Delta(\mathcal{D})} \mathbb{E}_{\gamma'\splitter{0.08}(I_{(D)}\otimes \kappa)}[u] - \mathbb{E}_{\kappa(d;\cdot)}[u(\cdot,d)]\label{eq:induced_l}
 \end{align}
 \end{definition}
 

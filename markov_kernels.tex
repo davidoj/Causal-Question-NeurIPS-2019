@@ -19,13 +19,13 @@ The \emph{kernel-kernel} product $KL$ is a Markov kernel $E\to \Delta(\mathcal{G
 
 The \emph{measure-kernel} product of $\mu$ and $K$, $\mu K$ is a probability measure on $(F,\mathcal{F})$ such that $\mu K(B)=\int_E \mu(dx) K(x;B),\qquad B\in\mathcal{F}$. Measure-kernel products are also associative: $(\mu K)L = \mu (KL)$.
 
-\paragraph*{Special kernels:} $I_E$ is the identity kernel $E\to \Delta(\mathcal{E})$ defined by $x\mapsto \delta_x$. It has the properties $\mu I_E=\mu$, $KI_F = K$, $I_E K = K$.
+\paragraph*{Special kernels:} $I_{(E)}$ is the identity kernel $E\to \Delta(\mathcal{E})$ defined by $x\mapsto \delta_x$. It has the properties $\mu I_{(E)}=\mu$, $KI_{(F)} = K$, $I_{(E)} K = K$.
 
 Given some measurable function $g:E\to F$, the kernel $F_g:E\to \Delta(\mathcal{F})$ is defined by $x\mapsto \delta_{g(x)}$. It is easy to check that $F_g F_g = F_g$. For $\mu\in \Delta(\mathcal{E})$, $\mu F_g (A) = \mu(g^{-1}(A))$. This notation allows us to consistently represent a marginal distribution $\mu F_\RV{X}$ and a marginal kernel $\kappa F_{\RV{X}}$.
 
-Given $\mu\in \Delta(\mathcal{E}$, $\mu\splitter{0.15}(I_E\otimes K)$ is a distribution in $\Delta(\mathcal{E}\otimes\mathcal{F})$ given by
+Given $\mu\in \Delta(\mathcal{E}$, $\mu\splitter{0.15}(I_{(E)}\otimes K)$ is a distribution in $\Delta(\mathcal{E}\otimes\mathcal{F})$ given by
 \begin{align}
-    \mu\splitter{0.15}(I_E\otimes K)(A\times B) = \int_A K(x;B) d\mu(x)\qquad \forall A\in \mathcal{E},B\in \mathcal{F}
+    \mu\splitter{0.15}(I_{(E)}\otimes K)(A\times B) = \int_A K(x;B) d\mu(x)\qquad \forall A\in \mathcal{E},B\in \mathcal{F}
 \end{align}
 The symbol $\splitter{0.15}$ is read ``splitter''.
 
