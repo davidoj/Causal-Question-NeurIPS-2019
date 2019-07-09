@@ -6,17 +6,18 @@ Repository for "How to Ask a Causal Question" submission for NeurIPS 2019
 
 
 ### Notation
- * Distinguish between kernel associated with a measurable function, identity on a given space and conditional distribution (currently all subscripts)
+ * Distinguish between kernel associated with a measurable function, identity on a given space and conditional distribution (currently all subscripts); conditionals go bar-subscript, identities get a bracket
  * Type signature for causal theories (maybe ExD-|> F?)
+ * Font for power sets
 
 ### Causal decision problems
 
- * Generalised utilities to appendix
+ * Generalised utilities to appendix; redo reduction theorems for regular utilities
  * Type ExD -|> E standard/ExD -|> F to appendix (? think about this one)
  * Explain causal theory vs statistical experiment
  * Mention "underlying state" (set \Theta)
  * Use generalised risk function rather than regret (+ propagate)
- * 
+ * Move explicit dependence on decision to appendix
 
 
 ### Potential outcomes

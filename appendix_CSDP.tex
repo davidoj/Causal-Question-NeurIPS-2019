@@ -82,7 +82,7 @@ Take $\RV{D}$ to be the projection from $D\times E$ to $D$. For each $\mu\in \ma
 
 For $\gamma\in \Delta(\mathcal{D})$ the induced loss $L$ is
 \begin{align}
-    L(\kappa_\mu,\gamma) &= -\sup_{\gamma'\in \Delta(\mathcal{D})} \mathbb{E}_{\gamma' \splitter{0.15}(I_D\otimes \kappa_\mu)_{\RV{E}}}[\ell(\gamma'\splitter{0.15}(I_D\otimes \kappa_\mu)_{\RV{E}},\RV{D})] + \mathbb{E}_{\gamma \splitter{0.15}(I_D\otimes \kappa_\mu)}[\ell(\gamma \splitter{0.15}(I_D\otimes \kappa_\mu)_{\RV{E}},\RV{D})]\\
+    L(\kappa_\mu,\gamma) &= -\sup_{\gamma'\in \Delta(\mathcal{D})} \mathbb{E}_{\gamma' \splitter{0.15}(I_D\otimes \kappa_\mu)_{|\RV{E}}}[\ell(\gamma'\splitter{0.15}(I_D\otimes \kappa_\mu)_{|\RV{E}},\RV{D})] + \mathbb{E}_{\gamma \splitter{0.15}(I_D\otimes \kappa_\mu)}[\ell(\gamma \splitter{0.15}(I_D\otimes \kappa_\mu)_{|\RV{E}},\RV{D})]\\
                      &= \mathbb{E}_{\gamma}[\ell(\mu,\RV{D})]
 \end{align}
 
@@ -90,7 +90,7 @@ For the surjective map, take $g:\mathscr{H}\to \mathscr{T}$ defined by $g(\mu)=\
 
 Denote by $R$ the risk associated with the SDP $\langle (\mathscr{H},E),D,\RV{X},\ell\rangle$ and by $R'$ the risk associated with the CSDP $\langle (\mathscr{T},E),D,\RV{X},U\rangle$. Then
 \begin{align}
-    R'(J,\kappa,\mu) &= \int_D \ell(\mu, y) \mu_{\RV{X}} J(dy)\\
+    R'(J,\kappa,\mu) &= \int_D \ell(\mu, y) \mu F_{\RV{X}} J(dy)\\
                    &=R(J,g(\kappa,\mu))
 \end{align}
 \end{proof}

@@ -19,7 +19,7 @@ A causal theory $\mathscr{T}^{po}$ is a ``Potential Outcomes'' theory with respe
 
 Note that the condition of consistency \citep{richardson2013single}, which is a very standard condition in the Potential Outcomes literature, is:
 \begin{align}
-    \mu_{\{\RV{X}_i,\RV{Z}\}} \RV{F}_{\RV{X}} (w;A) = \delta_{\RV{X}_i(w)} (A) \qquad w\in \RV{Z}^{-1}(i)
+    \mu_{|\{\RV{X}_i,\RV{Z}\}} \RV{F}_{\RV{X}} (w;A) = \delta_{\RV{X}_i(w)} (A) \qquad w\in \RV{Z}^{-1}(i)
 \end{align}
 Where the random variable $\RV{Z}$ is a variable that is informally understood to be ``intervenable'' in a similar manner to intervention in Causal Bayesian Networks. A Potential Outcomes Causal Theory invokes a very general notion of Potential Outcomes where such intervenable variables may not exist, and so consistency may not be a sensible notion.
 
@@ -68,7 +68,7 @@ Take a map $f$ from $\mathscr{T}$ to causal states on $E'$ such that, letting $(
 \end{align}
 It can be verified that $\kappa'$ is a Markov kernel.
 
-Note that by the definition of conditional probability, for $A,B\in \mathcal{X}$, $\int_{\RV{X}_y^{-1}(A)} (\delta_y \kappa')_{\RV{X}_y} F_{\RV{X}_0} (x;B) \delta_y\kappa' (dx)=\delta_y \kappa' \splitter{0.13}(F_{\RV{X}_0}\otimes F_{\RV{X}_y}) (A, B)$. Thus by \ref{eq:PO_kappap_def}, $\delta_x (A)$ is a version of $(\delta_y \kappa')_{\RV{X}_y} F_{\RV{X}_0} (x;A)$, so $\kappa'$ is consequence consistent.
+Note that by the definition of conditional probability, for $A,B\in \mathcal{X}$, $\int_{\RV{X}_y^{-1}(A)} (\delta_y \kappa')_{|\RV{X}_y} F_{\RV{X}_0} (x;B) \delta_y\kappa' (dx)=\delta_y \kappa' \splitter{0.13}(F_{\RV{X}_0}\otimes F_{\RV{X}_y}) (A, B)$. Thus by \ref{eq:PO_kappap_def}, $\delta_x (A)$ is a version of $(\delta_y \kappa')_{|\RV{X}_y} F_{\RV{X}_0} (x;A)$, so $\kappa'$ is consequence consistent.
 
 Furthermore, $\mu' F_{\RV{X}_y}=\delta_y \kappa F_{\RV{X}}=\delta_y \kappa' F_{\RV{X}_y}$ for $y\geq 1$ . Therefore defining $\mathscr{T}'$ to be the image of $\mathscr{T}$ under $f$, we can see that $\mathscr{T}'$ is a PO causal theory with respect to ``observable'' $\RV{X}_0$ and ``potential outcomes'' $\RV{X}_y$, $y\in D$.
 
