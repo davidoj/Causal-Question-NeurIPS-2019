@@ -52,14 +52,14 @@ Consider the mapping $g:\mathscr{T}^\alpha\to\mathscr{T}^\beta$ given by $(\kapp
 
 For $J\in \mathscr{J}$, $(\kappa,\mu)\in\mathscr{T}^\alpha$
 \begin{align}
-    R^\alpha(J,\kappa,\mu) &= \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_D\otimes\kappa)) - U(\mu F_{\RV{X}} J\splitter{0.15}(I_D\otimes\kappa))\\
-                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_D\otimes\kappa) - U(\mu F_{\RV{X}} F_{\RV{X}} J\splitter{0.15} (I_D\otimes\kappa)))\\
+    R^\alpha(J,\kappa,\mu) &= \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_{(D)}\otimes\kappa)) - U(\mu F_{\RV{X}} J\splitter{0.15}(I_{(D)}\otimes\kappa))\\
+                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_{(D)}\otimes\kappa) - U(\mu F_{\RV{X}} F_{\RV{X}} J\splitter{0.15} (I_{(D)}\otimes\kappa)))\\
                            &= R^\beta (J,g(\kappa,\mu))
 \end{align}
 \end{proof}
 
 \begin{theorem}[Reduction of a CSDP on the utilty]\label{th:CSDP_u_red}
-Given a CSDP $\alpha=\langle (\mathscr{T}^\alpha,(E,\mathcal{E}),\RV{X}),D,(U,(F,\mathcal{F}))\rangle$ where, for $\zeta\in \Delta(\mathcal{E}\otimes\mathcal{D})$, if $U(\zeta)=U'(\zeta(I_D\otimes F_{\RV{Y}}) ))$ for some $\RV{Y}: F\to Y$ and $U':\Delta(\mathcal{Y})\to \mathbb{R}$ then $\alpha$ has $\RV{Y}$-\emph{observable utility}. Such a problem can be reduced to a problem $\beta=\langle (\mathscr{T}^\beta,(E,\mathcal{E}),\RV{X}),D,(U',(Y,\mathcal{Y})\rangle$ by marginalization. 
+Given a CSDP $\alpha=\langle (\mathscr{T}^\alpha,(E,\mathcal{E}),\RV{X}),D,(U,(F,\mathcal{F}))\rangle$ where, for $\zeta\in \Delta(\mathcal{E}\otimes\mathcal{D})$, if $U(\zeta)=U'(\zeta(I_{(D)}\otimes F_{\RV{Y}}) ))$ for some $\RV{Y}: F\to Y$ and $U':\Delta(\mathcal{Y})\to \mathbb{R}$ then $\alpha$ has $\RV{Y}$-\emph{observable utility}. Such a problem can be reduced to a problem $\beta=\langle (\mathscr{T}^\beta,(E,\mathcal{E}),\RV{X}),D,(U',(Y,\mathcal{Y})\rangle$ by marginalization. 
 \end{theorem}
 
 \begin{proof}
@@ -67,9 +67,9 @@ Consider the mapping $g:\mathscr{T}^\alpha\to\mathscr{T}^\beta$ given by $(\kapp
 
 We have for $J\in \mathscr{J}$, $(\kappa,\mu)\in\mathscr{T}^\alpha$
 \begin{align}
-    R^\alpha(J,\kappa,\mu) &= \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_D\otimes\kappa)) - U(\mu F_{\RV{X}} J\splitter{0.15}(I_D\otimes\kappa))\\
-                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U'(\gamma'\splitter{0.15}(I_D\otimes\kappa)(I_D \otimes  F_{\RV{Y}})) - U'(\mu F_{\RV{X}} J\splitter{0.15} (I_D\otimes\kappa))(I_{\RV{D}}\otimes F_{\RV{Y}}))\\
-                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U'(\gamma'\splitter{0.15}(I_D\otimes \kappa F_{\RV{Y}})) - U'(\mu F_{\RV{X}} J\splitter{0.15}(I_D\otimes \kappa F_{\RV{Y}}))\\
+    R^\alpha(J,\kappa,\mu) &= \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_{(D)}\otimes\kappa)) - U(\mu F_{\RV{X}} J\splitter{0.15}(I_{(D)}\otimes\kappa))\\
+                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U'(\gamma'\splitter{0.15}(I_{(D)}\otimes\kappa)(I_{(D)} \otimes  F_{\RV{Y}})) - U'(\mu F_{\RV{X}} J\splitter{0.15} (I_{(D)}\otimes\kappa))(I_{\RV{D}}\otimes F_{\RV{Y}}))\\
+                           &= \sup_{\gamma'\in\Delta(\mathcal{D})} U'(\gamma'\splitter{0.15}(I_{(D)}\otimes \kappa F_{\RV{Y}})) - U'(\mu F_{\RV{X}} J\splitter{0.15}(I_{(D)}\otimes \kappa F_{\RV{Y}}))\\
                            &= R^\beta (J,g(\kappa,\mu))
 \end{align}
 \end{proof}
@@ -82,7 +82,7 @@ Take $\RV{D}$ to be the projection from $D\times E$ to $D$. For each $\mu\in \ma
 
 For $\gamma\in \Delta(\mathcal{D})$ the induced loss $L$ is
 \begin{align}
-    L(\kappa_\mu,\gamma) &= -\sup_{\gamma'\in \Delta(\mathcal{D})} \mathbb{E}_{\gamma' \splitter{0.15}(I_D\otimes \kappa_\mu)_{|\RV{E}}}[\ell(\gamma'\splitter{0.15}(I_D\otimes \kappa_\mu)_{|\RV{E}},\RV{D})] + \mathbb{E}_{\gamma \splitter{0.15}(I_D\otimes \kappa_\mu)}[\ell(\gamma \splitter{0.15}(I_D\otimes \kappa_\mu)_{|\RV{E}},\RV{D})]\\
+    L(\kappa_\mu,\gamma) &= -\sup_{\gamma'\in \Delta(\mathcal{D})} \mathbb{E}_{\gamma' \splitter{0.15}(I_{(D)}\otimes \kappa_\mu)_{|\RV{E}}}[\ell(\gamma'\splitter{0.15}(I_{(D)}\otimes \kappa_\mu)_{|\RV{E}},\RV{D})] + \mathbb{E}_{\gamma \splitter{0.15}(I_{(D)}\otimes \kappa_\mu)}[\ell(\gamma \splitter{0.15}(I_{(D)}\otimes \kappa_\mu)_{|\RV{E}},\RV{D})]\\
                      &= \mathbb{E}_{\gamma}[\ell(\mu,\RV{D})]
 \end{align}
 
