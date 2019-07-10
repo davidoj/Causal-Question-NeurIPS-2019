@@ -41,23 +41,17 @@ A class $C$ of decisions is a \emph{complete class} if for every $a\not\in C$ th
 $C$ is an \emph{essentially complete} class if for every $a\not\in C$ there is some $a'\in C$ that is as good as $a$.
 \end{definition}
 
-\begin{definition}[Reduction]\label{def:red_sdp_CSDP}
-A normal form two person game $\alpha = \langle \mathscr{S}^\alpha, A, L^\alpha\rangle$ can be reduced to a different game sharing the same action set $\beta = \langle \mathscr{S}^\beta, A, L^\beta \rangle$ if there is a surjective function $g:\mathscr{S}^\alpha\to \mathscr{S}^\beta$ such that for every $a\in A$, $s\in \mathscr{S}^\alpha$, $L^\alpha(s,a) = L^\beta(g(s),a)$.
-\end{definition}
-
-Because CSDPs and SDPs posit states of nature of different types, they cannot represent exactly the same game. Reduction is a notion that allows us to say tht the game represented by a CSDP and an SDP are ``essentially'' the same. Reduction preserves the important properties of admissibility and completeness as shown in Appendix \ref{app:csdps}.
-
 A statistical decision problem represents a normal form two-person game where the available actions are \emph{decision functions} that output a decision given data, the states of the environment are associated with probability measures on some measurable space and we assume a loss expressing preferences over decisions and states is known.
 
 \begin{definition}[Statistical Experiment]\label{def:stat_expt}
-A \emph{statistical experiment} relative to a set $\Theta$ on a measurable space $(E,\mathcal{E})$ is a set $\mathscr{H}=\{\mu_\theta|\theta\in \Theta\}$ where $\mu_\theta\in \Delta(\mathcal{E})$. The set $\Theta$ indexes the ``state of nature''. Given an experiment $\mathscr{H}$ relative to $\Theta$ we assume a map $\theta\mapsto \mu_\theta$ exists, but we typically leave it implicit.
+A \emph{statistical experiment} relative to a set $\Theta$, a measurable space $(E,\mathcal{E})$ and a map $m:\Theta\to \Delta(\mathcal{E})$ is a set $\mathscr{H}=\{\mu_\theta|\theta\in \Theta\}$ where $\mu_\theta:=m(\theta)$. The set $\Theta$ indexes the ``state of nature''.
 \end{definition}
 
 
 \begin{definition}[Statistical Decision Problem]
-A statistical decision problem (SDP) is a triple $\langle\Theta, \mathscr{H}, D, \ell\rangle$. $\mathscr{H}\subset\Delta(\mathcal{E})$ is a statistical experiment relative to states $\Theta$, $D$ is the set of available decisions and $\ell:\Theta\times D\to [0,\infty)$ is a loss function.
+A statistical decision problem (SDP) is a tuple $\langle\Theta, (\mathscr{H},m), D, \ell\rangle$. $\mathscr{H}\subset\Delta(\mathcal{E})$ is a statistical experiment relative to states $\Theta$, space $(E,\mathcal{E})$ and map $m:\Theta\to \Delta(\mathcal{E})$, $D$ is the set of available decisions with some $\sigma$-algebra $\mathcal{D}$ and $\ell:\Theta\times D\to \mathbb{R}$ is a loss function where $\ell(\theta,\cdot)$ is measurable with respect to $\mathcal{D}$ and $\mathcal{B}(\mathbb{R})$.
 
-Denote by $\mathscr{J}$ the set of stochastic decision functions $E\to \Delta(\mathcal{D})$. For $J\in \mathscr{J}$ and $\mu_\theta\in \mathcal{H}$, the risk $R:\mathscr{J}\times\Theta\to [0,\infty)$ is defined as $R(J,\theta) = \int_D \ell(\theta,y) \mu_\theta J(dy)$. The triple $\langle \mathscr{H}, \mathscr{J}, R\rangle$ forms a two player normal form game.
+Denote by $\mathscr{J}$ the set of stochastic decision functions $E\to \Delta(\mathcal{D})$. For $J\in \mathscr{J}$ and $\mu_\theta\in \mathcal{H}$, the risk $R:\Theta\times\mathscr{J}\to [0,\infty)$ is defined as $R(J,\theta) = \int_D \ell(\theta,y) \mu_\theta J(dy)$. The triple $\langle \Theta, \mathscr{J}, R\rangle$ forms a two player normal form game.
 \end{definition}
 
 The loss function $\ell$ expresses preferences over general (state, decision) pairs. It may be the case that our preferences are most directly known over future states of the world - we know which results of our decisions are desirable and which are undesirable, which we represent with a \emph{utility function}. In this case, if we are to induce preferences over the possible decisions, that we have a model that is more informative than a statistical experiment. In particular, we require each state of nature to be associated with both a distribution over the given information and a map from decisions to distributions over results - we call this map a \emph{consequence}, and the object that pairs a distribution and a consequence with each state of the world a \emph{causal theory}.
@@ -77,61 +71,62 @@ A causal theory $\mathscr{T}$ is a set of causal states sharing the same decisio
 \end{definition}
 
 \begin{definition}[Causal Statistical Decision Problem]\label{def:CSDP}
-A causal statistical decision problem (CSDP) is a triple $\langle \mathscr{T}, D, u) \rangle$. $\mathscr{T}$ is a causal theory on $D\times E\rightarrowtriangle F$, $D$ is the decision set with $\sigma$-algebra $\mathcal{D}$ and $u:F\to \mathbb{R}$ is a utility function expressing preference over the results of decisions.
+A causal statistical decision problem (CSDP) is a triple $\langle \mathscr{T}, D, u \rangle$. $\mathscr{T}$ is a causal theory on $D\times E\rightarrowtriangle F$, $D$ is the decision set with $\sigma$-algebra $\mathcal{D}$ and $u:F\to \mathbb{R}$ is a measurable utility function expressing preference over the results of decisions.
 
-Given arbitrary $f:\mathscr{T}\to\mathbb{R}$, define $l:\mathscr{T}\times D\to \mathbb{R}$ by $l:(\kappa,\mu,y)\mapsto a f(\kappa,\mu) + b \mathbb{E}_{\delta_y\kappa}[u]$. We can define a loss (relative to $f$) $L:\mathscr{T}\times\Delta(\mathcal{D})\to [0,\infty]$ by
-\begin{align}
-    L((\kappa,\mu),\gamma) &:= \mathbb{E}_\gamma[l(\kappa,\mu,\cdot)]
-    					   &= a f(\kappa,\mu) + b \mathbb{E}_{\gamma\kappa}[u]\label{eq:canonical_loss}\\
-\end{align}
-For $(\kappa,\mu)\in \mathscr{T}$ and $\gamma\in \Delta(\mathcal{D})$. Define $l^\kappa$
+Define the canonical loss $L:\mathscr{T}\times D\to \mathbb{R}$ by $L:(\kappa,\mu),y\mapsto -\mathbb{E}_{\gamma\kappa}[u]$. This change conforms with the conventions that utilities are maximised while losses are minimised.
 
-Given a decision function $J\in\mathscr{J}$ and $(\kappa,\mu)\in \mathscr{T}$, we define the risk $R:\mathscr{J}\times \mathscr{T}\to [0,\infty)$ by $R(J,\kappa,\mu) := L((\kappa,\mu),\mu J)$. The triple $\langle \mathscr{T}, \mathscr{J}, R\rangle$ is a normal form two person game.
+Given a decision function $J\in\mathscr{J}$ and $(\kappa,\mu)\in \mathscr{T}$, we define the risk $R:\mathscr{T}\times \mathscr{J} \to [0,\infty)$ by $R(\kappa,\mu,J) := L((\kappa,\mu),\mu J)$. The triple $\langle \mathscr{T}, \mathscr{J}, R\rangle$ is a normal form two person game.
 \end{definition}
 
-There are obvious similarities between SDPs and CSDPs: both have the same high level representation as a two person game which is arrived at by taking the expectation of a loss with respect to a decision function. We use the notion of a \emph{reduction} to formalise the notion of a CSDP and an SDP representing the same underlying decision problem. Reduction from a CSDP to an ordinary SDP is sufficient to import results from statistical decision theory such as Theorem \ref{th:complete_class}. The complete class theorem along with Corollary \ref{cor:CSDP_to_sdp} show that, at least for CSDPs with countable decision sets, finite causal theories and ordinary utilities, any admissible decision rule is a Bayes rule given \emph{some} prior on $\mathscr{T}$. Stronger versions of Theorem \ref{th:complete_class} exist for SDPs, and stronger versions are likely to exist for CSDPs as well.
+The loss and the utility differ in that the loss expresses per-state preferences while the utility expresses state independent preferences. While we choose the loss to be a particular function of the utility here, it is possible to allow losses to be a more general class of functions of the utility and state without altering the preference ordering of a CSDP under minimax or Bayes decision rules. Given arbitrary $f:\mathscr{T}\to\mathbb{R}$, define $l:\mathscr{T}\times D\to \mathbb{R}$ by $l:(\kappa,\mu,y)\mapsto a f(\kappa,\mu) + b \mathbb{E}_{\delta_y\kappa}[u]$. We can define a loss (relative to $f$) $L:\mathscr{T}\times\Delta(\mathcal{D})\to [0,\infty]$ by
+\begin{align}
+    L((\kappa,\mu),\gamma) &:= \mathbb{E}_\gamma[l(\kappa,\mu,\cdot)]\\
+    					   &= a f(\kappa,\mu) - b \mathbb{E}_{\gamma\kappa}[u]\label{eq:canonical_loss}\\
+\end{align}
+For $(\kappa,\mu)\in \mathscr{T}$, $\gamma\in \Delta(\mathcal{D})$ and $a\in \mathbb{R}$, $b\in \mathbb{R}^+$ (this is to preserve the conventions that losses are minimised while utilities are maximised). A common example of a loss is the \emph{regret}, which takes $a=b=1$ and $f(\kappa,\mu) = \sup_{\gamma'\in \Delta(\mathcal{D})$. Because expected utility preserves preference orderings under positive affine transformations, the ordering of preferences given a particular state is not affected by the choices of $a,b$ and $f$, nor is the Bayes ordering of preferences given some prior $\xi$ over $\mathscr{T}$. While it may be possible to formulate decision rules for which the choices of $a,b$ and $f$ do matter, we will take these properties as sufficient to allow us to choose $a=0$ and $b=1$. More general classes of loss are of substantial interest -- \emph{regret theory}, for example, is a straightforward generalisation of the losses discussed here and is a prominent alternative to expected utility theory \citep{loomes_regret_1982}.
+
+There are obvious similarities between SDPs and CSDPs: both have the same high level representation as a two person game which is arrived at by taking the expectation of a loss with respect to a decision function. In fact, if we consider two decision problems to be the same if they have the same representation as a two player game, we find that CSDPs are a special case of SDPs.
+
+\begin{theorem}[CSDPs are a special case of SDPs]\label{th:csdps_are_sdps}
+Given any CSDP $\alpha=\langle \mathscr{T}, D, u \rangle$ with two player game representation $\langle \mathscr{T}, \mathscr{J}, R\rangle$, there exists an SDP $\langle \mathscr{T}, (\mathscr{H},m), D,\ell \rangle$ with the same representation as a two player game.
+\end{theorem}
+
+\begin{proof}
+Let $m:\mathscr{T}\to \mathscr{H}$ be defined such that $m:(\kappa,\mu)\mapsto \mu$ for $(\kappa,\mu)\in \mathscr{H}$. Define $\ell:\mathscr{T}\times D\to \mathbb{R}$ by $\ell:((\kappa,\mu),y)\mapsto -\mathbb{E}_{\delta_y \kappa}[u]$. Let $R'((\kappa,\mu),J) = \mathbb{E}_{\mu J}[\ell(\theta,\cdot)]$. Then
+\begin{align}
+	R'((\kappa,\mu),J) &= -\int_D \mathbb{E}_{\delta_y \kappa}[u] \mu J(dy)\\ 
+					   &= -\int_D \int_F u(x) \kappa(y;dx) \mu J(dy)\\
+					   &= -\int_F u(x) \mu J \kappa(dx)\\
+					   &= R((\kappa,\mu),J)
+\end{align}
+\end{proof}
+
+The converse is not true, as the set $\Theta$ in an SDP is of an arbitrary type and may not be a causal theory. However, it is possible for any SDP with environmental states $\Theta$ to find a CSDP with causal theory $\mathscr{T}$ such that the games represented by each decision problem are related by a surjective map $f:\Theta\to \mathscr{T}$ which associates each state of nature with a causal state. We call such a map a \emph{reduction} from an SDP to a CSDP.
+
+\begin{definition}[Reduction]\label{def:red_sdp_CSDP}
+Given normal form two person games $\alpha = \langle \mathscr{S}^\alpha, A, L^\alpha\rangle$ and $\beta = \langle \mathscr{S}^\beta, A, L^\beta \rangle$, $f:\mathscr{S}^\alpha\to \mathscr{S}^\beta$ is a \emph{reduction} from $\alpha$ to $\beta$ if, defining the image $f(\mathscr{S}^\alpha)=\{f(\theta)|\theta\in \mathscr{S}^\alpha\}$, we have $\langle \mathscr{S}^\beta, A, L^\beta \rangle = \langle f(\mathscr{S}^\alpha), A, L^\alpha\circ(f\otimes I_A)\rangle$.
+\end{definition}
+
+\begin{theorem}[SDP can be reduced to a CSDP]\label{th:csdps_represent_sdps}
+Given any SDP $\langle \Theta, (\mathscr{H},m), D, \ell\rangle$ represented as the game $\alpha = \langle \Theta, \mathscr{J},R\rangle$, there exists a CSDP $\langle \mathscr{T},D,u\rangle$ represented as the game $\beta=\langle\mathscr{T},\mathscr{J},R' \rangle$ such that there is some reduction $f:\Theta\to \mathscr{T}$ from $\alpha$ to $\beta$.
+\end{theorem} 
+
+\begin{proof}
+Take $\mathscr{H}\subset\Delta(\mathcal{E})$ and define $f:\Theta\to \Delta(\mathcal{E})\times \Delta(\mathcal{B}(\mathbb{R}))^D$ by $f:\theta\mapsto (y\mapsto \delta_{l(\theta,y)},\mu_\theta)$. Noting that $y\mapsto \delta_{l(\theta,y)}$ is a Markov kernel $D\to \Delta(\mathcal{B}(\mathbb{R}))$, the image $f(\Theta)$ is a causal theory $E\times D\rightarrowtriangle \mathbb{R}$. Consider the CSDP $\langle f(\Theta),D,-I_{(\mathbb{R})}\rangle$. Then, letting $R'$ denote the risk associated with this theory
+\begin{align}
+ R'((\kappa,\mu),J) &= -\int_\mathbb{R} \int_D (-x) \delta_{l(\theta,y)}(dx) \mu_\theta J(dy)\\
+ 					&= \int_D l(\theta,y) \mu_\theta J(dy)\\
+ 					&= R(\Theta,J)
+\end{align}
+\end{proof}
+
+Theorem \ref{th:csdps_are_sdps} shows that properties that are true in general of SDPs must also be true of CSDPs. Thus, for example, the fundamental \emph{complete class theorem} of SDPs that shows that there are no decision rules that dominate the set of all Bayes rules applies also to CSDPs.
 
 \begin{theorem}[Complete class theorem (CSDP)]\label{th:complete_class}
-Given an CSDP $\alpha:=\langle (\mathscr{T},E),D,\RV{X},U\rangle$ with risk $R$, if there is a reduction to an SDP $\beta:=\langle (\mathscr{H},F),D,\RV{Y},\ell \rangle$ with risk $R'$ such that $|\mathscr{H}|<\infty$ and $\inf_{J\in\mathscr{J},\mu\in\mathscr{H}} R'(J,\mu)<-\infty$, then the set of all Bayes decision functions is a complete class for $\beta$ and the set of all admissible Bayes decision functions is a minimal complete class for $\beta$.
+Given any CSDP $\alpha:=\langle \mathscr{T},D,u\rangle$ with two player game representation $\langle \mathscr{T},\mathscr{J},R\rangle$, if $|\mathscr{T}|<\infty$ and $\inf_{J\in\mathscr{J},(\kappa,\mu)\in\mathscr{H}} R((\kappa,\mu),J)>-\infty$, then the set of all Bayes decision functions is a complete class for $\alpha$ and the set of all admissible Bayes decision functions is a minimal complete class for $\alpha$.
 \end{theorem}
 
 \begin{proof}
-This follows from Lemmas \ref{cor:red_comp} and \ref{lem:IB_rule}. See appendix \ref{app:csdps}.
+By theorem \ref{th:csdps_are_sdps}, there exists an SDP $\beta$ such that $\alpha$ and $\beta$ have the same representation as a two player game. By assumption, $\beta$ has a finite set of states and a risk function that is bounded below. Therefore the Bayes rules on $\alpha$ are a complete class and admissible Bayes rules are a minimal complete class for the problem $\langle \mathscr{T},\mathscr{J},R\rangle$ \citep{toutenburg_ferguson_1967}.
 \end{proof}
 
-Any statistical decision problem can be reduced to a CSDP featuring a causal theory where decisions have no effect.
-
-\begin{theorem}\label{th:sdp_to_CSDP}
-Every SDP $\langle (\mathscr{H},E,\RV{X}),D,\ell\rangle$ can be reduced to a CSDP.
-\end{theorem}
-\begin{proof}
-Choose a theory that matches every probability measure $\mu\in\Delta(\mathcal{E})$ with a consequence map that itself always yields $\mu$. Then construct a generalised utility $U$ that induces an identical risk. See Appendix \ref{app:csdps}.
-\end{proof}
-
-% The generalised utility $U$ enables Theorem \ref{th:sdp_to_CSDP}. A reduction is sometimes possible to an CSDP featuring an ordinary utility with a nontrivial theory, but whether this is always possible remains an open question.
-
-A CSDP cannot, in general, be reduced to a statistical decision problem - for example, if we choose the utililty to be the variance of some random variable we may be able to achieve higher utility through a randomised decision than any nonrandomised decision under conditions where a regular SDP cannot have this property (see Example \ref{ex:ired_csdp} in Appendix \ref{app:csdps}). It is an open question whether this reduction is generally possible if the problem features a ordinary utility.
-
-Theorem \ref{th:red_CSDP} reduces a CSDP to a SDP by associating each pair $(\mu,\kappa)$ in the causal theory with a distribution over $E\times F\times D$. This may be possible by finding a distribution on the product space for which $\mu$ is a marginal probability and $\kappa$ is a conditional distribution, but this is not necessary.
-
-\begin{theorem}\label{th:red_CSDP}
-Given a CSDP $\beta=\langle (\mathscr{T},E,\RV{X}),D,(U,F)\rangle$ where $U$ is an ordinary generalised utility, let $\mathscr{K}=\{\kappa|(\kappa,\mu)\in \mathscr{T}\}$ be the set of consequences. $\beta$ is reducible to a statistical decision problem on the measurable space $(E\times F\times D,\mathcal{E}\otimes \mathcal{F}\otimes \mathcal{D})$ if there is some surjective map $m:\Delta(\mathcal{F}\otimes\mathcal{D})\to \mathscr{K}$.
-\end{theorem}
-
-\begin{proof}
-We construct the map $h$ based on the map $m$ and show that, given an ordinary utility $U$, it is possible to construct a loss $\ell$ such that the resulting SDP features the same risk assignments as the original CSDP. See Appendix \ref{app:csdps}.
-\end{proof}
-
-\begin{corollary}\label{cor:card_reduc}
-If the cardinality of $\Delta(\mathcal{F}\otimes\mathcal{D})$ is at least as large as the cardinality of the set of Markov kernels $D\to \Delta(\mathcal{F})$ then an CSDP with an ordinary utility can always be reduced to a SDP.
-\end{corollary}
-
-A major open question, then, is if $(E,\mathcal{E})$ and $(D,\mathcal{D})$ are standard measurable spaces, the conditions for Corollary \ref{cor:card_reduc} hold in general. Corollary \ref{cor:CSDP_to_sdp} shows that the reduction can be made in general if $D$ is a denumerable set.
-
-\begin{corollary}\label{cor:CSDP_to_sdp}
-A CSDP $\langle (\mathscr{T},(E,\mathcal{E}),\RV{X}),(D,\mathcal{D}),(U,(F,\mathcal{F}))\rangle$ where $D$ is a denumerable set and $U$ is an ordinary generalised utility can be reduced to a statistical decision problem.
-\end{corollary}
-
-\begin{proof}
-Take some probability measure $\pi\in \Delta(\mathcal{D})$ such that $\pi(\{y\})>0$ for all $y\in D$. Such a $\pi$ exists by the denumerability of $\mathcal{D}$. The map $m:\Delta(\mathcal{F}\otimes\mathcal{D})\to \mathscr{K}$ given by $m(\xi)(y;A) := \frac{\xi(A\times\{y\})}{\pi(\{y\})}$ is surjective. The result follows from Theorem \ref{th:red_CSDP}.
-\end{proof}
