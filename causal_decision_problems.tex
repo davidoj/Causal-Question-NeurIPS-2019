@@ -8,11 +8,12 @@
  \hline
   & SDPs & CSDPs \\ 
  \hline
- State of the world & $\mathscr{H}$, hypothesis class & $\mathscr{T}$, causal theory \\ 
- Observations & $\RV{X}$ & $\RV{X}$ \\ 
+ State of the world & $\Theta$ & $\mathscr{T}$, causal theory \\ 
+ Observation space & $E$ & $E$ \\ 
+ Result space & - & $F$ \\
  Decisions & $D$ & $D$ \\
- Known preferences & $\ell$, loss & $U$, generalised utility \\
- Derived preferences & $\ell$, loss & $L$, causal loss\\
+ Given preferences & $\ell:\Theta\times D\to \mathbb{R}$ & $u:F\to \mathbb{R}$ \\
+ Loss in a given state & $\ell(\theta,\cdot)$, $\theta\in \Theta$ & $\kappa u (\cdot)$, $(\kappa,\mu)\in \mathscr{T}$\\
  \hline
 \end{tabular}
     \caption{Comparison of SDPs and CSDPs}
@@ -64,7 +65,7 @@ Given a measurable result space $(F,\mathcal{F})$ and a measurable decision spac
 Given a consequence $\kappa:D\to \Delta(\mathcal{F})$, a measurable observation space $(E,\mathcal{E})$ and some distribution $\mu\in \Delta(\mathcal{E})$, the pair $(\kappa,\mu)$ is a \emph{causal state} on $E, D$ and $F$. We refer to $\kappa$ as the consequence and $\mu$ as the observed distribution.
 \end{definition}
 
-We allow the ``observation'' space $E$ and the ``outcome'' space $F$ to differ as it it may be desirable to avoid modelling consequences on variables that are observed but irrelevant to preferences (see Theorems \ref{th:CSDP_u_red} and \ref{th:CSDP_ob_red}). In practice these spaces often coincide.
+In many cases the observation space $E$ and the results space $F$ might coincide. However, these spaces are defined by different aspects of the given information: the former is fixed by what observations are available and the latter by which parts of the world are relevant to the investigator's preferences (see Theorems \ref{th:CSDP_u_red} and \ref{th:CSDP_ob_red}), and there is not a clear reason to insist that these spaces should always be the same.
 
 \begin{definition}[Causal Theory]\label{def:causal_theory}
 A causal theory $\mathscr{T}$ is a set of causal states sharing the same decision, observation and outcome spaces. We abuse notation to assign the ``type signature'' $\mathscr{T}:E\times D\rightarrowtriangle F$ for a causal theory with observed distributions in $\Delta(\mathcal{E})$ and consequences of type $D\to \Delta(\mathcal{F})$. The causal states of a theory $\mathscr{T}$ may be associated with a master set of states $\Theta$, but in contrast to a statistical experiment this is not necessary to define the basic associated decision problem.
@@ -83,7 +84,9 @@ The loss and the utility differ in that the loss expresses per-state preferences
     L((\kappa,\mu),\gamma) &:= \mathbb{E}_\gamma[l(\kappa,\mu,\cdot)]\\
     					   &= a f(\kappa,\mu) - b \mathbb{E}_{\gamma\kappa}[u]\label{eq:canonical_loss}\\
 \end{align}
-For $(\kappa,\mu)\in \mathscr{T}$, $\gamma\in \Delta(\mathcal{D})$ and $a\in \mathbb{R}$, $b\in \mathbb{R}^+$ (this is to preserve the conventions that losses are minimised while utilities are maximised). A common example of a loss is the \emph{regret}, which takes $a=b=1$ and $f(\kappa,\mu) = \sup_{\gamma'\in \Delta(\mathcal{D})$. Because expected utility preserves preference orderings under positive affine transformations, the ordering of preferences given a particular state is not affected by the choices of $a,b$ and $f$, nor is the Bayes ordering of preferences given some prior $\xi$ over $\mathscr{T}$. While it may be possible to formulate decision rules for which the choices of $a,b$ and $f$ do matter, we will take these properties as sufficient to allow us to choose $a=0$ and $b=1$. More general classes of loss are of substantial interest -- \emph{regret theory}, for example, is a straightforward generalisation of the losses discussed here and is a prominent alternative to expected utility theory \citep{loomes_regret_1982}.
+For $(\kappa,\mu)\in \mathscr{T}$, $\gamma\in \Delta(\mathcal{D})$ and $a\in \mathbb{R}$, $b\in \mathbb{R}^{+}$. 
+
+A common example of a loss of the type above is the \emph{regret}, which takes $a=b=1$ and $f(\kappa,\mu) = \sup_{\gamma'\in \Delta(\mathcal{D})} \mathbb{E}_{\gamma'\kappa}[u]$. Because expected utility preserves preference orderings under positive affine transformations, the ordering of preferences given a particular state is not affected by the choices of $a,b$ and $f$, nor is the Bayes ordering of preferences given some prior $\xi$ over $\mathscr{T}$. While it may be possible to formulate decision rules for which the choices of $a,b$ and $f$ do matter, we will take these properties as sufficient to allow us to choose $a=0$ and $b=1$. More general classes of loss are of interest. \emph{Regret theory}, for example, is a straightforward generalisation of the losses discussed here and is a prominent alternative to expected utility theory \citep{loomes_regret_1982}.
 
 There are obvious similarities between SDPs and CSDPs: both have the same high level representation as a two person game which is arrived at by taking the expectation of a loss with respect to a decision function. In fact, if we consider two decision problems to be the same if they have the same representation as a two player game, we find that CSDPs are a special case of SDPs.
 
@@ -120,7 +123,7 @@ Take $\mathscr{H}\subset\Delta(\mathcal{E})$ and define $f:\Theta\to \Delta(\mat
 \end{align}
 \end{proof}
 
-Theorem \ref{th:csdps_are_sdps} shows that properties that are true in general of SDPs must also be true of CSDPs. Thus, for example, the fundamental \emph{complete class theorem} of SDPs that shows that there are no decision rules that dominate the set of all Bayes rules applies also to CSDPs.
+The fundamental \emph{complete class theorem} of SDPs establishes that there are no decision rules that dominate the set of all Bayes rules under some regularity assumptions. By theorem \ref{th:csdps_are_sdps}, this must also be true of CSDPs.
 
 \begin{theorem}[Complete class theorem (CSDP)]\label{th:complete_class}
 Given any CSDP $\alpha:=\langle \mathscr{T},D,u\rangle$ with two player game representation $\langle \mathscr{T},\mathscr{J},R\rangle$, if $|\mathscr{T}|<\infty$ and $\inf_{J\in\mathscr{J},(\kappa,\mu)\in\mathscr{H}} R((\kappa,\mu),J)>-\infty$, then the set of all Bayes decision functions is a complete class for $\alpha$ and the set of all admissible Bayes decision functions is a minimal complete class for $\alpha$.
