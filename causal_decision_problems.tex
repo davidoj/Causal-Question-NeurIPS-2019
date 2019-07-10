@@ -49,47 +49,47 @@ Because CSDPs and SDPs posit states of nature of different types, they cannot re
 
 A statistical decision problem represents a normal form two-person game where the available actions are \emph{decision functions} that output a decision given data, the states of the environment are associated with probability measures on some measurable space and we assume a loss expressing preferences over decisions and states is known.
 
-\begin{definition}[Statistical Decision Problem]
-A statistical decision problem (SDP) is a triple $\langle \mathscr{H}, D, \ell\rangle$. $\mathscr{H}\subset\Delta(\mathcal{E})$ is a hypothesis class representing possible states of the environment, $D$ is the set of available decisions, $\RV{X}:(E,\mathcal{E})\to (X,\mathcal{X})$ is a random variable representing the information available for the statistician to make a decision and $\ell:\mathcal{H}\times D\to [0,\infty)$ is a loss function.
-
-Denote by $\mathscr{J}$ the set of decision kernels $X\to \Delta(\mathcal{D})$. Recall that $\mu F_{\RV{X}}(A)=\mu(\RV{X}^{-1}(A))$. For $J\in \mathscr{J}$ and $\mu\in \mathcal{H}$, the risk $R:\mathscr{J}\times\mathscr{H}\to [0,\infty)$ is defined as $R(J,\mu) = \int_D \ell(\mu,y) \mu F_{\RV{X}} J(dy)$. The triple $\langle \mathscr{H}, \mathscr{J}, R\rangle$ forms a two player normal form game.
+\begin{definition}[Statistical Experiment]\label{def:stat_expt}
+A \emph{statistical experiment} relative to a set $\Theta$ on a measurable space $(E,\mathcal{E})$ is a set $\mathscr{H}=\{\mu_\theta|\theta\in \Theta\}$ where $\mu_\theta\in \Delta(\mathcal{E})$. The set $\Theta$ indexes the ``state of nature''. Given an experiment $\mathscr{H}$ relative to $\Theta$ we assume a map $\theta\mapsto \mu_\theta$ exists, but we typically leave it implicit.
 \end{definition}
 
 
-The loss function $\ell$ expresses preferences over (state, decision) pairs. However, it may be the case that our preferences don't naturally apply directly to such pairs. For a doctor deciding whether to prescribe a treatment to a patient, it is clear that this patient being healthy in the future is preferable to them being sick. This motivates the definition of a causal statistical decision problem, utilising a preferences defined over outcomes represented by a generalised utility rather than (state, decision) pairs. A generalised utility, as opposed to an ordinary utility, allows for a simple reduction from CSDPs to SDPs. In order to compute the loss associated with a decision a map from decisions to outcomes is required, which we term a \emph{consequence}.
+\begin{definition}[Statistical Decision Problem]
+A statistical decision problem (SDP) is a triple $\langle\Theta, \mathscr{H}, D, \ell\rangle$. $\mathscr{H}\subset\Delta(\mathcal{E})$ is a statistical experiment relative to states $\Theta$, $D$ is the set of available decisions and $\ell:\Theta\times D\to [0,\infty)$ is a loss function.
+
+Denote by $\mathscr{J}$ the set of stochastic decision functions $E\to \Delta(\mathcal{D})$. For $J\in \mathscr{J}$ and $\mu_\theta\in \mathcal{H}$, the risk $R:\mathscr{J}\times\Theta\to [0,\infty)$ is defined as $R(J,\theta) = \int_D \ell(\theta,y) \mu_\theta J(dy)$. The triple $\langle \mathscr{H}, \mathscr{J}, R\rangle$ forms a two player normal form game.
+\end{definition}
+
+The loss function $\ell$ expresses preferences over general (state, decision) pairs. It may be the case that our preferences are most directly known over future states of the world - we know which results of our decisions are desirable and which are undesirable, which we represent with a \emph{utility function}. In this case, if we are to induce preferences over the possible decisions, that we have a model that is more informative than a statistical experiment. In particular, we require each state of nature to be associated with both a distribution over the given information and a map from decisions to distributions over results - we call this map a \emph{consequence}, and the object that pairs a distribution and a consequence with each state of the world a \emph{causal theory}.
 
 \begin{definition}[Consequences]
-Given a measurable outcome space $(F,\mathcal{F})$ and a measurable decision space $(D,\mathcal{D})$, a Markov kernel $\kappa:D \to \Delta(\mathcal{F})$ is a \emph{consequence mapping}, or just a consequence for short.
+Given a measurable result space $(F,\mathcal{F})$ and a measurable decision space $(D,\mathcal{D})$, a Markov kernel $\kappa:D \to \Delta(\mathcal{F})$ is a \emph{consequence mapping}, or just a \emph{consequence}.
 \end{definition}
 
 \begin{definition}[Causal state]
-Given a consequence $\kappa:D\to \Delta(\mathcal{F})$, a measurable observation space $(E,\mathcal{E})$ and some distribution $\mu\in \Delta(\mathcal{E})$, the pair $\tau:=(\kappa,\mu)$ is a \emph{causal state} on $D, E$ and $F$. We refer to $\kappa$ as the consequence and $\mu$ as the observed state.
+Given a consequence $\kappa:D\to \Delta(\mathcal{F})$, a measurable observation space $(E,\mathcal{E})$ and some distribution $\mu\in \Delta(\mathcal{E})$, the pair $(\kappa,\mu)$ is a \emph{causal state} on $E, D$ and $F$. We refer to $\kappa$ as the consequence and $\mu$ as the observed distribution.
 \end{definition}
 
 We allow the ``observation'' space $E$ and the ``outcome'' space $F$ to differ as it it may be desirable to avoid modelling consequences on variables that are observed but irrelevant to preferences (see Theorems \ref{th:CSDP_u_red} and \ref{th:CSDP_ob_red}). In practice these spaces often coincide.
 
 \begin{definition}[Causal Theory]\label{def:causal_theory}
-A causal theory $\mathscr{T}$ is a set of causal states sharing the same decision, observation and outcome spaces. We abuse notation to assign the ``type signature'' $\mathscr{T}:E\times D\rightarrowtriangle F$ for a causal theory with observed distributions in $\Delta(\mathcal{E})$ and consequences $D\to \Delta(\mathcal{F})$.
+A causal theory $\mathscr{T}$ is a set of causal states sharing the same decision, observation and outcome spaces. We abuse notation to assign the ``type signature'' $\mathscr{T}:E\times D\rightarrowtriangle F$ for a causal theory with observed distributions in $\Delta(\mathcal{E})$ and consequences of type $D\to \Delta(\mathcal{F})$. The causal states of a theory $\mathscr{T}$ may be associated with a master set of states $\Theta$, but in contrast to a statistical experiment this is not necessary to define the basic associated decision problem.
 \end{definition}
 
 \begin{definition}[Causal Statistical Decision Problem]\label{def:CSDP}
-A causal statistical decision problem (CSDP) is a tuple $\langle (\mathscr{T}, (E,\mathcal{E}) \RV{X}), (D,\mathcal{D}), (U,(F,\mathcal{F})) \rangle$. $\mathscr{T}$ is a causal theory on $D, E$ and $F$, $D$ is the decision set, $\RV{X}:(E,\mathcal{E})\to (X,\mathcal{X})$ is a random variable representing the given information and $U:\Delta(\mathcal{F}\otimes \mathcal{D})\to \mathbb{R}$ is a generalised utility expressing preference over joint distributions of decisions and outcomes which we assume is bounded above.
+A causal statistical decision problem (CSDP) is a triple $\langle \mathscr{T}, D, u) \rangle$. $\mathscr{T}$ is a causal theory on $D\times E\rightarrowtriangle F$, $D$ is the decision set with $\sigma$-algebra $\mathcal{D}$ and $u:F\to \mathbb{R}$ is a utility function expressing preference over the results of decisions.
 
-From the generalised utility $U$ we can define a loss $L:\mathscr{T}\times\Delta(\mathcal{D})\to [0,\infty]$ by
+Given arbitrary $f:\mathscr{T}\to\mathbb{R}$, define $l:\mathscr{T}\times D\to \mathbb{R}$ by $l:(\kappa,\mu,y)\mapsto a f(\kappa,\mu) + b \mathbb{E}_{\delta_y\kappa}[u]$. We can define a loss (relative to $f$) $L:\mathscr{T}\times\Delta(\mathcal{D})\to [0,\infty]$ by
 \begin{align}
-    L((\kappa,\mu),\gamma) := \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_{(D)}\otimes \kappa)) - U(\gamma\splitter{0.15}(I_{(D)}\otimes \kappa))\label{eq:canonical_loss}
+    L((\kappa,\mu),\gamma) &:= \mathbb{E}_\gamma[l(\kappa,\mu,\cdot)]
+    					   &= a f(\kappa,\mu) + b \mathbb{E}_{\gamma\kappa}[u]\label{eq:canonical_loss}\\
 \end{align}
-For $(\kappa,\mu)\in \mathscr{T}$ and $\gamma\in \Delta(\mathcal{D})$. This is well defined wherever $U$ is bounded above. Note that $L$ does not depend on the data generating distribution $\mu$; henceforth we will suppress this argument and write $L(\kappa,\gamma):= L((\kappa,\mu),\gamma)$.
+For $(\kappa,\mu)\in \mathscr{T}$ and $\gamma\in \Delta(\mathcal{D})$. Define $l^\kappa$
 
-Given a decision function $J\in\mathscr{J}$ and $(\kappa,\mu)\in \mathscr{T}$, we define the risk $R:\mathscr{J}\times \mathscr{T}\to [0,\infty)$ by $R(J,\kappa,\mu) := L(\kappa,\mu F_{\RV{X}} J)$. The triple $\langle \mathscr{T}, \mathscr{J}, R\rangle$ is a normal form two person game.
-
-If there exists some measurable $u:F\times D\to \mathbb{R}$ such that for all $\xi\in \Delta(\mathcal{F}\otimes\mathcal{D})$, $U(\xi)=\mathbb{E}_{\xi}[u]$ then we call $U$ an ordinary utility. An ordinary  induces a loss $L(\kappa,\gamma) = \mathbb{E}_{\gamma}[l^\kappa]$ where $l^\kappa:D\to [0,\infty)$ is defined by
-\begin{align}
-    l^\kappa(d) := \sup_{\gamma'\in \Delta(\mathcal{D})} \mathbb{E}_{\gamma'\splitter{0.08}(I_{(D)}\otimes \kappa)}[u] - \mathbb{E}_{\kappa(d;\cdot)}[u(\cdot,d)]\label{eq:induced_l}
-\end{align}
+Given a decision function $J\in\mathscr{J}$ and $(\kappa,\mu)\in \mathscr{T}$, we define the risk $R:\mathscr{J}\times \mathscr{T}\to [0,\infty)$ by $R(J,\kappa,\mu) := L((\kappa,\mu),\mu J)$. The triple $\langle \mathscr{T}, \mathscr{J}, R\rangle$ is a normal form two person game.
 \end{definition}
 
-Reduction from a CSDP to an ordinary SDP is sufficient to import results from statistical decision theory such as Theorem \ref{th:complete_class}. The complete class theorem along with Corollary \ref{cor:CSDP_to_sdp} show that, at least for CSDPs with countable decision sets, finite causal theories and ordinary utilities, any admissible decision rule is a Bayes rule given \emph{some} prior on $\mathscr{T}$. Stronger versions of Theorem \ref{th:complete_class} exist for SDPs, and stronger versions are likely to exist for CSDPs as well.
+There are obvious similarities between SDPs and CSDPs: both have the same high level representation as a two person game which is arrived at by taking the expectation of a loss with respect to a decision function. We use the notion of a \emph{reduction} to formalise the notion of a CSDP and an SDP representing the same underlying decision problem. Reduction from a CSDP to an ordinary SDP is sufficient to import results from statistical decision theory such as Theorem \ref{th:complete_class}. The complete class theorem along with Corollary \ref{cor:CSDP_to_sdp} show that, at least for CSDPs with countable decision sets, finite causal theories and ordinary utilities, any admissible decision rule is a Bayes rule given \emph{some} prior on $\mathscr{T}$. Stronger versions of Theorem \ref{th:complete_class} exist for SDPs, and stronger versions are likely to exist for CSDPs as well.
 
 \begin{theorem}[Complete class theorem (CSDP)]\label{th:complete_class}
 Given an CSDP $\alpha:=\langle (\mathscr{T},E),D,\RV{X},U\rangle$ with risk $R$, if there is a reduction to an SDP $\beta:=\langle (\mathscr{H},F),D,\RV{Y},\ell \rangle$ with risk $R'$ such that $|\mathscr{H}|<\infty$ and $\inf_{J\in\mathscr{J},\mu\in\mathscr{H}} R'(J,\mu)<-\infty$, then the set of all Bayes decision functions is a complete class for $\beta$ and the set of all admissible Bayes decision functions is a minimal complete class for $\beta$.

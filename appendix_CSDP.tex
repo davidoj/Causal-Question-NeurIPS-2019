@@ -1,5 +1,25 @@
 \section{Appendix: Causal Statistical Decision Problems}\label{app:csdps}
 
+It is possible to define a generalised CSDP where preferences may not obey the Von Neumann-Morgenstern axioms, but this generalisation presents some difficulties.
+
+\begin{definition}[Generalised Causal Statistical Decision Problem]\label{def:gen_CSDP}
+A causal statistical decision problem (CSDP) is a tuple $\langle (\mathscr{T}, (E,\mathcal{E}) \RV{X}), (D,\mathcal{D}), (U,(F,\mathcal{F})) \rangle$. $\mathscr{T}$ is a causal theory on $D, E$ and $F$, $D$ is the decision set, $\RV{X}:(E,\mathcal{E})\to (X,\mathcal{X})$ is a random variable representing the given information and $U:\Delta(\mathcal{F}\otimes \mathcal{D})\to \mathbb{R}$ is a generalised utility expressing preference over joint distributions of decisions and outcomes which we assume is bounded above.
+
+From the generalised utility $U$ we can define a loss $L:\mathscr{T}\times\Delta(\mathcal{D})\to [0,\infty]$ by
+\begin{align}
+    L((\kappa,\mu),\gamma) := \sup_{\gamma'\in\Delta(\mathcal{D})} U(\gamma'\splitter{0.15}(I_{(D)}\otimes \kappa)) - U(\gamma\splitter{0.15}(I_{(D)}\otimes \kappa))\label{eq:canonical_loss}
+\end{align}
+For $(\kappa,\mu)\in \mathscr{T}$ and $\gamma\in \Delta(\mathcal{D})$. This is well defined wherever $U$ is bounded above. Note that $L$ does not depend on the data generating distribution $\mu$; henceforth we will suppress this argument and write $L(\kappa,\gamma):= L((\kappa,\mu),\gamma)$.
+
+Given a decision function $J\in\mathscr{J}$ and $(\kappa,\mu)\in \mathscr{T}$, we define the risk $R:\mathscr{J}\times \mathscr{T}\to [0,\infty)$ by $R(J,\kappa,\mu) := L(\kappa,\mu F_{\RV{X}} J)$. The triple $\langle \mathscr{T}, \mathscr{J}, R\rangle$ is a normal form two person game.
+
+If there exists some measurable $u:F\times D\to \mathbb{R}$ such that for all $\xi\in \Delta(\mathcal{F}\otimes\mathcal{D})$, $U(\xi)=\mathbb{E}_{\xi}[u]$ then we call $U$ an ordinary utility. An ordinary  induces a loss $L(\kappa,\gamma) = \mathbb{E}_{\gamma}[l^\kappa]$ where $l^\kappa:D\to [0,\infty)$ is defined by
+\begin{align}
+    l^\kappa(d) := \sup_{\gamma'\in \Delta(\mathcal{D})} \mathbb{E}_{\gamma'\splitter{0.08}(I_{(D)}\otimes \kappa)}[u] - \mathbb{E}_{\kappa(d;\cdot)}[u(\cdot,d)]\label{eq:induced_l}
+\end{align}
+\end{definition}
+
+
 \begin{lemma}[Reduction preserves admissibility]\label{lem:red_adm_app}
 If a CSDP $\beta$ with induced game $\langle \mathscr{T},\mathscr{J}, R\rangle$ can be reduced to a statistical decision problem $\alpha$ with induced game $\langle \mathscr{H},\mathscr{J},R' \rangle$ then a decision function $J\in \mathscr{J}$ is admissible in $\beta$ iff it is admissible in $\alpha$.
 \end{lemma}
