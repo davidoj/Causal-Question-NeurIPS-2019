@@ -223,6 +223,177 @@ Finally, $\{*\}$ is a terminal object in the Kleisli categories of either probab
  \draw (A.center) -- (C.center);
 \end{tikzpicture}\label{eq:termobj}
 \end{align}
-This is equivalent to requiring for all $x\in X$ $\int_Y \kappa(x;dy)=1$. In the case of $\textbf{Set}_\mathcal{D}$, this condition is what differentiates a stochastic matrix from a general positive matrix (note that positive matrices live in a larger category than $\textbf{Set}_\mathcal{D}$). In the case of $\textbf{Meas}_\mathcal{G}$, Markov kernels require an additional measurability condition for which I am not presently aware of any graphical statement.
+This is equivalent to requiring for all $x\in X$ $\int_Y \kappa(x;dy)=1$. In the case of $\textbf{Set}_\mathcal{D}$, this condition is what differentiates a stochastic matrix from a general positive matrix (which live in a larger category than $\textbf{Set}_\mathcal{D}$).
 
 Thus when manipulating diagrams representing Markov kernels in particular (and, importantly, not more general symmetric monoidal categories) diagram isomorphism also includes applications of \ref{eq:ccom1}, \ref{eq:ccom2}, \ref{eq:ccom3} and \ref{eq:termobj}.
+
+A particular property of the copy map in $\textbf{Meas}_{\mathcal{G}}$ (and probably $\textbf{Set}_\mathcal{D}$ as well) is that it commutes with Markov kernels iff the markov kernels are deterministic \citep{fong_causal_2013}.
+
+\subsection{Disintegration and Bayesian inversion}
+
+\emph{Disintegration} is a key operation on probability distributions (equivalently arrows $\{*\}\to X$) in the categories under discussion. It corresponds to ``finding the conditional probability'' (though conditional probability is usually formalised in a slightly different way).
+
+Given a distribution $\mu:\{*\}\to X\otimes Y$, a disintegration $c:X\to Y$ is a Markov kernel that satisfies
+\begin{align}
+	\begin{tikzpicture}
+	 	\path (0,0) node[dist] (A) {$\mu$}
+	 	+ (0,0.7) node (B) {$X$ $Y$};
+	 	\draw ($(A.north) +(-0.2,0)$) -- ($(B.south) + (-0.2,0)$);
+	 	\draw ($(A.north) +(0.2,0)$) -- ($(B.south) + (0.2,0)$);
+	\end{tikzpicture}
+	=
+	\begin{tikzpicture}
+	\path (0,0) node[dist] (A) {$\mu$}
+	+ (0.2,0.5) node (Z) {\textbf{*}}
+	++ (-0.2,0.5) coordinate (B)
+	+ (0.5,0.5) node[kernel] (C) {$c$}
+	+ (-0.5,0.5) coordinate (D)
+	+(0.5,1.2) node (E) {$Y$}
+	+(-0.5,1.2) node (F) {$X$};
+	\draw ($(A.north) +(-0.2,0)$) -- (B);
+	\draw ($(A.north) +(0.2,0)$) -- (Z.center);
+	\draw (B) -- (C);
+	\draw (B) -- (D);
+	\draw (D) -- (F);
+	\draw (C) -- (E);
+	\end{tikzpicture}
+\end{align}
+
+Disintegrations always exist in $\textbf{Set}_{\mathcal{D}}$ but not in $\textbf{Meas}_{\mathcal{G}}$. The do exist in the latter if we restrict ourselves to standard measurable spaces. If $c_1$ and $c_2$ are disintegrations $X\to Y$ of $\mu$, they are equal $\mu$-A.S. In fact, this equality can be strengthened somewhat - they are equal almost surely with respect to any distribution that shares the ``$X$-marginal'' of $\mu$.
+
+
+Given $\sigma:\{*\}\to X$ and a channel $c:X\to Y$, a Bayesian inversion of $(\sigma,c)$ is a channel $d:Y\to X$ such that
+\begin{align}
+	\begin{tikzpicture}
+	\path (0,0) node[dist] (A) {$\sigma$}
+	++ (0,0.5) coordinate (B)
+	+ (0.5,0.5) node[kernel] (C) {$c$}
+	+ (-0.5,0.5) coordinate (D)
+	+(0.5,1.2) node (E) {$Y$}
+	+(-0.5,1.2) node (F) {$X$};
+	\draw (A) -- (B);
+	\draw (B) -- (C);
+	\draw (B) -- (D);
+	\draw (D) -- (F);
+	\draw (C) -- (E);
+	\end{tikzpicture}
+	=
+	\begin{tikzpicture}
+	\path (0,0) node[dist] (A) {$\sigma$}
+	++ (0,0.5) node[kernel] (Z) {$c$}
+	++ (0,0.5) coordinate (B)
+	+ (-0.5,0.5) node[kernel] (C) {$d$}
+	+ (0.5,0.5) coordinate (D)
+	+(0.5,1.2) node (E) {$Y$}
+	+(-0.5,1.2) node (F) {$X$};
+	\draw (A) -- (Z);
+	\draw (Z) -- (B);
+	\draw (B) -- (C);
+	\draw (B) -- (D);
+	\draw (D) -- (E);
+	\draw (C) -- (F);
+	\end{tikzpicture}
+\end{align}
+
+We can obtain disintegrations from Bayesian inversions and vise-versa.
+
+\citet{clerc_pointless_2017} offer an alternative view of Bayesian inversion which they claim doesn't depend on standard measurability conditions, but there is a step in their proof I didn't follow.
+
+\subsection{Generalisations}
+
+\citet{cho_disintegration_2019} make use of a larger ``CD'' category by dropping \ref{eq:termobj}. I'm not completely clear whether you end up with arrows being ``Markov kernels for general measures'' or something else (can we have negative arrows?). This allows for the introduction of ``observables'' or ``effects'' of the form 
+\begin{tikzpicture}
+ \path (0,0) coordinate (A)
+ ++ (0,0.5) node[expectation] (B) {$f$};
+ \draw (A) -- (B);
+\end{tikzpicture}.
+
+\citet{jacobs_causal_2019} make use of an embedding of $\textbf{Set}_\mathcal{D}$ in $\textbf{Mat}(\mathbb{R}^+)$ with morphisms all positive matrices (I'm not totally clear on the objects, or how they are self-dual - this doesn't seem to be exactly the same as the category of finite dimensional vector spaces). This latter category is compact closed, which - informally speaking - supports the same diagrams as symmetric monoidal categories with the addition of ``upside down'' wires.
+
+\subsection{Key questions for Causal Theories}
+
+
+\paragraph{generalised disintegrations}: Of key importance to our work is generalising the notion of disintegration (and possibly Bayesian inversion) to general kernels $X\to Y$ rather than restricting ourselves to probability distributions $\{*\}\to Y$.
+
+Given $\kappa:D\to X\times Y$, a kernel $c:D\times X\to Y$ is a \emph{generalised disintegration} (``g-disintegration'') of $\kappa$ if the following holds:
+
+\begin{align}
+	\begin{tikzpicture}
+	 	\path (0,0) coordinate (Z)
+	 	++(0,0.5) node[kernel] (A) {\hspace{1em}$\kappa$}
+	 	+ (0,0.7) node (B) {$X$ $Y$};
+	 	\draw (Z) -- (A);
+	 	\draw ($(A.north) +(-0.2,0)$) -- ($(B.south) + (-0.2,0)$);
+	 	\draw ($(A.north) +(0.2,0)$) -- ($(B.south) + (0.2,0)$);
+	\end{tikzpicture}
+	=
+	\begin{tikzpicture}
+	\path (0,0) coordinate (X)
+	++(0,0.1) coordinate (W)
+	++ (0,0.5) node[kernel] (A) {\hspace{1em}$\kappa$}
+	+ (0.2,0.5) node (Z) {\textbf{*}}
+	++ (-0.2,0.5) coordinate (B)
+	+ (0.9,0.5) node[kernel] (C) {$c$}
+	+ (-0.5,0.5) coordinate (D)
+	+(0.9,1.2) node (E) {$Y$}
+	+(-0.5,1.2) node (F) {$X$};
+	\draw (X) -- (W);
+	\draw (W) to [bend right] (C);
+	\draw (W) -- (A);
+	\draw ($(A.north) +(-0.2,0)$) -- (B);
+	\draw ($(A.north) +(0.2,0)$) -- (Z.center);
+	\draw (B) -- (C);
+	\draw (B) -- (D);
+	\draw (D) -- (F);
+	\draw (C) -- (E);
+	\end{tikzpicture}
+\end{align}
+
+\begin{theorem}
+For all $\kappa:D\to X\times Y$, if $D$ is countable and $X\times Y$ is standard measurable, a g-disintegration of $\kappa$ exists.
+\end{theorem}
+
+\begin{proof}
+For all $y\in D$ we have a disintegration $c_y:X\to Y$ of $\delta_y \kappa$ by standard measurability of $X\times Y$. Define $c:D\times X\to Y$ by $c:(y,x)\mapsto c_y(x)$. Clearly, $c(y,x)$ is a probability distribution on $Y$ for all $(y,x)\in D\times X$. It remains to show $c(\cdot)^{-1}(B)$ is measurable for all $B\in \mathcal{B}([0,1])$. But $c(\cdot)^{-1}(B) = \cap_{y\in D} c_y(\cdot)^{-1}(B)$. The right hand side is measurable by measurability of $c_y(\cdot)^{-1}(B)$ and the properties of a $\sigma$-algebra.
+\end{proof}
+
+\paragraph{Conjecture:} This can be generalised to any $\kappa$ that is determined by its values on a countable set of points along with some notion of continuity. This seems likely to be true. In a more general setting, I think I could find a counterexample, but the converse also seems unlikely.
+
+
+Generalised disintegrations facilitate the following construction of a ``graphical model'':
+
+Suppose we have two causal theories, $\mathscr{T}^*$ and $\mathscr{T}$ both with signature $E\times D\rightarrowtriangle E$, and $\mathscr{T}$ is a decision randomised version of $\mathscr{T}^*$ (i.e. $\mathscr{T}=\{(\lambda\kappa,\mu)|(\kappa,\mu)\in\mathscr{T}^*\}$ for some $\lambda:D\to D$. We will construct a graphical model from $\mathscr{T}^*$ and $\mathscr{T}$ in three steps:
+
+First, we assume \emph{reproducibility} in the stronger theory $\mathscr{T}^*$. That is, for all $(\kappa,\mu)\in \mathscr{T}^*$ we suppose there exists $\gamma\in \Delta(\mathcal{D})$ such that $\gamma\kappa=\mu$. 
+
+\todo{I don't think reproducibility is quite the right assumption, but it is good enough for now}
+
+Second, we will assume certain \emph{generalised conditional independences} hold for the stronger theory $\mathscr{T}^*$ (we have not defined these, but they are the obvious generalisation of standard conditional independence lifted to g-disintegrations). Because we're constructing a graphical model, we will assume these are a ``DAG-compatible'' set, though we are under no obligation to do so. I conjecture we can illustrate these independences graphically. Suppose we have random variables $\RV{X}:E\to X$, $\RV{Y}:E\to Y$ and $\RV{Z}:E\to Z$, and we assume we have at least the generalised CIs implied by the following diagram for all $(\kappa,\mu)\in \mathscr{T}^*$:
+\begin{align}
+\kappa=\begin{tikzpicture}
+\path (0,0) node (A) {$E$}
+	++(0,0.2) coordinate (B)
+	++ (0,0.3) node[kernel] (C) {\hspace{1em}$\kappa$}
+	+ (0,0.5) node (D) {\textbf{*}}
+	+ (0.2,0.5) node (E) {\textbf{*}}
+	++ (-0.2,0.5) coordinate (F)
+	+ (-0.5,0.5) node (G) {$X$}
+	++ (0.5,0.5) node[kernel] (H) {$c_{Y|X}$}
+	+ (-0.5,0.8) node (I) {$Y$}
+	++(0.5,0.8) node[kernel] (J) {$c_{Z|Y}$}
+	++(0,0.8) node (K) {$Z$};
+	\draw (A) -- (B);
+	\draw (B) -- (C);
+	\draw (C) -- (D.center);
+	\draw (C) -- (E.center);
+	\draw (C) -- (F);
+	\draw (F) -- (G);
+	\draw (F) -- (H);
+	\draw (H) -- (I);
+	\draw (H) -- (J);
+	\draw (J) -- (K);
+\end{tikzpicture}
+\end{align}
+
+
+The above diagram is typed incorrectly, but we can always construct a kernel $\kappa_{\RV{XYZ}}$ that maps to $X\times Y\times Z$.
