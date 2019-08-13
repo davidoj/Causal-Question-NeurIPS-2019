@@ -89,15 +89,15 @@ Symmetric monoidal categoris have the following coherence theorem\citep{selinger
 Isomorphism of diagrams for symmetric monoidal categories (somewhat informally) is any planar deformation of a diagram including deformations that cause wires to cross. We consider a diagram for a symmetric monoidal category to be well formed only if all wires point upwards.
 
 
-In fact the Kleisli categories of the probability monads above have (for each object) unique \emph{copy}: $X\to X\times X$ and \emph{erase}: $X\to\{*\}$ maps that satisfy the \emph{commutative comonoid axioms} that (thanks to the coherence theorem above) can be stated graphically. These differ from the copy and erase maps of \emph{finite product} or \emph{cartesian} categories in that they do not necessarily respect composition of arrows.
+In fact the Kleisli categories of the probability monads above have (for each object) unique \emph{copy}: $X\to X\times X$ and \emph{erase}: $X\to\{*\}$ maps that satisfy the \emph{commutative comonoid axioms} that (thanks to the coherence theorem above) can be stated graphically. These differ from the copy and erase maps of \emph{finite product} or \emph{cartesian} categories in that they do not necessarily respect composition of morphisms.
 
 
 \begin{align}
 	\text{Erase} = \mathds{1}_X := 
 	\begin{tikzpicture}
 	    \path (0,0) coordinate (A)
-	    ++ (0,0.5) node(B) {\textbf{*}};
-	    \draw (A) -- (B.center);
+	    ++ (0,0.5) node(B) {};
+	    \draw[-{Rays [n=8]}] (A) -- (B.center);
 	\end{tikzpicture}
 	\text{Copy} = x\mapsto \delta_{x,x} := 
 	\begin{tikzpicture}[scale=0.8]
@@ -158,19 +158,19 @@ In fact the Kleisli categories of the probability monads above have (for each ob
 	\path (0,0) coordinate (A) 
 	++ (0,0.5) coordinate (B)
 	+ (0.5,0.5) coordinate (C)
-	+ (-0.5,0.5) node (D) {\textbf{*}};
+	+ (-0.5,0.5) node (D) {};
 	\draw (A) -- (B);
 	\draw[->] (B) -- (C);
-	\draw (B) -- (D.center);
+	\draw[-{Rays [n=8]}] (B) -- (D);
 	\end{tikzpicture}
 	= 
 	\begin{tikzpicture}[scale=0.8]
 	\path (0,0) coordinate (A) 
 	++ (0,0.5) coordinate (B)
-	+ (0.5,0.5) node (C) {\textbf{*}}
+	+ (0.5,0.5) node (C) {}
 	+ (-0.5,0.5) coordinate (D) ;
 	\draw (A) -- (B);
-	\draw (B) -- (C.center);
+	\draw[-{Rays [n=8]}] (B) -- (C);
 	\draw[->] (B) -- (D);
 	\end{tikzpicture}
 	=
@@ -212,15 +212,15 @@ Finally, $\{*\}$ is a terminal object in the Kleisli categories of either probab
 \begin{tikzpicture}
  \path (0,0) node (A) {\hspace{1em}$X$}
  ++(0,0.5) node[kernel] (B) {$\kappa$}
- ++(0,0.5) node (C) {\textbf{*}};
+ ++(0,0.5) node (C) {};
  \draw (A.center) -- (B);
- \draw (B) -- (C.center);
+ \draw[-{Rays [n=8]}] (B) -- (C);
 \end{tikzpicture}
 =
 \begin{tikzpicture}
  \path (0,0) node (A) {\hspace{1em}$X$}
-  ++(0,0.5) node (C) {\textbf{*}};
- \draw (A.center) -- (C.center);
+  ++(0,0.5) node (C) {};
+ \draw[-{Rays [n=8]}] (A.center) -- (C);
 \end{tikzpicture}\label{eq:termobj}
 \end{align}
 This is equivalent to requiring for all $x\in X$ $\int_Y \kappa(x;dy)=1$. In the case of $\textbf{Set}_\mathcal{D}$, this condition is what differentiates a stochastic matrix from a general positive matrix (which live in a larger category than $\textbf{Set}_\mathcal{D}$).
@@ -244,14 +244,14 @@ Given a distribution $\mu:\{*\}\to X\otimes Y$, a disintegration $c:X\to Y$ is a
 	=
 	\begin{tikzpicture}
 	\path (0,0) node[dist] (A) {$\mu$}
-	+ (0.2,0.5) node (Z) {\textbf{*}}
+	+ (0.2,0.5) node (Z) {}
 	++ (-0.2,0.5) coordinate (B)
 	+ (0.5,0.5) node[kernel] (C) {$c$}
 	+ (-0.5,0.5) coordinate (D)
 	+(0.5,1.2) node (E) {$Y$}
 	+(-0.5,1.2) node (F) {$X$};
 	\draw ($(A.north) +(-0.2,0)$) -- (B);
-	\draw ($(A.north) +(0.2,0)$) -- (Z.center);
+	\draw[-{Rays [n=8]}] ($(A.north) +(0.2,0)$) -- (Z);
 	\draw (B) -- (C);
 	\draw (B) -- (D);
 	\draw (D) -- (F);
@@ -312,10 +312,38 @@ We can obtain disintegrations from Bayesian inversions and vise-versa.
 
 \subsection{Key questions for Causal Theories}
 
+We will first define \emph{labeled diagrams}. Rather than labelling the wires of our diagrams with \emph{spaces} (as is typical \citep{selinger_survey_2010}), we assign a unique label to each ``wire segment''. Somewhat informally, we assign a unique label to each bare wire in the diagram with the following additonal qualifications:
+\begin{itemize}
+	\item If we have a box in the diagram representing the identity map, the incoming and outgoing wires are given the same label
+	\item If we have a wire crossing in the diagram, the diagonally opposite wires are given the same label
+	\item The input wire and the \emph{two} output wires of the copy map are given the same label
+\end{itemize}
+Given two diagrams $G_1$ and $G_2$ that are isomorphic under transformations licenced by the axioms of symmetric monoidal categories and commutative comonoid axioms, suppose we have a labelling of $G_1$. We can label $G_2$ using the following translation rule:
+\begin{itemize}
+	\item For each box in $G_2$, we can identify a corresponding box in $G_1$ via labels on each box. For each such pair of boxes, we label the incoming wires of the $G_2$ box with the labels of the $G_1$ box preserving the left-right order. We do likewise for outgoing wires.
+\end{itemize}
 
-\paragraph{generalised disintegrations}: Of key importance to our work is generalising the notion of disintegration (and possibly Bayesian inversion) to general kernels $X\to Y$ rather than restricting ourselves to probability distributions $\{*\}\to Y$.
+These rules will lead to a unique labelling of $G_2$ with all wire segments are labelled. We would like for these rules to yield the following:
+\begin{itemize}
+	\item For any sequence of diagram isomorphisms beginning with $G_1$ and ending with $G_2$, we end up with the same set of labels
+	\item If we label $G_2$ according to the rules above then relabel $G_1$ from $G_2$ according to the same rules we retrieve the original labels of $G_1$
+\end{itemize}
 
-Given $\kappa:D\to X\times Y$, a kernel $c:D\times X\to Y$ is a \emph{generalised disintegration} (``g-disintegration'') of $\kappa$  from $D\times X$ to $Y$ if the following holds:
+We do not prove these properties here, but motivate them via the following considerations:
+\begin{itemize}
+ 	\item These properties obviously hold for the wire segments into and out of boxes
+ 	\item The only features a diagram may have apart from boxes and wires are wire crossings, copy maps and erase maps
+ 	\item The labeling rule for wire crossings respects the symmetry of the swap map
+ 	\item The labeling rule for copy maps respects the symmetry of the copy map and the property described in Equation \ref{eq:ccom3}
+\end{itemize}
+
+We will continue to follow the convention whereby ``internal'' wire labels are omitted from diagrams.
+
+Note also that each wire that terminates in a free end can be associated with a random variable. Suppose for $N\in\mathbb{N}$ we have a kernel $\kappa:A\to \times_{i\in N} X_i$. Define by $\pi_j$ ($j\in[N]$) the projection map $\pi_j:\times_{i\in N}X_i\to X_j$ defined by $\pi_j:(x_0,...,x_N)\mapsto x_j$. $\pi_j$ is a measurable function, hence a random variable.
+
+\paragraph{generalised disintegrations}: Of key importance to our work is generalising the notion of disintegration (and possibly Bayesian inversion) to general kernels $X\to Y$ rather than restricting ourselves to probability distributions $\{*\}\to Y$. We will define generalised disintegrations as a straightforward analogy regular disintegrations, but the conditions under which such disintegrations exist are more restrictive than for regular disintegraions.
+
+A kernel $c:X\to Y$ is a \emph{generalised disintegration} (``g-disintegration'') of $\kappa$  from $X$ to $Y$ if the following holds:
 
 \begin{align}
 	\begin{tikzpicture}
@@ -329,19 +357,16 @@ Given $\kappa:D\to X\times Y$, a kernel $c:D\times X\to Y$ is a \emph{generalise
 	=
 	\begin{tikzpicture}
 	\path (0,0) coordinate (X)
-	++(0,0.1) coordinate (W)
 	++ (0,0.5) node[kernel] (A) {\hspace{1em}$\kappa$}
-	+ (0.2,0.5) node (Z) {\textbf{*}}
+	+ (0.2,0.5) node (Z) {}
 	++ (-0.2,0.5) coordinate (B)
-	+ (0.9,0.5) node[kernel] (C) {$c$}
+	+ (0.5,0.5) node[kernel] (C) {$c$}
 	+ (-0.5,0.5) coordinate (D)
-	+(0.9,1.2) node (E) {$Y$}
+	+(0.5,1.2) node (E) {$Y$}
 	+(-0.5,1.2) node (F) {$X$};
-	\draw (X) -- (W);
-	\draw (W) to [bend right] (C);
-	\draw (W) -- (A);
+	\draw (X) -- (A);
 	\draw ($(A.north) +(-0.2,0)$) -- (B);
-	\draw ($(A.north) +(0.2,0)$) -- (Z.center);
+	\draw[-{Rays [n=8]}] ($(A.north) +(0.2,0)$) -- (Z);
 	\draw (B) -- (C);
 	\draw (B) -- (D);
 	\draw (D) -- (F);
@@ -349,28 +374,187 @@ Given $\kappa:D\to X\times Y$, a kernel $c:D\times X\to Y$ is a \emph{generalise
 	\end{tikzpicture}
 \end{align}
 
-If we introduce let $Z=\{*\}$ and draw attention to the isomorphism $\{*\}\times X\times Y\cong X\times Y$, we can see that $\kappa:D\to X\times Y$ itself is a g-distintegration $\kappa$ from $D$ to $X\times Y$.
+In contrast to regular disintegrations, generalised disintegrations ``usually'' do not exist. Consider $D=X=Y=\{0,1\}$ and 
+\begin{align}
+	\kappa:\begin{cases} 1\mapsto \delta_1\otimes \delta_1\\
+						 0\mapsto \delta_1\otimes \delta_0\end{cases}
+\end{align}
+
+There is clearly no kernel $c:X\to Y$ that simultaneously satisfies $\delta_1 c=\delta_1$ if $D=1$ and $\delta_0 c = \delta_0$ if $D=0$. Subject to some regularity conditions, we can define g-disintegrations of a canonically related kernel that do generally exist; intuitively, we g-disintegrations exist if they take the ``input wires'' of $\kappa$ as input wires themselves.
 
 \begin{theorem}
-For all $\kappa:D\to X\times Y$, if $D$ is countable and $X\times Y$ is standard measurable, a g-disintegration of $\kappa$ exists in the following three directions: from $D\to X\times Y$, from $D\times X\to Y$ and from $D\times Y\to X$.
+For all $\kappa:D\to X\times Y$, if $D$ is countable and $X\times Y$ is standard measurable, a g-disintegration of $\kappa_{id}$ exists in the following three directions: from $D\to X\times Y$, from $D\times X\to Y$ and from $D\times Y\to X$. In general, a g-disintegration does not exist from $A\to B$ if 
 \end{theorem}
 
 \begin{proof}
-For the first direction, we note that $\kappa$ satisfies the condition.
+For $D\to X\times Y$, we note that $\kappa$ is always a disintegration:
 
-For all $y\in D$ we have a disintegration $c_y:X\to Y$ of $\delta_y \kappa$ by standard measurability of $X\times Y$. Define $c:D\times X\to Y$ by $c:(y,x)\mapsto c_y(x)$. Clearly, $c(y,x)$ is a probability distribution on $Y$ for all $(y,x)\in D\times X$. It remains to show $c(\cdot)^{-1}(B)$ is measurable for all $B\in \mathcal{B}([0,1])$. But $c(\cdot)^{-1}(B) = \cap_{y\in D} c_y(\cdot)^{-1}(B)$. The right hand side is measurable by measurability of $c_y(\cdot)^{-1}(B)$ and the properties of a $\sigma$-algebra.
+\begin{align}
+\begin{tikzpicture}
+ \path (0,0) node (A) {$D$}
+ ++(0,0.35) coordinate (B)
+ +(0,0.25) node[kernel] (C) {$\kappa$}
+ +(0.5,0.25) coordinate (D)
+ +(-0.15,0.8) node (X) {$X$}
+ +(0.15,0.8) node (Y) {$Y$}
+ +(0.5,0.8) node (Z) {$D$};
+ \draw (A)--(B);
+ \draw (B) -- (C);
+ \draw (B) to [bend right] (D);
+ \draw ($(C.north)+(-0.15,0)$) -- (X);
+ \draw ($(C.north)+(0.15,0)$) -- (Y);
+ \draw (D) -- (Z);
+\end{tikzpicture}=
+\begin{tikzpicture}
+ \path (0,0) node (A) {$D$}
+ ++(0,0.35) coordinate (B)
+ +(0,0.25) node[kernel] (C) {$\kappa$}
+ +(0.5,0.25) coordinate (D)
+ +(-0.15,0.8) node (X) {}
+ +(0.15,0.8) node (Y) {}
+ ++(0.5,0.8) node[kernel] (Z) {$\kappa$}
+ +(-0.15,0.8) node (X1) {$X$}
+ +(0.15,0.8) node (Y1) {$Y$}
+ +(0.5,0.8) node (D1) {$D$};
+ \draw (A)--(B);
+ \draw (B) -- (C);
+ \draw (B) to [bend right] (D);
+ \draw[-{Rays [n=8]}] ($(C.north)+(-0.15,0)$) -- (X);
+ \draw[-{Rays [n=8]}] ($(C.north)+(0.15,0)$) -- (Y);
+ \draw (D) -- (Z);
+ \draw (D) to [bend right] (D1);
+ \draw ($(Z.north)+(-0.15,0)$) -- (X1);
+ \draw ($(Z.north)+(0.15,0)$) -- (Y1);
+\end{tikzpicture}
+\end{align}
 
-The final direction follows from symmetry.
+Given $\kappa:D\to X\times Y$, define the \emph{canonical extension} $\kappa_{id}$:
+\begin{align}
+\kappa_{id} :=
+\begin{tikzpicture}
+ \path (0,0) node (A) {$D$}
+ ++(0,0.35) coordinate (B)
+ +(0,0.25) node[kernel] (C) {$\kappa$}
+ +(0.5,0.25) coordinate (D)
+ +(-0.15,0.8) node (X) {$X$}
+ +(0.15,0.8) node (Y) {$Y$}
+ +(0.5,0.8) node (Z) {$D$};
+ \draw (A)--(B);
+ \draw (B) -- (C);
+ \draw (B) to [bend right] (D);
+ \draw ($(C.north)+(-0.15,0)$) -- (X);
+ \draw ($(C.north)+(0.15,0)$) -- (Y);
+ \draw (D) -- (Z);
+\end{tikzpicture}\label{eq:cextn}
+\end{align}
+
+The canonical extension takes a copy of the input and maps it to the output.
+
+$D\times X\to Y$ and $D\times Y\to X$ are symmetric directions, so we will argue only for $D\times X\to Y$. For all $y\in D$ we have a disintegration $c_y:X\to Y$ of $\delta_y \kappa$ by standard measurability of $X\times Y$. Define $c:D\times X\to Y$ by $c:(y,x)\mapsto c_y(x)$. Clearly, $c(y,x)$ is a probability distribution on $Y$ for all $(y,x)\in D\times X$. It remains to show $c(\cdot)^{-1}(B)$ is measurable for all $B\in \mathcal{B}([0,1])$. But $c(\cdot)^{-1}(B) = \cap_{y\in D} c_y(\cdot)^{-1}(B)$. The right hand side is measurable by measurability of $c_y(\cdot)^{-1}(B)$ and the properties of a $\sigma$-algebra, so $c$ is a Markov kernel. By the definition of $c_y$, we have for all $y\in D$
+\begin{align}
+	\begin{tikzpicture}
+	 	\path (0,0) node[dist] (Z) {$\delta_y$}
+	 	++(0,0.3) coordinate (W)
+	 	++(0,0.5) node[kernel] (A) {\hspace{1em}$\kappa$}
+	 	+ (0,0.7) node (B) {$X$ $Y$}
+	 	+ (0.6,0.7) node (C) {$D$};
+	 	\draw (Z) -- (A);
+	 	\draw ($(A.north) +(-0.2,0)$) -- ($(B.south) + (-0.2,0)$);
+	 	\draw ($(A.north) +(0.2,0)$) -- ($(B.south) + (0.2,0)$);
+	 	\draw (W) to [bend right] (C);
+	\end{tikzpicture}
+	&=
+	\begin{tikzpicture}
+	\path (0,0) node[dist] (X) {$\delta_y$}
+	++ (0,0.3) coordinate (W)
+	++ (0,0.5) node[kernel] (A) {\hspace{1em}$\kappa$}
+	+ (0.2,0.5) node (Z) {}
+	++ (-0.2,0.5) coordinate (B)
+	+ (0.5,0.5) node[kernel] (C) {$c_y$}
+	+ (-0.5,0.5) coordinate (D)
+	+(0.5,1.2) node (E) {$Y$}
+	+(-0.5,1.2) node (F) {$X$}
+	+(1,1.2) node (G) {$D$};
+	\draw (X) -- (A);
+	\draw ($(A.north) +(-0.2,0)$) -- (B);
+	\draw[-{Rays [n=8]}] ($(A.north) +(0.2,0)$) -- (Z);
+	\draw (B) -- (C);
+	\draw (B) -- (D);
+	\draw (D) -- (F);
+	\draw (C) -- (E);
+	\draw (W) to [bend right] (G);
+	\end{tikzpicture}\\
+	&= 
+	\begin{tikzpicture}
+	\path (0,0) node[dist] (X) {$\delta_y$}
+	++ (0,0.3) coordinate (W)
+	++ (0,0.5) node[kernel] (A) {\hspace{1em}$\kappa$}
+	+ (0.2,0.5) node (Z) {}
+	++ (-0.2,0.5) coordinate (B)
+	+ (0.5,0.5) node[kernel] (C) {$c$}
+	+ (-0.5,0.5) coordinate (D)
+	+(0.5,1.2) node (E) {$Y$}
+	+(-0.5,1.2) node (F) {$X$}
+	+(1,0) coordinate (G) 
+	+(1,1.2) node (H) {$D$};
+	\draw (X) -- (A);
+	\draw ($(A.north) +(-0.2,0)$) -- (B);
+	\draw[-{Rays [n=8]}] ($(A.north) +(0.2,0)$) -- (Z);
+	\draw (B) -- (C);
+	\draw (B) -- (D);
+	\draw (D) -- (F);
+	\draw (C) -- (E);
+	\draw (W) to [bend right] (G);
+	\draw (G) -- (H);
+	\draw (G) to [bend left] (C);
+	\end{tikzpicture}
+\end{align}
+Which implies
+\begin{align}
+\begin{tikzpicture}
+ 	\path (0,0) node (Z) {}
+ 	++(0,0.3) coordinate (W)
+ 	++(0,0.5) node[kernel] (A) {\hspace{1em}$\kappa$}
+ 	+ (0,0.7) node (B) {$X$ $Y$}
+ 	+ (0.6,0.7) node (C) {$D$};
+ 	\draw (Z) -- (A);
+ 	\draw ($(A.north) +(-0.2,0)$) -- ($(B.south) + (-0.2,0)$);
+ 	\draw ($(A.north) +(0.2,0)$) -- ($(B.south) + (0.2,0)$);
+ 	\draw (W) to [bend right] (C);
+	\end{tikzpicture}
+	&=
+	\begin{tikzpicture}
+	\path (0,0) node (X) {}
+	++ (0,0.3) coordinate (W)
+	++ (0,0.5) node[kernel] (A) {\hspace{1em}$\kappa$}
+	+ (0.2,0.5) node (Z) {}
+	++ (-0.2,0.5) coordinate (B)
+	+ (0.5,0.5) node[kernel] (C) {$c$}
+	+ (-0.5,0.5) coordinate (D)
+	+(0.5,1.2) node (E) {$Y$}
+	+(-0.5,1.2) node (F) {$X$}
+	+(1,0) coordinate (G) 
+	+(1,1.2) node (H) {$D$};
+	\draw (X) -- (A);
+	\draw ($(A.north) +(-0.2,0)$) -- (B);
+	\draw[-{Rays [n=8]}] ($(A.north) +(0.2,0)$) -- (Z);
+	\draw (B) -- (C);
+	\draw (B) -- (D);
+	\draw (D) -- (F);
+	\draw (C) -- (E);
+	\draw (W) to [bend right] (G);
+	\draw (G) -- (H);
+	\draw (G) to [bend left] (C);
+	\end{tikzpicture}
+\end{align}
+ 
+Note that the only other (non-trivial) disintegrations do not feature $D$ as an ``input wire''. All such 
+
 \end{proof}
 
 \paragraph{Conjecture:} This can be generalised to any $\kappa$ that is determined by its values on a countable set of points along with some notion of continuity. This seems likely to be true. In a more general setting, I think I could find a counterexample, but the converse also seems unlikely.
 
 The extension of \emph{conditional independence} to g-disintegrations becomes a directional relationship. Suppose we have $\kappa:D\to X\times Y$ and a disintegration $c:D\times X\to Y$. We say $Y$ is directionally conditionally independent (DCI) of $D$ given $X$ if
-\begin{align}
- \begin{tikzpicture}
- 
- \end{tikzpicture}
-\end{align}
 
 Generalised disintegrations facilitate the following construction of a ``graphical model'':
 
@@ -386,8 +570,8 @@ Second, we will assume certain \emph{generalised conditional independences} hold
 \path (0,0) node (A) {$E$}
 	++(0,0.2) coordinate (B)
 	++ (0,0.3) node[kernel] (C) {\hspace{1em}$\kappa$}
-	+ (0,0.5) node (D) {\textbf{*}}
-	+ (0.2,0.5) node (E) {\textbf{*}}
+	+ (0,0.5) node (D) {}
+	+ (0.2,0.5) node (E) {}
 	++ (-0.2,0.5) coordinate (F)
 	+ (-0.5,0.5) node (G) {$X$}
 	++ (0.5,0.5) node[kernel] (H) {$c_{Y|X}$}
@@ -396,8 +580,8 @@ Second, we will assume certain \emph{generalised conditional independences} hold
 	++(0,0.8) node (K) {$Z$};
 	\draw (A) -- (B);
 	\draw (B) -- (C);
-	\draw (C) -- (D.center);
-	\draw (C) -- (E.center);
+	\draw[-{Rays [n=8]}] (C) -- (D);
+	\draw[-{Rays [n=8]}] (C) -- (E);
 	\draw (C) -- (F);
 	\draw (F) -- (G);
 	\draw (F) -- (H);
