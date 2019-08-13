@@ -315,7 +315,7 @@ We can obtain disintegrations from Bayesian inversions and vise-versa.
 
 \paragraph{generalised disintegrations}: Of key importance to our work is generalising the notion of disintegration (and possibly Bayesian inversion) to general kernels $X\to Y$ rather than restricting ourselves to probability distributions $\{*\}\to Y$.
 
-Given $\kappa:D\to X\times Y$, a kernel $c:D\times X\to Y$ is a \emph{generalised disintegration} (``g-disintegration'') of $\kappa$ if the following holds:
+Given $\kappa:D\to X\times Y$, a kernel $c:D\times X\to Y$ is a \emph{generalised disintegration} (``g-disintegration'') of $\kappa$  from $D\times X$ to $Y$ if the following holds:
 
 \begin{align}
 	\begin{tikzpicture}
@@ -349,16 +349,28 @@ Given $\kappa:D\to X\times Y$, a kernel $c:D\times X\to Y$ is a \emph{generalise
 	\end{tikzpicture}
 \end{align}
 
+If we introduce let $Z=\{*\}$ and draw attention to the isomorphism $\{*\}\times X\times Y\cong X\times Y$, we can see that $\kappa:D\to X\times Y$ itself is a g-distintegration $\kappa$ from $D$ to $X\times Y$.
+
 \begin{theorem}
-For all $\kappa:D\to X\times Y$, if $D$ is countable and $X\times Y$ is standard measurable, a g-disintegration of $\kappa$ exists.
+For all $\kappa:D\to X\times Y$, if $D$ is countable and $X\times Y$ is standard measurable, a g-disintegration of $\kappa$ exists in the following three directions: from $D\to X\times Y$, from $D\times X\to Y$ and from $D\times Y\to X$.
 \end{theorem}
 
 \begin{proof}
+For the first direction, we note that $\kappa$ satisfies the condition.
+
 For all $y\in D$ we have a disintegration $c_y:X\to Y$ of $\delta_y \kappa$ by standard measurability of $X\times Y$. Define $c:D\times X\to Y$ by $c:(y,x)\mapsto c_y(x)$. Clearly, $c(y,x)$ is a probability distribution on $Y$ for all $(y,x)\in D\times X$. It remains to show $c(\cdot)^{-1}(B)$ is measurable for all $B\in \mathcal{B}([0,1])$. But $c(\cdot)^{-1}(B) = \cap_{y\in D} c_y(\cdot)^{-1}(B)$. The right hand side is measurable by measurability of $c_y(\cdot)^{-1}(B)$ and the properties of a $\sigma$-algebra.
+
+The final direction follows from symmetry.
 \end{proof}
 
 \paragraph{Conjecture:} This can be generalised to any $\kappa$ that is determined by its values on a countable set of points along with some notion of continuity. This seems likely to be true. In a more general setting, I think I could find a counterexample, but the converse also seems unlikely.
 
+The extension of \emph{conditional independence} to g-disintegrations becomes a directional relationship. Suppose we have $\kappa:D\to X\times Y$ and a disintegration $c:D\times X\to Y$. We say $Y$ is directionally conditionally independent (DCI) of $D$ given $X$ if
+\begin{align}
+ \begin{tikzpicture}
+ 
+ \end{tikzpicture}
+\end{align}
 
 Generalised disintegrations facilitate the following construction of a ``graphical model'':
 

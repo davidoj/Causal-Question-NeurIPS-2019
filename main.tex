@@ -81,6 +81,14 @@
     kernel/.style={rectangle,draw,inner sep = 2pt},
     expectation/.style = {triangle,draw,inner sep=0pt}}
 
+\newcommand\DCI{
+	\begin{tikzpicture}[scale=0.35]
+	\draw[->] (1,0) -- (0,0);
+	\draw (0.6,0) -- (0.6,0.75);
+	\draw (0.4,0) -- (0.4,0.75);
+	\end{tikzpicture}
+}
+
 \newcommand\splitter[1]{%
 \begin{tikzpicture}[scale=#1]
 \draw (0,-1) -- (0,0);
