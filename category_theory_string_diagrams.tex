@@ -312,7 +312,7 @@ We can obtain disintegrations from Bayesian inversions and vise-versa.
 
 \subsection{Key questions for Causal Theories}
 
-We will first define \emph{labeled diagrams}. Rather than labelling the wires of our diagrams with \emph{spaces} (as is typical \citep{selinger_survey_2010}), we assign a unique label to each ``wire segment''. Somewhat informally, we assign a unique label to each bare wire in the diagram with the following additonal qualifications:
+We will first define \emph{labeled diagrams}\todo{I'm sure one of the papers I read mentioned labeled diagrams, I just couldn't find it when I looked for it}. Rather than labelling the wires of our diagrams with \emph{spaces} (as is typical \citep{selinger_survey_2010}), we assign a unique label to each ``wire segment'' (with some qualifications). That is, we assign a unique label to each bare wire in the diagram with the following additonal qualifications:
 \begin{itemize}
 	\item If we have a box in the diagram representing the identity map, the incoming and outgoing wires are given the same label
 	\item If we have a wire crossing in the diagram, the diagonally opposite wires are given the same label
@@ -337,53 +337,81 @@ We do not prove these properties here, but motivate them via the following consi
  	\item The labeling rule for copy maps respects the symmetry of the copy map and the property described in Equation \ref{eq:ccom3}
 \end{itemize}
 
-We will continue to follow the convention whereby ``internal'' wire labels are omitted from diagrams.
+We will follow the convention whereby ``internal'' wire labels are omitted from diagrams.
 
-Note also that each wire that terminates in a free end can be associated with a random variable. Suppose for $N\in\mathbb{N}$ we have a kernel $\kappa:A\to \Delta(\times_{i\in N} X_i)$. Define by $p_j$ ($j\in[N]$) the projection map $p_j:\times_{i\in N}X_i\to X_j$ defined by $p_j:(x_0,...,x_N)\mapsto x_j$. $p_j$ is a measurable function, hence a random variable. Define by $\pi_j$ the projection kernel $\mathcal{G}(\pi_j)$ (that is, $\pi_j:\mathbf{x}\mapsto \delta_{p_j(\mathbf{x})}$). Note that $\kappa(y;p_j^{-1}(A))=\int_{X_j} \delta_{p_j(\mathbf{x})}(A) \kappa(y;d\mathbf{x}) = \kappa \pi_j$. Diagrammatically, $\pi_j$ is the identity map on the $j$-th wire tensored with the erase map on every other wire. It is in this way that we can consider the $j$-th wire to correspond to the random variable $p_j$. We will therefore consider the labels of the ``outgoing'' wires of a diagram to denote random varaibles.
+Note also that each wire that terminates in a free end can be associated with a random variable. Suppose for $N\in\mathbb{N}$ we have a kernel $\kappa:A\to \Delta(\times_{i\in N} X_i)$. Define by $p_j$ ($j\in[N]$) the projection map $p_j:\times_{i\in N}X_i\to X_j$ defined by $p_j:(x_0,...,x_N)\mapsto x_j$. $p_j$ is a measurable function, hence a random variable. Define by $\pi_j$ the projection kernel $\mathcal{G}(\pi_j)$ (that is, $\pi_j:\mathbf{x}\mapsto \delta_{p_j(\mathbf{x})}$). Note that $\kappa(y;p_j^{-1}(A))=\int_{X_j} \delta_{p_j(\mathbf{x})}(A) \kappa(y;d\mathbf{x}) = \kappa \pi_j$. Diagrammatically, $\pi_j$ is the identity map on the $j$-th wire tensored with the erase map on every other wire. Thus the $j$-th wire carries the distribution associated with the random variable $p_j$. We will therefore consider the labels of the ``outgoing'' wires of a diagram to denote random varaibles (though there are obviously many random variables not represented by such wires). We will additionally distinguish wire labels from spaces by font - wire labels are sans serif $\RV{A,B,C,X,Y,Z}$ while spaces are serif $A,B,C,X,Y,Z$.
+
+\todo[inline]{Wire labels appear to have a key advantage over random variables: they allow us to ``forget'' the sample space as the correct typing is handled automatically by composition and erasure of wires}
 
 \paragraph{generalised disintegrations}: Of key importance to our work is generalising the notion of disintegration (and possibly Bayesian inversion) to general kernels $X\to Y$ rather than restricting ourselves to probability distributions $\{*\}\to Y$. We will define generalised disintegrations as a straightforward analogy regular disintegrations, but the conditions under which such disintegrations exist are more restrictive than for regular disintegraions.
 
-A kernel $c:X\to Y$ is a \emph{generalised disintegration} (``g-disintegration'') of $\kappa$  from $X$ to $Y$ if the following holds:
+\begin{definition}[Label signatures]
+If a kernel $\kappa:X\to \Delta(Y)$ can be represented by a diagram $G$ with incoming wires $\RV{X_1,...X_n}$ and outgoing wires $\RV{Y_1,...,Y_m}$, we can assign the kernel a ``label signature'' $\kappa:\RV{X_1}\otimes...\otimes\RV{X_n}\dashrightarrow \RV{Y}_1\otimes...\otimes\RV{Y}_m$ or, for short, $\kappa:\RV{X}_{[n]}\dashrightarrow \RV{Y}_{[m]}$. Note that this signature associates each label with a unique space - the space of $\RV{X}_1$ is the space associated with the left-most wire of $G$ and so forth. We will implicitly leverage this correspondence and write with $X_1$ the space associated with $\RV{X}_1$ and so forth. Note that while $\RV{X}_1$ is by construction always different from $\RV{X}_2$ (or any other label), the space $X_1$ may coincide with $X_2$ - the fact that labels always maintain distinctions between wires is the fundamental reason for introducing them in the first place.
+\end{definition}
+
+\todo[inline]{There might actually be some sensible way to consider $\kappa$ to be transforming the measurable functions of a type similar to $\otimes_{i\in[n]}\RV{X}_i$ to functions of a type simlar to $\otimes_{i\in [m]}\RV{Y}_i$ (or vise versa - perhaps related to \citet{clerc_pointless_2017}), but wire labels are all we need at this point}
+
+\begin{definition}[Generalised disintegration]
+Given a kernel $\kappa:X\to \Delta(Y)$ with label signature $\kappa:\RV{X_{[n]}}\dashrightarrow \RV{Y_{[m]}}$ and disjoint subsets $S,T\subset[m]$, a kernel $c$ is a \emph{g-disintigration from $S$ to $T$} if it's type is compatible with the label signature $c:\RV{Y_{S}}\dashrightarrow \RV{Y_{T}}$ and we have the identity (omitting incoming wire labels):
 
 \begin{align}
 	\begin{tikzpicture}
 	 	\path (0,0) coordinate (Z)
-	 	++(0,0.5) node[kernel] (A) {\hspace{1em}$\kappa$}
-	 	+ (0,0.7) node (B) {$X$ $Y$};
+	 	++(0,0.5) node[kernel] (A) {$\quad\kappa\quad$}
+	 	+(-0.5,0.7) node (B) {$\RV{Y_S}$}
+	 	+(0,0.7) node (C) {$\RV{Y_T}$}
+	 	+(1,0.7) node (D) {$\RV{Y_{[m]\setminus S\cup T}}$};
 	 	\draw (Z) -- (A);
-	 	\draw ($(A.north) +(-0.2,0)$) -- ($(B.south) + (-0.2,0)$);
-	 	\draw ($(A.north) +(0.2,0)$) -- ($(B.south) + (0.2,0)$);
+	 	\draw ($(A.north) +(-0.5,0)$) -- (B);
+	 	\draw (A) -- (C);
+	 	\draw ($(A.north) +(0.5,0)$) to [bend right] (D);
 	\end{tikzpicture}
 	=
 	\begin{tikzpicture}
 	\path (0,0) coordinate (X)
-	++ (0,0.5) node[kernel] (A) {\hspace{1em}$\kappa$}
-	+ (0.2,0.5) node (Z) {}
-	++ (-0.2,0.5) coordinate (B)
+	++ (0,0.5) node[kernel] (A) {$\quad\kappa\quad$}
+	+ (0,0.5) node (Z) {}
+	+ (1,1.7) node (W) {$\RV{Y_{[m]\setminus S\cup T}}$}
+	++ (-0.5,0.5) coordinate (B)
 	+ (0.5,0.5) node[kernel] (C) {$c$}
 	+ (-0.5,0.5) coordinate (D)
-	+(0.5,1.2) node (E) {$Y$}
-	+(-0.5,1.2) node (F) {$X$};
+	+(0.5,1.2) node (E) {$\RV{Y_T}$}
+	+(-0.5,1.2) node (F) {$\RV{Y_S}$};
 	\draw (X) -- (A);
-	\draw ($(A.north) +(-0.2,0)$) -- (B);
-	\draw[-{Rays [n=8]}] ($(A.north) +(0.2,0)$) -- (Z);
+	\draw ($(A.north) +(-0.5,0)$) -- (B);
+	\draw[-{Rays [n=8]}] (A) -- (Z);
 	\draw (B) -- (C);
 	\draw (B) -- (D);
 	\draw (D) -- (F);
 	\draw (C) -- (E);
+	\draw ($(A.north) +(0.5,0)$) to [bend right] (W);
 	\end{tikzpicture}
 \end{align}
 
-In contrast to regular disintegrations, generalised disintegrations ``usually'' do not exist. Consider $D=X=Y=\{0,1\}$ and 
+\end{definition}
+
+\todo[inline]{I have introduced without definition additional labeling operations here: first, each label has a particular space associated with it (in order to license the notion of ``type compatible with label signature''), and we have supposed labels can be ``bundled''.}
+
+In contrast to regular disintegrations, generalised disintegrations ``usually'' do not exist. Consider $X=\{0,1\}$, $Y=\{0,1\}^2$ and $\kappa$ has label signature $\RV{X}_1\dashrightarrow \RV{Y}_{\{1,2\}}$ with
 \begin{align}
 	\kappa:\begin{cases} 1\mapsto \delta_1\otimes \delta_1\\
 						 0\mapsto \delta_1\otimes \delta_0\end{cases}
 \end{align}
 
-There is clearly no kernel $c:X\to Y$ that simultaneously satisfies $\delta_1 c=\delta_1$ if $D=1$ and $\delta_0 c = \delta_0$ if $D=0$. Subject to some regularity conditions, we can define g-disintegrations of a canonically related kernel that do generally exist; intuitively, we g-disintegrations exist if they take the ``input wires'' of $\kappa$ as input wires themselves.
+$\kappa$ imposes contradictory requirements for any disintegration $c:\{0,1\}\to\{0,1\}$ from $\{1\}$ to $\{2\}$: equality for $\RV{X}_1=1$ requires $c(1;\cdot)=\delta_1$ while equality for $\RV{X}_1=0$ requires $c(1;\cdot) = \delta_0$. Subject to some regularity conditions (similar to standard Borel conditions for regular disintegrations), we can define g-disintegrations of a canonically related kernel that do generally exist; intuitively, g-disintegrations exist if they take the ``input wires'' of $\kappa$ as input wires themselves.
+
+\begin{lemma}[Right inverses are deterministic kernels]
+Given $\kappa:X\to\Delta(Y)$ for countable $X$ and standard measurable $Y$. A right inverse $\kappa^\dagger$ exists iff there exists a measurable function $f:Y\to X$ such that for all $x\in X$, $y\in Y$, $f(y)=x$ $\kappa_x$-almost surely. Moreover, in such a case $\kappa^\dagger(y;A) = \delta_{f(y)}(A)$.
+\end{lemma}
+
+\begin{proof}
+Suppose we have such a function $f$. We immediately have measurability: $f^{-1}(A)$ for all measurable $A$ is a countable union of supports which are themselves measurable. Furthermore, $\int_Y \kappa(x;dy) \delta_{f(y)}(A) = \delta_x (A)$ so $\delta_{f(y)}(A)$ is a right inverse of $\kappa$ as needed.
+
+Suppose we have a right inverse $\kappa^\dagger$. By definition, $\int_Y \kappa(x;dy)\kappa^\dagger(y;A)=\delta_x(A) = \int_Y \kappa(x;dy) \delta_x(A)$ for all $x\in X$. 
+\end{proof}
 
 \begin{theorem}
-For all $\kappa:D\to X\times Y$, if $D$ is countable and $X\times Y$ is standard measurable, a g-disintegration of $\kappa_{id}$ exists in the following three directions: from $D\to X\times Y$, from $D\times X\to Y$ and from $D\times Y\to X$. In general, a g-disintegration does not exist from $A\to B$ if 
+Given countable $X$, standard measurable $Y$, $n,m\in\mathbb{N}$, $S,T\subset[m]$ a g-disintegration exists from $S$ to $T$ for all $\kappa:X\to Y$ with label signature $\RV{X_[n]}\dashrightarrow \RV{Y_[m]}$ iff $\kappa\pi_S$ is right-invertible.
 \end{theorem}
 
 \begin{proof}
