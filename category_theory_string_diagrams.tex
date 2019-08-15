@@ -312,7 +312,7 @@ We can obtain disintegrations from Bayesian inversions and vise-versa.
 
 \subsection{Key questions for Causal Theories}
 
-We will first define \emph{labeled diagrams}\todo{I'm sure one of the papers I read mentioned labeled diagrams, I just couldn't find it when I looked for it}. Rather than labelling the wires of our diagrams with \emph{spaces} (as is typical \citep{selinger_survey_2010}), we assign a unique label to each ``wire segment'' (with some qualifications). That is, we assign a unique label to each bare wire in the diagram with the following additonal qualifications:
+We will first define \emph{labeled diagrams}\todo{I'm sure one of the papers I read mentioned labeled diagrams, I just couldn't find it when I looked for it}. Rather than labelling the wires of our diagrams with \emph{spaces} (as is typical \citep{selinger_survey_2010}), we assign a unique label to each ``wire segment'' (with some qualifications). \todo{Since writing this, I found \citet{kissinger_abstract_2014} as an example of a diagrammatic system with labeled wires, I will follow it up} That is, we assign a unique label to each bare wire in the diagram with the following additonal qualifications:
 \begin{itemize}
 	\item If we have a box in the diagram representing the identity map, the incoming and outgoing wires are given the same label
 	\item If we have a wire crossing in the diagram, the diagonally opposite wires are given the same label
@@ -352,39 +352,35 @@ If a kernel $\kappa:X\to \Delta(Y)$ can be represented by a diagram $G$ with inc
 \todo[inline]{There might actually be some sensible way to consider $\kappa$ to be transforming the measurable functions of a type similar to $\otimes_{i\in[n]}\RV{X}_i$ to functions of a type simlar to $\otimes_{i\in [m]}\RV{Y}_i$ (or vise versa - perhaps related to \citet{clerc_pointless_2017}), but wire labels are all we need at this point}
 
 \begin{definition}[Generalised disintegration]
-Given a kernel $\kappa:X\to \Delta(Y)$ with label signature $\kappa:\RV{X_{[n]}}\dashrightarrow \RV{Y_{[m]}}$ and disjoint subsets $S,T\subset[m]$, a kernel $c$ is a \emph{g-disintigration from $S$ to $T$} if it's type is compatible with the label signature $c:\RV{Y_{S}}\dashrightarrow \RV{Y_{T}}$ and we have the identity (omitting incoming wire labels):
+Given a kernel $\kappa:X\to \Delta(Y)$ with label signature $\kappa:\RV{X_{[n]}}\dashrightarrow \RV{Y_{[m]}}$ and disjoint subsets $S,T\subset[m]$ such that $S\cup T=[m]$, a kernel $c$ is a \emph{g-disintigration from $S$ to $T$} if it's type is compatible with the label signature $c:\RV{Y_{S}}\dashrightarrow \RV{Y_{T}}$ and we have the identity (omitting incoming wire labels):
 
 \begin{align}
 	\begin{tikzpicture}
 	 	\path (0,0) coordinate (Z)
-	 	++(0,0.5) node[kernel] (A) {$\quad\kappa\quad$}
-	 	+(-0.5,0.7) node (B) {$\RV{Y_S}$}
-	 	+(0,0.7) node (C) {$\RV{Y_T}$}
-	 	+(1,0.7) node (D) {$\RV{Y_{[m]\setminus S\cup T}}$};
+	 	++(0,0.5) node[kernel] (A) {$\;\kappa\;$}
+	 	+(-0.25,0.7) node (B) {$\RV{Y_S}$}
+	 	+(0.25,0.7) node (C) {$\RV{Y_T}$};
 	 	\draw (Z) -- (A);
-	 	\draw ($(A.north) +(-0.5,0)$) -- (B);
-	 	\draw (A) -- (C);
-	 	\draw ($(A.north) +(0.5,0)$) to [bend right] (D);
+	 	\draw ($(A.north) +(-0.25,0)$) -- (B);
+	 	\draw ($(A.north) +(0.25,0)$) -- (C);
 	\end{tikzpicture}
 	=
 	\begin{tikzpicture}
 	\path (0,0) coordinate (X)
-	++ (0,0.5) node[kernel] (A) {$\quad\kappa\quad$}
-	+ (0,0.5) node (Z) {}
-	+ (1,1.7) node (W) {$\RV{Y_{[m]\setminus S\cup T}}$}
-	++ (-0.5,0.5) coordinate (B)
+	++ (0,0.5) node[kernel] (A) {$\;\kappa\;$}
+	+ (0.25,0.5) node (Z) {}
+	++ (-0.25,0.5) coordinate (B)
 	+ (0.5,0.5) node[kernel] (C) {$c$}
 	+ (-0.5,0.5) coordinate (D)
 	+(0.5,1.2) node (E) {$\RV{Y_T}$}
 	+(-0.5,1.2) node (F) {$\RV{Y_S}$};
 	\draw (X) -- (A);
-	\draw ($(A.north) +(-0.5,0)$) -- (B);
-	\draw[-{Rays [n=8]}] (A) -- (Z);
+	\draw ($(A.north) +(-0.25,0)$) -- (B);
+	\draw[-{Rays [n=8]}] ($(A.north) +(0.25,0)$) -- (Z);
 	\draw (B) -- (C);
 	\draw (B) -- (D);
 	\draw (D) -- (F);
 	\draw (C) -- (E);
-	\draw ($(A.north) +(0.5,0)$) to [bend right] (W);
 	\end{tikzpicture}
 \end{align}
 
@@ -400,109 +396,176 @@ In contrast to regular disintegrations, generalised disintegrations ``usually'' 
 
 $\kappa$ imposes contradictory requirements for any disintegration $c:\{0,1\}\to\{0,1\}$ from $\{1\}$ to $\{2\}$: equality for $\RV{X}_1=1$ requires $c(1;\cdot)=\delta_1$ while equality for $\RV{X}_1=0$ requires $c(1;\cdot) = \delta_0$. Subject to some regularity conditions (similar to standard Borel conditions for regular disintegrations), we can define g-disintegrations of a canonically related kernel that do generally exist; intuitively, g-disintegrations exist if they take the ``input wires'' of $\kappa$ as input wires themselves.
 
-\begin{lemma}[Right inverses are deterministic kernels]
-Given $\kappa:X\to\Delta(Y)$ for countable $X$ and standard measurable $Y$. A right inverse $\kappa^\dagger$ exists iff there exists a measurable function $f:Y\to X$ such that for all $x\in X$, $y\in Y$, $f(y)=x$ $\kappa_x$-almost surely. Moreover, in such a case $\kappa^\dagger(y;A) = \delta_{f(y)}(A)$.
+\begin{lemma}\label{lem:rightinverse}
+Given $\kappa:X\to\Delta(Y)$, a kernel $\kappa^\dagger$ is a right inverse iff we have for all $x\in X$ $\kappa^\dagger(y;A)=\delta_x(A)$, $\kappa(x;\cdot)$-almost surely.
 \end{lemma}
 
 \begin{proof}
-Suppose we have such a function $f$. We immediately have measurability: $f^{-1}(A)$ for all measurable $A$ is a countable union of supports which are themselves measurable. Furthermore, $\int_Y \kappa(x;dy) \delta_{f(y)}(A) = \delta_x (A)$ so $\delta_{f(y)}(A)$ is a right inverse of $\kappa$ as needed.
+Suppose $\kappa^\dagger$ satisfies the almost sure equality for all $x\in X$. Then for all $x\in X$, $A\in \mathcal{Y}$ we have $\kappa \kappa^\dagger (x;A) = \int_Y \kappa^\dagger(y;A) \kappa(x;dy) = \int_Y \delta_x (A) \kappa(x;dy) = \delta_x(A)$; that is, $\kappa\kappa^\dagger = \mathrm{Id}_X$, so $\kappa^\dagger$ is a right inverse of $\kappa$.
 
-Suppose we have a right inverse $\kappa^\dagger$. By definition, $\int_Y \kappa(x;dy)\kappa^\dagger(y;A)=\delta_x(A) = \int_Y \kappa(x;dy) \delta_x(A)$ for all $x\in X$. 
+Suppose we have a right inverse $\kappa^\dagger$. By definition, for all $x\in X$ and $A\in\mathcal{Y}$ we have $\int_Y \kappa^\dagger(y;A) \kappa(x;dy)=\delta_x(A)$. Suppose $x\not\in A$ and let $B_\epsilon=\kappa^{\dagger-1}_A((\epsilon,1])$ for some $\epsilon>0$. We have $\int_Y \kappa^\dagger(y;A) \kappa(x;dy)\geq\epsilon\kappa(x;B)$. For any $\epsilon>0$ we have $\kappa(x;B_\epsilon)=0$. Consider the set $B_0=\kappa^{\dagger-1}_A((0,1])$. For some sequence $\{\epsilon_i\}_{i\in \mathbb{N}}$ such that $\lim_{i\to\infty} \epsilon_i = 0$ we have $B_0=\cup_{i\in\mathbb{N}} B_{\epsilon_i}$. By countable additivity, $kappa(x;B_0)=0$. Suppose $x\in A$ and let $B^{1-\epsilon}=\kappa^{\dagger-1}_A([0,1-\epsilon))$. By an argument analogous to the above, we have $\kappa(x;B^1)=0$. Thus the $\kappa(x;\cdot)$ measure of the set on which $\kappa^\dagger(y;A)$ disagrees with $\delta_x(A)$ is $\kappa(x;B_0) + \kappa(x;B^1)=0$ and hence $\kappa^\dagger(y;A)=\delta_x(A)$ $\kappa(x;\cdot)$-almost surely.
 \end{proof}
 
+\todo[inline]{I haven't shown that any map inverting $\kappa$ implies the existence of a Markov kernel that does so}
+
+\todo[inline]{I am using countable sets below to get my general argument in order without getting too hung up on measurability; I will try to lift it to standard measurable once it's all there}
+
+% \begin{lemma}
+% For $\kappa:X\to \Delta(Y)$, countable $X$ and $Y$, if we have an arbitrary map $Q:Y\times\mathcal{X}\to [0,1]$ satisfying $\int_Y Q(dy,A) \kappa(x;dy)=\delta_x(A)$ for all $x$ and $A$ then there is a right inverse $\kappa^\dagger$.
+% \end{lemma}
+
+% \begin{proof}
+% Fix some $A\in \mathcal{Y}$ and let $B_A=Q^{-1}_A((0,1))$. By Lemma \ref{lem:rightinverse} and countable additivity, $B_A$ is a set of $\kappa(x;\cdot)$-measure 0 for all $x$. Thus defining
+% \begin{align}
+% Q'(y,A) = \begin{cases} Q(y,A) & y\not\in B_A\\ 0 & y\in B_A \end{cases}
+% \end{align}
+% We can see that $\int_Y Q'(dy,A) \kappa(x;dy)=\delta_x(A)$ for all $x$ and $A$. Furthermore
+% \end{proof}
+
+
+
 \begin{theorem}
-Given countable $X$, standard measurable $Y$, $n,m\in\mathbb{N}$, $S,T\subset[m]$ a g-disintegration exists from $S$ to $T$ for all $\kappa:X\to Y$ with label signature $\RV{X_[n]}\dashrightarrow \RV{Y_[m]}$ iff $\kappa\pi_S$ is right-invertible.
+Given countable $X$ and standard measurable $Y$, $n,m\in\mathbb{N}$, $S,T\subset[m]$, $\kappa$ with label signature $\RV{X_{[n]}}\dashrightarrow \RV{Y_{[m]}}$ a g-disintegration exists from $S$ to $T$ if $\kappa\pi_S$ is right-invertible \todo[inline]{via a Markov kernel}
 \end{theorem}
 
 \begin{proof}
-For $D\to X\times Y$, we note that $\kappa$ is always a disintegration:
+Let $\kappa_S^\dagger$ be a right inverse of $\kappa\pi_S$. We will show that
 
 \begin{align}
 \begin{tikzpicture}
- \path (0,0) node (A) {$D$}
- ++(0,0.35) coordinate (B)
- +(0,0.25) node[kernel] (C) {$\kappa$}
- +(0.5,0.25) coordinate (D)
- +(-0.15,0.8) node (X) {$X$}
- +(0.15,0.8) node (Y) {$Y$}
- +(0.5,0.8) node (Z) {$D$};
- \draw (A)--(B);
- \draw (B) -- (C);
- \draw (B) to [bend right] (D);
- \draw ($(C.north)+(-0.15,0)$) -- (X);
- \draw ($(C.north)+(0.15,0)$) -- (Y);
- \draw (D) -- (Z);
-\end{tikzpicture}=
-\begin{tikzpicture}
- \path (0,0) node (A) {$D$}
- ++(0,0.35) coordinate (B)
- +(0,0.25) node[kernel] (C) {$\kappa$}
- +(0.5,0.25) coordinate (D)
- +(-0.15,0.8) node (X) {}
- +(0.15,0.8) node (Y) {}
- ++(0.5,0.8) node[kernel] (Z) {$\kappa$}
- +(-0.15,0.8) node (X1) {$X$}
- +(0.15,0.8) node (Y1) {$Y$}
- +(0.5,0.8) node (D1) {$D$};
- \draw (A)--(B);
- \draw (B) -- (C);
- \draw (B) to [bend right] (D);
- \draw[-{Rays [n=8]}] ($(C.north)+(-0.15,0)$) -- (X);
- \draw[-{Rays [n=8]}] ($(C.north)+(0.15,0)$) -- (Y);
- \draw (D) -- (Z);
- \draw (D) to [bend right] (D1);
- \draw ($(Z.north)+(-0.15,0)$) -- (X1);
- \draw ($(Z.north)+(0.15,0)$) -- (Y1);
-\end{tikzpicture}
+ \path (0,0) node (A) {$\RV{X}$}
+ ++(0,0.5) node[kernel] (C) {$\;\kappa \pi_S\;$}
+ ++(0.,0.5) coordinate (D)
+ +(-0.5,0.5) node[kernel] (X) {$\kappa_S^\dagger$}
+ +(0.5,1.2) node (Y) {$\RV{Y_S}$}
+ +(-0.5,1.2) node (Z) {$\RV{X}$};
+ \draw (A)--(C);
+ \draw (C) -- (D);
+ \draw (D) to [bend left] (X);
+ \draw (X) -- (Z);
+ \draw (D) to [bend right] (Y);
+\end{tikzpicture} = \begin{tikzpicture}
+ \path (0,0) node (A) {$\RV{X}$}
+ ++(0.,0.5) coordinate (D)
+ +(0.5,0.5) node[kernel] (X) {$\;\kappa \pi_S\;$}
+ +(-0.5,1) node (Y) {$\RV{X}$}
+ +(+0.5,1) node (Z) {$\RV{Y_S}$};
+ \draw (A)--(D);
+ \draw (D) to [bend right] (X);
+ \draw (X) -- (Z);
+ \draw (D) to [bend left] (Y);
+\end{tikzpicture}\label{eq:rightinverse_commute}
 \end{align}
 
-Given $\kappa:D\to X\times Y$, define the \emph{canonical extension} $\kappa_{id}$:
+Let the diagram on the left hand side be $L$ and the diagram on the right hand side be $R$.
 \begin{align}
-\kappa_{id} :=
-\begin{tikzpicture}
- \path (0,0) node (A) {$D$}
- ++(0,0.35) coordinate (B)
- +(0,0.25) node[kernel] (C) {$\kappa$}
- +(0.5,0.25) coordinate (D)
- +(-0.15,0.8) node (X) {$X$}
- +(0.15,0.8) node (Y) {$Y$}
- +(0.5,0.8) node (Z) {$D$};
- \draw (A)--(B);
- \draw (B) -- (C);
- \draw (B) to [bend right] (D);
- \draw ($(C.north)+(-0.15,0)$) -- (X);
- \draw ($(C.north)+(0.15,0)$) -- (Y);
- \draw (D) -- (Z);
-\end{tikzpicture}\label{eq:cextn}
+L(x;A\times B) &= \int_Y \int_{Y\times Y} \mathrm{Id}_Y\otimes \kappa_S^\dagger(y,y';A\times B) \delta_{(z,z)}(dy\times dy') \kappa\pi_S(x;dz)\\
+  &= \int \mathrm{Id}_Y\otimes \kappa^\dagger(z,z;A\times B) \kappa\pi_S(x;dz)\\
+  &= \int \delta_z(A) \kappa_S^\dagger(z;B) \kappa \pi_S(x;dz)\\
+  &= \int_A \kappa_S^\dagger(z;B) \kappa\pi_S(x;dz)\\
+  &= \delta_x(B) \kappa\pi_S(x;A) \label{eq:from_ri_lemma}
 \end{align}
 
-The canonical extension takes a copy of the input and maps it to the output.
+Where \ref{eq:from_ri_lemma} follows from Lemma \ref{lem:rightinverse}.
 
-$D\times X\to Y$ and $D\times Y\to X$ are symmetric directions, so we will argue only for $D\times X\to Y$. For all $y\in D$ we have a disintegration $c_y:X\to Y$ of $\delta_y \kappa$ by standard measurability of $X\times Y$. Define $c:D\times X\to Y$ by $c:(y,x)\mapsto c_y(x)$. Clearly, $c(y,x)$ is a probability distribution on $Y$ for all $(y,x)\in D\times X$. It remains to show $c(\cdot)^{-1}(B)$ is measurable for all $B\in \mathcal{B}([0,1])$. But $c(\cdot)^{-1}(B) = \cap_{y\in D} c_y(\cdot)^{-1}(B)$. The right hand side is measurable by measurability of $c_y(\cdot)^{-1}(B)$ and the properties of a $\sigma$-algebra, so $c$ is a Markov kernel. By the definition of $c_y$, we have for all $y\in D$
+\begin{align}
+R(x;A\times B) &= \int \delta_{(x,x)}(dy\times dy') \kappa\pi_S\otimes\mathrm{Id}_X(y,y';A\times B)\\
+			   &= \kappa\pi_S(x;A)\delta_x(B)
+			   &= L
+\end{align}
+In addition, as $R$ is a composition of Markov kernels, and hence a Markov kernel itself, $L$ must also be a Markov kernel even if $\kappa^\dagger$ is not.
+
+
+
+
+% For $D\to X\times Y$, we note that $\kappa$ is always a disintegration:
+
+% \begin{align}
+% \begin{tikzpicture}
+%  \path (0,0) node (A) {$D$}
+%  ++(0,0.35) coordinate (B)
+%  +(0,0.25) node[kernel] (C) {$\kappa$}
+%  +(0.5,0.25) coordinate (D)
+%  +(-0.15,0.8) node (X) {$X$}
+%  +(0.15,0.8) node (Y) {$Y$}
+%  +(0.5,0.8) node (Z) {$D$};
+%  \draw (A)--(B);
+%  \draw (B) -- (C);
+%  \draw (B) to [bend right] (D);
+%  \draw ($(C.north)+(-0.15,0)$) -- (X);
+%  \draw ($(C.north)+(0.15,0)$) -- (Y);
+%  \draw (D) -- (Z);
+% \end{tikzpicture}=
+% \begin{tikzpicture}
+%  \path (0,0) node (A) {$D$}
+%  ++(0,0.35) coordinate (B)
+%  +(0,0.25) node[kernel] (C) {$\kappa$}
+%  +(0.5,0.25) coordinate (D)
+%  +(-0.15,0.8) node (X) {}
+%  +(0.15,0.8) node (Y) {}
+%  ++(0.5,0.8) node[kernel] (Z) {$\kappa$}
+%  +(-0.15,0.8) node (X1) {$X$}
+%  +(0.15,0.8) node (Y1) {$Y$}
+%  +(0.5,0.8) node (D1) {$D$};
+%  \draw (A)--(B);
+%  \draw (B) -- (C);
+%  \draw (B) to [bend right] (D);
+%  \draw[-{Rays [n=8]}] ($(C.north)+(-0.15,0)$) -- (X);
+%  \draw[-{Rays [n=8]}] ($(C.north)+(0.15,0)$) -- (Y);
+%  \draw (D) -- (Z);
+%  \draw (D) to [bend right] (D1);
+%  \draw ($(Z.north)+(-0.15,0)$) -- (X1);
+%  \draw ($(Z.north)+(0.15,0)$) -- (Y1);
+% \end{tikzpicture}
+% \end{align}
+
+% Given $\kappa:D\to X\times Y$, define the \emph{canonical extension} $\kappa_{id}$:
+% \begin{align}
+% \kappa_{id} :=
+% \begin{tikzpicture}
+%  \path (0,0) node (A) {$D$}
+%  ++(0,0.35) coordinate (B)
+%  +(0,0.25) node[kernel] (C) {$\kappa$}
+%  +(0.5,0.25) coordinate (D)
+%  +(-0.15,0.8) node (X) {$X$}
+%  +(0.15,0.8) node (Y) {$Y$}
+%  +(0.5,0.8) node (Z) {$D$};
+%  \draw (A)--(B);
+%  \draw (B) -- (C);
+%  \draw (B) to [bend right] (D);
+%  \draw ($(C.north)+(-0.15,0)$) -- (X);
+%  \draw ($(C.north)+(0.15,0)$) -- (Y);
+%  \draw (D) -- (Z);
+% \end{tikzpicture}\label{eq:cextn}
+% \end{align}
+
+% The canonical extension takes a copy of the input and maps it to the output.
+
+For all $x\in X$ we have a (regular) disintegration $c_x:Y_S\to \Delta(Y_T)$ of $\kappa(x;\cdot)$ by standard measurability of $Y$. Define $c:X\otimes Y_S\to \Delta(Y_T)$ by $c:(x,y_S)\mapsto c_x(y_S)$. Clearly, $c(x,y_S)$ is a probability distribution on $Y_T$ for all $(x,y_S)\in X\otimes Y_S$. It remains to show $c(\cdot)^{-1}(B)$ is measurable for all $B\in \mathcal{B}([0,1])$. But $c(\cdot)^{-1}(B) = \cap_{x\in X} c_y(\cdot)^{-1}(B)$. The right hand side is measurable by measurability of $c_y(\cdot)^{-1}(B)$ countability of $X$, so $c$ is a Markov kernel. 
+
+By the definition of $c_x$, we have for all $x\in X$
+
 \begin{align}
 	\begin{tikzpicture}
-	 	\path (0,0) node[dist] (Z) {$\delta_y$}
+	 	\path (0,0) node[dist] (Z) {$\delta_x$}
 	 	++(0,0.3) coordinate (W)
-	 	++(0,0.5) node[kernel] (A) {\hspace{1em}$\kappa$}
-	 	+ (0,0.7) node (B) {$X$ $Y$}
-	 	+ (0.6,0.7) node (C) {$D$};
+	 	++(0,0.5) node[kernel] (A) {\;$\kappa$\;}
+	 	+ (0,0.7) node (B) {$\RV{Y}_S$ $\RV{Y}_T$};
 	 	\draw (Z) -- (A);
 	 	\draw ($(A.north) +(-0.2,0)$) -- ($(B.south) + (-0.2,0)$);
 	 	\draw ($(A.north) +(0.2,0)$) -- ($(B.south) + (0.2,0)$);
-	 	\draw (W) to [bend right] (C);
 	\end{tikzpicture}
 	&=
 	\begin{tikzpicture}
-	\path (0,0) node[dist] (X) {$\delta_y$}
+	\path (0,0) node[dist] (X) {$\delta_x$}
 	++ (0,0.3) coordinate (W)
-	++ (0,0.5) node[kernel] (A) {\hspace{1em}$\kappa$}
+	++ (0,0.5) node[kernel] (A) {\;$\kappa$\;}
 	+ (0.2,0.5) node (Z) {}
 	++ (-0.2,0.5) coordinate (B)
-	+ (0.5,0.5) node[kernel] (C) {$c_y$}
+	+ (0.5,0.5) node[kernel] (C) {$c_x$}
 	+ (-0.5,0.5) coordinate (D)
-	+(0.5,1.2) node (E) {$Y$}
-	+(-0.5,1.2) node (F) {$X$}
-	+(1,1.2) node (G) {$D$};
+	+(0.5,1.2) node (E) {$\RV{Y}_T$}
+	+(-0.5,1.2) node (F) {$\RV{Y}_S$};
 	\draw (X) -- (A);
 	\draw ($(A.north) +(-0.2,0)$) -- (B);
 	\draw[-{Rays [n=8]}] ($(A.north) +(0.2,0)$) -- (Z);
@@ -510,21 +573,19 @@ $D\times X\to Y$ and $D\times Y\to X$ are symmetric directions, so we will argue
 	\draw (B) -- (D);
 	\draw (D) -- (F);
 	\draw (C) -- (E);
-	\draw (W) to [bend right] (G);
 	\end{tikzpicture}\\
 	&= 
 	\begin{tikzpicture}
-	\path (0,0) node[dist] (X) {$\delta_y$}
+	\path (0,0) node[dist] (X) {$\delta_x$}
 	++ (0,0.3) coordinate (W)
-	++ (0,0.5) node[kernel] (A) {\hspace{1em}$\kappa$}
+	++ (0,0.5) node[kernel] (A) {\;$\kappa$\;}
 	+ (0.2,0.5) node (Z) {}
 	++ (-0.2,0.5) coordinate (B)
 	+ (0.5,0.5) node[kernel] (C) {$c$}
 	+ (-0.5,0.5) coordinate (D)
-	+(0.5,1.2) node (E) {$Y$}
-	+(-0.5,1.2) node (F) {$X$}
-	+(1,0) coordinate (G) 
-	+(1,1.2) node (H) {$D$};
+	+(0.5,1.2) node (E) {$\RV{Y}_T$}
+	+(-0.5,1.2) node (F) {$\RV{Y}_S$}
+	+(0.8,-0.4) coordinate (G);
 	\draw (X) -- (A);
 	\draw ($(A.north) +(-0.2,0)$) -- (B);
 	\draw[-{Rays [n=8]}] ($(A.north) +(0.2,0)$) -- (Z);
@@ -533,36 +594,32 @@ $D\times X\to Y$ and $D\times Y\to X$ are symmetric directions, so we will argue
 	\draw (D) -- (F);
 	\draw (C) -- (E);
 	\draw (W) to [bend right] (G);
-	\draw (G) -- (H);
-	\draw (G) to [bend left] (C);
+	\draw (G) to [bend right] (C);
 	\end{tikzpicture}
 \end{align}
 Which implies
 \begin{align}
-\begin{tikzpicture}
- 	\path (0,0) node (Z) {}
- 	++(0,0.3) coordinate (W)
- 	++(0,0.5) node[kernel] (A) {\hspace{1em}$\kappa$}
- 	+ (0,0.7) node (B) {$X$ $Y$}
- 	+ (0.6,0.7) node (C) {$D$};
- 	\draw (Z) -- (A);
- 	\draw ($(A.north) +(-0.2,0)$) -- ($(B.south) + (-0.2,0)$);
- 	\draw ($(A.north) +(0.2,0)$) -- ($(B.south) + (0.2,0)$);
- 	\draw (W) to [bend right] (C);
+	\begin{tikzpicture}
+	 	\path (0,0) node (Z) {}
+	 	++(0,0.3) coordinate (W)
+	 	++(0,0.5) node[kernel] (A) {\;$\kappa$\;}
+	 	+ (0,0.7) node (B) {$\RV{Y}_S$ $\RV{Y}_T$};
+	 	\draw (Z) -- (A);
+	 	\draw ($(A.north) +(-0.2,0)$) -- ($(B.south) + (-0.2,0)$);
+	 	\draw ($(A.north) +(0.2,0)$) -- ($(B.south) + (0.2,0)$);
 	\end{tikzpicture}
 	&=
 	\begin{tikzpicture}
 	\path (0,0) node (X) {}
 	++ (0,0.3) coordinate (W)
-	++ (0,0.5) node[kernel] (A) {\hspace{1em}$\kappa$}
+	++ (0,0.5) node[kernel] (A) {\;$\kappa$\;}
 	+ (0.2,0.5) node (Z) {}
 	++ (-0.2,0.5) coordinate (B)
 	+ (0.5,0.5) node[kernel] (C) {$c$}
 	+ (-0.5,0.5) coordinate (D)
-	+(0.5,1.2) node (E) {$Y$}
-	+(-0.5,1.2) node (F) {$X$}
-	+(1,0) coordinate (G) 
-	+(1,1.2) node (H) {$D$};
+	+(0.5,1.2) node (E) {$\RV{Y}_T$}
+	+(-0.5,1.2) node (F) {$\RV{Y}_S$}
+	+(0.8,-0.4) coordinate (G);
 	\draw (X) -- (A);
 	\draw ($(A.north) +(-0.2,0)$) -- (B);
 	\draw[-{Rays [n=8]}] ($(A.north) +(0.2,0)$) -- (Z);
@@ -571,53 +628,120 @@ Which implies
 	\draw (D) -- (F);
 	\draw (C) -- (E);
 	\draw (W) to [bend right] (G);
-	\draw (G) -- (H);
-	\draw (G) to [bend left] (C);
+	\draw (G) to [bend right] (C);
 	\end{tikzpicture}
 \end{align}
- 
-Note that the only other (non-trivial) disintegrations do not feature $D$ as an ``input wire''. All such 
+Finally, we have
 
+\begin{align}
+\begin{tikzpicture}
+	\path (0,0) node (X) {}
+	++ (0,0.5) node[kernel] (A) {\;$\kappa$\;}
+	+ (0.2,0.5) node (Z) {}
+	++ (-0.2,0.5) coordinate (B)
+	+ (0.8,0.5) node[kernel] (H) {$\kappa_S^\dagger$}
+	+ (0,0.8) coordinate (I)
+	+ (0.5,1.3) node[kernel] (C) {$c$}
+	+ (-0.5,1.3) coordinate (D)
+	+(0.5,2) node (E) {$\RV{Y}_T$}
+	+(-0.5,2) node (F) {$\RV{Y}_S$};
+	\draw (X) -- (A);
+	\draw ($(A.north) +(-0.2,0)$) -- (B);
+	\draw[-{Rays [n=8]}] ($(A.north) +(0.2,0)$) -- (Z);
+	\draw (B) -- (I);
+	\draw (I) -- (C);
+	\draw (B) to [bend right] (H);
+	\draw (H) -- (C);
+	\draw ($(B)+(0,-0.3)$) to [bend left] (D);
+	\draw (D) -- (F);
+	\draw (C) -- (E);
+	\end{tikzpicture}
+	&=\begin{tikzpicture}
+	\path (0,0) node (X) {}
+	++ (0,0.5) node[kernel] (A) {\;$\kappa$\;}
+	+ (0.2,0.5) node (Z) {}
+	++ (-0.2,0.5) coordinate (B)
+	+ (0.8,0.5) node[kernel] (H) {$\kappa_S^\dagger$}
+	+ (0,0.8) coordinate (I)
+	+ (0.5,1.3) node[kernel] (C) {$c$}
+	+ (-0.5,1.3) coordinate (D)
+	+(0.5,2) node (E) {$\RV{Y}_T$}
+	+(-0.5,2) node (F) {$\RV{Y}_S$};
+	\draw (X) -- (A);
+	\draw ($(A.north) +(-0.2,0)$) -- (B);
+	\draw[-{Rays [n=8]}] ($(A.north) +(0.2,0)$) -- (Z);
+	\draw (B) -- (I);
+	\draw (I) -- (C);
+	\draw (B) to [bend right] (H);
+	\draw (H) -- (C);
+	\draw (I) to [bend left] (D);
+	\draw (D) -- (F);
+	\draw (C) -- (E);
+	\end{tikzpicture}\\
+	&=
+	\begin{tikzpicture}
+	\path (0,0) node (X) {}
+	++ (0,0.3) coordinate (W)
+	++ (0,0.5) node[kernel] (A) {\;$\kappa$\;}
+	+ (0.2,0.5) node (Z) {}
+	++ (-0.2,0.5) coordinate (B)
+	+ (0.5,0.5) node[kernel] (C) {$c$}
+	+ (-0.5,0.5) coordinate (D)
+	+(0.5,1.2) node (E) {$\RV{Y}_T$}
+	+(-0.5,1.2) node (F) {$\RV{Y}_S$}
+	+(0.8,-0.4) coordinate (G);
+	\draw (X) -- (A);
+	\draw ($(A.north) +(-0.2,0)$) -- (B);
+	\draw[-{Rays [n=8]}] ($(A.north) +(0.2,0)$) -- (Z);
+	\draw (B) -- (C);
+	\draw (B) -- (D);
+	\draw (D) -- (F);
+	\draw (C) -- (E);
+	\draw (W) to [bend right] (G);
+	\draw (G) to [bend right] (C);
+	\end{tikzpicture}
+\end{align}
+Where the first line follows from \ref{eq:ccom2} and the second line from \ref{eq:rightinverse_commute}. If $\kappa_S^\dagger$ is a Markov kernel, then $\splitter{0.1}(\mathrm{Id}_{Y_S}\otimes \kappa_S^\dagger)c$ is a g-disintegration.
 \end{proof}
 
-\paragraph{Conjecture:} This can be generalised to any $\kappa$ that is determined by its values on a countable set of points along with some notion of continuity. This seems likely to be true. In a more general setting, I think I could find a counterexample, but the converse also seems unlikely.
+In the reverse direction, suppose $\kappa$ is such that $\kappa \pi_T=\mathrm{Id}_X$; that is, $\pi_T$ is a right inverse of $\kappa$. If $\kappa \pi_S$ is not right invertible then, by definition, there is no $d$ such that $\kappa \pi_S d \pi_T = \mathrm{Id}_X$. However, if a g-disintegration of $\kappa$ exists then there is a $d$ such that $\kappa \pi_S d = \kappa$, a contradiction. Thus if $\kappa \pi_S$ is not right invertible then there is \emph{in general} no g-disintegration from $S$ to $T$.
 
-The extension of \emph{conditional independence} to g-disintegrations becomes a directional relationship. Suppose we have $\kappa:D\to X\times Y$ and a disintegration $c:D\times X\to Y$. We say $Y$ is directionally conditionally independent (DCI) of $D$ given $X$ if
+% The extension of \emph{conditional independence} to g-disintegrations becomes a directional relationship. Suppose we have $\kappa:D\to X\times Y$ and a disintegration $c:D\times X\to Y$. We say $Y$ is directionally conditionally independent (DCI) of $D$ given $X$ if
 
-Generalised disintegrations facilitate the following construction of a ``graphical model'':
+% Generalised disintegrations facilitate the following construction of a ``graphical model'':
 
-Suppose we have two causal theories, $\mathscr{T}^*$ and $\mathscr{T}$ both with signature $E\times D\rightarrowtriangle E$, and $\mathscr{T}$ is a decision randomised version of $\mathscr{T}^*$ (i.e. $\mathscr{T}=\{(\lambda\kappa,\mu)|(\kappa,\mu)\in\mathscr{T}^*\}$ for some $\lambda:D\to D$. We will construct a graphical model from $\mathscr{T}^*$ and $\mathscr{T}$ in three steps:
+% Suppose we have two causal theories, $\mathscr{T}^*$ and $\mathscr{T}$ both with signature $E\times D\rightarrowtriangle E$, and $\mathscr{T}$ is a decision randomised version of $\mathscr{T}^*$ (i.e. $\mathscr{T}=\{(\lambda\kappa,\mu)|(\kappa,\mu)\in\mathscr{T}^*\}$ for some $\lambda:D\to D$. We will construct a graphical model from $\mathscr{T}^*$ and $\mathscr{T}$ in three steps:
 
-First, we assume \emph{reproducibility} in the stronger theory $\mathscr{T}^*$. That is, for all $(\kappa,\mu)\in \mathscr{T}^*$ we suppose there exists $\gamma\in \Delta(\mathcal{D})$ such that $\gamma\kappa=\mu$. 
+% First, we assume \emph{reproducibility} in the stronger theory $\mathscr{T}^*$. That is, for all $(\kappa,\mu)\in \mathscr{T}^*$ we suppose there exists $\gamma\in \Delta(\mathcal{D})$ such that $\gamma\kappa=\mu$. 
 
-\todo{I don't think reproducibility is quite the right assumption, but it is good enough for now}
+% \todo{I don't think reproducibility is quite the right assumption, but it is good enough for now}
 
-Second, we will assume certain \emph{generalised conditional independences} hold for the stronger theory $\mathscr{T}^*$ (we have not defined these, but they are the obvious generalisation of standard conditional independence lifted to g-disintegrations). Because we're constructing a graphical model, we will assume these are a ``DAG-compatible'' set, though we are under no obligation to do so. I conjecture we can illustrate these independences graphically. Suppose we have random variables $\RV{X}:E\to X$, $\RV{Y}:E\to Y$ and $\RV{Z}:E\to Z$, and we assume we have at least the generalised CIs implied by the following diagram for all $(\kappa,\mu)\in \mathscr{T}^*$:
-\begin{align}
-\kappa=\begin{tikzpicture}
-\path (0,0) node (A) {$E$}
-	++(0,0.2) coordinate (B)
-	++ (0,0.3) node[kernel] (C) {\hspace{1em}$\kappa$}
-	+ (0,0.5) node (D) {}
-	+ (0.2,0.5) node (E) {}
-	++ (-0.2,0.5) coordinate (F)
-	+ (-0.5,0.5) node (G) {$X$}
-	++ (0.5,0.5) node[kernel] (H) {$c_{Y|X}$}
-	+ (-0.5,0.8) node (I) {$Y$}
-	++(0.5,0.8) node[kernel] (J) {$c_{Z|Y}$}
-	++(0,0.8) node (K) {$Z$};
-	\draw (A) -- (B);
-	\draw (B) -- (C);
-	\draw[-{Rays [n=8]}] (C) -- (D);
-	\draw[-{Rays [n=8]}] (C) -- (E);
-	\draw (C) -- (F);
-	\draw (F) -- (G);
-	\draw (F) -- (H);
-	\draw (H) -- (I);
-	\draw (H) -- (J);
-	\draw (J) -- (K);
-\end{tikzpicture}
-\end{align}
+% Second, we will assume certain \emph{generalised conditional independences} hold for the stronger theory $\mathscr{T}^*$ (we have not defined these, but they are the obvious generalisation of standard conditional independence lifted to g-disintegrations). Because we're constructing a graphical model, we will assume these are a ``DAG-compatible'' set, though we are under no obligation to do so. I conjecture we can illustrate these independences graphically. Suppose we have random variables $\RV{X}:E\to X$, $\RV{Y}:E\to Y$ and $\RV{Z}:E\to Z$, and we assume we have at least the generalised CIs implied by the following diagram for all $(\kappa,\mu)\in \mathscr{T}^*$:
+% \begin{align}
+% \kappa=\begin{tikzpicture}
+% \path (0,0) node (A) {$E$}
+% 	++(0,0.2) coordinate (B)
+% 	++ (0,0.3) node[kernel] (C) {\hspace{1em}$\kappa$}
+% 	+ (0,0.5) node (D) {}
+% 	+ (0.2,0.5) node (E) {}
+% 	++ (-0.2,0.5) coordinate (F)
+% 	+ (-0.5,0.5) node (G) {$X$}
+% 	++ (0.5,0.5) node[kernel] (H) {$c_{Y|X}$}
+% 	+ (-0.5,0.8) node (I) {$Y$}
+% 	++(0.5,0.8) node[kernel] (J) {$c_{Z|Y}$}
+% 	++(0,0.8) node (K) {$Z$};
+% 	\draw (A) -- (B);
+% 	\draw (B) -- (C);
+% 	\draw[-{Rays [n=8]}] (C) -- (D);
+% 	\draw[-{Rays [n=8]}] (C) -- (E);
+% 	\draw (C) -- (F);
+% 	\draw (F) -- (G);
+% 	\draw (F) -- (H);
+% 	\draw (H) -- (I);
+% 	\draw (H) -- (J);
+% 	\draw (J) -- (K);
+% \end{tikzpicture}
+% \end{align}
 
 
-The above diagram is typed incorrectly, but we can always construct a kernel $\kappa_{\RV{XYZ}}$ that maps to $X\times Y\times Z$.
+% The above diagram is typed incorrectly, but we can always construct a kernel $\kappa_{\RV{XYZ}}$ that maps to $X\times Y\times Z$.
