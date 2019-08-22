@@ -422,22 +422,16 @@ Suppose we have a right inverse $\kappa^\dagger$. By definition, for all $x\in X
 % We can see that $\int_Y Q'(dy,A) \kappa(x;dy)=\delta_x(A)$ for all $x$ and $A$. Furthermore
 % \end{proof}
 
-
-
-\begin{theorem}
-Given countable $X$ and standard measurable $Y$, $n,m\in\mathbb{N}$, $S,T\subset[m]$, $\kappa$ with label signature $\RV{X_{[n]}}\dashrightarrow \RV{Y_{[m]}}$ a g-disintegration exists from $S$ to $T$ if $\kappa\pi_S$ is right-invertible \todo[inline]{via a Markov kernel}
-\end{theorem}
-
-\begin{proof}
-Let $\kappa_S^\dagger$ be a right inverse of $\kappa\pi_S$. We will show that
+\begin{lemma}\label{th:rightleft_inverse}
+Given $\kappa:X\to \Delta(Y)$ and a right inverse $\kappa^\dagger$, we have
 
 \begin{align}
 \begin{tikzpicture}
  \path (0,0) node (A) {$\RV{X}$}
- ++(0,0.5) node[kernel] (C) {$\;\kappa \pi_S\;$}
+ ++(0,0.5) node[kernel] (C) {$\;\kappa\;$}
  ++(0.,0.5) coordinate (D)
- +(-0.5,0.5) node[kernel] (X) {$\kappa_S^\dagger$}
- +(0.5,1.2) node (Y) {$\RV{Y_S}$}
+ +(-0.5,0.5) node[kernel] (X) {$\kappa^\dagger$}
+ +(0.5,1.2) node (Y) {$\RV{Y}$}
  +(-0.5,1.2) node (Z) {$\RV{X}$};
  \draw (A)--(C);
  \draw (C) -- (D);
@@ -447,16 +441,18 @@ Let $\kappa_S^\dagger$ be a right inverse of $\kappa\pi_S$. We will show that
 \end{tikzpicture} = \begin{tikzpicture}
  \path (0,0) node (A) {$\RV{X}$}
  ++(0.,0.5) coordinate (D)
- +(0.5,0.5) node[kernel] (X) {$\;\kappa \pi_S\;$}
+ +(0.5,0.5) node[kernel] (X) {$\;\kappa\;$}
  +(-0.5,1) node (Y) {$\RV{X}$}
- +(+0.5,1) node (Z) {$\RV{Y_S}$};
+ +(+0.5,1) node (Z) {$\RV{Y}$};
  \draw (A)--(D);
  \draw (D) to [bend right] (X);
  \draw (X) -- (Z);
  \draw (D) to [bend left] (Y);
 \end{tikzpicture}\label{eq:rightinverse_commute}
 \end{align}
+\end{lemma}
 
+\begin{proof}
 Let the diagram on the left hand side be $L$ and the diagram on the right hand side be $R$.
 \begin{align}
 L(x;A\times B) &= \int_Y \int_{Y\times Y} \mathrm{Id}_Y\otimes \kappa_S^\dagger(y,y';A\times B) \delta_{(z,z)}(dy\times dy') \kappa\pi_S(x;dz)\\
@@ -473,73 +469,17 @@ R(x;A\times B) &= \int \delta_{(x,x)}(dy\times dy') \kappa\pi_S\otimes\mathrm{Id
 			   &= \kappa\pi_S(x;A)\delta_x(B)
 			   &= L
 \end{align}
+\end{proof}
+
+\begin{theorem}
+Given countable $X$ and standard measurable $Y$, $n,m\in\mathbb{N}$, $S,T\subset[m]$, $\kappa$ with label signature $\RV{X_{[n]}}\dashrightarrow \RV{Y_{[m]}}$ a g-disintegration exists from $S$ to $T$ if $\kappa\pi_S$ is right-invertible \todo[inline]{via a Markov kernel}
+\end{theorem}
+
+\begin{proof}
+
+
+
 In addition, as $R$ is a composition of Markov kernels, and hence a Markov kernel itself, $L$ must also be a Markov kernel even if $\kappa^\dagger$ is not.
-
-
-
-
-% For $D\to X\times Y$, we note that $\kappa$ is always a disintegration:
-
-% \begin{align}
-% \begin{tikzpicture}
-%  \path (0,0) node (A) {$D$}
-%  ++(0,0.35) coordinate (B)
-%  +(0,0.25) node[kernel] (C) {$\kappa$}
-%  +(0.5,0.25) coordinate (D)
-%  +(-0.15,0.8) node (X) {$X$}
-%  +(0.15,0.8) node (Y) {$Y$}
-%  +(0.5,0.8) node (Z) {$D$};
-%  \draw (A)--(B);
-%  \draw (B) -- (C);
-%  \draw (B) to [bend right] (D);
-%  \draw ($(C.north)+(-0.15,0)$) -- (X);
-%  \draw ($(C.north)+(0.15,0)$) -- (Y);
-%  \draw (D) -- (Z);
-% \end{tikzpicture}=
-% \begin{tikzpicture}
-%  \path (0,0) node (A) {$D$}
-%  ++(0,0.35) coordinate (B)
-%  +(0,0.25) node[kernel] (C) {$\kappa$}
-%  +(0.5,0.25) coordinate (D)
-%  +(-0.15,0.8) node (X) {}
-%  +(0.15,0.8) node (Y) {}
-%  ++(0.5,0.8) node[kernel] (Z) {$\kappa$}
-%  +(-0.15,0.8) node (X1) {$X$}
-%  +(0.15,0.8) node (Y1) {$Y$}
-%  +(0.5,0.8) node (D1) {$D$};
-%  \draw (A)--(B);
-%  \draw (B) -- (C);
-%  \draw (B) to [bend right] (D);
-%  \draw[-{Rays [n=8]}] ($(C.north)+(-0.15,0)$) -- (X);
-%  \draw[-{Rays [n=8]}] ($(C.north)+(0.15,0)$) -- (Y);
-%  \draw (D) -- (Z);
-%  \draw (D) to [bend right] (D1);
-%  \draw ($(Z.north)+(-0.15,0)$) -- (X1);
-%  \draw ($(Z.north)+(0.15,0)$) -- (Y1);
-% \end{tikzpicture}
-% \end{align}
-
-% Given $\kappa:D\to X\times Y$, define the \emph{canonical extension} $\kappa_{id}$:
-% \begin{align}
-% \kappa_{id} :=
-% \begin{tikzpicture}
-%  \path (0,0) node (A) {$D$}
-%  ++(0,0.35) coordinate (B)
-%  +(0,0.25) node[kernel] (C) {$\kappa$}
-%  +(0.5,0.25) coordinate (D)
-%  +(-0.15,0.8) node (X) {$X$}
-%  +(0.15,0.8) node (Y) {$Y$}
-%  +(0.5,0.8) node (Z) {$D$};
-%  \draw (A)--(B);
-%  \draw (B) -- (C);
-%  \draw (B) to [bend right] (D);
-%  \draw ($(C.north)+(-0.15,0)$) -- (X);
-%  \draw ($(C.north)+(0.15,0)$) -- (Y);
-%  \draw (D) -- (Z);
-% \end{tikzpicture}\label{eq:cextn}
-% \end{align}
-
-% The canonical extension takes a copy of the input and maps it to the output.
 
 For all $x\in X$ we have a (regular) disintegration $c_x:Y_S\to \Delta(Y_T)$ of $\kappa(x;\cdot)$ by standard measurability of $Y$. Define $c:X\otimes Y_S\to \Delta(Y_T)$ by $c:(x,y_S)\mapsto c_x(y_S)$. Clearly, $c(x,y_S)$ is a probability distribution on $Y_T$ for all $(x,y_S)\in X\otimes Y_S$. It remains to show $c(\cdot)^{-1}(B)$ is measurable for all $B\in \mathcal{B}([0,1])$. But $c(\cdot)^{-1}(B) = \cap_{x\in X} c_y(\cdot)^{-1}(B)$. The right hand side is measurable by measurability of $c_y(\cdot)^{-1}(B)$ countability of $X$, so $c$ is a Markov kernel. 
 

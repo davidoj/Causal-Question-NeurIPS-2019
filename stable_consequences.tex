@@ -1,111 +1,472 @@
 %!TEX root = main.tex
 
-\section{Reproducibility}
+\section{Recoverability}
 
-A natural assumption suggested by the notion of a CSDP is that of \emph{reproducibility} - that a causal theory $\mathscr{T}:E\times D\rightarrowtriangle E$ permits some decision function that reproduces the distribution of the observed data. Without loss of generality, we assume that for every $(\kappa,\mu)\in \mathscr{T}$ there exists $\gamma_{\kappa,\mu}\in \Delta(\mathcal{D})$ such that
+A natural assumption suggested by the notion of a CSDP is that of \emph{recoverability} - that a causal theory $\mathscr{T}:E\times D\rightarrowtriangle E$ permits some decision function that reproduces the distribution of the observed data. That is, we assume that for every $(\kappa_\theta,\mu_\theta):=\theta\in \mathscr{T}$ there exists $\gamma_{\theta}\in \Delta(\mathcal{D})$ such that
 \begin{align}
-	\gamma_{\kappa,\mu}\kappa = \mu
+	\gamma_{\theta}\kappa_\theta = \mu_\theta
 \end{align}
 
-A common causal assumption is \emph{variable forcing}: suppose that there exists a variable $\RV{X}:E\to D$ such that, given a decision $y \in D$, the resulting distribution of $\RV{X}$ is $\delta_y$. That is, for all $y\in D$, $\delta_y\kappa F_{\RV{X}} = \delta_y$; this is equivalent to the claim that the Markov kernel $F_{\RV{X}}$ is a right inverse of $\kappa$, which we will subsequently denote $\kappa^\dagger$. This assumption is found explicitly in the Bayesian network literature as ``hard interventions'' and while no such explicit assumption is made in the Potential Outcomes literature, it is typical to posit counterfactual worlds predicated on certain variables being set to certain values.
+Suppose also that we have some $\kappa^*$ that, for all $\theta \in \mathscr{T}$, is a Bayesian inversion of $\gamma_\theta$ and $\kappa_\theta$; that is:
 
-Given these two assumptions, we have
 \begin{align}
-	\begin{tikzpicture}[scale=0.8]
-		\path (0,0) node[dist] (A) {$\mu$}
-		++(0,1) coordinate (C)
-		+(1,2) node (F) {$*$}
-		++(-1,1) node[kernel] (E) {$\kappa^\dagger$}
-		++(0,1) coordinate (G)
-		+(1,0.5) node[kernel] (D) {$\kappa$}
-		+(0,1) coordinate (H)
-		+(1,1) coordinate (I);
-		\draw (A) -- (C);
-		\draw (C) to [bend right] (F.center);
-		\draw (C) to [bend left] (E);
-		\draw (E) -- (G);
-		\draw (G) -- (H);
-		\draw (G) to [bend right] (D);
-		\draw (D) to (I);
-	\end{tikzpicture}&=
-		\begin{tikzpicture}[scale=0.8]
-		\path (0,0) node[dist] (A) {$\mu$}
-		++(0,1) node[kernel] (E) {$\kappa^\dagger$}
-		++(0,0.5) coordinate (G)
-		+(1,0.5) node[kernel] (D) {$\kappa$}
-		+(-1,1) coordinate (H)
-		+(1,1) coordinate (I);
-		\draw (A) -- (E);
-		\draw (E) -- (G);
-		\draw (G) to [bend left] (H);
-		\draw (G) to [bend right] (D);
-		\draw (D) to (I);
-	\end{tikzpicture}\\
-	&=
-		\begin{tikzpicture}[scale=0.8]
-		\path (0,0) node[dist] (A) {$\mu$}
-		++(0,1) coordinate (G)
-		+(1,1) node[kernel] (B) {$\kappa^\dagger$}
-		+(-1,1) node[kernel] (C) {$\kappa^\dagger$}
-		+(1,2) node[kernel] (D) {$\kappa$}
-		+(-1,3) coordinate (H)
-		+(1,3) coordinate (I);
-		\draw (A) -- (G);
-		\draw (G) to [bend left] (C);
-		\draw (G) to [bend right] (B);
-		\draw (C) to (H);
-		\draw (B) to (D);
-		\draw (D) to (I);
-	\end{tikzpicture}\\
-	&=
-	\begin{tikzpicture}[scale=0.8]
-		\path (0,0) node[dist] (A) {$\mu$}
-		++(0,1) coordinate (B) 
-		+(1,2) coordinate (C)
-		+(-1,1) node[kernel] (D) {$\kappa^\dagger$}
-		+(-1,2) coordinate (E);
-		\draw (A) -- (B);
-		\draw (B) to [bend right] (C);
-		\draw (B) to [bend left] (D);
-		\draw (D) -- (E);
-	\end{tikzpicture}\\
-	&:= \mu^{\dagger|}
+\begin{tikzpicture}
+	\path (0,0) node[dist] (gam) {$\gamma_\theta$}
+	++(0,0.5) coordinate (copy0)
+	+(0.5,0.5) node[kernel] (kap) {$\kappa_\theta$}
+	+(-0.5,0.5) coordinate (ph)
+	+(0.5,1) node (E) {$\RV{E}$}
+	+(-0.5,1) node (D) {$\RV{D}$};
+	\draw (gam) -- (copy0);
+	\draw (copy0) to [bend right] (kap);
+	\draw (copy0) to [bend left] (ph);
+	\draw (kap) -- (E);
+	\draw (ph) -- (D); 
+\end{tikzpicture}= \begin{tikzpicture}
+	\path (0,0) node[dist] (gam) {$\gamma_\theta$}
+	++(0,0.5) node[kernel] (kap) {$\kappa_\theta$}
+	++(0,0.5) coordinate (copy0)
+	+(-0.5,0.5) node[kernel] (kapdag) {$\kappa^*$}
+	+(0.5,0.5) coordinate (ph)
+	+(0.5,1) node (E) {$\RV{E}$}
+	+(-0.5,1) node (D) {$\RV{D}$};
+	\draw (gam) -- (kap);
+	\draw (kap) -- (copy0);
+	\draw (copy0) to [bend left] (kapdag);
+	\draw (copy0) to [bend right] (ph);
+	\draw (kapdag) -- (D);
+	\draw (ph) -- (E); 
+\end{tikzpicture} \label{eq:kappa_BI}
 \end{align}
 
-Here we recall the definition of a conditional probability: a conditional probability \inkernel{\RV{Y}|\RV{X}}{}{} with respect to $\nu\in \Delta(\mathcal{E})$ and RVs $\RV{X}:E\to X$, $\RV{Y}:E\to Y$ is any Markov kernel $X\to \Delta(\mathcal{Y})$ such that
+A sufficient condition for the existence of such a $\kappa^*$ is the assumption that decisions correspond to \emph{variable setting} - that is, there is some variable $\RV{X}:E\to X$ such that for all $a\in D$, $\theta\in\mathscr{T}$ we have $\delta_a \kappa_\theta F_{\RV{X}} = \delta_a$ (such an assumption arises in graphical models as hard interventions, and in potential outcomes as ``potential-outcome identifiers''). Indeed $F_{\RV{X}}$ is in this case a candidate for $\kappa^*$. It is not necessary that $\kappa^*$ be deterministic, however - suppose every $\kappa$ ignores $D$. Then choose $\gamma_\theta=\gamma$ for arbitrary $\gamma\in \Delta(\mathcal{D})$ and it can be verified that $\kappa^*:b\mapsto \gamma$ satisfies \ref{eq:kappa_BI}. 
+
+I believe a weaker sufficient condition for the existence of a universal $\kappa^*$ is that every $\kappa_\theta$ factorises as $\kappa_\theta = h j_\theta$ for some fixed $h$, but I have not yet shown this.
+
+We will proceed somewhat rashly: suppose that by defining $\gamma:\mathscr{T}\to \Delta(\mathcal{D})$, $\mu:\mathscr{T}\to \Delta(\mathcal{E})$ and $\kappa:\mathscr{T}\times D\to \Delta(\mathcal{E}$ by $\gamma:\theta\to \gamma_\theta$, $\mu:\theta\to \mu_\theta$ and $\kappa:(\theta,d)\to \kappa_\theta(d;\cdot)$ that all resulting objects are Markov kernels, and that $\mathscr{T}$ is a standard measurable space.
+
+By previous assumptions, we have the following properties:
 \begin{align}
-	\begin{tikzpicture}[scale=0.7]
-	\path (0,0) node[dist,inner sep=2pt] (A) {$\nu$}
-	+ (0.5,1) node (B) {$X$}
-	+ (-0.5,1) node (C) {$Y$};
-	\draw (B) -- (B|- A.north);
-	\draw (C) -- (C|- A.north);
-	\end{tikzpicture} = 
-	\begin{tikzpicture}[scale=0.7]
-	\path (0,0) node[dist,inner sep=2pt] (A) {$\nu$}
-	+ (-0.5,1) node (C) {$*$}
-	++ (0.5,1) coordinate (B)
-	+ (-1,1) node[kernel] (D) {$\RV{Y}|\RV{X}$}
-	+(0,2) node (E) {$X$}
-	+(-1,2) node (F) {$Y$};
-	\draw (B) -- (B|- A.north);
-	\draw (C.center) -- (C|- A.north);
-	\draw (B) -- (E);
-	\draw (B) to [bend left] (D);
-	\draw (D) -- (F);
-	\end{tikzpicture}
+\begin{tikzpicture}
+	\path (0,0) coordinate (A)
+	++ (0,0.5) node[kernel] (B) {$\mu$}
+	++ (0,0.5) coordinate (C);
+	\draw (A) -- (B);
+	\draw (B) -- (C);
+\end{tikzpicture}
+&=
+\begin{tikzpicture}
+	\path (0,0) coordinate (A)
+	++ (0,0.25) coordinate (copy0)
+	++(0,0.5) node[kernel] (gam) {$\gamma$}
+	+ (0.3,0) coordinate (B)
+	++(0,0.5) node[kernel] (kap) {$\kappa$}
+	++(0,0.5) coordinate (C);
+	\draw (A) -- (copy0);
+	\draw (copy0) to [bend right] (B);
+	\draw (copy0) -- (gam);
+	\draw (B) to [bend right] (kap.south);
+	\draw (gam) -- (kap);
+	\draw (kap) -- (C);
+\end{tikzpicture}\label{eq:recoverability}\\
+\begin{tikzpicture}
+	\path (0,0) coordinate (A)
+	++ (0,0.25) coordinate (copy0)
+	++ (0,0.5) node[kernel] (gam) {$\gamma$}
+	++ (0,0.5) coordinate (copy1)
+	+ (-0.5,0.5) node[kernel] (kap) {$\kappa$}
+	+ (0.5,0.5) coordinate (B)
+	+ (-0.5,1) node (E) {$\RV{E}$}
+	+ (0.5,1) node (D) {$\RV{D}$};
+	\draw (A) -- (copy0);
+	\draw (copy0) -- (gam);
+	\draw (copy0) to [bend left] (kap);
+	\draw (gam) -- (copy1);
+	\draw (copy1) to [bend right] (B);
+	\draw (copy1) to [bend left] (kap);
+	\draw (kap) to (E);
+	\draw (B) to (D);
+\end{tikzpicture}
+&=
+\begin{tikzpicture}
+	\path (0,0) coordinate (A)
+	++ (0,0.25) coordinate (copy0)
+	++ (0,0.5) node[kernel] (gam) {$\gamma$}
+	++ (0,0.5) node[kernel] (kap) {$\kappa$}
+	++ (0,0.5) coordinate (copy1)
+	+ (0.5,0.5) node[kernel] (kapdag) {$\kappa^{\dagger}$}
+	+ (-0.5,0.5) coordinate (B)
+	+ (-0.5,1) node (E) {$\RV{E}$}
+	+ (0.5,1) node (D) {$\RV{D}$};
+	\draw (A) -- (copy0);
+	\draw (copy0) -- (gam);
+	\draw (copy0) to [bend left=40] (kap);
+	\draw (gam) -- (kap);
+	\draw (kap) -- (copy1);
+	\draw (copy1) to [bend left] (B);
+	\draw (copy1) to [bend right] (kapdag);
+	\draw (kapdag) to (D);
+	\draw (B) to (E);
+\end{tikzpicture} \label{eq:general_kapdag}\\
+&= 
+\begin{tikzpicture}
+	\path (0,0) coordinate (A)
+	++ (0,0.25) coordinate (copy0)
+	++ (0,0.5) node[kernel] (mu) {$\mu$}
+	++ (0,0.5) coordinate (copy1)
+	+ (0.5,0.5) node[kernel] (kapdag) {$\kappa^{\dagger}$}
+	+ (-0.5,0.5) coordinate (B)
+	+ (-0.5,1) node (E) {$\RV{E}$}
+	+ (0.5,1) node (D) {$\RV{D}$};
+	\draw (A) -- (copy0);
+	\draw (copy0) -- (mu);
+	\draw (mu) -- (copy1);
+	\draw (copy1) to [bend left] (B);
+	\draw (copy1) to [bend right] (kapdag);
+	\draw (kapdag) to (D);
+	\draw (B) to (E);
+\end{tikzpicture}\label{eq:gamkap_2_mu}
+\end{align}
+From \ref{eq:general_kapdag} we also have
+
+\begin{align}
+\begin{tikzpicture}
+	\path (0,0) coordinate (A)
+	++ (0,0.25) coordinate (copy0)
+	++ (0,0.5) node[kernel] (gam) {$\gamma$}
+	++ (0,0.5) coordinate (copy1)
+	+ (-0.5,0.5) node[kernel] (kap) {$\kappa$}
+	+ (0.5,0.5) coordinate (B)
+	+ (-0.5,1.1) node (E) {}
+	+ (0.5,1.1) node (D) {$\RV{D}$};
+	\draw (A) -- (copy0);
+	\draw (copy0) -- (gam);
+	\draw (copy0) to [bend left] (kap);
+	\draw (gam) -- (copy1);
+	\draw (copy1) to [bend right] (B);
+	\draw (copy1) to [bend left] (kap);
+	\draw[-{Rays [n=8]}] (kap) to (E);
+	\draw (B) to (D);
+\end{tikzpicture}
+&=
+\begin{tikzpicture}
+	\path (0,0) coordinate (A)
+	++ (0,0.25) coordinate (copy0)
+	++ (0,0.5) node[kernel] (gam) {$\gamma$}
+	++ (0,0.5) node[kernel] (kap) {$\kappa$}
+	++ (0,0.5) coordinate (copy1)
+	+ (0.5,0.5) node[kernel] (kapdag) {$\kappa^{\dagger}$}
+	+ (-0.5,0.5) coordinate (B)
+	+ (-0.5,1.1) node (E) {}
+	+ (0.5,1.1) node (D) {$\RV{D}$};
+	\draw (A) -- (copy0);
+	\draw (copy0) -- (gam);
+	\draw (copy0) to [bend left=40] (kap);
+	\draw (gam) -- (kap);
+	\draw (kap) -- (copy1);
+	\draw (copy1) to [bend left] (B);
+	\draw (copy1) to [bend right] (kapdag);
+	\draw (kapdag) to (D);
+	\draw[-{Rays [n=8]}] (B) to (E);
+\end{tikzpicture} \\
+\begin{tikzpicture}
+	\path (0,0) coordinate (A)
+	++ (0,0.25) coordinate (copy0)
+	++ (0,0.5) node[kernel] (gam) {$\gamma$}
+	+ (0,0.5) node (D) {$\RV{D}$};
+	\draw (A) -- (copy0);
+	\draw (copy0) -- (gam);
+	\draw (gam) -- (D);
+\end{tikzpicture}
+&=
+\begin{tikzpicture}
+	\path (0,0) coordinate (A)
+	++ (0,0.5) node[kernel] (mu) {$\mu$}
+	+ (0,0.5) node[kernel] (kapdag) {$\kappa^{\dagger}$}
+	+ (0,1.1) node (D) {$\RV{D}$};
+	\draw (A) -- (mu);
+	\draw (mu) --  (kapdag);
+	\draw (kapdag) to (D);
+\end{tikzpicture} \label{eq:kappa_cancel}
+\end{align}
+Where \ref{eq:kappa_cancel} follows from \ref{eq:recoverability}.
+
+Now, suppose we have a \emph{left-inverse} of $\mu$, denoted $^\dagger\mu$. This means that from observations $\RV{E}$ we can distinguish any two states $\theta$ and $\theta'$ unless $\mu_\theta=\mu_{\theta'}$; this could be true, for example, if we have an infinite sequence of samples.
+
+A corollary of Lemma \ref{th:rightleft_inverse} is that left inverses have the following property:
+
+\begin{align}
+\begin{tikzpicture}
+ \path (0,0) node (A) {}
+ ++(0,0.5) node[kernel] (C) {$\;^\dagger\mu\;$}
+ ++(0.,0.5) coordinate (D)
+ +(-0.5,0.5) node[kernel] (X) {$\mu$}
+ +(0.5,1.2) node (Y) {}
+ +(-0.5,1.2) node (Z) {};
+ \draw (A)--(C);
+ \draw (C) -- (D);
+ \draw (D) to [bend left] (X);
+ \draw (X) -- (Z);
+ \draw (D) to [bend right] (Y);
+\end{tikzpicture} = \begin{tikzpicture}
+ \path (0,0) node (A) {}
+ ++(0.,0.5) coordinate (D)
+ +(0.5,0.5) node[kernel] (X) {$\;^\dagger\mu\;$}
+ +(-0.5,1) node (Y) {}
+ +(+0.5,1) node (Z) {};
+ \draw (A)--(D);
+ \draw (D) to [bend right] (X);
+ \draw (X) -- (Z);
+ \draw (D) to [bend left] (Y);
+\end{tikzpicture}\label{eq:rightinverse_commute}
 \end{align}
 
-Thus we can see that $\kappa$ is a conditional probability \inkernel{\RV{E}|\RV{D}}{}{} with respect to $\mu^{\dagger|}$ the RVs $\RV{D}:E\times D\to D$ and $\RV{E}:E\times D\to E$ given by the respective projections.
+We then have
 
-This result is in line with two familiar cases from the causal literature: an \emph{ignorable} treatment in potential outcomes or a graphical model with no back-door paths between $\RV{D}$ and $\RV{E}$ both imply that the theory's respective version of ``causal effect'' can be determined directly from the conditional probability. This suggests that reproducibility is in fact quite a strong condition, as it is the exception rather than the norm where causal effects can be determined directly from conditional probabilities. There are two important caveats here, however: firstly we've assumed $\kappa$ has a known right-inverse $\kappa^\dagger$, and secondly this result only allows $\kappa$ to be determined $\mu^{\dagger|}$-almost surely.
+\begin{align}
+\begin{tikzpicture}
+ \path (0,0) node (A) {}
+ ++(0,0.3) coordinate (copy0)
+ ++(0,0.5) node[kernel] (mu) {$\mu$}
+ ++(0,0.5) node[kernel] (kapdag) {$\kappa^*$}
+ ++(0,0.7) node[kernel] (kap) {$\kappa$}
+ ++(0,0.5) node (E) {$\RV{E}$};
+ \draw (A)--(mu) -- (kapdag) -- (kap) -- (E);
+ \draw (copy0) to [bend right = 45] (kap);
+\end{tikzpicture} &=
+\begin{tikzpicture}
+\path (0,0) node (A) {}
+++ (0,0.5) node[kernel] (mu) {$\mu$}
+++(0,0.5) node (E) {$\RV{E}$};
+\draw (A) -- (mu) --(E);
+\end{tikzpicture}\\
+&= \begin{tikzpicture}
+\path (0,0) node (A) {}
+++ (0,0.5) node[kernel] (mu0) {$\mu$}
+++ (0,0.5) node[kernel] (dmu) {$^\dagger\mu$}
+++(0,0.5) node[kernel] (mu1) {$\mu$}
+++(0,0.5) node (E) {$\RV{E}$};
+\draw (A) -- (mu0) -- (dmu) -- (mu1) --(E);
+\end{tikzpicture}\\
+&= \begin{tikzpicture}
+\path (0,0) node (A) {}
+++ (0,0.5) node[kernel] (mu0) {$\mu$}
+++ (0,0.5) node[kernel] (dmu) {$^\dagger\mu$}
+++ (0,0.5) coordinate (copy0)
+++(0,0.5) node[kernel] (mu1) {$\mu$}
+++(0,0.5) node[kernel] (kapd) {$\kappa^*$}
+++(0,0.5) node[kernel] (kap) {$\kappa$}
+++(0,0.5) node (E) {$\RV{E}$};
+\draw (A) -- (mu0) -- (dmu) -- (mu1) --(kapd) -- (kap) -- (E);
+\draw (copy0) to [bend right = 45] (kap);
+\end{tikzpicture}\\
+\begin{tikzpicture}
+ \path (0,0) node (A) {}
+ ++(0,0.3) coordinate (copy0)
+ ++(0,0.5) node[kernel] (mu) {$\mu$}
+ ++(0,0.5) node[kernel] (kapdag) {$\kappa^*$}
+ ++(0,0.7) node[kernel] (kap) {$\kappa$}
+ ++(0,0.5) node (E) {$\RV{E}$};
+ \draw (A)--(mu) -- (kapdag) -- (kap) -- (E);
+ \draw (copy0) to [bend right = 45] (kap);
+\end{tikzpicture}&=
+\begin{tikzpicture}
+\path (0,0) node (A) {}
+++ (0,0.5) node[kernel] (mu0) {$\mu$}
+++ (0,0.5) coordinate (copy0)
++ (0.5,0.5) node[kernel] (dmu) {$^\dagger\mu$}
+++(0,0.5) node[kernel] (kapd) {$\kappa^*$}
+++(0,0.5) node[kernel] (kap) {$\kappa$}
+++(0,0.5) node (E) {$\RV{E}$};
+\draw (A) -- (mu0) -- (kapd) -- (kap) -- (E);
+\draw (copy0) to [bend right] (dmu) (dmu) -- (kap);
+\end{tikzpicture}\label{eq:skipmu}
+\end{align}
 
-\todo[inline]{A notion of ``approximate right-invertibility'' would be very helpful here. Something like $\kappa$ is approximately right invertible if there is some $\tilde{\kappa}^\dagger$ such that $\gamma \kappa\tilde{\kappa}^\dagger$ is always ``close'' to $\gamma$. Intuitively, a consequence that is \emph{not} approximately right invertible has a channel capacity of 0, and \textbf{Conjecture:} a set of kernels that do not collectively admit some approximate right-inverse do not admit preferences between decisions under the minimax rule}
+% From \ref{eq:gamkap_2_mu} and \ref{eq:kappa_cancel} we have
 
-\section{More Complex Cases}
+% \begin{align}
+% \begin{tikzpicture}
+% 	\path (0,0) coordinate (A)
+% 	+  (0,0.15) coordinate (copy0)
+% 	++ (0,0.5) node[kernel] (mu) {$\mu$}
+% 	++ (0,0.5) node[kernel] (kapdag) {$\kappa^{\dagger}$}
+% 	++ (0,0.5) coordinate (copy1)
+% 	+  (0.6,0.5) node[kernel] (kap) {$\kappa$}
+% 	+  (-0.5,0.5) coordinate (B) 
+% 	+  (0.6	,1) node (E) {$\RV{E}$}
+% 	+  (-0.5,1) node (D) {$\RV{D}$};
+% 	\draw (A) -- (mu);
+% 	\draw (mu) -- (kapdag);
+% 	\draw (kapdag) -- (copy1);
+% 	\draw (copy1) to [bend left] (B);
+% 	\draw (copy1) to [bend right]  (kap);
+% 	\draw (kap) to (E);
+% 	\draw (B) to (D);
+% 	\draw (copy0) to [bend right] (kap);
+% \end{tikzpicture} &= 
+% \begin{tikzpicture}
+% 	\path (0,0) coordinate (A)
+% 	++ (0,0.25) coordinate (copy0)
+% 	++ (0,0.5) node[kernel] (gam) {$\gamma$}
+% 	++ (0,0.5) coordinate (copy1)
+% 	+ (0.5,0.5) node[kernel] (kap) {$\kappa$}
+% 	+ (-0.5,0.5) coordinate (B)
+% 	+ (0.5,1) node (E) {$\RV{E}$}
+% 	+ (-0.5,1) node (D) {$\RV{D}$};
+% 	\draw (A) -- (copy0);
+% 	\draw (copy0) -- (gam);
+% 	\draw (copy0) to [bend right] (kap);
+% 	\draw (gam) -- (copy1);
+% 	\draw (copy1) to [bend left] (B);
+% 	\draw (copy1) to [bend right] (kap);
+% 	\draw (kap) to (E);
+% 	\draw (B) to (D);
+% \end{tikzpicture}
+% \end{align}
 
-Suppose we retain the right invertibility of $\kappa$ via some known $\kappa^\dagger$, which is consistent with (for example) hard interventions and counterfactual variable forcing. A more common way that there fails to be a memoryless function $J_\theta$ such that $J_\theta\kappa=\mu$ arises from the fact that we may often regard the consequence as dynamic. Assign an index $\theta\in \Theta$ to each causal state, which we now denote $(\kappa_\theta,\mu_\theta)\in \mathscr{T}$ and let $\kappa^\Theta:\Theta\times D\to \Delta(\mathcal{E})$ be defined by $\kappa^\Theta:(\theta,y;A)\mapsto \kappa_\theta(y;A)$ which we will assume is also a Markov kernel (noting that this intoduces additional restrictions on $\mathscr{T}$ in the general case). We may assume, then, for some state-dependent generating distribution $\xi_\theta\in \Delta(\Theta)$ and some state dependent ``passive decision map'' $K_\theta:\Theta\to \Delta(\mathcal{D})$, we have $\mu_\theta = \xi_\theta\splitter{0.1}(I_{(\Theta)}\otimes K_\theta)\kappa^\Theta$. 
+% Note that, given some prior $\xi\in \Delta(\mathscr{T})$, the ``Bayes result'' of invoking some decision rule $J:E\to \Delta(\mathcal{D})$ is given by
 
-\indist{a}{b}
+% \begin{align}
+% \begin{tikzpicture}
+%  \path (0,0) node[dist] (A) {$\xi$}
+%  ++(0,0.3) coordinate (copy0)
+%  ++(0,0.5) node[kernel] (mu) {$\mu$}
+%  ++(0,0.5) node[kernel] (kapdag) {$J$}
+%  ++(0,0.7) node[kernel] (kap) {$\kappa$}
+%  ++(0,0.5) node (E) {$\RV{E}$};
+%  \draw (A)--(mu) -- (kapdag) -- (kap) -- (E);
+%  \draw (copy0) to [bend right = 45] (kap);
+% \end{tikzpicture}
+% \end{align}
 
-\inkernel{ab}{a}{b}
+A key question is does \ref{eq:skipmu} imply anything non-trivial regarding the following ``identifiability'' condition for arbitrary $J:E\to \Delta(\mathcal{D})$:
+
+\begin{align}
+\begin{tikzpicture}
+ \path (0,0) node (A) {}
+ ++(0,0.3) coordinate (copy0)
+ ++(0,0.5) node[kernel] (mu) {$\mu$}
+ ++(0,0.5) node[kernel] (kapdag) {$J$}
+ ++(0,0.7) node[kernel] (kap) {$\kappa$}
+ ++(0,0.5) node (E) {$\RV{E}$};
+ \draw (A)--(mu) -- (kapdag) -- (kap) -- (E);
+ \draw (copy0) to [bend right = 45] (kap);
+\end{tikzpicture} =
+\begin{tikzpicture}
+\path (0,0) node (xi) {}
+++ (0,0.5) node[kernel] (mu0) {$\mu$}
+++ (0,0.5) coordinate (copy0)
++ (0.5,0.5) node[kernel] (dmu) {$^\dagger\mu$}
+++(0,0.5) node[kernel] (kapd) {$J$}
+++(0,0.5) node[kernel] (kap) {$\kappa$}
+++(0,0.5) node (E) {$\RV{E}$};
+\draw (xi) -- (mu0) -- (kapd) -- (kap) -- (E);
+\draw (copy0) to [bend right] (dmu) (dmu) -- (kap);
+\end{tikzpicture}\label{eq:identifiability}
+\end{align}
+
+I call this identifiability because the left hand side is the kernel $\mathscr{T}\to \Delta(\mathcal{E})$ that computes the ``result'' of a given state and decision function, while the right hand side implies it is possible to find a $J$ that minimises the expected utility $\kappa u$ independent of the causal state (this is because we see one of the input wires and control the other).
+
+We may be able to get some insight into this by asking, given matrices $A,B,C,D$ of appropriate shapes, if $BA=CA$ when does $BDA=CDA$?
+
+% Given these two assumptions, we have
+% \begin{align}
+% 	\begin{tikzpicture}[scale=0.8]
+% 		\path (0,0) node[dist] (A) {$\mu$}
+% 		++(0,1) coordinate (C)
+% 		+(1,2) node (F) {$*$}
+% 		++(-1,1) node[kernel] (E) {$\kappa^*$}
+% 		++(0,1) coordinate (G)
+% 		+(1,0.5) node[kernel] (D) {$\kappa$}
+% 		+(0,1) coordinate (H)
+% 		+(1,1) coordinate (I);
+% 		\draw (A) -- (C);
+% 		\draw (C) to [bend right] (F.center);
+% 		\draw (C) to [bend left] (E);
+% 		\draw (E) -- (G);
+% 		\draw (G) -- (H);
+% 		\draw (G) to [bend right] (D);
+% 		\draw (D) to (I);
+% 	\end{tikzpicture}&=
+% 		\begin{tikzpicture}[scale=0.8]
+% 		\path (0,0) node[dist] (A) {$\mu$}
+% 		++(0,1) node[kernel] (E) {$\kappa^*$}
+% 		++(0,0.5) coordinate (G)
+% 		+(1,0.5) node[kernel] (D) {$\kappa$}
+% 		+(-1,1) coordinate (H)
+% 		+(1,1) coordinate (I);
+% 		\draw (A) -- (E);
+% 		\draw (E) -- (G);
+% 		\draw (G) to [bend left] (H);
+% 		\draw (G) to [bend right] (D);
+% 		\draw (D) to (I);
+% 	\end{tikzpicture}\\
+% 	&=
+% 		\begin{tikzpicture}[scale=0.8]
+% 		\path (0,0) node[dist] (A) {$\mu$}
+% 		++(0,1) coordinate (G)
+% 		+(1,1) node[kernel] (B) {$\kappa^*$}
+% 		+(-1,1) node[kernel] (C) {$\kappa^*$}
+% 		+(1,2) node[kernel] (D) {$\kappa$}
+% 		+(-1,3) coordinate (H)
+% 		+(1,3) coordinate (I);
+% 		\draw (A) -- (G);
+% 		\draw (G) to [bend left] (C);
+% 		\draw (G) to [bend right] (B);
+% 		\draw (C) to (H);
+% 		\draw (B) to (D);
+% 		\draw (D) to (I);
+% 	\end{tikzpicture}\\
+% 	&=
+% 	\begin{tikzpicture}[scale=0.8]
+% 		\path (0,0) node[dist] (A) {$\mu$}
+% 		++(0,1) coordinate (B) 
+% 		+(1,2) coordinate (C)
+% 		+(-1,1) node[kernel] (D) {$\kappa^*$}
+% 		+(-1,2) coordinate (E);
+% 		\draw (A) -- (B);
+% 		\draw (B) to [bend right] (C);
+% 		\draw (B) to [bend left] (D);
+% 		\draw (D) -- (E);
+% 	\end{tikzpicture}\\
+% 	&:= \mu^{\dagger|}
+% \end{align}
+
+% Here we recall the definition of a conditional probability: a conditional probability \inkernel{\RV{Y}|\RV{X}}{}{} with respect to $\nu\in \Delta(\mathcal{E})$ and RVs $\RV{X}:E\to X$, $\RV{Y}:E\to Y$ is any Markov kernel $X\to \Delta(\mathcal{Y})$ such that
+% \begin{align}
+% 	\begin{tikzpicture}[scale=0.7]
+% 	\path (0,0) node[dist,inner sep=2pt] (A) {$\nu$}
+% 	+ (0.5,1) node (B) {$X$}
+% 	+ (-0.5,1) node (C) {$Y$};
+% 	\draw (B) -- (B|- A.north);
+% 	\draw (C) -- (C|- A.north);
+% 	\end{tikzpicture} = 
+% 	\begin{tikzpicture}[scale=0.7]
+% 	\path (0,0) node[dist,inner sep=2pt] (A) {$\nu$}
+% 	+ (-0.5,1) node (C) {$*$}
+% 	++ (0.5,1) coordinate (B)
+% 	+ (-1,1) node[kernel] (D) {$\RV{Y}|\RV{X}$}
+% 	+(0,2) node (E) {$X$}
+% 	+(-1,2) node (F) {$Y$};
+% 	\draw (B) -- (B|- A.north);
+% 	\draw (C.center) -- (C|- A.north);
+% 	\draw (B) -- (E);
+% 	\draw (B) to [bend left] (D);
+% 	\draw (D) -- (F);
+% 	\end{tikzpicture}
+% \end{align}
+
+% Thus we can see that $\kappa$ is a conditional probability \inkernel{\RV{E}|\RV{D}}{}{} with respect to $\mu^{\dagger|}$ the RVs $\RV{D}:E\times D\to D$ and $\RV{E}:E\times D\to E$ given by the respective projections.
+
+% This result is in line with two familiar cases from the causal literature: an \emph{ignorable} treatment in potential outcomes or a graphical model with no back-door paths between $\RV{D}$ and $\RV{E}$ both imply that the theory's respective version of ``causal effect'' can be determined directly from the conditional probability. This suggests that reproducibility is in fact quite a strong condition, as it is the exception rather than the norm where causal effects can be determined directly from conditional probabilities. There are two important caveats here, however: firstly we've assumed $\kappa$ has a known right-inverse $\kappa^*$, and secondly this result only allows $\kappa$ to be determined $\mu^{\dagger|}$-almost surely.
+
+% \todo[inline]{A notion of ``approximate right-invertibility'' would be very helpful here. Something like $\kappa$ is approximately right invertible if there is some $\tilde{\kappa}^\dagger$ such that $\gamma \kappa\tilde{\kappa}^\dagger$ is always ``close'' to $\gamma$. Intuitively, a consequence that is \emph{not} approximately right invertible has a channel capacity of 0, and \textbf{Conjecture:} a set of kernels that do not collectively admit some approximate right-inverse do not admit preferences between decisions under the minimax rule}
+
+% \section{More Complex Cases}
+
+% Suppose we retain the right invertibility of $\kappa$ via some known $\kappa^*$, which is consistent with (for example) hard interventions and counterfactual variable forcing. A more common way that there fails to be a memoryless function $J_\theta$ such that $J_\theta\kappa=\mu$ arises from the fact that we may often regard the consequence as dynamic. Assign an index $\theta\in \Theta$ to each causal state, which we now denote $(\kappa_\theta,\mu_\theta)\in \mathscr{T}$ and let $\kappa^\Theta:\Theta\times D\to \Delta(\mathcal{E})$ be defined by $\kappa^\Theta:(\theta,y;A)\mapsto \kappa_\theta(y;A)$ which we will assume is also a Markov kernel (noting that this intoduces additional restrictions on $\mathscr{T}$ in the general case). We may assume, then, for some state-dependent generating distribution $\xi_\theta\in \Delta(\Theta)$ and some state dependent ``passive decision map'' $K_\theta:\Theta\to \Delta(\mathcal{D})$, we have $\mu_\theta = \xi_\theta\splitter{0.1}(I_{(\Theta)}\otimes K_\theta)\kappa^\Theta$. 
+
+% \indist{a}{b}
+
+% \inkernel{ab}{a}{b}
