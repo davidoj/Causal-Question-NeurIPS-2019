@@ -191,7 +191,7 @@ From \ref{eq:general_kapdag} we also have
 \end{align}
 Where \ref{eq:kappa_cancel} follows from \ref{eq:recoverability}.
 
-Suppose we have some $\rho:E\to \Delta(\mathcal{G})$ that is deterministic such that $\mu\rho$ and $\kappa\rho$ are both deterministic. $\mu\rho$ therefore has a left inverse $^\dagger(\mu\rho):G\to \Delta(\mathcal{E})$.
+Suppose we have some $\rho:E\to \Delta(\mathcal{G})$ that is deterministic such that $\mu\rho$ and $\kappa\rho$ are also deterministic. Both $\rho$ and $\mu\rho$ therefore have left inverses $^\dagger(\mu\rho):G\to \Delta(\mathscr{T})$ and $^\dagger\rho:G\to \Delta(\mathcal{E})$.
 
 \todo[inline]{$\rho$ is ``something like'' a sufficient statistic.}
 
@@ -226,60 +226,64 @@ A corollary of Lemma \ref{th:rightleft_inverse} is that left inverses have the f
 We then have
 
 \begin{align}
-\begin{tikzpicture}
-	\path (0,0) coordinate (A)
-	++ (0.3,0) coordinate (copy0)
-	++ (0.5,0) node[kernel] (gam) {$\gamma$}
-	++ (0.5,0) coordinate (copy1)
-	+ (0.5,-0.5) node[kernel] (kap) {$\kappa\rho$}
-	+ (0.5,0.5) coordinate (B)
-	+ (1,-0.5) node (E) {}
-	+ (1,0.5) node (D) {}
-	+(1,1) node (T) {};
-	\draw (A) -- (copy0);
-	\draw (copy0) -- (gam);
-	\draw (copy0) to [bend right] (kap);
-	\draw (gam) -- (copy1);
-	\draw (copy1) to [bend left] (B);
-	\draw (copy1) to [bend right] (kap);
-	\draw (kap) to (E);
-	\draw (B) to (D);
-	\draw (copy0) to [bend left] (T);
-\end{tikzpicture} &\overset{\ref{eq:general_kapdag}}{=}
-\begin{tikzpicture}
-	\path (0,0) coordinate (A)
-	++ (0.3,0) coordinate (copy0)
-	++ (0.5,0) node[kernel] (gam) {$\gamma$}
-	++ (0.5,0) node[kernel] (kap) {$\kappa\rho$}
-	++ (0.5,0) coordinate (copy1)
-	+ (0.5,0.5) node[kernel] (kapdag) {$\kappa^*$}
-	+ (1,-0.5) node (E) {}
-	+ (1,0.5) node (D) {}
-	+(1,1) node (T) {};
-	\draw (A) -- (copy0);
-	\draw (copy0) -- (gam);
-	\draw (copy0) to [bend right] (kap);
-	\draw (gam) -- (kap) -- (copy1);
-	\draw (copy1) to [bend left] (kapdag);
-	\draw (copy1) to [bend right] (E);
-	\draw (kapdag) to (D);
-	\draw (copy0) to [bend left] (T);
-\end{tikzpicture}\\
+% \begin{tikzpicture}
+% 	\path (0,0) coordinate (A)
+% 	++ (0.3,0) coordinate (copy0)
+% 	++ (0.5,0) node[kernel] (gam) {$\gamma$}
+% 	++ (0.5,0) coordinate (copy1)
+% 	+ (0.5,-0.5) node[kernel] (kap) {$\kappa\rho$}
+% 	+ (0.5,0.5) coordinate (B)
+% 	+ (1,-0.5) node (E) {}
+% 	+ (1,0.5) node (D) {}
+% 	+(1,1) node (T) {};
+% 	\draw (A) -- (copy0);
+% 	\draw (copy0) -- (gam);
+% 	\draw (copy0) to [bend right] (kap);
+% 	\draw (gam) -- (copy1);
+% 	\draw (copy1) to [bend left] (B);
+% 	\draw (copy1) to [bend right] (kap);
+% 	\draw (kap) to (E);
+% 	\draw (B) to (D);
+% 	\draw (copy0) to [bend left] (T);
+% \end{tikzpicture} &\overset{\ref{eq:general_kapdag}}{=}
+% \begin{tikzpicture}
+% 	\path (0,0) coordinate (A)
+% 	++ (0.3,0) coordinate (copy0)
+% 	++ (0.5,0) node[kernel] (gam) {$\gamma$}
+% 	++ (0.5,0) node[kernel] (kap) {$\kappa\rho$}
+% 	++ (0.5,0) coordinate (copy1)
+% 	+ (0.5,0.5) node[kernel] (kapdag) {$^\dagger\rho\kappa^*$}
+% 	+ (0.5,-0.5) coordinate (rho) {}
+% 	+ (1,-0.5) node (E) {}
+% 	+ (1,0.5) node (D) {}
+% 	+(1,1) node (T) {};
+% 	\draw (A) -- (copy0);
+% 	\draw (copy0) -- (gam);
+% 	\draw (copy0) to [bend right] (kap);
+% 	\draw (gam) -- (kap) -- (copy1);
+% 	\draw (copy1) to [bend left] (kapdag);
+% 	\draw (copy1) to [bend right] (rho);
+% 	\draw (rho) -- (E);
+% 	\draw (kapdag) to (D);
+% 	\draw (copy0) to [bend left] (T);
+% \end{tikzpicture}\\
  &= \begin{tikzpicture}
  \path (0,0) node (A) {}
  ++(0.3,0) coordinate (copy0)
+ ++(1,0) node[kernel] (mudagmu) {$\mu\rho^\dagger(\mu\rho)$}
+ ++(1,0) coordinate (copy2)
  ++(0.5,0) node[kernel] (mu) {$\mu\rho$}
- ++(1,0) node[kernel] (kapdag) {$^\dagger (\mu\rho) \kappa^*$}
+ ++(1,0) node[kernel] (kapdag) {$^\dagger \rho \kappa^*$}
  ++(1,0) node[kernel] (kap) {$\kappa\rho$}
  ++(0.4,0) coordinate (copy1)
- +(0.8,0) node (G) {}
- +(0.4,0.5) node[kernel] (kapdag1) {$\kappa^*$}
- +(0.8,0.5) node (D) {}
- +(0.5,0.8) node (T) {};
- \draw (A)--(mu) -- (kapdag) -- (kap) -- (G);
+ +(1,0) node (G) {}
+ +(0.4,0.5) node[kernel] (kapdag1) {$^\dagger\rho\kappa^*$}
+ +(1,0.5) node (D) {}
+ +(1,0.8) node (T) {};
+ \draw (A)--(mudagmu) -- (mu) -- (kapdag) -- (kap) -- (G);
  \draw (copy1) to [bend left] (kapdag1) (copy0) to [bend left] (T);
  \draw (kapdag1) -- (D);
- \draw (copy0) to [bend right] (kap);
+ \draw (copy2) to [bend right] (kap);
 \end{tikzpicture}\\
  &=
 \begin{tikzpicture}
