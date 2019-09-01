@@ -94,7 +94,7 @@ By previous assumptions, we have the following properties:
 	++ (0.5,0) node[kernel] (gam) {$\gamma$}
 	++ (0.5,0) node[kernel] (kap) {$\kappa$}
 	++ (0.5,0) coordinate (copy1)
-	+ (0.5,0.5) node[kernel] (kapdag) {$\kappa^{\dagger}$}
+	+ (0.5,0.5) node[kernel] (kapdag) {$\kappa^*$}
 	+ (0.5,-0.5) coordinate (B)
 	+ (1,-0.5) node (E) {$\RV{E}$}
 	+ (1,0.5) node (D) {$\RV{D}$};
@@ -114,7 +114,7 @@ By previous assumptions, we have the following properties:
 	++ (0.3,0) coordinate (copy0)
 	++ (0.5,0) node[kernel] (mu) {$\mu$}
 	++ (0.5,0) coordinate (copy1)
-	+ (0.5,0.5) node[kernel] (kapdag) {$\kappa^{\dagger}$}
+	+ (0.5,0.5) node[kernel] (kapdag) {$\kappa^*$}
 	+ (0.5,-0.5) coordinate (B)
 	+ (1,-0.5) node (E) {$\RV{E}$}
 	+ (1,0.5) node (D) {$\RV{D}$};
@@ -191,9 +191,7 @@ From \ref{eq:general_kapdag} we also have
 \end{align}
 Where \ref{eq:kappa_cancel} follows from \ref{eq:recoverability}.
 
-Suppose we have some $\rho:E\to \Delta(\mathcal{G})$ that is deterministic such that $\mu\rho$ and $\kappa\rho$ are also deterministic. Both $\rho$ and $\mu\rho$ therefore have left inverses $^\dagger(\mu\rho):G\to \Delta(\mathscr{T})$ and $^\dagger\rho:G\to \Delta(\mathcal{E})$.
-
-\todo[inline]{$\rho$ is ``something like'' a sufficient statistic.}
+Suppose we have that $\mu$ is deterministic, relieving us of having to deal with any issues regarding inferring the observed distribution from a finite sample (e.g. we are in the world of classical physics). $\mu$ therefore has a left inverse $^\dagger\mu$. 
 
 A corollary of Lemma \ref{th:rightleft_inverse} is that left inverses have the following property:
 
@@ -223,141 +221,140 @@ A corollary of Lemma \ref{th:rightleft_inverse} is that left inverses have the f
 \end{tikzpicture}\label{eq:rightinverse_commute}
 \end{align}
 
+And \citet{fong_causal_2013} has shown that for deterministic $A$ we have
+
+\begin{align}
+\begin{tikzpicture}
+ \path (0,0) node (A) {}
+ ++(0.5,0) node[kernel] (C) {$A$}
+ ++(0.5,0) coordinate (D)
+ +(1.2,0.5) node (Y) {}
+ +(1.2,-0.5) node (Z) {};
+ \draw (A)--(C);
+ \draw (C) -- (D);
+ \draw (D) to [bend right] (Z);
+  \draw (D) to [bend left] (Y);
+\end{tikzpicture} = \begin{tikzpicture}
+ \path (0,0) node (A) {}
+ ++(0.5,0) coordinate (D)
+ +(0.5,0.5) node[kernel] (A1) {$A$}
+ +(0.5,-0.5) node[kernel] (A2) {$A$}
+ +(1,-0.5) node (Y) {}
+ +(1,0.5) node (Z) {};
+ \draw (A)--(D);
+ \draw (D) to [bend right] (A2);
+ \draw (A2) -- (Y);
+ \draw (D) to [bend left] (A1);
+ \draw (A1) -- (Z);
+\end{tikzpicture}\label{eq:det_commute}
+\end{align}
+
 We then have
 
 \begin{align}
-% \begin{tikzpicture}
-% 	\path (0,0) coordinate (A)
-% 	++ (0.3,0) coordinate (copy0)
-% 	++ (0.5,0) node[kernel] (gam) {$\gamma$}
-% 	++ (0.5,0) coordinate (copy1)
-% 	+ (0.5,-0.5) node[kernel] (kap) {$\kappa\rho$}
-% 	+ (0.5,0.5) coordinate (B)
-% 	+ (1,-0.5) node (E) {}
-% 	+ (1,0.5) node (D) {}
-% 	+(1,1) node (T) {};
-% 	\draw (A) -- (copy0);
-% 	\draw (copy0) -- (gam);
-% 	\draw (copy0) to [bend right] (kap);
-% 	\draw (gam) -- (copy1);
-% 	\draw (copy1) to [bend left] (B);
-% 	\draw (copy1) to [bend right] (kap);
-% 	\draw (kap) to (E);
-% 	\draw (B) to (D);
-% 	\draw (copy0) to [bend left] (T);
-% \end{tikzpicture} &\overset{\ref{eq:general_kapdag}}{=}
-% \begin{tikzpicture}
-% 	\path (0,0) coordinate (A)
-% 	++ (0.3,0) coordinate (copy0)
-% 	++ (0.5,0) node[kernel] (gam) {$\gamma$}
-% 	++ (0.5,0) node[kernel] (kap) {$\kappa\rho$}
-% 	++ (0.5,0) coordinate (copy1)
-% 	+ (0.5,0.5) node[kernel] (kapdag) {$^\dagger\rho\kappa^*$}
-% 	+ (0.5,-0.5) coordinate (rho) {}
-% 	+ (1,-0.5) node (E) {}
-% 	+ (1,0.5) node (D) {}
-% 	+(1,1) node (T) {};
-% 	\draw (A) -- (copy0);
-% 	\draw (copy0) -- (gam);
-% 	\draw (copy0) to [bend right] (kap);
-% 	\draw (gam) -- (kap) -- (copy1);
-% 	\draw (copy1) to [bend left] (kapdag);
-% 	\draw (copy1) to [bend right] (rho);
-% 	\draw (rho) -- (E);
-% 	\draw (kapdag) to (D);
-% 	\draw (copy0) to [bend left] (T);
-% \end{tikzpicture}\\
- &= \begin{tikzpicture}
- \path (0,0) node (A) {}
- ++(0.3,0) coordinate (copy0)
- ++(1,0) node[kernel] (mudagmu) {$\mu\rho^\dagger(\mu\rho)$}
- ++(1,0) coordinate (copy2)
- ++(0.5,0) node[kernel] (mu) {$\mu\rho$}
- ++(1,0) node[kernel] (kapdag) {$^\dagger \rho \kappa^*$}
- ++(1,0) node[kernel] (kap) {$\kappa\rho$}
- ++(0.4,0) coordinate (copy1)
- +(1,0) node (G) {}
- +(0.4,0.5) node[kernel] (kapdag1) {$^\dagger\rho\kappa^*$}
- +(1,0.5) node (D) {}
- +(1,0.8) node (T) {};
- \draw (A)--(mudagmu) -- (mu) -- (kapdag) -- (kap) -- (G);
- \draw (copy1) to [bend left] (kapdag1) (copy0) to [bend left] (T);
- \draw (kapdag1) -- (D);
- \draw (copy2) to [bend right] (kap);
-\end{tikzpicture}\\
- &=
 \begin{tikzpicture}
  \path (0,0) node (A) {}
  ++(0.3,0) coordinate (copy0)
- ++(0.3,0) coordinate (copyN)
- ++(0.5,0) node[kernel] (mu) {$\mu\rho$}
- ++(1,0) node[kernel] (kapdag) {$^\dagger (\mu\rho) \kappa^*$}
- ++(1.3,0) node[kernel] (kap) {$\kappa\rho\kappa^*$}
-  +(0.8,0) node (G) {}
- +(0.8,0.5) node (T) {};
- \path (copy0) 
- ++(0.5,-1) coordinate (copyS) 
- ++(0.5,0) node[kernel] (muS) {$\mu\rho$}
- ++(1,0) node[kernel] (kapdagS) {$^\dagger (\mu\rho) \kappa^*$}
- ++(1.3,0) node[kernel] (kapS) {$\kappa\rho$}
- +(0.8,0) node (GS) {};
- \draw (A)--(copy0) to (copyN) -- (mu) -- (kapdag) -- (kap) -- (G);
- \draw (copy0) to [bend right] (copyS) -- (muS) -- (kapdagS) -- (kapS) -- (GS);
+ ++(0.5,0) node[kernel] (mu) {$\mu$}
+ ++(1,0) node[kernel] (kapdag) {$\kappa^*$}
+ ++(0.4,0) coordinate (copy1)
+ ++(0.5,0) node[kernel] (kap) {$\kappa$}
+ +(1,0) node (E) {}
+ +(1,-0.5) node (D) {}
+ +(1,0.5) node (T) {};
+ \draw (A)--(mu) -- (kapdag) -- (kap) -- (E);
+ \draw (copy0) to [bend left] (kap) (copy0) to [bend left] (T);
+ \draw (copy1) to [bend right] (D);
+\end{tikzpicture}
+ & \overset{\ref{eq:general_kapdag}}{=}
+\begin{tikzpicture}
+ \path (0,0) node (A) {}
+ ++(0.3,0) coordinate (copy0)
+ ++(0.5,0) node[kernel] (mu) {$\mu$}
+ ++(1,0) node[kernel] (dagmumu) {$^\dagger\mu\mu$}
+ ++(0.4,0) coordinate (copy1)
+ ++(0.5,-0.5) node[kernel] (kapsta) {$\kappa^*$}
+ +(1,0.5) node (E) {}
+ +(1,0) node (D) {}
+ +(1,1) node (T) {};
+ \draw (A)--(mu) -- (dagmumu) -- (copy1);
  \draw (copy0) to [bend left] (T);
- \draw (copyN) to [bend left] (kap) (copyS) to [bend right] (kapS);
+ \draw (copy1) to [bend right] (kapsta) (copy1) to [bend left] (E);
+ \draw (kapsta) -- (D);
 \end{tikzpicture}\\
 &=
 \begin{tikzpicture}
  \path (0,0) node (A) {}
  ++(0.3,0) coordinate (copy0)
- ++(0.3,0) coordinate (copyN)
- ++(0.5,0) node[kernel] (mu) {$\mu\rho$}
- ++(1.3,0) node[kernel] (kapdag) {$\kappa^*$}
-  +(0.8,0) node (G) {}
- +(0.8,0.5) node (T) {};
- \path (copy0) 
- ++(0.5,-1) coordinate (copyS) 
- ++(0.5,0) node[kernel] (muS) {$\mu\rho$}
- ++(1,0) node[kernel] (kapdagS) {$^\dagger (\mu\rho) \kappa^*$}
- ++(1.3,0) node[kernel] (kapS) {$\kappa\rho$}
- +(0.8,0) node (GS) {};
- \draw (A)--(copy0) to (copyN) -- (mu) -- (kapdag) -- (G);
- \draw (copy0) to [bend right] (copyS) -- (muS) -- (kapdagS) -- (kapS) -- (GS);
+ ++(0.7,0) node[kernel] (mudagmu) {$\mu^\dagger\mu$}
+ ++(0.7,0) coordinate (copy1)
+ ++(0.5,0) node[kernel] (mu) {$\mu$}
+ ++(0.5,0) node[kernel] (kapsta0) {$\kappa^*$}
+ ++(0.5,0) node[kernel] (kap) {$\kappa$}
+ ++(0.4,0) coordinate (copy2)
+ ++(0.5,-0.5) node[kernel] (kapsta1) {$\kappa^*$}
+ +(1,0.5) node (E) {}
+ +(1,0) node (D) {}
+ +(1,1	) node (T) {};
+ \draw (A)--(mudagmu) -- (mu) -- (kapsta0) -- (kap) -- (copy2);
  \draw (copy0) to [bend left] (T);
- \draw (copyS) to [bend right] (kapS);
+ \draw (copy1) to [bend left = 40] (kap);
+ \draw (copy2) to [bend right] (kapsta1) (copy2) to [bend left] (E);
+ \draw (kapsta1) -- (D);
 \end{tikzpicture}\\
-&= \begin{tikzpicture}
-\path (0,0) node (A) {}
-++ (0,0.5) node[kernel] (mu0) {$\mu$}
-++ (0,0.5) node[kernel] (dmu) {$^\dagger\mu$}
-++ (0,0.5) coordinate (copy0)
-++(0,0.5) node[kernel] (mu1) {$\mu$}
-++(0,0.5) node[kernel] (kapd) {$\kappa^*$}
-++(0,0.5) node[kernel] (kap) {$\kappa$}
-++(0,0.5) node (E) {$\RV{E}$};
-\draw (A) -- (mu0) -- (dmu) -- (mu1) --(kapd) -- (kap) -- (E);
-\draw (copy0) to [bend right = 45] (kap);
-\end{tikzpicture}\\
+&\overset{\ref{eq:general_kapdag}}{=} 
 \begin{tikzpicture}
  \path (0,0) node (A) {}
- ++(0,0.3) coordinate (copy0)
- ++(0,0.5) node[kernel] (mu) {$\mu$}
- ++(0,0.5) node[kernel] (kapdag) {$\kappa^*$}
- ++(0,0.7) node[kernel] (kap) {$\kappa$}
- ++(0,0.5) node (E) {$\RV{E}$};
- \draw (A)--(mu) -- (kapdag) -- (kap) -- (E);
- \draw (copy0) to [bend right = 45] (kap);
-\end{tikzpicture}&=
+ ++(0.3,0) coordinate (copy0)
+ ++(0.7,0) node[kernel] (mudagmu) {$\mu^\dagger\mu$}
+ ++(0.7,0) coordinate (copy1)
+ ++(0.5,0) node[kernel] (mu) {$\mu$}
+ ++(0.5,0) node[kernel] (kapsta0) {$\kappa^*$}
+ ++(0.4,0) coordinate (copy2)
+ ++(0.5,0) node[kernel] (kap) {$\kappa$}
+ +(1,0) node (E) {}
+ +(1,-0.5) node (D) {}
+ +(1,0.5) node (T) {};
+ \draw (A)--(mudagmu) -- (mu) -- (kapsta0) -- (kap) -- (copy2);
+ \draw (copy0) to [bend left] (T);
+ \draw (copy1) to [bend left =40] (kap);
+ \draw (copy2) to [bend right] (D) (kap) -- (E);
+\end{tikzpicture}\\
+&\overset{\ref{eq:rightinverse_commute}}{=}
 \begin{tikzpicture}
-\path (0,0) node (A) {}
-++ (0,0.5) node[kernel] (mu0) {$\mu$}
-++ (0,0.5) coordinate (copy0)
-+ (0.5,0.5) node[kernel] (dmu) {$^\dagger\mu$}
-++(0,0.5) node[kernel] (kapd) {$\kappa^*$}
-++(0,0.5) node[kernel] (kap) {$\kappa$}
-++(0,0.5) node (E) {$\RV{E}$};
-\draw (A) -- (mu0) -- (kapd) -- (kap) -- (E);
-\draw (copy0) to [bend right] (dmu) (dmu) -- (kap);
+ \path (0,0) node (A) {}
+ ++(0.3,0) coordinate (copy0)
+ ++(0.7,0) node[kernel] (mudagmu) {$\mu$}
+ ++(0.7,0) coordinate (copy1)
+ +(0.5,0.5) node[kernel] (dagmu) {$^\dagger\mu$}
+ ++(0.5,0) node[kernel] (kapsta0) {$\kappa^*$}
+ ++(0.4,0) coordinate (copy2)
+ ++(0.5,0) node[kernel] (kap) {$\kappa$}
+ +(1,0) node (E) {}
+ +(1,-0.5) node (D) {}
+ +(1,1) node (T) {};
+ \draw (A)--(mudagmu) -- (kapsta0) -- (kap) -- (copy2);
+ \draw (copy0) to [bend left] (T);
+ \draw (copy1) to [bend left] (dagmu);
+ \draw (dagmu) to [bend left] (kap);
+ \draw (copy2) to [bend right] (D) (kap) -- (E);
+\end{tikzpicture}\\
+&\overset{\ref{eq:det_commute}}{=}
+\begin{tikzpicture}
+ \path (0,0) node (A) {}
+ ++(0.3,0) coordinate (copy0)
+ +(1.4,0.5) node[kernel] (dagmu) {$\mu^\dagger\mu$}
+ ++(1.4,0) node[kernel] (kapsta0) {$\mu \kappa^*$}
+ ++(0.4,0) coordinate (copy2)
+ ++(0.5,0) node[kernel] (kap) {$\kappa$}
+ +(1,0) node (E) {}
+ +(1,-0.5) node (D) {}
+ +(1,1) node (T) {};
+ \draw (A)-- (kapsta0) -- (kap) -- (copy2);
+ \draw (copy0) to [bend left=40] (T);
+ \draw (copy0) to [bend left] (dagmu);
+ \draw (dagmu) to [bend left] (kap);
+ \draw (copy2) to [bend right] (D) (kap) -- (E);
 \end{tikzpicture}\label{eq:skipmu}
 \end{align}
 
