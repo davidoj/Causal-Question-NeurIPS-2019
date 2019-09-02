@@ -343,7 +343,8 @@ We then have
 \begin{tikzpicture}
  \path (0,0) node (A) {}
  ++(0.3,0) coordinate (copy0)
- +(1.4,0.5) node[kernel] (dagmu) {$\mu^\dagger\mu$}
+ +(0.9,0.5) node[kernel] (mu) {$\mu$}
+ +(1.5,0.5) node[kernel] (dagmu) {$^\dagger\mu$}
  ++(1.4,0) node[kernel] (kapsta0) {$\mu \kappa^*$}
  ++(0.4,0) coordinate (copy2)
  ++(0.5,0) node[kernel] (kap) {$\kappa$}
@@ -352,11 +353,59 @@ We then have
  +(1,1) node (T) {};
  \draw (A)-- (kapsta0) -- (kap) -- (copy2);
  \draw (copy0) to [bend left=40] (T);
- \draw (copy0) to [bend left] (dagmu);
- \draw (dagmu) to [bend left] (kap);
+ \draw (copy0) to [bend left] (mu);
+ \draw (mu) -- (dagmu) to [bend left] (kap);
  \draw (copy2) to [bend right] (D) (kap) -- (E);
 \end{tikzpicture}\label{eq:skipmu}
 \end{align}
+
+Equation \ref{eq:skipmu} implies that, given any $\xi\in\Delta(\mathscr{T})$, all distributions of the form
+
+\begin{align}
+\begin{tikzpicture}
+ \path (0,0) node[dist] (A) {$\xi$}
+ ++(0.3,0) coordinate (copy0)
+ ++(0.5,0) node[kernel] (mu) {$\mu$}
+ ++(1,0) node[kernel] (kapdag) {$\kappa^*$}
+ ++(0.4,0) coordinate (copy1)
+ ++(0.5,0) node[kernel] (kap) {$\kappa$}
+ +(1,0) node (E) {$\RV{E}$}
+ +(1,-0.5) node (D) {$\RV{D}$}
+ +(1,0.5) node (T) {$\RV{T}$};
+ \draw (A)--(mu) -- (kapdag) -- (kap) -- (E);
+ \draw (copy0) to [bend left] (kap) (copy0) to [bend left] (T);
+ \draw (copy1) to [bend right] (D);\label{eq:reference_dist}
+\end{tikzpicture}
+\end{align}
+
+Admit both \begin{tikzpicture}
+\path (0,0) node[kernel] (kap) {$\kappa^{\,}$};
+\draw ($(kap.west) +(-0.5,0.15)$) -- ($(kap.west) +(0,0.15)$) ($(kap.west) +(-0.5,-0.15)$) -- ($(kap.west) +(0,-0.15)$);
+\draw (kap) -- (0.5,0);
+\end{tikzpicture} and \begin{tikzpicture}
+\path (0,0) node[kernel] (kap) {$\kappa^{\,}$}
+ + (-0.8,0.15) node[kernel] (mdm) {$\mu^\dagger\mu$};
+\draw ($(kap.west) +(-1.25,-0.15)$) -- ($(kap.west) +(0,-0.15)$);
+\draw (kap) -- (0.5,0);
+\draw ($(mdm.west)+(-0.2,0)$) -- (mdm) -- ($(kap.west) +(0,0.15)$);
+\end{tikzpicture} as disintegrations from $(\RV{D},\RV{T})\dashrightarrow\RV{E}$. Therefore these two kernels agree almost surely with respect to the distribution \ref{eq:reference_dist} for any prior $\xi$. We appear to require additional assumptions in order to support a nontrivial result, however. Given that $\mu$ is deterministic, we might suppose $\kappa^*$ is also likely to be deterministic (or, if it is not, the nondeterminism is not carried through by $\kappa$). Then we will have only a single pair in $D\times \mathscr{T}$ having nonzero measure for each $\theta \in \mathscr{T}$, so the ``almost surely'' condition rules out almost all feasible decision functions. There appear to be two competing demands - we want $\kappa^*$ stochastic in order to determine the results of a wide variety of decision functions, but we want $\mu$ deterministic in order to support statistical inference. One option might be to relax the assumption of determinism on $\mu$ slightly and hope that we ``gain more than we lose''. I suspect, at this point, that this does not work.
+
+An alternative nontrivial case of ``optimisability'' requires the additional assumption of \emph{double exchangeability}. This is exchangeability in the standard statistical sense, not in the sense of the Rubin causal model; a doubly exchangeable kernel is a kernel that remains the same if inputs and outputs are permuted in the same way.
+
+\begin{definition}[Double exchangeability]
+A kernel $\kappa:X\to \Delta(\mathcal{Y})$ is \emph{doubly exchangeable} with respect to random variable multisets $\lbag\RV{X}_i\rbag_{i\in A}$, $\lbag\RV{Y}_i\rbag_{i\in A}$ where $A=[n]$ or $A=\mathbb{N}$ and $\RV{X}_i:X\to X_i$, $\RV{Y}_i:Y\to Y_i$ if, given any finite permutation $\sigma$ and its inverse $\sigma^{-1}$ we have both
+\begin{itemize}
+	\item There exists $\sigma_X:X\to X$ and $\sigma^{-1}_Y:Y\to Y$ such that $F_{\sigma_X}\splitter{0.1}(\otimes_{i\in A} \RV{X}_{a_i}) = \splitter{0.1}(\otimes_{i\in A} \RV{X}_{\sigma(a_i)})$ and similarly for $F_{\sigma^{-1}_Y}$ and
+	\item $F_{\sigma_X}\kappa F_{\sigma^{-1}_Y} = \kappa$
+\end{itemize}
+
+Double exchangeability reduces to regular exchangeability for probability distributions.
+\end{definition}
+
+An example follows. We identify $\mathscr{T}\cong[0,1]\times T$, $E\cong [0,1]^2$ and $D\cong\{0,1\}^{\mathbb{N}}$. For $(\theta,\phi)\in \mathscr{T}$ let $\mu:(\theta;A\times B)\mapsto \delta_{0.5}(A)\delta_{\frac{\theta}{2}}(B)$.
+
+Define $\overline{\RV{D}}^n:\{0,1\}^n\to [0,1]$ by $\overline{\RV{D}}^n:(y_0,...,y_n)\mapsto \frac{1}{n} \sum_{i\in [n]} y_i$ and let $\overline{\RV{D}}:D\to [0,1]$ be the limit $\overline{\RV{D}}=\lim_{n\to\infty} \overline{\RV{D}}^n$. Let $\gamma$ be for all $(\theta,\phi)$ the unique distribution such that $\gamma F_{\overline{\RV{D}}^n} (\theta,\phi;A) = \delta_{0.5}(A)$ (i.e. the distribtion of an infinite sequence of IID RVs with success probability $0.5$) and assert that  $\delta_{(\theta,\phi)} \splitter{0.1}(\text{Id}_{\mathscr{T}}\otimes \gamma)\kappa = \delta_\theta \mu$ almost surely for all $(\theta,\phi)$. 
+ We note that $\kappa^*:(_;A)\mapsto \gamma(\cdot;A)$ satisfies \ref{eq:general_kapdag} for arbitrary $\kappa$.
 
 % From \ref{eq:gamkap_2_mu} and \ref{eq:kappa_cancel} we have
 
@@ -415,35 +464,6 @@ We then have
 % \end{tikzpicture}
 % \end{align}
 
-A key question is does \ref{eq:skipmu} imply anything non-trivial regarding the following ``identifiability'' condition for arbitrary $J:E\to \Delta(\mathcal{D})$:
-
-\begin{align}
-\begin{tikzpicture}
- \path (0,0) node (A) {}
- ++(0,0.3) coordinate (copy0)
- ++(0,0.5) node[kernel] (mu) {$\mu$}
- ++(0,0.5) node[kernel] (kapdag) {$J$}
- ++(0,0.7) node[kernel] (kap) {$\kappa$}
- ++(0,0.5) node (E) {$\RV{E}$};
- \draw (A)--(mu) -- (kapdag) -- (kap) -- (E);
- \draw (copy0) to [bend right = 45] (kap);
-\end{tikzpicture} =
-\begin{tikzpicture}
-\path (0,0) node (xi) {}
-++ (0,0.5) node[kernel] (mu0) {$\mu$}
-++ (0,0.5) coordinate (copy0)
-+ (0.5,0.5) node[kernel] (dmu) {$^\dagger\mu$}
-++(0,0.5) node[kernel] (kapd) {$J$}
-++(0,0.5) node[kernel] (kap) {$\kappa$}
-++(0,0.5) node (E) {$\RV{E}$};
-\draw (xi) -- (mu0) -- (kapd) -- (kap) -- (E);
-\draw (copy0) to [bend right] (dmu) (dmu) -- (kap);
-\end{tikzpicture}\label{eq:identifiability}
-\end{align}
-
-I call this identifiability because the left hand side is the kernel $\mathscr{T}\to \Delta(\mathcal{E})$ that computes the ``result'' of a given state and decision function, while the right hand side implies it is possible to find a $J$ that minimises the expected utility $\kappa u$ independent of the causal state (this is because we see one of the input wires and control the other).
-
-We may be able to get some insight into this by asking, given matrices $A,B,C,D$ of appropriate shapes, if $BA=CA$ when does $BDA=CDA$?
 
 % Given these two assumptions, we have
 % \begin{align}
