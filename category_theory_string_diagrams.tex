@@ -397,13 +397,17 @@ In contrast to regular disintegrations, generalised disintegrations ``usually'' 
 $\kappa$ imposes contradictory requirements for any disintegration $c:\{0,1\}\to\{0,1\}$ from $\{1\}$ to $\{2\}$: equality for $\RV{X}_1=1$ requires $c(1;\cdot)=\delta_1$ while equality for $\RV{X}_1=0$ requires $c(1;\cdot) = \delta_0$. Subject to some regularity conditions (similar to standard Borel conditions for regular disintegrations), we can define g-disintegrations of a canonically related kernel that do generally exist; intuitively, g-disintegrations exist if they take the ``input wires'' of $\kappa$ as input wires themselves.
 
 \begin{lemma}\label{lem:rightinverse}
-Given $\kappa:X\to\Delta(Y)$, a kernel $\kappa^\dagger$ is a right inverse iff we have for all $x\in X$ $\kappa^\dagger(y;A)=\delta_x(A)$, $\kappa(x;\cdot)$-almost surely.
+Given $\kappa:X\to\Delta(Y)$, a kernel $\kappa^\dagger$ is a right inverse iff we have for all $x\in X$, $A\in \mathcal{X}$, $y\in Y$ $\kappa^\dagger(y;A)=\delta_x(A)$, $\kappa(x;\cdot)$-almost surely.
 \end{lemma}
 
 \begin{proof}
-Suppose $\kappa^\dagger$ satisfies the almost sure equality for all $x\in X$. Then for all $x\in X$, $A\in \mathcal{Y}$ we have $\kappa \kappa^\dagger (x;A) = \int_Y \kappa^\dagger(y;A) \kappa(x;dy) = \int_Y \delta_x (A) \kappa(x;dy) = \delta_x(A)$; that is, $\kappa\kappa^\dagger = \mathrm{Id}_X$, so $\kappa^\dagger$ is a right inverse of $\kappa$.
+Suppose $\kappa^\dagger$ satisfies the almost sure equality for all $x\in X$. Then for all $x\in X$, $A\in \mathcal{X}$ we have $\kappa \kappa^\dagger (x;A) = \int_Y \kappa^\dagger(y;A) \kappa(x;dy) = \int_Y \delta_x (A) \kappa(x;dy) = \delta_x(A)$; that is, $\kappa\kappa^\dagger = \mathrm{Id}_X$, so $\kappa^\dagger$ is a right inverse of $\kappa$.
 
-Suppose we have a right inverse $\kappa^\dagger$. By definition, for all $x\in X$ and $A\in\mathcal{Y}$ we have $\int_Y \kappa^\dagger(y;A) \kappa(x;dy)=\delta_x(A)$. Suppose $x\not\in A$ and let $B_\epsilon=\kappa^{\dagger-1}_A((\epsilon,1])$ for some $\epsilon>0$. We have $\int_Y \kappa^\dagger(y;A) \kappa(x;dy)\geq\epsilon\kappa(x;B)$. For any $\epsilon>0$ we have $\kappa(x;B_\epsilon)=0$. Consider the set $B_0=\kappa^{\dagger-1}_A((0,1])$. For some sequence $\{\epsilon_i\}_{i\in \mathbb{N}}$ such that $\lim_{i\to\infty} \epsilon_i = 0$ we have $B_0=\cup_{i\in\mathbb{N}} B_{\epsilon_i}$. By countable additivity, $kappa(x;B_0)=0$. Suppose $x\in A$ and let $B^{1-\epsilon}=\kappa^{\dagger-1}_A([0,1-\epsilon))$. By an argument analogous to the above, we have $\kappa(x;B^1)=0$. Thus the $\kappa(x;\cdot)$ measure of the set on which $\kappa^\dagger(y;A)$ disagrees with $\delta_x(A)$ is $\kappa(x;B_0) + \kappa(x;B^1)=0$ and hence $\kappa^\dagger(y;A)=\delta_x(A)$ $\kappa(x;\cdot)$-almost surely.
+Suppose we have a right inverse $\kappa^\dagger$. By definition, for all $x\in X$ and $A\in\mathcal{X}$ we have $\int_Y \kappa^\dagger(y;A) \kappa(x;dy)=\delta_x(A)$. 
+
+Suppose $x\not\in A$ and let $B_\epsilon=\kappa^{\dagger-1}_A((\epsilon,1])$ for some $\epsilon>0$. We have $\int_Y \kappa^\dagger(y;A) \kappa(x;dy)=0\geq\epsilon\kappa(x;B_\epsilon)$. Thus for any $\epsilon>0$ we have $\kappa(x;B_\epsilon)=0$. Consider the set $B_0=\kappa^{\dagger-1}_A((0,1])$. For some sequence $\{\epsilon_i\}_{i\in \mathbb{N}}$ such that $\lim_{i\to\infty} \epsilon_i = 0$ we have $B_0=\cup_{i\in\mathbb{N}} B_{\epsilon_i}$. By countable additivity, $\kappa(x;B_0)=0$. 
+
+Suppose $x\in A$ and let $B^{1-\epsilon}=\kappa^{\dagger-1}_A([0,1-\epsilon))$. We have $\int_Y \kappa^\dagger(y;A) \kappa(x;dy)=1\leq(1-\epsilon)\kappa(x;B^{1-\epsilon})+1-\kappa(x;B^{1-\epsilon})=1-\epsilon \kappa(x;B^{1-\epsilon})$. Thus $\kappa(x;B^{1-epsilon})=0$ for $\epsilon>0$. By an argument analogous to the above, we also have $\kappa(x;B^1)=0$. Thus the $\kappa(x;\cdot)$ measure of the set on which $\kappa^\dagger(y;A)$ disagrees with $\delta_x(A)$ is $\kappa(x;B_0) + \kappa(x;B^1)=0$ and hence $\kappa^\dagger(y;A)=\delta_x(A)$ $\kappa(x;\cdot)$-almost surely.
 \end{proof}
 
 \todo[inline]{I haven't shown that any map inverting $\kappa$ implies the existence of a Markov kernel that does so}

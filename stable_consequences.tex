@@ -191,63 +191,102 @@ From \ref{eq:general_kapdag} we also have
 \end{align}
 Where \ref{eq:kappa_cancel} follows from \ref{eq:recoverability}.
 
-Suppose we have that $\mu$ is deterministic, relieving us of having to deal with any issues regarding inferring the observed distribution from a finite sample (e.g. we are in the world of classical physics). $\mu$ therefore has a left inverse $^\dagger\mu$. 
-
-A corollary of Lemma \ref{th:rightleft_inverse} is that left inverses have the following property:
+The following assumption is a formalisation of the notion that ``we can determine $\mu$ precisely from observation'' (alternatively, that we can find an optimal decision for a classical statistical decision problem). Suppose that $\mu$ is characterised by some kernel $^*\mu$. That is,
 
 \begin{align}
 \begin{tikzpicture}
- \path (0,0) node (A) {}
- ++(0.5,0) node[kernel] (C) {$\;^\dagger A\;$}
- ++(0.5,0) coordinate (D)
- +(0.5,-0.5) node[kernel] (X) {$A$}
- +(1.2,0.5) node (Y) {}
- +(1.2,-0.5) node (Z) {};
- \draw (A)--(C);
- \draw (C) -- (D);
- \draw (D) to [bend right] (X);
- \draw (X) -- (Z);
- \draw (D) to [bend left] (Y);
-\end{tikzpicture} = \begin{tikzpicture}
- \path (0,0) node (A) {}
- ++(0.5,0) coordinate (D)
- +(0.5,0.5) node[kernel] (X) {$\;^\dagger A\;$}
- +(1,-0.5) node (Y) {}
- +(1,0.5) node (Z) {};
- \draw (A)--(D);
- \draw (D) to [bend left] (X);
- \draw (X) -- (Z);
- \draw (D) to [bend right] (Y);
-\end{tikzpicture}\label{eq:rightinverse_commute}
-\end{align}
-
-And \citet{fong_causal_2013} has shown that for deterministic $A$ we have
-
-\begin{align}
+\path (0,0) node (A) {}
+++ (0.5,0) node[kernel] (mu0) {$\mu$}
+++ (0.5,0) node[kernel] (smu) {$^*\mu$}
+++ (0.5,0) coordinate (copy0)
++  (0.5,0.5) coordinate (B)
++  (1,0.5) coordinate (T)
++  (0.5,-0.5) node[kernel] (mu1) {$\mu$}
++  (1,-0.5) coordinate (E);
+\draw (A) -- (mu0) -- (smu) -- (copy0);
+\draw (copy0) to [bend left] (B);
+\draw (B) -- (T);
+\draw (copy0) to [bend right] (mu1);
+\draw (mu1) -- (E);
+\end{tikzpicture}=
 \begin{tikzpicture}
- \path (0,0) node (A) {}
- ++(0.5,0) node[kernel] (C) {$A$}
- ++(0.5,0) coordinate (D)
- +(1.2,0.5) node (Y) {}
- +(1.2,-0.5) node (Z) {};
- \draw (A)--(C);
- \draw (C) -- (D);
- \draw (D) to [bend right] (Z);
-  \draw (D) to [bend left] (Y);
-\end{tikzpicture} = \begin{tikzpicture}
- \path (0,0) node (A) {}
- ++(0.5,0) coordinate (D)
- +(0.5,0.5) node[kernel] (A1) {$A$}
- +(0.5,-0.5) node[kernel] (A2) {$A$}
- +(1,-0.5) node (Y) {}
- +(1,0.5) node (Z) {};
- \draw (A)--(D);
- \draw (D) to [bend right] (A2);
- \draw (A2) -- (Y);
- \draw (D) to [bend left] (A1);
- \draw (A1) -- (Z);
-\end{tikzpicture}\label{eq:det_commute}
+\path (0,0) node (A) {}
+++ (0.5,0) coordinate (copy0)
+++ (0.5,0.5) node[kernel] (mu0) {$\mu$}
+++ (0.5,0) node[kernel] (smu) {$^*\mu$}
+++ (0.5,0) coordinate (T);
+\path (copy0)
+++  (0.5,-0.5) node[kernel] (mu1) {$\mu$}
+++  (1,0) coordinate (E);
+\draw (A) -- (copy0);
+\draw (copy0) to [bend left] (mu0);
+\draw (mu0) -- (smu) -- (T);
+\draw (copy0) to [bend right] (mu1);
+\draw (mu1) -- (E);
+\end{tikzpicture}\label{eq:starmu}
 \end{align}
+
+An equivalent condition to \ref{eq:starmu} is that for all $\theta,\theta'\in\mathscr{T}$, $A\in \mathcal{E}$, we have $\mu(\theta;A) = \mu(\theta';A)$, $\mu^*\mu(\theta;\cdot)$-almost surely. More informally,the support of $\mu^*\mu$ for each input $\theta$ divides $\mathscr{T}$ into equivalence classes such that for all $\theta$ in a given equivalence class, $\mu$ maps to the same probability measure on $\mathscr{E}$. 
+
+Note that as a result of \ref{eq:starmu} we also have $\mu^*\mu\mu=\mu$. This weaker condition is not sufficient for the following result.
+
+\todo[inline]{There is a connection between equation \ref{eq:starmu} and the notion of a sufficient statistic}
+
+% A corollary of Lemma \ref{th:rightleft_inverse} is that left inverses have the following property:
+
+% \begin{align}
+% \begin{tikzpicture}
+%  \path (0,0) node (A) {}
+%  ++(0.5,0) node[kernel] (C) {$\;^\dagger A\;$}
+%  ++(0.5,0) coordinate (D)
+%  +(0.5,-0.5) node[kernel] (X) {$A$}
+%  +(1.2,0.5) node (Y) {}
+%  +(1.2,-0.5) node (Z) {};
+%  \draw (A)--(C);
+%  \draw (C) -- (D);
+%  \draw (D) to [bend right] (X);
+%  \draw (X) -- (Z);
+%  \draw (D) to [bend left] (Y);
+% \end{tikzpicture} = \begin{tikzpicture}
+%  \path (0,0) node (A) {}
+%  ++(0.5,0) coordinate (D)
+%  +(0.5,0.5) node[kernel] (X) {$\;^\dagger A\;$}
+%  +(1,-0.5) node (Y) {}
+%  +(1,0.5) node (Z) {};
+%  \draw (A)--(D);
+%  \draw (D) to [bend left] (X);
+%  \draw (X) -- (Z);
+%  \draw (D) to [bend right] (Y);
+% \end{tikzpicture}\label{eq:rightinverse_commute}
+% \end{align}
+
+% And \citet{fong_causal_2013} has shown that for deterministic $A$ we have
+
+% \begin{align}
+% \begin{tikzpicture}
+%  \path (0,0) node (A) {}
+%  ++(0.5,0) node[kernel] (C) {$A$}
+%  ++(0.5,0) coordinate (D)
+%  +(1.2,0.5) node (Y) {}
+%  +(1.2,-0.5) node (Z) {};
+%  \draw (A)--(C);
+%  \draw (C) -- (D);
+%  \draw (D) to [bend right] (Z);
+%   \draw (D) to [bend left] (Y);
+% \end{tikzpicture} = \begin{tikzpicture}
+%  \path (0,0) node (A) {}
+%  ++(0.5,0) coordinate (D)
+%  +(0.5,0.5) node[kernel] (A1) {$A$}
+%  +(0.5,-0.5) node[kernel] (A2) {$A$}
+%  +(1,-0.5) node (Y) {}
+%  +(1,0.5) node (Z) {};
+%  \draw (A)--(D);
+%  \draw (D) to [bend right] (A2);
+%  \draw (A2) -- (Y);
+%  \draw (D) to [bend left] (A1);
+%  \draw (A1) -- (Z);
+% \end{tikzpicture}\label{eq:det_commute}
+% \end{align}
 
 We then have
 
@@ -271,7 +310,7 @@ We then have
  \path (0,0) node (A) {}
  ++(0.3,0) coordinate (copy0)
  ++(0.5,0) node[kernel] (mu) {$\mu$}
- ++(1,0) node[kernel] (dagmumu) {$^\dagger\mu\mu$}
+ ++(1,0) node[kernel] (dagmumu) {$^*\mu\mu$}
  ++(0.4,0) coordinate (copy1)
  ++(0.5,-0.5) node[kernel] (kapsta) {$\kappa^*$}
  +(1,0.5) node (E) {}
@@ -286,7 +325,7 @@ We then have
 \begin{tikzpicture}
  \path (0,0) node (A) {}
  ++(0.3,0) coordinate (copy0)
- ++(0.7,0) node[kernel] (mudagmu) {$\mu^\dagger\mu$}
+ ++(0.7,0) node[kernel] (mudagmu) {$\mu^*\mu$}
  ++(0.7,0) coordinate (copy1)
  ++(0.5,0) node[kernel] (mu) {$\mu$}
  ++(0.5,0) node[kernel] (kapsta0) {$\kappa^*$}
@@ -306,7 +345,7 @@ We then have
 \begin{tikzpicture}
  \path (0,0) node (A) {}
  ++(0.3,0) coordinate (copy0)
- ++(0.7,0) node[kernel] (mudagmu) {$\mu^\dagger\mu$}
+ ++(0.7,0) node[kernel] (mudagmu) {$\mu^*\mu$}
  ++(0.7,0) coordinate (copy1)
  ++(0.5,0) node[kernel] (mu) {$\mu$}
  ++(0.5,0) node[kernel] (kapsta0) {$\kappa^*$}
@@ -326,7 +365,7 @@ We then have
  ++(0.3,0) coordinate (copy0)
  ++(0.7,0) node[kernel] (mudagmu) {$\mu$}
  ++(0.7,0) coordinate (copy1)
- +(0.5,0.5) node[kernel] (dagmu) {$^\dagger\mu$}
+ +(0.5,0.5) node[kernel] (dagmu) {$^*\mu$}
  ++(0.5,0) node[kernel] (kapsta0) {$\kappa^*$}
  ++(0.4,0) coordinate (copy2)
  ++(0.5,0) node[kernel] (kap) {$\kappa$}
@@ -339,12 +378,12 @@ We then have
  \draw (dagmu) to [bend left] (kap);
  \draw (copy2) to [bend right] (D) (kap) -- (E);
 \end{tikzpicture}\\
-&\overset{\ref{eq:det_commute}}{=}
+&\overset{\ref{eq:starmu}}{=}
 \begin{tikzpicture}
  \path (0,0) node (A) {}
  ++(0.3,0) coordinate (copy0)
  +(0.9,0.5) node[kernel] (mu) {$\mu$}
- +(1.5,0.5) node[kernel] (dagmu) {$^\dagger\mu$}
+ +(1.5,0.5) node[kernel] (dagmu) {$^*\mu$}
  ++(1.4,0) node[kernel] (kapsta0) {$\mu \kappa^*$}
  ++(0.4,0) coordinate (copy2)
  ++(0.5,0) node[kernel] (kap) {$\kappa$}
@@ -378,34 +417,48 @@ Equation \ref{eq:skipmu} implies that, given any $\xi\in\Delta(\mathscr{T})$, al
 \end{tikzpicture}
 \end{align}
 
-Admit both \begin{tikzpicture}
+admit both \begin{tikzpicture}
 \path (0,0) node[kernel] (kap) {$\kappa^{\,}$};
 \draw ($(kap.west) +(-0.5,0.15)$) -- ($(kap.west) +(0,0.15)$) ($(kap.west) +(-0.5,-0.15)$) -- ($(kap.west) +(0,-0.15)$);
 \draw (kap) -- (0.5,0);
 \end{tikzpicture} and \begin{tikzpicture}
 \path (0,0) node[kernel] (kap) {$\kappa^{\,}$}
- + (-0.8,0.15) node[kernel] (mdm) {$\mu^\dagger\mu$};
+ + (-0.8,0.15) node[kernel] (mdm) {$\mu^*\mu$};
 \draw ($(kap.west) +(-1.25,-0.15)$) -- ($(kap.west) +(0,-0.15)$);
 \draw (kap) -- (0.5,0);
 \draw ($(mdm.west)+(-0.2,0)$) -- (mdm) -- ($(kap.west) +(0,0.15)$);
-\end{tikzpicture} as disintegrations from $(\RV{D},\RV{T})\dashrightarrow\RV{E}$. Therefore these two kernels agree almost surely with respect to the distribution \ref{eq:reference_dist} for any prior $\xi$. We appear to require additional assumptions in order to support a nontrivial result, however. Given that $\mu$ is deterministic, we might suppose $\kappa^*$ is also likely to be deterministic (or, if it is not, the nondeterminism is not carried through by $\kappa$). Then we will have only a single pair in $D\times \mathscr{T}$ having nonzero measure for each $\theta \in \mathscr{T}$, so the ``almost surely'' condition rules out almost all feasible decision functions. There appear to be two competing demands - we want $\kappa^*$ stochastic in order to determine the results of a wide variety of decision functions, but we want $\mu$ deterministic in order to support statistical inference. One option might be to relax the assumption of determinism on $\mu$ slightly and hope that we ``gain more than we lose''. I suspect, at this point, that this does not work.
+\end{tikzpicture} as disintegrations from $(\RV{D},\RV{T})\dashrightarrow\RV{E}$. Therefore these two kernels agree almost surely with respect to the distribution \ref{eq:reference_dist} for any prior $\xi$. 
+
+However, also by assumption \ref{eq:starmu}, we have that for $\theta,\theta'\in \mathscr{T}$  either $\mu(\theta;A)=\mu(\theta';A)$ for all $A\in \mathcal{E}$, or for any $A\in\mathcal{E}$ $\mu(\theta;A)=0$ or $\mu(\theta';A)=0$. That is, any two states either have the same probability measure or probability measures with disjoint support. This is problematic, as the distribution \ref{eq:reference_dist} then has no support over much of the space $D\times E\times \mathscr{T}$. If $\mu$ were deterministic, for example, and hence associated with some function $f$, while \ref{eq:starmu} would be guaranteed via a left inverse, \ref{eq:reference_dist} would be supported on a subset of $D\times\{(\theta,f(\theta))|\theta\in\mathscr{T}\}$. In particular, we have no guarantee that the desired equality of kernels holds if we take any decision that doesn't reproduce the observed distribution. This isn't totally trivial: we may live in a world where most actions make things worse, in which case knowing how to keep things the same is valuable.
+
+A stronger result can be found if we assume we have an infinite sequence of RVs $\RV{X}_i:E\to W$ and $\RV{D}_i:D\to V$ such that
+\begin{itemize}
+	\item $W^\mathbb{N}=E$, $V^\mathbb{N}=D$ (i.e. the sequence of all $\RV{X}_i$'s is identified with $E$ and the sequence of all $\RV{D}_i$'s is identified with $D$)
+ 	\item For $A:=A_0\times A_1\times ... \in E$, $\mu = \splitter{0.1} \otimes_{i\in \mathbb{N}} \mu F_{\RV{X}_i}$ (the $\RV{X}_i$'s are IID)
+ 	\item For $y:=(y_0,y_1,...)\in D$, $A\in E$, there exists $\kappa_0$ such that $\kappa = \splitter{0.1}\otimes_{i\in\mathbb{N}} F_{\RV{D}_i} \kappa_0 F_{\RV{X}_i}$ ($\kappa$ is ``IID'')
+ \end{itemize} the sequence is IID with respect to $\mu(\theta;\cdot)$ for all $\theta$.
+
+
+We appear to require additional assumptions in order to support a nontrivial result, however. Given that $\mu$ is deterministic, we might suppose $\kappa^*$ is also likely to be deterministic (or, if it is not, the nondeterminism is not carried through by $\kappa$). Then we will have only a single pair in $D\times \mathscr{T}$ having nonzero measure for each $\theta \in \mathscr{T}$, so the ``almost surely'' condition rules out almost all feasible decision functions. There appear to be two competing demands - we want $\kappa^*$ stochastic in order to determine the results of a wide variety of decision functions, but we want $\mu$ deterministic in order to support statistical inference. One option might be to relax the assumption of determinism on $\mu$ slightly and hope that we ``gain more than we lose''. I suspect, at this point, that this does not work.
 
 An alternative nontrivial case of ``optimisability'' requires the additional assumption of \emph{double exchangeability}. This is exchangeability in the standard statistical sense, not in the sense of the Rubin causal model; a doubly exchangeable kernel is a kernel that remains the same if inputs and outputs are permuted in the same way.
 
 \begin{definition}[Double exchangeability]
-A kernel $\kappa:X\to \Delta(\mathcal{Y})$ is \emph{doubly exchangeable} with respect to random variable multisets $\lbag\RV{X}_i\rbag_{i\in A}$, $\lbag\RV{Y}_i\rbag_{i\in A}$ where $A=[n]$ or $A=\mathbb{N}$ and $\RV{X}_i:X\to X_i$, $\RV{Y}_i:Y\to Y_i$ if, given any finite permutation $\sigma$ and its inverse $\sigma^{-1}$ we have both
+A kernel $\kappa:X\to \Delta(\mathcal{Y})$ is \emph{doubly exchangeable} with respect to random variable sets $\{\RV{X}_i\}_{i\in A}$, $\{\RV{Y}_i\}_{i\in A}$ where $A=[n]$ or $A=\mathbb{N}$ and $\RV{X}_i:X\to X_i$, $\RV{Y}_i:Y\to Y_i$ if, given any finite permutation $\sigma$ and its inverse $\sigma^{-1}$ we have both
 \begin{itemize}
 	\item There exists $\sigma_X:X\to X$ and $\sigma^{-1}_Y:Y\to Y$ such that $F_{\sigma_X}\splitter{0.1}(\otimes_{i\in A} \RV{X}_{a_i}) = \splitter{0.1}(\otimes_{i\in A} \RV{X}_{\sigma(a_i)})$ and similarly for $F_{\sigma^{-1}_Y}$ and
 	\item $F_{\sigma_X}\kappa F_{\sigma^{-1}_Y} = \kappa$
 \end{itemize}
 
-Double exchangeability reduces to regular exchangeability for probability distributions.
+Double exchangeability is similar to exchangeability for probability distributions, but there is no possible analogoue of the set $\{\RV{X}_i\}$ in that case.
 \end{definition}
+
 
 An example follows. We identify $\mathscr{T}\cong[0,1]\times T$, $E\cong [0,1]^2$ and $D\cong\{0,1\}^{\mathbb{N}}$. For $(\theta,\phi)\in \mathscr{T}$ let $\mu:(\theta;A\times B)\mapsto \delta_{0.5}(A)\delta_{\frac{\theta}{2}}(B)$.
 
-Define $\overline{\RV{D}}^n:\{0,1\}^n\to [0,1]$ by $\overline{\RV{D}}^n:(y_0,...,y_n)\mapsto \frac{1}{n} \sum_{i\in [n]} y_i$ and let $\overline{\RV{D}}:D\to [0,1]$ be the limit $\overline{\RV{D}}=\lim_{n\to\infty} \overline{\RV{D}}^n$. Let $\gamma$ be for all $(\theta,\phi)$ the unique distribution such that $\gamma F_{\overline{\RV{D}}^n} (\theta,\phi;A) = \delta_{0.5}(A)$ (i.e. the distribtion of an infinite sequence of IID RVs with success probability $0.5$) and assert that  $\delta_{(\theta,\phi)} \splitter{0.1}(\text{Id}_{\mathscr{T}}\otimes \gamma)\kappa = \delta_\theta \mu$ almost surely for all $(\theta,\phi)$. 
- We note that $\kappa^*:(_;A)\mapsto \gamma(\cdot;A)$ satisfies \ref{eq:general_kapdag} for arbitrary $\kappa$.
+Define $\overline{\RV{D}}^n:\{0,1\}^n\to [0,1]$ by $\overline{\RV{D}}^n:(y_0,...,y_n)\mapsto \frac{1}{n} \sum_{i\in [n]} y_i$ and let $\overline{\RV{D}}:D\to [0,1]$ be the limit $\overline{\RV{D}}=\lim_{n\to\infty} \overline{\RV{D}}^n$. Let $\gamma$ be for all $(\theta,\phi)$ the unique distribution such that $\gamma F_{\overline{\RV{D}}^n} (\theta,\phi;A) = \delta_{0.5}(A)$ (i.e. the distribtion of an infinite sequence of IID RVs with success probability $0.5$) and assert that  $\delta_{(\theta,\phi)} \splitter{0.1}(\text{Id}_{\mathscr{T}}\otimes \gamma)\kappa = \delta_\theta \mu$ almost surely for all $(\theta,\phi)$.  We note that $\kappa^*:(_;A)\mapsto \gamma(\cdot;A)$ satisfies \ref{eq:general_kapdag} for arbitrary $\kappa$.
+
+
 
 % From \ref{eq:gamkap_2_mu} and \ref{eq:kappa_cancel} we have
 
