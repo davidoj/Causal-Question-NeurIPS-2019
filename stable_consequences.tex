@@ -1,5 +1,91 @@
 %!TEX root = main.tex
 
+\section{The story at a high level}
+
+\paragraph{Optmizibility:} I make the claim (unproven) that it is possible to find a ``universally optimal'' decision function if the following identity holds for all decision functions $J:E\to \Delta(\mathcal{D})$:
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) coordinate (A)
+	  ++(0.5,0) coordinate (copy0)
+	  ++(0.5,0) node[kernel] (mu) {$\mu$}
+	  ++(0.5,0) node[kernel] (J) {$J$}
+	  ++(0.5,0) node[kernel] (kap) {$\kappa$}
+	  ++(0.5,0) node[expectation] (u) {$u$};
+\draw (A) -- (mu) -- (J) -- (kap) -- (u);
+\draw (copy0) to [bend right = 40] (kap);
+\end{tikzpicture}
+=
+\begin{tikzpicture}
+\path (0,0) coordinate (A)
+	  ++(0.5,0) node[kernel] (mu) {$\mu$}
+	  ++(0.5,0) node[kernel] (be) {$\beta$}
+  	  ++(0.5,0) coordinate (copy0)
+  	  +(0.5,-0.5) node[kernel] (al) {$\alpha$}
+	  ++(0.5,0) node[kernel] (J) {$J$}
+	  ++(0.5,0) node[kernel] (kap) {$\kappa$}
+	  ++(0.5,0) node[expectation] (u) {$u$};
+\draw (A) -- (mu) -- (be) -- (J) -- (kap) -- (u);
+\draw (copy0) to [bend right = 40] (al) (al) to [bend right = 40] (kap);
+\end{tikzpicture} \label{eq:lift_the_string}
+\end{align}
+
+If the forward direction holds, the reverse direction does not hold - we can take a problem that respects \ref{eq:lift_the_string} and introduce additional dominated decisions that break \ref{eq:lift_the_string} without breaking the ``universal optimizability'' (i.e. decisions we know to be very bad, but exactly how bad depends on the state in a difficult-to-identify manner). It is an open question whether the reverse direction might hold if we exclude such decisions.
+
+\paragraph{Sufficient conditions for optimizibility:} It is easy to show that \ref{eq:lift_the_string} holds if there exists some kernel $^*\mu$ such that the following two identities hold:
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node[kernel] (kap) {$\kappa$}
+ + (-0.8,0.15) node[kernel] (mdm) {$\mu^*\mu$};
+\draw ($(kap.west) +(-1.25,-0.15)$) -- ($(kap.west) +(0,-0.15)$);
+\draw (kap) -- (0.5,0);
+\draw ($(mdm.west)+(-0.2,0)$) -- (mdm) -- ($(kap.west) +(0,0.15)$);
+\end{tikzpicture} &=
+\begin{tikzpicture}
+\path (0,0) node[kernel] (kap) {$\kappa$};
+\draw ($(kap.west) +(-0.5,0.15)$) -- ($(kap.west) +(0,0.15)$) ($(kap.west) +(-0.5,-0.15)$) -- ($(kap.west) +(0,-0.15)$);
+\draw (kap) -- (0.5,0);
+\end{tikzpicture}\label{eq:kappa_factorises}\\
+\begin{tikzpicture}
+\path (0,0) node (A) {}
+++ (0.5,0) node[kernel] (mu0) {$\mu$}
+++ (0.5,0) node[kernel] (smu) {$^*\mu$}
+++ (0.5,0) coordinate (copy0)
++  (0.5,0.5) coordinate (B)
++  (1,0.5) coordinate (T)
++  (0.5,-0.5) node[kernel] (mu1) {$\mu$}
++  (1,-0.5) coordinate (E);
+\draw (A) -- (mu0) -- (smu) -- (copy0);
+\draw (copy0) to [bend left] (B);
+\draw (B) -- (T);
+\draw (copy0) to [bend right] (mu1);
+\draw (mu1) -- (E);
+\end{tikzpicture}&=
+\begin{tikzpicture}
+\path (0,0) node (A) {}
+++ (0.5,0) coordinate (copy0)
+++ (0.5,0.5) node[kernel] (mu0) {$\mu$}
+++ (0.5,0) node[kernel] (smu) {$^*\mu$}
+++ (0.5,0) coordinate (T);
+\path (copy0)
+++  (0.5,-0.5) node[kernel] (mu1) {$\mu$}
+++  (1,0) coordinate (E);
+\draw (A) -- (copy0);
+\draw (copy0) to [bend left] (mu0);
+\draw (mu0) -- (smu) -- (T);
+\draw (copy0) to [bend right] (mu1);
+\draw (mu1) -- (E);
+\end{tikzpicture}\label{eq:know_mu}
+\end{align}
+
+The first condition says that $\kappa$ is fixed on the support of $\mu^*\mu$. 
+
+The second is less obvious. It implies that if we ``guess'' the underlying state via $\mu^*\mu$ this is as good as having the actual underlying state for the purposes of determining the output of $\mu$, but it is stronger than this. In particular, the \emph{joint distribution} between the ``guess'' and the observations must be the same whether we use the guess or the true underlying state as input to $\mu$.
+
+Two sufficient conditions for \ref{eq:know_mu} to obtain are 1) when $\mu$ is deterministic (as $\mu$ then has a left inverse) and 2) if observations are an infinite sequence of binary random variables where each $\mu_\theta$ corresponds to a Bernoulli distribution for a particular parameter $p_\theta$ (via the strong law of large numbers).
+
+
 \section{Recoverability}
 
 A natural assumption suggested by the notion of a CSDP is that of \emph{recoverability} - that a causal theory $\mathscr{T}:E\times D\rightarrowtriangle E$ permits some decision function that reproduces the distribution of the observed data. That is, we assume that for every $(\kappa_\theta,\mu_\theta):=\theta\in \mathscr{T}$ there exists $\gamma_{\theta}\in \Delta(\mathcal{D})$ such that
@@ -417,48 +503,49 @@ Equation \ref{eq:skipmu} implies that, given any $\xi\in\Delta(\mathscr{T})$, al
 \end{tikzpicture}
 \end{align}
 
-admit both \begin{tikzpicture}
+admit both $\kappa:=$\begin{tikzpicture}
 \path (0,0) node[kernel] (kap) {$\kappa^{\,}$};
 \draw ($(kap.west) +(-0.5,0.15)$) -- ($(kap.west) +(0,0.15)$) ($(kap.west) +(-0.5,-0.15)$) -- ($(kap.west) +(0,-0.15)$);
 \draw (kap) -- (0.5,0);
-\end{tikzpicture} and \begin{tikzpicture}
+\end{tikzpicture} and $\kappa_{\mathrm{fac}}:=$\begin{tikzpicture}
 \path (0,0) node[kernel] (kap) {$\kappa^{\,}$}
  + (-0.8,0.15) node[kernel] (mdm) {$\mu^*\mu$};
 \draw ($(kap.west) +(-1.25,-0.15)$) -- ($(kap.west) +(0,-0.15)$);
 \draw (kap) -- (0.5,0);
 \draw ($(mdm.west)+(-0.2,0)$) -- (mdm) -- ($(kap.west) +(0,0.15)$);
-\end{tikzpicture} as disintegrations from $(\RV{D},\RV{T})\dashrightarrow\RV{E}$. Therefore these two kernels agree almost surely with respect to the distribution \ref{eq:reference_dist} for any prior $\xi$. 
+\end{tikzpicture} as disintegrations from $(\RV{D},\RV{T})\dashrightarrow\RV{E}$. Therefore these $\kappa$ and $\kappa_{\mathrm{fac}}$ agree almost surely with respect to the distribution \ref{eq:reference_dist} for any prior $\xi$. 
 
-However, also by assumption \ref{eq:starmu}, we have that for $\theta,\theta'\in \mathscr{T}$  either $\mu(\theta;A)=\mu(\theta';A)$ for all $A\in \mathcal{E}$, or for any $A\in\mathcal{E}$ $\mu(\theta;A)=0$ or $\mu(\theta';A)=0$. That is, any two states either have the same probability measure or probability measures with disjoint support. This is problematic, as the distribution \ref{eq:reference_dist} then has no support over much of the space $D\times E\times \mathscr{T}$. If $\mu$ were deterministic, for example, and hence associated with some function $f$, while \ref{eq:starmu} would be guaranteed via a left inverse, \ref{eq:reference_dist} would be supported on a subset of $D\times\{(\theta,f(\theta))|\theta\in\mathscr{T}\}$. In particular, we have no guarantee that the desired equality of kernels holds if we take any decision that doesn't reproduce the observed distribution. This isn't totally trivial: we may live in a world where most actions make things worse, in which case knowing how to keep things the same is valuable.
+However, also by assumption \ref{eq:starmu}, we have that for $\theta,\theta'\in \mathscr{T}$  either $\mu(\theta;A)=\mu(\theta';A)$ for all $A\in \mathcal{E}$, or for any $A\in\mathcal{E}$ $\mu(\theta;A)=0$ or $\mu(\theta';A)=0$. That is, any two states either have the same probability measure or probability measures with disjoint support. This is problematic, as the distribution \ref{eq:reference_dist} then has no support over much of the space $D\times E\times \mathscr{T}$. If $\mu$ were deterministic, for example, and hence associated with some function $f$, while \ref{eq:starmu} would be guaranteed via a left inverse, \ref{eq:reference_dist} would be supported on a subset of $D\times\{(\theta,f(\theta))|\theta\in\mathscr{T}\}$. In particular, we have no guarantee that the desired equality of $\kappa$ and $\kappa_{\mathrm{fac}}$ holds if we take any decision that doesn't reproduce the observed distribution. This isn't totally trivial: we may live in a world where most actions make things worse, in which case knowing how to keep things the same is valuable.
 
 A stronger result can be found if we assume we have an infinite sequence of RVs $\RV{X}_i:E\to W$ and $\RV{D}_i:D\to V$ such that
 \begin{itemize}
 	\item $W^\mathbb{N}=E$, $V^\mathbb{N}=D$ (i.e. the sequence of all $\RV{X}_i$'s is identified with $E$ and the sequence of all $\RV{D}_i$'s is identified with $D$)
- 	\item For $A:=A_0\times A_1\times ... \in E$, $\mu = \splitter{0.1} \otimes_{i\in \mathbb{N}} \mu F_{\RV{X}_i}$ (the $\RV{X}_i$'s are IID)
- 	\item For $y:=(y_0,y_1,...)\in D$, $A\in E$, there exists $\kappa_0$ such that $\kappa = \splitter{0.1}\otimes_{i\in\mathbb{N}} F_{\RV{D}_i} \kappa_0 F_{\RV{X}_i}$ ($\kappa$ is ``IID'')
- \end{itemize} the sequence is IID with respect to $\mu(\theta;\cdot)$ for all $\theta$.
+ 	\item $\mu = \splitter{0.1} \otimes_{i\in \mathbb{N}} \mu F_{\RV{X}_i}$ (the $\RV{X}_i$'s are ``IID conditional on $\theta$'')\todo{this might be closely related to exchangeability via de Finetti?}
+ 	\item There exists $\kappa_0$ such that $\kappa = \splitter{0.1}\otimes_{i\in\mathbb{N}} (F_{\RV{D}_i}\otimes \mathrm{Id}_\mathscr{T}) \kappa_0 F_{\RV{X}_i}$ ($\kappa$ is ``IID conditional on $\RV{D},\theta$'')
+ \end{itemize} 
 
+Here we define the ``infinite copy map'' $\splitter{0.1}\otimes_{i\in\mathbb{N}}\mu F_{\RV{X}_i}$ to denote the kernel $\theta\mapsto \nu_\theta$ where $\nu_\theta$ the unique distribution such that for all finite $A\subset \mathbb{N}$ and projections $\pi_{A}:E\to \Delta(W^{|A|})$, $\nu_\theta \pi_{A}=\otimes_{i\in A}\mu_\theta F_{\RV{X}_i}$. This distribution is unique via the Kolmogorov extension theorem (the symmetry of the copy map guarantees the required consistency conditions) \citep{tao_introduction_2011}.
 
-We appear to require additional assumptions in order to support a nontrivial result, however. Given that $\mu$ is deterministic, we might suppose $\kappa^*$ is also likely to be deterministic (or, if it is not, the nondeterminism is not carried through by $\kappa$). Then we will have only a single pair in $D\times \mathscr{T}$ having nonzero measure for each $\theta \in \mathscr{T}$, so the ``almost surely'' condition rules out almost all feasible decision functions. There appear to be two competing demands - we want $\kappa^*$ stochastic in order to determine the results of a wide variety of decision functions, but we want $\mu$ deterministic in order to support statistical inference. One option might be to relax the assumption of determinism on $\mu$ slightly and hope that we ``gain more than we lose''. I suspect, at this point, that this does not work.
+\todo[inline]{I assume, for now, that measurability can be worked out in some cases; in particular, that there is a $\sigma$-algebra on infinite sequences that renders the above kernel measurable in the appropriate way.}
 
-An alternative nontrivial case of ``optimisability'' requires the additional assumption of \emph{double exchangeability}. This is exchangeability in the standard statistical sense, not in the sense of the Rubin causal model; a doubly exchangeable kernel is a kernel that remains the same if inputs and outputs are permuted in the same way.
+\begin{lemma}[``IID'' kernels agree on truncations]\label{lem:agree_on_truncations}
+For finite $A\subset\mathbb{N}$, $y,y'\in D$, if $\otimes_{i\in A} \RV{X}_i(y) = \otimes_{i\in A} \RV{X}_i(y')$ and $\kappa:\mathscr{T}\times D\to \Delta(\mathcal{E})$ is ``IID'' in the sense above then for all $\theta\in \mathscr{T}$, $B\in\mathcal{W}^{|A|}$, $\kappa(\theta,y;B) \pi_A = \kappa(\theta,y';B) \pi_A$.
+\end{lemma}
 
-\begin{definition}[Double exchangeability]
-A kernel $\kappa:X\to \Delta(\mathcal{Y})$ is \emph{doubly exchangeable} with respect to random variable sets $\{\RV{X}_i\}_{i\in A}$, $\{\RV{Y}_i\}_{i\in A}$ where $A=[n]$ or $A=\mathbb{N}$ and $\RV{X}_i:X\to X_i$, $\RV{Y}_i:Y\to Y_i$ if, given any finite permutation $\sigma$ and its inverse $\sigma^{-1}$ we have both
-\begin{itemize}
-	\item There exists $\sigma_X:X\to X$ and $\sigma^{-1}_Y:Y\to Y$ such that $F_{\sigma_X}\splitter{0.1}(\otimes_{i\in A} \RV{X}_{a_i}) = \splitter{0.1}(\otimes_{i\in A} \RV{X}_{\sigma(a_i)})$ and similarly for $F_{\sigma^{-1}_Y}$ and
-	\item $F_{\sigma_X}\kappa F_{\sigma^{-1}_Y} = \kappa$
-\end{itemize}
+\begin{proof}
+By definition, we have 
+\begin{align}
+	\kappa \pi_A (\theta,y;B) &= \otimes_{i\in A} \kappa F_{\RV{X}_i} (\theta,\RV{D}_i(y);B)\\
+							 &= \otimes_{i\in A} \kappa F_{\RV{X}_i} (\theta,\RV{D}_i(y');B)\\
+							 &= \kappa \pi_A (\theta,y';B)
+\end{align}
+\end{proof}
 
-Double exchangeability is similar to exchangeability for probability distributions, but there is no possible analogoue of the set $\{\RV{X}_i\}$ in that case.
-\end{definition}
+Suppose both $\RV{X}_i$ and $\RV{D}_i$ are binary, and that for each $\theta\in \mathscr{T}$ we have recoverability (Eq. \ref{eq:recoverability}) with $\mu_\theta=\gamma_\theta$ (we will conclude that $\RV{X}$ is ``directly controlled'' by $\RV{D}$, but we will not assume this at the outset). $\kappa^*$ is therefore trivial. For each $\theta$, $\RV{X}_i$ are IID Bernoulli variables and so each $\mu_\theta$ is characterised by a single parameter $p$; let $p_\theta$ be the value of this parameter for some given $\theta$. Define $\overline{\RV{X}} := \lim_{n\to\infty} \frac{1}{m}\sum_{i\in[n]} \RV{X}_i$ and $^*\mu$ to be any kernel $E\to \Delta(\mathscr{T})$ such that the support of $^*\mu(x;\cdot)$ is a subset of $\{\theta|p_\theta=\overline{\RV{X}}(x)\}$. Note that for any $\theta,\theta'\in \mathscr{T}$ we have either $p_\theta=p_{\theta'}$ and so $\mu(\theta;A)=\mu(\theta';A)$ for all $A$ or $\theta'$ is not in the support of $\mu^*\mu(\theta;\cdot)$. Thus we have \ref{eq:starmu}, and hence ``almost sure'' equality of $\kappa$ and $\kappa_{\mathrm{fac}}$.
 
+However with the exception of states where $p_\theta=0$ or $1$, almost sure equality is enough for $\kappa_{\mathrm{fac}}\pi_A(\theta,y;B)=\kappa\pi_A(\theta,y;B)$ for all $y\in D$, finite $A\subset\mathbb{N}$ and $B\in \mathcal{W}^{|A|}$. Then by the Kolmogorov extension theorem, we also have $\kappa_{\mathrm{fac}} (\theta,y;B) = \kappa(\theta,y;B)$ for all $y\in D$ and ``almost all'' $\theta\in \mathscr{T}$.
 
-An example follows. We identify $\mathscr{T}\cong[0,1]\times T$, $E\cong [0,1]^2$ and $D\cong\{0,1\}^{\mathbb{N}}$. For $(\theta,\phi)\in \mathscr{T}$ let $\mu:(\theta;A\times B)\mapsto \delta_{0.5}(A)\delta_{\frac{\theta}{2}}(B)$.
-
-Define $\overline{\RV{D}}^n:\{0,1\}^n\to [0,1]$ by $\overline{\RV{D}}^n:(y_0,...,y_n)\mapsto \frac{1}{n} \sum_{i\in [n]} y_i$ and let $\overline{\RV{D}}:D\to [0,1]$ be the limit $\overline{\RV{D}}=\lim_{n\to\infty} \overline{\RV{D}}^n$. Let $\gamma$ be for all $(\theta,\phi)$ the unique distribution such that $\gamma F_{\overline{\RV{D}}^n} (\theta,\phi;A) = \delta_{0.5}(A)$ (i.e. the distribtion of an infinite sequence of IID RVs with success probability $0.5$) and assert that  $\delta_{(\theta,\phi)} \splitter{0.1}(\text{Id}_{\mathscr{T}}\otimes \gamma)\kappa = \delta_\theta \mu$ almost surely for all $(\theta,\phi)$.  We note that $\kappa^*:(_;A)\mapsto \gamma(\cdot;A)$ satisfies \ref{eq:general_kapdag} for arbitrary $\kappa$.
-
-
+This appears to have similarities to the general case where we are trying to identify a particular function from some set of possible functions and we know the output of that function for a subset of inputs. It still comes down to a question of whether or not the set of functions in question is small enough to be fully characterised by the set of inputs we're allowed to see.
 
 % From \ref{eq:gamkap_2_mu} and \ref{eq:kappa_cancel} we have
 
