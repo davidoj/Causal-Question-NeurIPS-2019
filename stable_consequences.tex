@@ -2,6 +2,8 @@
 
 \section{The story at a high level}
 
+Take a causal theory $\mathscr{T}$ where we label each pair $\theta:=(\kappa_\theta,\mu_\theta)\in\mathscr{T}$. Define the kernels $\kappa:\mathscr{T}\times D\to \mathcal{E}$ and $\mu:\mathscr{T}\to\mathcal{E}$.
+
 \paragraph{Optmizibility:} I make the claim (unproven) that it is possible to find a ``universally optimal'' decision function if the following identity holds for all decision functions $J:E\to \Delta(\mathcal{D})$:
 
 \begin{align}
@@ -85,9 +87,17 @@ The second is less obvious. It implies that if we ``guess'' the underlying state
 
 Two sufficient conditions for \ref{eq:know_mu} to obtain are 1) when $\mu$ is deterministic (as $\mu$ then has a left inverse) and 2) if observations are an infinite sequence of binary random variables where each $\mu_\theta$ corresponds to a Bernoulli distribution for a particular parameter $p_\theta$ (via a $^*\mu$ that witnesses the strong law of large numbers).
 
-A more general graphical sufficient condition is available, but it is not presently clear if it is also a necessary one.
+A more general sufficient graphical condition is available, but it is not presently clear if it is also a necessary one.
 
 These conditions are not necessary for \ref{eq:lift_the_string}; observations may be ``too informative''. For example, if $\mathscr{T}$ contains many different $\mu_\theta$ but only one $\kappa_\theta$, then we can always perform \ref{eq:lift_the_string}, while we do not generally have \ref{eq:know_mu}.
+
+Below, I document additional assumptions that, along with \ref{eq:know_mu} yield \ref{eq:kappa_factorises}.
+
+I'm not sure how interesting the assumptions themselves are. One interesting point about the big picture story is that from one point of view the assumptions boil down to:
+\begin{itemize}
+	\item We can characterise the input-output behaviour of $\kappa$ for any given state and a small subset of available decisions
+	\item $\kappa$ is sufficiently regular that its behaviour on said subset of decisions characterises its complete behaviour
+\end{itemize}
 
 \section{Recoverability}
 
@@ -95,6 +105,8 @@ A natural assumption suggested by the notion of a CSDP is that of \emph{recovera
 \begin{align}
 	\gamma_{\theta}\kappa_\theta = \mu_\theta \label{eq:recoverability}
 \end{align}
+
+``Traditional'' causal inference doesn't have a strict equivalent of this assumption, though it corresponds roughly to the ``easy'' cases (for example, it is satisfied by a CBN where there are no backdoor paths between the ``intervened'' variable and the ``target'' variable). One reason I think it's interesting is that \emph{randomised recoverability} may be quite a general assumption - that is, there is ``in principle'' a stochastic decision that recovers the observed distribution, but we are practically limited to taking mixed decisions that cannot necessarily accomplish this.
 
 Suppose also that we have some $\kappa^*$ that, for all $\theta \in \mathscr{T}$, is a Bayesian inversion of $\gamma_\theta$ and $\kappa_\theta$; that is:
 
