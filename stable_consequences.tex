@@ -83,8 +83,11 @@ The first condition says that $\kappa$ is fixed on the support of $\mu^*\mu$.
 
 The second is less obvious. It implies that if we ``guess'' the underlying state via $\mu^*\mu$ this is as good as having the actual underlying state for the purposes of determining the output of $\mu$, but it is stronger than this. In particular, the \emph{joint distribution} between the ``guess'' and the observations must be the same whether we use the guess or the true underlying state as input to $\mu$.
 
-Two sufficient conditions for \ref{eq:know_mu} to obtain are 1) when $\mu$ is deterministic (as $\mu$ then has a left inverse) and 2) if observations are an infinite sequence of binary random variables where each $\mu_\theta$ corresponds to a Bernoulli distribution for a particular parameter $p_\theta$ (via the strong law of large numbers).
+Two sufficient conditions for \ref{eq:know_mu} to obtain are 1) when $\mu$ is deterministic (as $\mu$ then has a left inverse) and 2) if observations are an infinite sequence of binary random variables where each $\mu_\theta$ corresponds to a Bernoulli distribution for a particular parameter $p_\theta$ (via a $^*\mu$ that witnesses the strong law of large numbers).
 
+A more general graphical sufficient condition is available, but it is not presently clear if it is also a necessary one.
+
+These conditions are not necessary for \ref{eq:lift_the_string}; observations may be ``too informative''. For example, if $\mathscr{T}$ contains many different $\mu_\theta$ but only one $\kappa_\theta$, then we can always perform \ref{eq:lift_the_string}, while we do not generally have \ref{eq:know_mu}.
 
 \section{Recoverability}
 
