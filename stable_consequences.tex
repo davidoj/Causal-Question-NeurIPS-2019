@@ -2,7 +2,7 @@
 
 \section{The story at a high level}
 
-Take a causal theory $\mathscr{T}$ where we label each pair $\theta:=(\kappa_\theta,\mu_\theta)\in\mathscr{T}$. Define the kernels $\kappa:\mathscr{T}\times D\to \mathcal{E}$ and $\mu:\mathscr{T}\to\mathcal{E}$.
+Take a causal theory $\mathscr{T}$ where we label each pair $\theta:=(\kappa_\theta,\mu_\theta)\in\mathscr{T}$. Define the kernels $\kappa:\mathscr{T}\times D\to \mathcal{E}$ and $\mu:\mathscr{T}\to\mathcal{E}$ by $\kappa:(\theta,y;A)\mapsto \kappa_\theta(y;A)$ and $\mu:(\theta;A)\mapsto \mu_\theta(A)$.
 
 \paragraph{Optmizibility:} I make the claim (unproven) that it is possible to find a ``universally optimal'' decision function if the following identity holds for all decision functions $J:E\to \Delta(\mathcal{D})$:
 
@@ -31,6 +31,8 @@ Take a causal theory $\mathscr{T}$ where we label each pair $\theta:=(\kappa_\th
 \draw (copy0) to [bend right = 40] (al) (al) to [bend right = 40] (kap);
 \end{tikzpicture} \label{eq:lift_the_string}
 \end{align}
+
+The reason why I think this is optimizable is that the decision function $J$ ``sees'' all the input to $\kappa$.
 
 If the forward direction holds, the reverse direction does not hold - we can take a problem that respects \ref{eq:lift_the_string} and introduce additional dominated decisions that break \ref{eq:lift_the_string} without breaking the ``universal optimizability'' (i.e. decisions we know to be very bad, but exactly how bad depends on the state in a difficult-to-identify manner). It is an open question whether the reverse direction might hold if we exclude such decisions.
 
