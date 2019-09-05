@@ -19,13 +19,12 @@
 \begin{tikzpicture}
 \path (0,0) coordinate (A)
 	  ++(0.5,0) node[kernel] (mu) {$\mu$}
-	  ++(0.5,0) node[kernel] (be) {$\beta$}
   	  ++(0.5,0) coordinate (copy0)
   	  +(0.5,-0.5) node[kernel] (al) {$\alpha$}
 	  ++(0.5,0) node[kernel] (J) {$J$}
 	  ++(0.5,0) node[kernel] (kap) {$\kappa$}
 	  ++(0.5,0) node[expectation] (u) {$u$};
-\draw (A) -- (mu) -- (be) -- (J) -- (kap) -- (u);
+\draw (A) -- (mu) --(J) -- (kap) -- (u);
 \draw (copy0) to [bend right = 40] (al) (al) to [bend right = 40] (kap);
 \end{tikzpicture} \label{eq:lift_the_string}
 \end{align}
@@ -76,7 +75,22 @@ If the forward direction holds, the reverse direction does not hold - we can tak
 \draw (mu0) -- (smu) -- (T);
 \draw (copy0) to [bend right] (mu1);
 \draw (mu1) -- (E);
-\end{tikzpicture}\label{eq:know_mu}
+\end{tikzpicture}\label{eq:know_mu}\\
+&= \begin{tikzpicture}
+\path (0,0) node (A) {}
+++ (0.5,0) node[kernel] (mu) {$\mu$}
+++ (0.5,0) coordinate (copy0)
+++ (0.5,0.5) node[kernel] (smu) {$^*\mu$}
+++ (0.5,0) coordinate (T);
+\path (copy0)
+++  (0.5,-0.5) coordinate (mu1)
+++  (0.5,0) coordinate (E);
+\draw (A) -- (mu) -- (copy0);
+\draw (copy0) to [bend left] (smu);
+\draw (smu) -- (T);
+\draw (copy0) to [bend right] (mu1);
+\draw (mu1) -- (E);
+\end{tikzpicture} \label{eq:starmusufficient}
 \end{align}
 
 The first condition says that $\kappa$ is fixed on the support of $\mu^*\mu$. 
