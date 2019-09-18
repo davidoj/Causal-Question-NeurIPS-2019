@@ -2,8 +2,6 @@
 
 \section{The story at a high level}
 
-Take a causal theory $\mathscr{T}$ where we label each pair $\theta:=(\kappa_\theta,\mu_\theta)\in\mathscr{T}$. Define the kernels $\kappa:\mathscr{T}\times D\to \mathcal{E}$ and $\mu:\mathscr{T}\to\mathcal{E}$ by $\kappa:(\theta,y;A)\mapsto \kappa_\theta(y;A)$ and $\mu:(\theta;A)\mapsto \mu_\theta(A)$.
-
 \paragraph{Optmizibility:} I make the claim (unproven) that it is possible to find a ``universally optimal'' decision function if the following identity holds for all decision functions $J:E\to \Delta(\mathcal{D})$:
 
 \begin{align}
@@ -31,124 +29,27 @@ Take a causal theory $\mathscr{T}$ where we label each pair $\theta:=(\kappa_\th
 \end{tikzpicture} \label{eq:lift_the_string}
 \end{align}
 
-I have a proof that this is so in my notebook, but I still have to write it up and check it.
+If the forward direction holds, the reverse direction does not hold - we can take a problem that respects \ref{eq:lift_the_string} and introduce additional dominated decisions that break \ref{eq:lift_the_string} without breaking the ``universal optimizability'' (i.e. decisions we know to be very bad, but exactly how bad depends on the state in a difficult-to-identify manner). It is an open question whether the reverse direction might hold if we exclude such decisions.
 
-If the forward direction holds, the reverse direction does not hold - we can take a problem that respects \ref{eq:lift_the_string} and introduce additional dominated decisions that break \ref{eq:lift_the_string} without breaking the ``universal optimizability'' (i.e. decisions we know to be very bad, but exactly how bad depends on the state in a difficult-to-identify manner). Again in my notebook, I have an argument that if we only require \ref{eq:lift_the_string} for any complete class of decision functions, then this requirement is necessary. 
-
-\paragraph{Necessary and Sufficient conditions for optimizibility:} 
-
-Setting aside the utility for now, if equation \ref{eq:lift_the_string} holds for all decision functions dominated by $I$ (that is, all $J$ such that for all $x\in E$, $J(x;\cdot) \ll I(x;\cdot)$), this is equivalent to the following:
+\paragraph{Sufficient conditions for optimizibility:} It is easy to show that \ref{eq:lift_the_string} holds if there exists some kernel $^*\mu$ such that the following two identities hold:
 
 \begin{align}
 \begin{tikzpicture}
-\path (0,0) coordinate (A)
-	  ++(0.5,0) coordinate (copy0)
-	  ++(0.5,0) node[kernel] (mu) {$\mu$}
-	  ++(0.5,0) node[kernel] (J) {$I$}
-	  ++(0.5,0) coordinate(copy1)
-	  ++(0.5,0) node[kernel] (kap) {$\kappa$}
-	  ++(0.5,0) node (u) {}
-	  ++(0,0.5) node (D) {};
-\draw (A) -- (mu) -- (J) -- (kap) -- (u);
-\draw (copy0) to [bend right = 40] (kap);
-\draw (copy1) to [bend left] (D); 
-\end{tikzpicture}
-=
-\begin{tikzpicture}
-\path (0,0) coordinate (A)
-	  ++(0.5,0) node[kernel] (mu) {$\mu$}
-  	  ++(0.5,0) coordinate (copy0)
-  	  +(0.5,-0.5) node[kernel] (al) {$\alpha$}
-	  ++(0.5,0) node[kernel] (J) {$I$}
-  	  ++(0.5,0) coordinate (copy1)
-	  ++(0.5,0) node[kernel] (kap) {$\kappa$}
-	  ++(0.5,0) node (u) {}
-	  ++(0,0.5) node (D) {};
-\draw (A) -- (mu) --(J) -- (kap) -- (u);
-\draw (copy0) to [bend right = 40] (al) (al) to [bend right = 40] (kap);
-\draw (copy1) to [bend left] (D);
-\end{tikzpicture}\label{eq:lts_joint}
-\end{align}
-
-The extra copy map allows us to extend from equality ``for $I$'' to equality ``for all kernels dominated by $I$''.
-
-\todo[inline]{We ignore the utility as introducing it moves us out of the world of Markov kernels; need to show that everything still works if we reintroduce it}
-
-Immediate from Eq. \ref{eq:lts_joint} is the fact that there is some kernel $L$ such that the left hand side of \ref{eq:lts_joint} is equal to $\mu L$. Under additional assumptions the reverse direction holds:
-
-
-\begin{align}
-\exists L:
-\begin{tikzpicture}
-	 \path (0,0) coordinate (A)
-	  ++(0.5,0) coordinate (copy0)
-	  ++(0.5,0) node[kernel] (mu) {$\mu$}
-	  ++(0.5,0) node[kernel] (J) {$I$}
-	  ++(0.5,0) coordinate(copy1)
-	  ++(0.5,0) node[kernel] (kap) {$\kappa$}
-	  ++(0.5,0) node (u) {}
-	  ++(0,0.5) node (D) {};
-\draw (A) -- (mu) -- (J) -- (kap) -- (u);
-\draw (copy0) to [bend right = 40] (kap);
-\draw (copy1) to [bend left] (D); 
+\path (0,0) node[kernel] (kap) {$\kappa$}
+ + (-0.8,0.15) node[kernel] (mdm) {$\mu^*\mu$};
+\draw ($(kap.west) +(-1.25,-0.15)$) -- ($(kap.west) +(0,-0.15)$);
+\draw (kap) -- (0.5,0);
+\draw ($(mdm.west)+(-0.2,0)$) -- (mdm) -- ($(kap.west) +(0,0.15)$);
 \end{tikzpicture} &=
 \begin{tikzpicture}
-	\path (0,0) coordinate (A)
-	++(0.5,0) node[kernel] (mu) {$\mu$}
-	++(0.5,0) node[kernel] (L) {$L$}
-	++(1,0.5) node (D) {}
-	++(0,-0.5) node (u) {};
-	\draw (A) -- (mu) -- (L) -- (u);
-	\draw ($(L.east) +(0,0.15)$) to [bend left] (D);
-\end{tikzpicture}\label{eq:joint_from_mu}\\	
-\exists M:\begin{tikzpicture}
-\path (0,0) node (A) {}
-++ (0.5,0) node[kernel] (mu) {$\mu$}
-++ (0.5,0) coordinate (copy0)
-++ (0.5,0.5) node[kernel] (smu) {$M$}
-++ (0.5,0) coordinate (T);
-\path (copy0)
-++  (0.5,-0.5) coordinate (mu1)
-++  (0.5,0) coordinate (E);
-\draw (A) -- (mu) -- (copy0);
-\draw (copy0) to [bend left] (smu);
-\draw (smu) -- (T);
-\draw (copy0) to [bend right] (mu1);
-\draw (mu1) -- (E);
-\end{tikzpicture} &=
+\path (0,0) node[kernel] (kap) {$\kappa$};
+\draw ($(kap.west) +(-0.5,0.15)$) -- ($(kap.west) +(0,0.15)$) ($(kap.west) +(-0.5,-0.15)$) -- ($(kap.west) +(0,-0.15)$);
+\draw (kap) -- (0.5,0);
+\end{tikzpicture}\label{eq:kappa_factorises}\\
 \begin{tikzpicture}
-\path (0,0) node (A) {}
-++ (0.5,0) coordinate (copy0)
-++ (0.5,0.5) node[kernel] (mu0) {$\mu$}
-++ (0.5,0) node[kernel] (smu) {$M$}
-++ (0.5,0) coordinate (T);
-\path (copy0)
-++  (0.5,-0.5) node[kernel] (mu1) {$\mu$}
-++  (1,0) coordinate (E);
-\draw (A) -- (copy0);
-\draw (copy0) to [bend left] (mu0);
-\draw (mu0) -- (smu) -- (T);
-\draw (copy0) to [bend right] (mu1);
-\draw (mu1) -- (E);
-\end{tikzpicture}\label{eq:muM_det}\\
-\begin{tikzpicture}
-\path (0,0) node (A) {}
-++ (0.5,0) node[kernel] (mu) {$\mu$}
-++ (0.5,0) coordinate (copy0)
-++ (0.5,0.5) node[kernel] (smu) {$M$}
-++ (0.5,0) coordinate (T);
-\path (copy0)
-++  (0.5,-0.5) coordinate (mu1)
-++  (0.5,0) coordinate (E);
-\draw (A) -- (mu) -- (copy0);
-\draw (copy0) to [bend left] (smu);
-\draw (smu) -- (T);
-\draw (copy0) to [bend right] (mu1);
-\draw (mu1) -- (E);
-\end{tikzpicture}&= \begin{tikzpicture}
 \path (0,0) node (A) {}
 ++ (0.5,0) node[kernel] (mu0) {$\mu$}
-++ (0.5,0) node[kernel] (smu) {$M$}
+++ (0.5,0) node[kernel] (smu) {$^*\mu$}
 ++ (0.5,0) coordinate (copy0)
 +  (0.5,0.5) coordinate (B)
 +  (1,0.5) coordinate (T)
@@ -159,148 +60,48 @@ Immediate from Eq. \ref{eq:lts_joint} is the fact that there is some kernel $L$ 
 \draw (B) -- (T);
 \draw (copy0) to [bend right] (mu1);
 \draw (mu1) -- (E);
-\end{tikzpicture}\label{eq:know_mu}
-\end{align}
-
-\todo[inline]{In general, \ref{eq:joint_from_mu} requires an ``infinite swap map'' to be defined, as the upper and lower wires might each represent an infinite collection of wires}
-
-Equation \ref{eq:joint_from_mu} gives us that the ``output'' of $\mu$ is enough to reconstruct the joint distribution of inputs and outputs to $\kappa$ via some $L$. This is enough, informally, to say ``if we have $\mu_\theta$ then we have $\kappa_\theta$''.
-
-The second pair of assumptions permit us to ``know $\mu_\theta$''. Sufficient for \ref{eq:muM_det} is the condition that there is some function $\RV{T}$ with associated kernel $F_{\RV{T}}$ such that $\mu F_{\RV{T}}$ is deterministic and for \ref{eq:know_mu} we require that $\RV{T}$ is sufficient for $\{\mu_\theta\}$. An example of this is where $\RV{T}$ is the mean of an infinite sequence of IID Bernoulli variables and $\mu F_{\RV{T}}$ is then deterministic via the strong law of large numbers. In the typical regime of causal models where the joint distribution is assumed to be known with certainty, it \emph{seems very likely} that these two assumptions hold.
-
-Equation \ref{eq:know_mu} is not necessary for \ref{eq:lift_the_string}, as observations may be ``too informative''. For example, if $\mathscr{T}$ contains many different $\mu_\theta$ but only one $\kappa_\theta$, then we can always perform \ref{eq:lift_the_string} while we do not generally have \ref{eq:know_mu}.
-
-Equation \ref{eq:joint_from_mu} is not sufficient for \ref{eq:lts_joint}. Informally, we might know $\kappa_\theta$ given $\mu_\theta$ but we may not know $\mu_\theta$.
-
-Equation \ref{eq:joint_from_mu} is quite general, and the necessity of the condition follows from an uninteresting choice of $L$. It may be of interest to investigate whether it can be satisfied for particular kernels $L$. For example, $L$ may factorise:
-
-\begin{align}
-\begin{tikzpicture}
-\path (0,0) coordinate (A)
-++ (0.5,0) node[kernel,inner sep=5pt] (L) {$L$}
-++ (0.7,0.2) node (D) {}
-++ (0,-0.2) node (E) {}
-++ (0,-0.2) node (F) {$...$};
-\draw ($(A.east) +(0,0)$) -- ($(L.west) +(0,0)$);
-\draw ($(A.east) + (0,0.2)$) -- ($(L.west) +(0,0.2)$);
-\draw ($(A.east) + (0,-0.2)$) -- ($(L.west) +(0,-0.2)$);
-\draw ($(L.east) +(0,0)$) -- (E);
-\draw ($(L.east) + (0,0.2)$) -- (D);
-\draw ($(L.east) + (0,-0.2)$) -- (F);
 \end{tikzpicture}&=
 \begin{tikzpicture}
-\path (0,0) node[kernel] (LE) {$L_0$}
-+ (0,0.5) node[kernel] (LD) {$L_0$}
-++ (0.7,0) node (E) {}
-+ (0,0.5) node (D) {}
-+ (-0.7,-0.3) node (F) {$...$};
-\draw ($(LE.west) +(-0.5,0)$) -- (LE);
-\draw ($(LD.west) + (-0.5,0)$) -- (LD);
-\draw (LE) -- (E);
-\draw (LD) -- (D);
-\end{tikzpicture}
+\path (0,0) node (A) {}
+++ (0.5,0) coordinate (copy0)
+++ (0.5,0.5) node[kernel] (mu0) {$\mu$}
+++ (0.5,0) node[kernel] (smu) {$^*\mu$}
+++ (0.5,0) coordinate (T);
+\path (copy0)
+++  (0.5,-0.5) node[kernel] (mu1) {$\mu$}
+++  (1,0) coordinate (E);
+\draw (A) -- (copy0);
+\draw (copy0) to [bend left] (mu0);
+\draw (mu0) -- (smu) -- (T);
+\draw (copy0) to [bend right] (mu1);
+\draw (mu1) -- (E);
+\end{tikzpicture}\label{eq:know_mu}\\
+&= \begin{tikzpicture}
+\path (0,0) node (A) {}
+++ (0.5,0) node[kernel] (mu) {$\mu$}
+++ (0.5,0) coordinate (copy0)
+++ (0.5,0.5) node[kernel] (smu) {$^*\mu$}
+++ (0.5,0) coordinate (T);
+\path (copy0)
+++  (0.5,-0.5) coordinate (mu1)
+++  (0.5,0) coordinate (E);
+\draw (A) -- (mu) -- (copy0);
+\draw (copy0) to [bend left] (smu);
+\draw (smu) -- (T);
+\draw (copy0) to [bend right] (mu1);
+\draw (mu1) -- (E);
+\end{tikzpicture} \label{eq:starmusufficient}
 \end{align}
 
-A special case of this is considered below. We can informally think of this case as ``correlation \emph{is} causation'', as from each observed RV we can get an input-output pair via $L_0$. 
+The first condition says that $\kappa$ is fixed on the support of $\mu^*\mu$. 
 
-This is a generalisation of the usual case of ``correlation is causation'' as, for example, the output may be a randomised version of the observational conditionals.
+The second is less obvious. It implies that if we ``guess'' the underlying state via $\mu^*\mu$ this is as good as having the actual underlying state for the purposes of determining the output of $\mu$, but it is stronger than this. In particular, the \emph{joint distribution} between the ``guess'' and the observations must be the same whether we use the guess or the true underlying state as input to $\mu$.
 
-\subsection{Informal overview of sufficient conditions}
+Two sufficient conditions for \ref{eq:know_mu} to obtain are 1) when $\mu$ is deterministic (as $\mu$ then has a left inverse) and 2) if observations are an infinite sequence of binary random variables where each $\mu_\theta$ corresponds to a Bernoulli distribution for a particular parameter $p_\theta$ (via a $^*\mu$ that witnesses the strong law of large numbers).
 
-First, we assume that the state-observations map $\mu$ sends a state to an infinite IID sequence generated by the one-shot state-consequence map $\kappa_0$ and some state-decision map $\gamma$:
-\begin{align}
-	\begin{tikzpicture}
-	\path (0,0) node (A) {$\theta$}
-	++(0.5,0) node[kernel] (mu) {$\mu$}
-	++(0.5,-0.25) node (ell) {...};
-	\draw (A) -- (mu);
-	\draw ($(mu.east) +(0,0.15)$) -- ($(mu.east) +(0.25,0.15)$);
-	\draw ($(mu.east) +(0,0)$) -- ($(mu.east) +(0.25,0)$);
-	\draw ($(mu.east) +(0,-0.15)$) -- (ell);
-	\end{tikzpicture}
-	=
-	\begin{tikzpicture}
-	\path (0,0) node (A) {$\theta$}
-	++(0.35,0) coordinate (copy0)
-	++(0.25,0.5) coordinate (copy1)
-	++(0.5,0) node[kernel] (g0) {$\gamma$}
-	++(0.5,0) node[kernel] (k0) {$\kappa_0$}
-	++(0.5,0) coordinate (k0end)
-	++(0,-0.5) coordinate (k1end)
-	++(-0.5,0) node[kernel] (k1) {$\kappa_0$}
-	++(-0.5,0) node[kernel] (g1) {$\gamma$}
-	++(-0.5,0) coordinate (copy2)
-	++(0.5,-0.5) node (ell) {...};
-	\draw (A) -- (copy0) -- (copy2) -- (g1) -- (k1) -- (k1end);
-	\draw (copy0) to [bend left] (copy1) -- (g0) -- (k0) -- (k0end);
-	\draw (copy0) to [bend right] (ell);
-	\draw (copy1) to [bend left = 40] (k0);
-	\draw (copy2) to [bend left = 40] (k1);
-	\end{tikzpicture}\label{eq:iidmu}
-\end{align}
+A more general graphical sufficient condition is available, but it is not presently clear if it is also a necessary one.
 
-\todo[inline]{Infinite copy maps (indicated by ellipsis) are defined for distributions via the Kolmogorov extension theorem. I don't know if they always exist for kernels.}
-
-\todo[inline]{I think this assumption has a connection with the De Finetti representation theorem}
-
-Second we assume $\kappa_0$ is \emph{globally invertible}. That is, there is a kernel $\kappa_0^*:E\to \Delta(\mathcal{D})$ such that
-
-\begin{align}
-\begin{tikzpicture}
-	\path (0,0) coordinate (A)
-	++ (0.3,0) coordinate (copy0)
-	++ (0.5,0) node[kernel] (gam) {$\gamma$}
-	++ (0.5,0) coordinate (copy1)
-	+ (0.5,-0.5) node[kernel] (kap) {$\kappa_0$}
-	+ (0.5,0.5) coordinate (B)
-	+ (1,-0.5) node (E) {$\RV{E}$}
-	+ (1,0.5) node (D) {$\RV{D}$};
-	\draw (A) -- (copy0);
-	\draw (copy0) -- (gam);
-	\draw (copy0) to [bend right] (kap);
-	\draw (gam) -- (copy1);
-	\draw (copy1) to [bend left] (B);
-	\draw (copy1) to [bend right] (kap);
-	\draw (kap) to (E);
-	\draw (B) to (D);
-\end{tikzpicture}
-&=
-\begin{tikzpicture}
-	\path (0,0) coordinate (A)
-	++ (0.3,0) coordinate (copy0)
-	++ (0.5,0) node[kernel] (gam) {$\gamma$}
-	++ (0.5,0) node[kernel] (kap) {$\kappa_0$}
-	++ (0.5,0) coordinate (copy1)
-	+ (0.5,0.5) node[kernel] (kapdag) {$\kappa_0^*$}
-	+ (0.5,-0.5) coordinate (B)
-	+ (1,-0.5) node (E) {$\RV{E}$}
-	+ (1,0.5) node (D) {$\RV{D}$};
-	\draw (A) -- (copy0);
-	\draw (copy0) -- (gam);
-	\draw (copy0) to [bend right=40] (kap);
-	\draw (gam) -- (kap);
-	\draw (kap) -- (copy1);
-	\draw (copy1) to [bend right] (B);
-	\draw (copy1) to [bend left] (kapdag);
-	\draw (kapdag) to (D);
-	\draw (B) to (E);
-\end{tikzpicture}
-\end{align}
-
-In the general, non-globally-invertible case we'd need a string from the ``state'' wire to $\kappa_0^*$.
-
-Under these two conditions plus full support plus sufficient regularity for the strong law of large numbers, we have \ref{eq:kappa_factorises}, \ref{eq:know_mu} and \ref{eq:starmusufficient}.
-
-I think a CBN is a causal theory where the consequence map is a decision randomised version of $\kappa_0$ in Eq. \ref{eq:iidmu} (i.e. the true consequence $\kappa=M\kappa_0$) and these other conditions hold, and is therefore dominated by a theory of the form above. Global invertibility is related to variable setting/hard interventions, and I think it's also related to the ``No Causes in No Causes out'' theorems \ref{th:no_in_out_min} and \ref{th:no_in_out_bayes}.
-
-% I'm not sure how interesting the assumptions themselves are. One interesting point about the big picture story is that from one point of view the assumptions boil down to:
-% \begin{itemize}
-% 	\item We can characterise the input-output behaviour of $\kappa$ for any given state and a small subset of available decisions
-% 	\item $\kappa$ is sufficiently regular that its behaviour on said subset of decisions characterises its complete behaviour
-% \end{itemize}
-
-
-
+These conditions are not necessary for \ref{eq:lift_the_string}; observations may be ``too informative''. For example, if $\mathscr{T}$ contains many different $\mu_\theta$ but only one $\kappa_\theta$, then we can always perform \ref{eq:lift_the_string}, while we do not generally have \ref{eq:know_mu}.
 
 \section{Recoverability}
 
@@ -308,8 +109,6 @@ A natural assumption suggested by the notion of a CSDP is that of \emph{recovera
 \begin{align}
 	\gamma_{\theta}\kappa_\theta = \mu_\theta \label{eq:recoverability}
 \end{align}
-
-``Traditional'' causal inference doesn't have a strict equivalent of this assumption, though it corresponds roughly to the ``easy'' cases (for example, it is satisfied by a CBN where there are no backdoor paths between the ``intervened'' variable and the ``target'' variable). One reason I think it's interesting is that \emph{randomised recoverability} may be quite a general assumption - that is, there is ``in principle'' a stochastic decision that recovers the observed distribution, but we are practically limited to taking mixed decisions that cannot necessarily accomplish this.
 
 Suppose also that we have some $\kappa^*$ that, for all $\theta \in \mathscr{T}$, is a Bayesian inversion of $\gamma_\theta$ and $\kappa_\theta$; that is:
 

@@ -1,0 +1,236 @@
+\section{No Free Lunch and Causal Assumptions}
+Call any causal theory $\mathscr{T}$ where $\mathscr{T}=\Delta(\mathcal{F})^D\times \mathscr{H}$ for any $\mathscr{H}\subset\Delta(\mathcal{E})$ a \emph{skeptical theory} (this name is chosen because $\mathscr{T}$ holds that every consequence is possible, no matter what is observed).
+
+% Let the set of measurable functions from $D\to F$ be denoted $\tilde{F}^D$. A \emph{deterministic skeptical theory} is a theory $\mathscr{T}=\tilde{F}^D\times \mathscr{H}$ for some $\mathscr{H}\subset \Delta(\mathcal{E})$ where we associate each measurable function $f\in \tilde{F}^D$ with a kernel $\kappa_f:(x,A)\mapsto \delta_{f(x)}(A)$.
+
+\begin{theorem}[Minimax no free lunch]\label{th:nfl_mm}
+For any CSDP where $\mathscr{T}$ is a skeptical theory and $D, E$ and $F$ are denumerable, all decision functions have the same minimax risk.
+\end{theorem}
+
+\begin{proof}
+Consider an arbitrary pair of stochastic decisions $\gamma,\gamma'\in \Delta(\mathcal{D})$. One can straightforwardly construct a kernel $A:D\to \Delta(\mathcal{D})$ such that $\gamma A = \gamma'$. Thus for any decision functions $J$ and $J'$, there is some Markov kernel $A:D\to \Delta(\mathcal{D})$ such that $\mu J A = \mu J'$. Noting that for all $(\kappa,\mu)\in \mathscr{T}$ we also have $(A\kappa,\mu)\in \mathscr{T}$, it follows that for each $(\kappa,\mu)\in \mathscr{T}$ there is a corresponding $(A\kappa,\mu)\in \mathscr{T}$ such that $R(J,\kappa,\mu)=R(J',A\kappa,\mu)$.
+\end{proof}
+
+\begin{definition}[Constant on consequence permutations]
+Given a causal theory $\mathscr{T}$ with $\sigma$-algebra $\mathcal{T}$, a prior $\xi$ on $\mathcal{T}$ is constant on consequence permutations if, given any invertible Markov kernel $S:D\to \Delta(\mathcal{D})$ (which must be a permutation map) and $A\in \mathcal{T}$ we have $\xi(A) = \xi(\{(S\kappa,\mu)|(\kappa,\mu)\in A\})$.
+\end{definition}
+
+\begin{lemma}\label{lem:lebesgue_measure_perm_pres}
+Given a set of consequences $\mathscr{K}$ where $\mathscr{K}\ni\kappa:D\to \Delta(\mathcal{F})$ with finite $D$ and $F$, suppose we induce a measure on $\mathscr{K}$ via the vectorisation isomorphism $\text{vec}$ from $\mathscr{K}$ to $\mathbb{R}^{|D||F|}$ endowed with the Borel algebra. Then the pushforward measure $\mathrm{vec}_{\#}\lambda$ where $\lambda$ is the Lebesgue measure on $\mathbb{R}^{|D||F|}$ is constant with respect to consequence permutations.
+\end{lemma}
+
+\begin{proof}
+Let $\mathcal{K}=\{\mathrm{vec}^{-1}(A)|A\in\mathcal{B}(\mathbb{R}^{|D||F|})\}$.
+
+Given $A\in \mathcal{K}$ and some permutation kernel $P:D\to \Delta(\mathcal{D})$, define $PA = \{P\kappa| \kappa\in A\}$. We have 
+\begin{align}
+    \mathrm{vec}_{\#}\lambda(PA) &= \lambda(\{\mathrm{vec}(P\kappa)|\kappa\in A\})\\
+                              &= \lambda(\{(I_{|F|}\otimes P)\mathrm{vec}(\kappa)|\kappa\in A\})
+\end{align}
+
+It is sufficient to show that $I_{|F|}\otimes P$ is a volume preserving transformation i.e. $|\mathrm{det}(I_{|F|}\otimes P)|=1$. But $|\mathrm{det}(I_{|F|}\otimes P)| = |\mathrm{det}(I_{|F|})^{|D|}\mathrm{det}(P)^{|F|}|=|1^{|D|}(\pm 1)^{|F|}|=1$.
+\end{proof}
+
+\begin{theorem}[Bayes no free lunch]\label{th:nfl_de_ba}
+For any CSDP where $\mathscr{T}=\tilde{F}^D\times \mathscr{H}$ is a deterministic skeptical theory and $D$, $E$ and $F$ are finite, given a $\xi$ that is constant on consequence permutations with respect on $\mathscr{T}$, all decision functions have the same Bayes risk.
+\end{theorem}
+
+\begin{proof}
+Given $y,y'\in D$, let $S_{yy'}:D\to \Delta(\mathcal{D})$ be the Markov kernel that swaps $y$ and $y'$ and leaves all other decisions in place: $S_{yy'}(y,A) := \delta_{y'}(A)$, $S_{yy'}(y',A):=\delta_{y}(A)$ and $S_{yy'}^2=I$. Clearly, for all consequences $\kappa$, $\delta_y S_{yy'} \kappa = \delta_{y'}\kappa$ and $\delta_{y'} S_{yy'} \kappa = \delta_{y}\kappa$.
+
+In addition, for all $\kappa$, $f:\kappa\mapsto S_{yy'}\kappa$ is an invertible map from $\Delta(\mathcal{F})^D\to \Delta(\mathcal{F})^D$. By assumption then, for all $A\in \mathcal{T}$, $\xi(A) = \xi(\{(S_{yy'}\kappa,\mu)|(\kappa,\mu)\in A\})$. Therefore, defining the pushforward measure $f_{\#}\xi:A\mapsto \xi(f^{-1}(A))$, we have $f_{\#}\xi(A) = \xi(A)$.
+
+Thus for any ordinary utility $u:F\to \mathbb{R}$:
+\begin{align}
+    \int_{\Delta(\mathcal{F})^D} \delta_y \kappa u d\xi &= \int_{\Delta(\mathcal{F})^D} \delta_{y} \kappa u df_{\#}\xi\\
+                                                        &= \int_{\Delta(\mathcal{F})^D} \delta_y S_{yy'}\kappa u d\xi\\
+                                                        &= \int_{\Delta(\mathcal{F})^D} \delta_{y'}\kappa u d\xi
+\end{align}
+
+Thus for any $\gamma\in\Delta(\mathcal{D})$:
+\begin{align}
+   \int_{\Delta(\mathcal{F})^D} \gamma \kappa u d\xi &= \int_{\Delta(\mathcal{F})^D} \int_D \delta_y \kappa u d\gamma(y) d\xi\\
+                                                     &= \int_{\Delta(\mathcal{F})^D} \delta_{y_0} \kappa u \int_D  d\gamma d\xi\\
+                                                     &= \int_{\Delta(\mathcal{F})^D} \delta_{y_0} \kappa u d\xi
+\end{align}
+For some $y_0\in D$.
+
+For all observational distributions $\mu\in \Delta(\mathcal{E})$ and stochastic decision functions $J$, $\mu J \in \Delta(\mathcal{D})$, so for all $\mu$ and $J$ we have
+\begin{align}
+    \int_{\Delta(\mathcal{F})^D} \mu J \kappa u d\xi = \int_{\Delta(\mathcal{F})^D} \delta_{y_0} \kappa u d\xi
+\end{align}
+
+\end{proof}
+
+These no-free-lunch theorems are perhaps not very surprising - if we suppose that any consequence is equally likely not matter what we observe, it is not surprising that all decisions appear equally good. 
+
+\subsection{Types of causal assumption}
+
+In light of the no free lunch theorems, it is necessary to introduce assumptions that yield causal theories smaller than skeptical theories, or to introduce nontrivial priors on a given skeptical theory. Because it is simpler than introducing priors, here we discuss assumptions that place hard restrictions on a causal theory.
+
+\begin{definition}[Statistical assumption]
+A \emph{statistical assumption} or \emph{hypothesis class} is a pair of distribution classes $\mathscr{H}\subset \Delta(\mathcal{E})$, $\mathscr{I}\subset \Delta(\mathcal{F})$ that is assumed to contain both the observational distributions and outcome distributions. Specifically, a causal theory $\mathscr{T}$ on $E$, $D$ and $E$ is compatible with a hypothesis class $(\mathscr{H},\mathscr{I})$ iff for all $(\kappa,\mu)\in \mathscr{T}$ we have $\mu\in \mathscr{H}$ and $\mathrm{Conv}(\kappa)\subset \mathscr{I}$ where $\mathrm{Conv}$ denotes the convex hull.
+
+The maximal causal theory compatible with $(\mathscr{H},\mathscr{I})$ is the causal theory $\mathscr{T}^\mathscr{H}$ such that for all $\mathscr{T}$ compatible with $\mathscr{H}$, $\mathscr{T}^{\mathscr{H}}\supset \mathscr{T}$
+\end{definition}
+
+Examples: Assuming that observations are IID and Gaussian fixes some $\mathscr{H}$. If we can additionally conduct hard interventions on some variables, $\mathscr{I}$ must must contain delta distributions on these variables, so $\mathscr{I}$ is not in general equal to $\mathscr{H}$, even if $E=F$.
+
+\begin{definition}[Consistency assumption]
+Given $\mathscr{H}\subset\Delta(\mathcal{E})$ and $\mathscr{I}\subset\Delta(\mathcal{F})$, a \emph{consistency assumption} is a set valued function $\mathscr{H}\to \mathscr{P}(\mathscr{I})$ (where $\mathscr{P}$ denotes the power set) that constrains the convex hull of the consequences given a particular observed distribution. Specifically, $\mathscr{T}$ is a causal theory compatible with a consistency assumption $C:\mathscr{H}\to \mathscr{P}(\mathscr{I})$ iff for all $(\kappa,\mu)\in \mathscr{T}$ we have $\mu\in \mathscr{H}$ and  $\mathrm{Conv}(\kappa)\subset C(\mu)$.
+
+The maximal causal theory compatible with $C$ is defined analogously to the maximal theory compatible with a hypothesis class.
+\end{definition}
+
+Example: Invariance of conditional distributions: Suppose we have $E=F$ and random variables $\RV{X}$ and $\RV{Y}$ on $E$ such that $\mu_{\RV{X}} F_{\RV{Y}} = (\gamma \kappa)_{\RV{X}} F_{\RV{Y}}$ for all $\gamma\in \Delta(\mathcal{D})$ and $(\kappa,\mu)\in \mathscr{T}$ (where $\mu_{\RV{X}}$ denotes the conditional distribution on $\RV{X}$ and $\mu F_{\RV{Y}}$ denotes the marginal over $\RV{Y}$). Then $\mathscr{T}$ is compatible with the consistency assumption $C:\mu\mapsto \{\nu|\nu_{\RV{X}} F_{\RV{Y}} = \mu_{\RV{X}} F_{\RV{Y}}\}$.
+
+Every statistical assumption $(\mathscr{H},\mathscr{I})$ can be associated with a consistency assumption $C:\mathscr{H}\to \mathscr{P}(\mathscr{I})$ where $C:\mu\mapsto \mathscr{I}$ for all $\mu\in \mathscr{H}$. Consistency assumptions can relate outcome distributions to input distributions but they cannot relate decisions to input distributions.
+
+\begin{definition}[Causal assumption]
+A \emph{causal assumption} is simply a causal theory. This is the most general type of assumption.
+
+A special class of causal assumption is the \emph{a priori causal assumption}, which is associated wtih a class of consequences $\mathscr{K}\subset \Delta(\mathcal{F})^D$. A theory $\mathscr{T}$ is compatible with an a priori assumption $\mathscr{K}$ iff for every $(\kappa,\mu)\in \mathscr{T}$ we have $\kappa \in \mathscr{K}$.
+\end{definition}
+
+Example: Suppose we have a causal theory $\mathscr{T}$ that features hard interventions on a random variable $\RV{X}$ and nothing else; that is, for every $(\kappa,\mu)\in\mathscr{T}$ we have $\delta_y \kappa F_{\RV{X}}(A) = \delta_y(A)$. This is an a priori causal assumption defined by the set of consequences $\mathscr{K} = \{\kappa|\delta_y \kappa F_{\RV{X}}(A) = \delta_y(A)\} $.
+
+Suppose we have a causal theory $\mathscr{T}$ on $D=\{0,1\}$, $E=F=\{0,1\}$ where we know only that decision $0$ (which is our only available decision) does not increase the entropy of the observed variable. Thus $\mathscr{T}=\{(\kappa,\mu)| \|0.5-\kappa (0;\{1\})\|\leq\|0.5-\mu\|\}$.
+
+As before, causal assumptions are strictly more general than consistency assumptions. This is not true for \emph{a priori} causal assumptions.
+
+The causal theory compatible some set of assumptions $A$ is the intersection of maximal theories compatible with each $a\in A$. In order to obtain nontrivial results, at least one causal assumption is required.
+
+\begin{lemma}\label{lem:consist_lmult_closed}
+Given an arbitrary set of consistency assumptions $A$, the causal theory $\mathscr{T}$ compatible with $A$ is closed under left multiplication of the consequences.
+\end{lemma}
+
+\begin{proof}
+Suppose $\mathscr{T}$ is a causal theory on $E$, $D$ and $F$. For any $L:D\to \Delta(\mathcal{D})$, $\mathrm{Conv}(L\kappa) \subset \mathrm{Conv}(\kappa)$.
+
+For each $\mu\in \mathscr{H}$, $\mathscr{T}$ contains each consequence $\kappa$ such that $\mathrm{Conv}(\kappa)\subset \int_{c\in A}c(\mu)$. Thus for all $(\kappa,\mu)\in \mathscr{T}$, $(L\kappa,\mu)\in \mathscr{T}$.
+\end{proof}
+
+\begin{theorem}[``No causes in no causes out'' minimax]\label{th:no_in_out_min}
+Given the causal theory $\mathscr{T}$ compatible with a set of assumptions $A$ where each $a\in A$ is a statistical or consistency assumption, all decision functions have the same minimax risk.
+\end{theorem}
+
+\begin{proof}
+Without loss of generality, assume each $a\in A$ is a consistency assumption. We follow the proof for Theorem \ref{th:nfl_mm}.
+
+Consider an arbitrary pair of stochastic decisions $\gamma,\gamma'\in \Delta(\mathcal{D})$. One can straightforwardly construct a kernel $A:D\to \Delta(\mathcal{D})$ such that $\gamma A = \gamma'$. Thus for any decision functions $J$ and $J'$, there is some Markov kernel $A:D\to \Delta(\mathcal{D})$ such that $\mu J A = \mu J'$. By lemma \ref{lem:consist_lmult_closed}, for all $(\kappa,\mu)\in \mathscr{T}$ we also have $(A\kappa,\mu)\in \mathscr{T}$, it follows that for each $(\kappa,\mu)\in \mathscr{T}$ there is a corresponding $(A\kappa,\mu)\in \mathscr{T}$ such that $R(J,\kappa,\mu)=R(J',A\kappa,\mu)$.
+\end{proof}
+
+
+\begin{theorem}[``No causes in no causes out'' Bayes]\label{th:no_in_out_bayes}
+Given the causal theory $\mathscr{T}$ with $\sigma$-algebra $\mathcal{T}$ compatible with a set of assumptions $A$ where each $a\in A$ is a statistical or consistency assumption, given a prior $\xi$ that is constant on consequence permutations with respect on $\mathscr{T}$, all decision functions have the same Bayes risk.
+\end{theorem}
+
+\begin{proof}
+Without loss of generality, assume assume each $a\in A$ is a consistency assumption. Note that from lemma \ref{lem:consist_lmult_closed}, for every $(\kappa,\mu)\in \mathscr{T}$ we have $(S_{yy'}\kappa,\mu)\in \mathscr{T}$ also, where $S_{yy'}$ was defined in the proof of Theorem \ref{th:nfl_de_ba}.
+
+The proof proceeds identically to the proof of Theorem \ref{th:nfl_de_ba}.
+\end{proof}
+
+It is straightforward to show that the maximal causal theory for which assumptions $a$ and $b$ hold is the intersection of the maximal causal theory for which assumption $a$ holds and the maximal causal theory for which assumption $b$ holds. Similarly, the maximal causal theory for which assumptions $a$ or $b$ hold is the union of maximal theories for which assumptions $a$ and $b$ hold separately. Thus we can build complex causal theories from unions and intersections of simpler theories.
+
+\subsection{Causal Assumption Types in Graphical Models}
+
+At a high level, causal graphical models can \emph{almost} be broken two sets of assumptions:
+\begin{itemize}
+    \item Interventional assumptions, which are causal assumptions that specify which variables are known to be affected by decisions and how they are affected
+    \item Invariance assumptions, which are consistency assumptions that hold certain conditionals to be invariant between the observed and outcome distributions
+\end{itemize}
+
+They don't quite break down in this manner due to the fact that causal graphical models typically admit a set of interventions that affect each variable separately. Thus no conditional distribution is \emph{truly} invariant in a standard graphical model. We take the approach here of considering graphical models to encode consistency assumptions for subsets of the full decision set $D$. A desirable feature of this approach is that we can view the edges in graphical models as responsible only for specifying invariant conditional distributions, while interventions are handled by extra sets of assumptions. We make use of two-colour graphs (Definition \ref{def:tc_graph}) to distinguish between ``intervened nodes'' and ``nodes that feature invariant conditionals''.
+
+\todo[inline]{Open question: can every causal theory be ``factored'' into a set of ``restricted consistency assumptions'' and \emph{a priori} causal theories?}
+
+\todo[inline]{Subsequently, we show that the set of possible invariance assumptions for $N$ variables is larger than the set of graphs on $N$ variables.}
+
+Graphical models describe causal theories in terms of \emph{sets} of IID random variables. For the following we assume that at the outset we are given $NM\in\mathbb{N}$ random variables $\RV{X}^0_0,...,\RV{X}^M_0,...,\RV{X}^M_N$ from $E\to \mathbb{R}$ such that the given information $\RV{X}=\splitter{0.1}(\otimes_{i\in[N],j\in[M]} \RV{X}^j_i)$. We assume that for every theory $\mathscr{T}$ under consideration $E=F$ and we make the statistical assumption that all observed and outcome data are in the class of distributions $\mathscr{H}\subset\Delta(\mathcal{E})$ such that $\RV{X}_i:=\splitter{0.1}(\otimes_{j\in [M]} \RV{X}_i^j$ are IID. Henceforth we drop the subscript and take $\RV{X}^j:=\RV{X}^j_0$ to be a ``representative example'' of the relevant random variable.
+
+\begin{definition}[Directed graph, walk, path, descendant, ancestor, parent, cycle]
+A \emph{directed graph} $\mathbf{G}$ of degree $N\in \mathbb{N}$ is a set of $N$ vertices $\mathbf{V}:=\{V_i|i\in [N]\}$ and $\leq N^2$ directed edges $\mathbf{E}:=\{(V_i,V_j)|i,j\in [N]\}$. 
+
+A \emph{walk} in a directed graph $\mathbf{G}$ is a sequence of edges from $\mathbf{E}$, $W:=[(V_{i0},V_{j0}),...(V_{iM},V_{jM})]$ such that for each adjacent pair of edges one of the following holds:
+\begin{itemize}
+    \item $V_{ik}=V_{i(k+1)}$
+    \item $V_{ik}=V_{j(k+1)}$
+    \item $V_{jk}=V_{i(k+1)}$
+    \item $V_{jk}=V_{j(k+1)}$
+\end{itemize}
+
+A \emph{path} or \emph{directed path} is a sequence of edges from $\mathbf{E}$ such that for each pair of adjacent edges we have $V_{jk}=V_{i(k+1)}$. We define paths to be forward directed (if a reverse directed path exists, then a forward directed path exists by reversing the order of edges).
+
+If there is a path $P$ in $\mathbf{G}$ such that, for some $k\in\mathbb{N}$, $n\in \mathbb{N}^+$, $V_{i}\in E_k\in P$ and $V_j\in E_{k+n}\in P$ then we say $V_j$ is a descendant of degreen $n$ of $V_i$ and $V_i$ is an ancestor of degree $n$ of $V_j$. 
+
+An ancestor of degree $1$ is a \emph{parent}. The set of indices $S\subset[N]$ such that $\{V_j|j\in S\}$ are parents of $V_i$ in $\mathbf{G}$ is defined as $\mathrm{Pa}_{\mathbf{G}}(i)$ or $\mathrm{Pa}(i)$ if the graph is clear from context.
+
+A \emph{cycle} is a path such that for some $k\in \mathbb{N}$, $n\in \mathbb{N}^+$ we have $V_{ik}=V_{i(k+n)}$. A graph $\mathbf{G}$ contains a cycle iff there is a node $V_i$ that is its own ancestor.
+
+A \emph{directed acyclic graph (DAG)} $\mathbf{G}:=(\mathbf{V},\mathbf{E})$ of degree $N$ is a directed graph of degree $N$ with $\leq N(N-1)/2$ directed edges such that $\mathbf{E}$ contains no cycles.
+\end{definition}
+
+\begin{definition}[Completion]
+Given a DAG $\mathbf{G}=(\mathbf{V},\mathbf{E})$ of degree $M$, a \emph{completion} of $\mathbf{G}$, denoted $\overline{\mathbf{G}}:=(\mathbf{V},\overline{\mathbf{E}})$, is any DAG where $|\overline{\mathbf{E}}|=N(N-1)/2$ and $\overline{\mathbf{E}}\supset\mathbf{E}$. A completion of $\mathbf{G}$ is a fully connected graph that shares the edges of $\mathbf{G}$.
+\end{definition}
+
+\begin{definition}[Two colour directed graph]\label{def:tc_graph}
+A \emph{two-colour directed graph} of degree $N\in\mathbb{N}$ is a directed graph $\mathbf{G}$ along with an additional set of ``off-colour'' vertex labels $S\subset [N]$. The ``on-colour'' label set is given by $[N]\setminus S$.
+\end{definition}
+
+\begin{definition}[Graphical Consistency Assumption]
+Given a two-colour directed graph of degree $N$ $\mathbf{G}=(\mathbf{V},\mathbf{E},S)$ and a set of $N$ random variables $\RV{X}^j:E\to \mathbb{R}$ along with a hypothesis class $\mathscr{H}\subset\Delta(\mathcal{E})$, we can define the graphical consistency assumption $C_{\mathbf{G}}:\mathscr{H}\to \mathscr{P}(\mathscr{H})$ such that $C:\mu\mapsto \{\nu|\forall i\in [N]\setminus S:\nu_{\PA{}{\RV{X}_i}}F_{\RV{X}_i} = \mu_{\PA{}{\RV{X}_i}}F_{\RV{X}_i}\}$.
+
+Thegraphical consistency assumption specifies that the marginal distributions of the ``on-colour'' random variables conditioned on their parents in $\mathbf{G}$ are the same for observations and outcomes.
+\end{definition}
+
+We define an elementary graphical theory as a causal theory that satisfies only the graphical consistency assumption and the IID assumption. The former we allow to hold for only a subset of possible decisions.
+
+\begin{definition}[Elementary graphical theory]\label{def:EGT}
+Suppose we have a causal theory $\mathscr{T}: E\times D\rightarrowtriangle F$ with a set of random variables $\RV{X}^j_i:E\to \mathbb{R}$, $j\in [M],i\in [N]$ such that $\splitter{0.1}(\otimes_{j\in [M],i\in[N]} \RV{X}^j_i)=I_E$.
+
+$\mathscr{T}$ is a $\mathbf{G},D'$-\emph{elementary graphical theory (EGT)} for some $D'\subset D$ and two-colour directed graph $\mathbf{G}$ of degree $[M]$ iff $\mathscr{T}$ is a maximal theory for which:
+\begin{enumerate}
+    \item The statistical assumption that $\RV{X}_i:= \splitter{0.1}(\otimes_{j\in [M]} \RV{X}^j_i)$ holds for $\mathscr{T}$
+    \item The graphical consistency assumption $C_{\mathbf{G}}$ holds for the restriction $\mathscr{T}_{D'}$ of $\mathscr{T}$ to $D'$
+\end{enumerate}
+\end{definition}
+
+Theorems \ref{th:no_in_out_min} and \ref{th:no_in_out_bayes} apply to any $\mathbf{G},D$-EGTs (i.e. they apply if condition 2 holds for all decisions $D$). They do not apply to $\mathbf{G},D'$-EGTs in general.
+
+Graphical causal models are typically specified with the additional ingredient of \emph{interventions}, which specify which variables are ``targeted'' by a particular decision and (possibly) how they are affected.  \citet{yang_characterizing_2018} characterise graphical models with \emph{general interventions} where it is known what variables are targeted by a given intervention but not what effect these interventions have.
+
+\begin{proposition}[Standard Graphical Models with General Interventions]
+The causal theory $\mathscr{T}_{\mathbf{G}}$ associated with a directed acyclic graph $\mathbf{G}=(\mathbf{V},\mathbf{E})$ of degree $M$ with general interventions is equivalent to the intersection of $M$ EGTs $\mathscr{T}_1,...\mathscr{T}_M$ where $\mathscr{T}_i$ is $\overline{\mathbf{G}}_i,D_i$ elementary, $\{D_i|i\in [M]\}$ is a partition of $D$ and $\overline{\mathbf{G}}_i:=(\mathbf{V},\overline{\mathbf{E}},\{i\})$ is an arbitrary completion of $\mathbf{G}$ with the singleton off-colour index $i$.
+\end{proposition}
+
+\todo[inline]{This requires the definition of graphical models under general interventions and showing that the product rule given by \citet{yang_characterizing_2018} is equivalent to the invariances given by \ref{def:EGT}, which is likely require additional assumptions about the regularity of the causal theory.}
+
+\begin{definition}[Hard Interventions]
+Suppose we have a causal theory $\mathscr{T}: E\times D\rightarrowtriangle F$ with a set of random variables $\RV{X}^j_i:E\to \mathbb{R}$, $j\in [M],i\in [N]$ such that $\splitter{0.1}(\otimes_{j\in [M],i\in[N]} \RV{X}^j_i)=I_E$.
+
+$\mathscr{T}$ is a $\mathbf{G},D'$-\emph{elementary hard intervention theory (EHIT)} for two-colour directed graph $\mathbf{G}$ and $D'\subset D$ of degree $[M]$ with off-colour set $S$ iff $\mathscr{T}$ is a maximal theory for which:
+\begin{enumerate}
+    \item The statistical assumption that $\RV{X}_i:= \splitter{0.1}(\otimes_{j\in [M]} \RV{X}^j_i)$ holds for $\mathscr{T}$
+    \item There exists a function $f:D'\to \mathbb{R}^|S|$ such that all $(\kappa,\mu)\in\mathscr{T}_D'$, $\kappa \splitter{0.1}(\otimes_{i\in S} F_{\RV{X}_i}):(y,A)\mapsto \delta_{f(y)}(A)$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[Standard Graphical Models with Hard Interventions]
+The causal theory $\mathscr{T}_{\mathbf{G}}$ associated with a directed acyclic graph $\mathbf{G}=(\mathbf{V},\mathbf{E})$ of degree $M$ with hard interventions is equivalent to the intersection of $M$ EGTs $\mathscr{T}_1,...\mathscr{T}_M$ and $M$ EHITs $\mathscr{T}'_1,...,\mathscr{T}'_M$ where $\mathscr{T}_i$ is a $\mathbf{G}_i,D_i$ EGT, $\mathscr{T}'_i$ is a $\mathbf{G}_i,D_i$ EHIT, $\{D_i|i\in [M]\}$ is a partition of $D$ and $\overline{\mathbf{G}}_i:=(\mathbf{V},\overline{\mathbf{E}},\{i\})$ is an arbitrary completion of $\mathbf{G}$ with the singleton off-colour index $i$.
+\end{proposition}
+
+\todo[inline]{Write up example of an ungraphable invariance assumption}
+\todo[inline]{Is there any relationship between the number of conditional independence stantements possible and the number of invariance statements possible on a given number of variables? Maybe via Dawid's extended conditional independence}
+\todo[inline]{Generalised invariance assumptions: conditionals invariances may be drawn from \emph{all possible} RVs/functions of observed data; show that this is a strict generalisation of invariance}
+\todo[inline]{Can we do anything sensible WRT consistency assumptions besides conditional invariance? Can we show that there is nothing else?}
+
+
+% A common way to proceed with causal inference is to assume the given information ($\RV{X}$) was generated by a mechanism \emph{similar} to the joint operation of the causal state and the investigator. It is not generally possible to assume that they were generated by the \emph{same} mechanism. Suppose that for some $(\kappa,\mu)\in \mathscr{T}$ and $J\in \Delta(\mathcal{D})^E$ the joint operation of the causal state and investigator is the joint distribution given by $\mu\splitter{0.1}(I_{(E)}\otimes J\splitter{0.1}(I_{(D)}\otimes \kappa))$. We cannot suppose that $\RV{X}$ is $N$ IID samples drawn from this joint distribution on $E\times D\times F$ as that would imply that $(E\times D\times F)^N=E$ (recalling that the given information $\RV{X}$ takes values in $E$).
+
+% Instead, suppose that there is some alternate given information $\RV{X}'$ taking values in $E'$ and distributed as $\mu'$ for the state $(\kappa,\mu)\in \mathscr{T}$. Then suppose the given information $\RV{X}$ takes values in $(E'\times D\times F)^N$ and is IID according to $\mu'\splitter{0.1}(I_{(E)}\otimes J\splitter{0.1}(I_{(D)}\otimes \kappa))=\mu$. It can be verified that the consequence $\kappa$ is then a version of the conditional distribution $\mu_{\RV{D}}$ - that is, this assumption is strong enough to imply that correlation is good enough for causation.
+
+% This result arises from the fact that, by construction, consequences depend only on the decision made and not on the given information. We may make different decisions based on different information, but this is because different given information indicates a different causal state. Fixing the causal state is not generally an appropriate way to operationalise the notion of ``common mechanisms''.
+
+% Introduce the idea of a ``mechanism state'' $\Theta$ and suppose a causal state is associated with a state distribution $\zeta\in\Delta(\Theta)$ and Markov kernels $\theta\mapsto \mu'_\theta$, $\theta\mapsto \kappa_\theta$. We then assume the given information is IID according to $\mu= \zeta \mu_$

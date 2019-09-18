@@ -2,13 +2,11 @@
 
 Repository for "How to Ask a Causal Question" submission for NeurIPS 2019
 
-## TODO 09 Jul 2019:
+## TODO 11 Sep 2019:
 
 
 ### Notation
- * Distinguish between kernel associated with a measurable function, identity on a given space and conditional distribution (currently all subscripts); conditionals go bar-subscript, identities get a bracket
- * Type signature for causal theories (maybe ExD-|> F?)
- * Font for power sets
+ * Choose Font for power sets
 
 ### Causal decision problems
 
