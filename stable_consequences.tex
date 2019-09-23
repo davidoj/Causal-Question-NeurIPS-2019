@@ -47,8 +47,8 @@ Setting aside the utility for now, if equation \ref{eq:lift_the_string} holds fo
 	  ++(0.5,0) node[kernel] (J) {$I$}
 	  ++(0.5,0) coordinate(copy1)
 	  ++(0.5,0) node[kernel] (kap) {$\kappa$}
-	  ++(0.5,0) node (u) {}
-	  ++(0,0.5) node (D) {};
+	  ++(0.5,0) node (u) {$E$}
+	  ++(0,0.5) node (D) {$D$};
 \draw (A) -- (mu) -- (J) -- (kap) -- (u);
 \draw (copy0) to [bend right = 40] (kap);
 \draw (copy1) to [bend left] (D); 
@@ -62,8 +62,8 @@ Setting aside the utility for now, if equation \ref{eq:lift_the_string} holds fo
 	  ++(0.5,0) node[kernel] (J) {$I$}
   	  ++(0.5,0) coordinate (copy1)
 	  ++(0.5,0) node[kernel] (kap) {$\kappa$}
-	  ++(0.5,0) node (u) {}
-	  ++(0,0.5) node (D) {};
+	  ++(0.5,0) node (u) {$E$}
+	  ++(0,0.5) node (D) {$D$};
 \draw (A) -- (mu) --(J) -- (kap) -- (u);
 \draw (copy0) to [bend right = 40] (al) (al) to [bend right = 40] (kap);
 \draw (copy1) to [bend left] (D);
@@ -74,11 +74,9 @@ The extra copy map allows us to extend from equality ``for $I$'' to equality ``f
 
 \todo[inline]{We ignore the utility as introducing it moves us out of the world of Markov kernels; need to show that everything still works if we reintroduce it}
 
-Immediate from Eq. \ref{eq:lts_joint} is the fact that there is some kernel $L$ such that the left hand side of \ref{eq:lts_joint} is equal to $\mu L$. Under additional assumptions the reverse direction holds:
-
+Immediate from Eq. \ref{eq:lts_joint} is the fact that there is some kernel $L$ such that:
 
 \begin{align}
-\exists L:
 \begin{tikzpicture}
 	 \path (0,0) coordinate (A)
 	  ++(0.5,0) coordinate (copy0)
@@ -100,7 +98,84 @@ Immediate from Eq. \ref{eq:lts_joint} is the fact that there is some kernel $L$ 
 	++(0,-0.5) node (u) {};
 	\draw (A) -- (mu) -- (L) -- (u);
 	\draw ($(L.east) +(0,0.15)$) to [bend left] (D);
-\end{tikzpicture}\label{eq:joint_from_mu}\\	
+\end{tikzpicture}\label{eq:joint_from_mu}
+\end{align}
+
+In addition, if we define $C:\mathscr{T}\times D\to \Delta(\mathcal{E})$ as a \emph{generalised disintegration} of $\mu L$ - i.e. a kernel with the following property:
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) coordinate (A)
+	  ++(0.5,0) coordinate (copy0)
+	  ++(0.5,0) node[kernel] (mu) {$\mu$}
+	  ++(0.5,0) node[kernel] (J) {$I$}
+	  ++(0.5,0) coordinate(copy1)
+	  ++(0.5,0) node[kernel] (kap) {$\kappa$}
+	  ++(0.5,0) node (u) {$E$}
+	  ++(0,0.5) node (D) {$D$};
+\draw (A) -- (mu) -- (J) -- (kap) -- (u);
+\draw (copy0) to [bend right = 40] (kap);
+\draw (copy1) to [bend left] (D); 
+\end{tikzpicture} &=
+\begin{tikzpicture}
+\path (0,0) coordinate (A)
+	  ++(0.5,0) coordinate (copy0)
+	  ++(0.5,0) node[kernel] (mu) {$\mu$}
+	  ++(0.5,0) node[kernel] (J) {$I$}
+	  ++(0.5,0) coordinate(copy1)
+	  ++(0.5,0) node[kernel] (kap) {$\kappa$}
+	  ++(0.5,0) node (u) {}
+	  +(0,0.5) coordinate (copy2)
+	  ++(0.5,0) node[kernel] (C) {$C$}
+	  ++(0.7,0) node (E) {$E$}
+	  +(0,0.5) node (D) {$D$};
+\draw (A) -- (mu) -- (J) -- (kap);
+\draw[-{Rays [n=8]}] (kap) -- (u);
+\draw (copy0) to [bend right = 35] (kap);
+\draw (copy2) to [bend left] (C.west);
+\draw (C) -- (E);
+\draw (copy1) to [bend left] (copy2) to [bend left] (D); 
+\draw (copy0) to [bend right = 40] (C);
+\end{tikzpicture}
+\end{align}
+
+Then we can see by the fact that $C=\kappa$ ``A.S.'' that 
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) coordinate (A)
+	  ++(0.5,0) coordinate (copy0)
+	  ++(0.5,0) node[kernel] (mu) {$\mu$}
+	  ++(0.5,0) node[kernel] (J) {$I$}
+	  ++(0.5,0) coordinate(copy1)
+	  ++(0.5,0) node[kernel] (kap) {$C$}
+	  ++(0.5,0) node (u) {$E$}
+	  ++(0,0.5) node (D) {$D$};
+\draw (A) -- (mu) -- (J) -- (kap) -- (u);
+\draw (copy0) to [bend right = 40] (kap);
+\draw (copy1) to [bend left] (D); 
+\end{tikzpicture}
+=
+\begin{tikzpicture}
+\path (0,0) coordinate (A)
+	  ++(0.5,0) node[kernel] (mu) {$\mu$}
+  	  ++(0.5,0) coordinate (copy0)
+  	  +(0.5,-0.5) node[kernel] (al) {$\alpha$}
+	  ++(0.5,0) node[kernel] (J) {$I$}
+  	  ++(0.5,0) coordinate (copy1)
+	  ++(0.5,0) node[kernel] (kap) {$C$}
+	  ++(0.5,0) node (u) {$E$}
+	  ++(0,0.5) node (D) {$D$};
+\draw (A) -- (mu) --(J) -- (kap) -- (u);
+\draw (copy0) to [bend right = 40] (al) (al) to [bend right = 40] (kap);
+\draw (copy1) to [bend left] (D);
+\end{tikzpicture}\label{eq:lts_disint_joint}
+\end{align}
+
+The reverse direction also holds: \ref{eq:joint_from_mu} and \ref{eq:lts_disint_joint} imply \ref{eq:lts_joint}. This decomposition is handy, because we can consider \ref{eq:joint_from_mu} to express ``perfect identifiability of $\kappa$'' and \ref{eq:lts_disint_joint} to express ``perfect estimability of $\mu$'', the former being a quintessentially ``causal'' notion and the latter being a ``statistical'' notion (note that this distinction is only based on \emph{typical use} of the words causal and statistical).
+
+The following assumptions are sufficient (but not necessary) for \ref{eq:lts_disint_joint}:
+\begin{align}
 \exists M:\begin{tikzpicture}
 \path (0,0) node (A) {}
 ++ (0.5,0) node[kernel] (mu) {$\mu$}
@@ -162,17 +237,13 @@ Immediate from Eq. \ref{eq:lts_joint} is the fact that there is some kernel $L$ 
 \end{tikzpicture}\label{eq:know_mu}
 \end{align}
 
-\todo[inline]{In general, \ref{eq:joint_from_mu} requires an ``infinite swap map'' to be defined, as the upper and lower wires might each represent an infinite collection of wires}
-
-Equation \ref{eq:joint_from_mu} gives us that the ``output'' of $\mu$ is enough to reconstruct the joint distribution of inputs and outputs to $\kappa$ via some $L$. This is enough, informally, to say ``if we have $\mu_\theta$ then we have $\kappa_\theta$''.
-
-The second pair of assumptions permit us to ``know $\mu_\theta$''. Sufficient for \ref{eq:muM_det} is the condition that there is some function $\RV{T}$ with associated kernel $F_{\RV{T}}$ such that $\mu F_{\RV{T}}$ is deterministic and for \ref{eq:know_mu} we require that $\RV{T}$ is sufficient for $\{\mu_\theta\}$. An example of this is where $\RV{T}$ is the mean of an infinite sequence of IID Bernoulli variables and $\mu F_{\RV{T}}$ is then deterministic via the strong law of large numbers. In the typical regime of causal models where the joint distribution is assumed to be known with certainty, it \emph{seems very likely} that these two assumptions hold.
+Sufficient for \ref{eq:muM_det} is the condition that there is some function $\RV{T}$ with associated kernel $F_{\RV{T}}$ such that $\mu F_{\RV{T}}$ is deterministic and for \ref{eq:know_mu} we require that $\RV{T}$ is sufficient for $\{\mu_\theta\}$. An example of this is where $\RV{T}$ is the mean of an infinite sequence of IID Bernoulli variables and $\mu F_{\RV{T}}$ is then deterministic via the strong law of large numbers.
 
 Equation \ref{eq:know_mu} is not necessary for \ref{eq:lift_the_string}, as observations may be ``too informative''. For example, if $\mathscr{T}$ contains many different $\mu_\theta$ but only one $\kappa_\theta$, then we can always perform \ref{eq:lift_the_string} while we do not generally have \ref{eq:know_mu}.
 
-Equation \ref{eq:joint_from_mu} is not sufficient for \ref{eq:lts_joint}. Informally, we might know $\kappa_\theta$ given $\mu_\theta$ but we may not know $\mu_\theta$.
+\subsection{IID variables and factorisibility}
 
-Equation \ref{eq:joint_from_mu} is quite general, and the necessity of the condition follows from an uninteresting choice of $L$. It may be of interest to investigate whether it can be satisfied for particular kernels $L$. For example, $L$ may factorise:
+Equation \ref{eq:joint_from_mu} is quite general in the sense that, if $\mu$ maps from $\mathscr{T}$ to an infinite sequence of IID variables, we may satisfy it with an $L$ that first estimates $\mu_\theta$ from the sequence of variables and subsequently chooses an appropriate measure on $D\times E$. A particularly interesting case is where $\mu$ maps to an infinite sequence of IID variables and $L$ factorises as follows:
 
 \begin{align}
 \begin{tikzpicture}
@@ -201,9 +272,7 @@ Equation \ref{eq:joint_from_mu} is quite general, and the necessity of the condi
 \end{tikzpicture}
 \end{align}
 
-A special case of this is considered below. We can informally think of this case as ``correlation \emph{is} causation'', as from each observed RV we can get an input-output pair via $L_0$. 
-
-This is a generalisation of the usual case of ``correlation is causation'' as, for example, the output may be a randomised version of the observational conditionals.
+A special case of this is considered below. We can informally think of this case as ``correlation \emph{is} causation'', as from \emph{each} observed RV we can get an input-output pair via $L_0$. This is a generalisation of the usual case of ``correlation is causation'' as we allow the possibility that the output is randomised from observations rather than insisting it be distributed exactly as observations were. The possibility of post randomisation is helpful, for example, if the sequence of ``result'' variables we expect is of a different length to our sequence of observations.
 
 \subsection{Informal overview of sufficient conditions}
 
