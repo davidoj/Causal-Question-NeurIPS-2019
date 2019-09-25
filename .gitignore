@@ -8,3 +8,6 @@
 *.out
 *.synctex.gz
 *.nfs*
+*.sublime-project
+*.sublime-workspace
+*.pdf

@@ -1,6 +1,29 @@
+%!TEX root = main.tex
+
 \section{Causal Bayesian Networks}
 
-A Causal Bayesian Network (CBN) is a directed acyclic graph (DAG) $\mathcal{G}$ containing a set of nodes $\{\RV{X}^i\}_{i\in[N]}$ which we identify with random variables on some space $(E,\mathcal{E})$. Given a decision $y\in D$ (called a \emph{do-intervention} in other treatments) and a distribution $\mu\in \Delta(\mathcal{E})$ that is \emph{compatible} (Definition \ref{def:compat}) with $\mathcal{G}$, $\mathcal{G}$ induces an \emph{interventional} distribution $\mu^{\mathcal{G},y}$. The set of pairs $(\mu,y\mapsto \mu^{\mathcal{G},y})$ for $\mu$ compatible with $\mathcal{G}$ is a causal theory $\mathscr{T}_{\mathcal{G}}$.
+Suppose we have a set of ``interventions'' $R$ which factorises as $R=\otimes_{i\in [n]} \{\#\}\cup X^i$ for some $n\in \mathbb{N}$, collection of sets $\{X^i\}_{i\in [n]}$ and distinguished element $*\not\in R^i$ for any $i$. Suppose we also have a measurable space $E$ and set of random variables $\{\RV{X}^i|i\in \mathbb{N}\}$ such that $\RV{X}^i:E\to X^i$. We denote an element $(x^0,\#,...,\#,x^n)\in R$, $x^0,x^n\neq \#$ by the notation $do(\RV{X}^0=x^0,\RV{X}^n=x^n)$ where occurrences of the distinguished element $*$ are ommitted. Denote by $\underline{\#}$ the element of $R$ consisting entirely of $\#$ (equivalently, $do()$).
+
+For $n\in \mathbb{N}$, directed acyclic graph (DAG) of degree $n$ is a graph $\mathcal{G}=(V,A)$ where $V$ is a set of vertices such that $|V|=n$ and $A\subset V\times V$ is a set of directed edges (``arrows'') such that $A$ induces no cycles (for a more thorough definition see \citet{pearl_causality:_2009}). 
+
+Strictly, we are considering labeled graphs $\mathcal{G}$ and sets $\{\RV{X}^i\}_{[n]}$ of random variables. That is, we have bijective functions $f:V\to [n]$ and $g:\{\RV{X}^i\}_{[n]}\to [n]$ and we adopt the convention that $f(i):=V^i$ and $g(i):=\RV{X}^i$. In addition, we will sometimes let a set $U\subset V$ or $a\subset[n]$ to denote a set of random variables rather than vertices or natural numbers; this is licenced by the bijections $f$ and $g$. 
+
+We also suppose we have surjective $h:R\to \mathscr{P}([n])$ such that $h:(x^0,...,x^n)\mapsto \{i|x^i\neq *\}$. That is, $h$ picks out the indices that aren't suppressed in the $do(...)$ notation for elements of $V$. Define $\RV{X}^{i\prime}:R\to \{\#\}\cup X^i$ by the function returning the $i$-th element of $r$ for $r\in R$. Again, we suppose we have a bijection between primed random variables and natural numbers and can therefore pick out corresponding sets of primed and unprimed random variables.
+
+\begin{definition}[Causal Bayesian Network]\label{def:CBN}
+
+Given $R$, $E$ and $P_*:R\to \Delta(\mathcal{E})$ and $\{\RV{X}^i\}_{i\in [n]}$, a Causal Bayesian Network (CBN) compatible with $P_*$ is a directed acyclic graph (DAG) $\mathcal{G}$ of degree $n$ such that for all $r\in R$
+
+\begin{enumerate}
+    \item $P_*(r)$ is compatible with $\mathcal{G}$
+    \item For all $i\in h(r)$, $P_*(r)F_{\RV{X}^i}=\delta_{\RV{X}^{i\prime}(r)} F_{\RV{X}^i}$
+    \item For all $i\not \in h(r)$, $P_*(r)_{|\PA{\mathcal{G}}{\RV{X}^i}} F_{\RV{X}^i}=P_*(\underline{\#})_{|\PA{\mathcal{G}}{\RV{X}^i}}F_{\RV{X}^i} $, $P_*(\underline{\#};\cdot)$-almost surely
+\end{enumerate}
+\end{definition}
+
+So far, this is a standard definition of a CBN; the extra additions are making explicit some implicit parts of the definition found in \citet{pearl_causality:_2009}.
+
+Given a decision $y\in D$ (called a \emph{do-intervention} in other treatments) and a distribution $\mu\in \Delta(\mathcal{E})$ that is \emph{compatible} (Definition \ref{def:compat}) with $\mathcal{G}$, $\mathcal{G}$ induces an \emph{interventional} distribution $\mu^{\mathcal{G},y}$. The set of pairs $(\mu,y\mapsto \mu^{\mathcal{G},y})$ for $\mu$ compatible with $\mathcal{G}$ is a causal theory $\mathscr{T}_{\mathcal{G}}$.
 
 In all following discussion, we assume the observed data represented by $\RV{X}$ is a sequence of independent and identically distributed random variables $\RV{X}=(\RV{X}_t)_{t\in T}$. We identify distributions over the sequence $\RV{X}$ with distributions over the initial observation $\RV{X}_0$ and subsequently drop the subscript.
 
@@ -14,18 +37,7 @@ Given a measurable space $(E,\mathcal{E})$, $\mu\in \Delta(\mathcal{E})$ and a s
 $\mu$ is compatible with $\mathcal{G}$ if $\RV{X}^i\perp_{\mathcal{G}} \RV{X}^j | \mathbf{X} \implies \RV{X}^i\CI_\mu \RV{X}^j|\mathbf{X}$
 \end{definition}
 
-\begin{definition}[Causal Bayesian Network]\label{def:CBN}
-\todo{A CBN has a graph $\mathcal{G}$ with edges $\{V^i\}_{[N]}$, random variables $\{\RV{X}^i\}_{[N]}$ and decision variables $\{\RV{D}^i\}_{[N]}$ which are all associated with one another in the obvious way. It would be nice to have a simple way of expressing this bundle of things and the corresponding associations}
 
-Consider a directed acyclic graph $\mathcal{G}$ with nodes $\mathbf{X}=\{\RV{X}^i|i\in [N]\}$, a measurable space $(E,\mathcal{E})$ and a set of random variables $\RV{X}^i:E\to X^i$ and $X=\times_{i\in[N]} X^i$ along with decision space $(D,\mathcal{D})$ and random variables $\{\RV{D}^i\}_{i\in [N]}$ where $\RV{D}^i:D\to X^i\cup\{*\}$.
-
-Given any $y\in D$ let $S(y)\subset[N]$ be the set of all indices $i$ such that $\RV{D}^i(y)\neq *$. Let $\mathscr{H}_\mathcal{G}\subset\Delta(\mathcal{X})$ be the set of distributions compatible with $\mathcal{G}$. Given arbitrary $\mu\in \mathscr{H}_\mathcal{G}$ and $y\in D$ the $\mathcal{G},\mu,y$-interventional distribution denoted $\mu^{\mathcal{G},y}$ is given by the following three conditions:
-\begin{enumerate}
-    \item $\mu^{\mathcal{G},y}$ is compatible with $\mathcal{G}$
-    \item For all $i\in S(y)$, $\mu^{\mathcal{G},y}F_{\RV{X}^i}=\delta_{\RV{D}^i(y)} F_{\RV{X}^i}$
-    \item For all $i\not \in S(y)$, $\mu^{\mathcal{G},y}_{\PA{\mathcal{G}}{\RV{X}^i}} F_{\RV{X}^i}=\mu_{|\PA{\mathcal{G}}{\RV{X}^i}}F_{\RV{X}^i} $, $\mu^{\mathcal{G},y}$-almost surely
-\end{enumerate}
-\end{definition}
 
 $\PA{\mathcal{G}}{\RV{X}^i}$ are the parents of $\RV{X}^i$ with respect to the graph $\mathcal{G}$ and $\mu_{|\PA{\mathcal{G}}{\RV{X}^i}}$ is the conditional probability with respect to $\mu$ and the $\sigma$-algebra generated by the set $\PA{\mathcal{G}}{\RV{X}^i}$. Recall that $\mu \splitter{0.15}(\otimes_{i\not\in S(y)} F_{\RV{X}^i})$ is the joint distribution of $\{\RV{X}^i|i\in S(y)\}$.
 
