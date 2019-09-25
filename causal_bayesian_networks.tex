@@ -4,111 +4,30 @@
 
 Suppose we have a set of ``interventions'' $R$ which factorises as $R=\otimes_{i\in [n]} \{\#\}\cup X^i$ for some $n\in \mathbb{N}$, collection of sets $\{X^i\}_{i\in [n]}$ and distinguished element $*\not\in R^i$ for any $i$. Suppose we also have a measurable space $E$ and set of random variables $\{\RV{X}^i|i\in \mathbb{N}\}$ such that $\RV{X}^i:E\to X^i$. We denote an element $(x^0,\#,...,\#,x^n)\in R$, $x^0,x^n\neq \#$ by the notation $do(\RV{X}^0=x^0,\RV{X}^n=x^n)$ where occurrences of the distinguished element $*$ are ommitted. Denote by $\underline{\#}$ the element of $R$ consisting entirely of $\#$ (equivalently, $do()$).
 
-For $n\in \mathbb{N}$, directed acyclic graph (DAG) of degree $n$ is a graph $\mathcal{G}=(V,A)$ where $V$ is a set of vertices such that $|V|=n$ and $A\subset V\times V$ is a set of directed edges (``arrows'') such that $A$ induces no cycles (for a more thorough definition see \citet{pearl_causality:_2009}). 
+For $n\in \mathbb{N}$, directed acyclic graph (DAG) of degree $n$ is a graph $\mathcal{G}=(V,A)$ where $V$ is a set of vertices such that $|V|=n$ and $A\subset V\times V$ is a set of directed edges (``arrows'') such that $A$ induces no cycles (for a definition of cycles see \citet{pearl_causality:_2009}). 
 
 Strictly, we are considering labeled graphs $\mathcal{G}$ and sets $\{\RV{X}^i\}_{[n]}$ of random variables. That is, we have bijective functions $f:V\to [n]$ and $g:\{\RV{X}^i\}_{[n]}\to [n]$ and we adopt the convention that $f(i):=V^i$ and $g(i):=\RV{X}^i$. In addition, we will sometimes let a set $U\subset V$ or $a\subset[n]$ to denote a set of random variables rather than vertices or natural numbers; this is licenced by the bijections $f$ and $g$. 
 
-We also suppose we have surjective $h:R\to \mathscr{P}([n])$ such that $h:(x^0,...,x^n)\mapsto \{i|x^i\neq *\}$. That is, $h$ picks out the indices that aren't suppressed in the $do(...)$ notation for elements of $V$. Define $\RV{X}^{i\prime}:R\to \{\#\}\cup X^i$ by the function returning the $i$-th element of $r$ for $r\in R$. Again, we suppose we have a bijection between primed random variables and natural numbers and can therefore pick out corresponding sets of primed and unprimed random variables.
+We also suppose we have surjective $h:R\to \mathscr{P}([n])$ such that $h:(x^0,...,x^n)\mapsto \{i|x^i\neq *\}$. That is, $h$ picks out the indices that aren't suppressed in the $do(...)$ notation for elements of $V$. Define $\RV{X}^{i\prime}:R\to \{\#\}\cup X^i$ by the function returning the $i$-th element of $r$ for $r\in R$. Again, we suppose we have a bijection between primed random variables and natural numbers and can therefore pick out corresponding sets of primed RVs, unprimed RVs, nodes and natural numbers.
 
 \begin{definition}[Causal Bayesian Network]\label{def:CBN}
 
 Given $R$, $E$ and $P_*:R\to \Delta(\mathcal{E})$ and $\{\RV{X}^i\}_{i\in [n]}$, a Causal Bayesian Network (CBN) compatible with $P_*$ is a directed acyclic graph (DAG) $\mathcal{G}$ of degree $n$ such that for all $r\in R$
 
 \begin{enumerate}
-    \item $P_*(r)$ is compatible with $\mathcal{G}$
+    \item $P_*(r)$ is compatible with $\mathcal{G}$ (see \citet{pearl_causality:_2009})
     \item For all $i\in h(r)$, $P_*(r)F_{\RV{X}^i}=\delta_{\RV{X}^{i\prime}(r)} F_{\RV{X}^i}$
-    \item For all $i\not \in h(r)$, $P_*(r)_{|\PA{\mathcal{G}}{\RV{X}^i}} F_{\RV{X}^i}=P_*(\underline{\#})_{|\PA{\mathcal{G}}{\RV{X}^i}}F_{\RV{X}^i} $, $P_*(\underline{\#};\cdot)$-almost surely
+    \item For all $i\not \in h(r)$, $P_*(r)_{|\PA{\mathcal{G}}{\RV{X}^i}} F_{\RV{X}^i}=P_*(\underline{\#})_{|\PA{\mathcal{G}}{\RV{X}^i}}F_{\RV{X}^i} $, $P_*(\underline{\#})$-almost surely
 \end{enumerate}
 \end{definition}
 
-So far, this is a standard definition of a CBN; the extra additions are making explicit some implicit parts of the definition found in \citet{pearl_causality:_2009}.
+Condition 3 presents some difficulties in the presence of measure 0 sets, as when a conditional probability such as $P_*(\#)_{|\PA{\mathcal{G}}{\RV{V}^i}}$ (or, using more common notation, $P_{\#}(\cdot|\PA{\mathcal{G}}{\RV{V}^i})$) may be variously intended to mean a particular representative of the class of conditional probabilities, an arbitrary representative or the entire class; condition 3 will have different implications for these various interpretations. If we interpret it as the entire class, for example, then any $P_*$ such that there is some $\RV{X}^i$ with nonempty parents $P_*(\#) F_{\PA{\mathcal{G}}{\RV{X}^i}$ assigns measure 0 to any set has no compatible CBN. \todo{Surely Pearl has dealt with this? Somewhere? I have looked...}
 
-Given a decision $y\in D$ (called a \emph{do-intervention} in other treatments) and a distribution $\mu\in \Delta(\mathcal{E})$ that is \emph{compatible} (Definition \ref{def:compat}) with $\mathcal{G}$, $\mathcal{G}$ induces an \emph{interventional} distribution $\mu^{\mathcal{G},y}$. The set of pairs $(\mu,y\mapsto \mu^{\mathcal{G},y})$ for $\mu$ compatible with $\mathcal{G}$ is a causal theory $\mathscr{T}_{\mathcal{G}}$.
-
-In all following discussion, we assume the observed data represented by $\RV{X}$ is a sequence of independent and identically distributed random variables $\RV{X}=(\RV{X}_t)_{t\in T}$. We identify distributions over the sequence $\RV{X}$ with distributions over the initial observation $\RV{X}_0$ and subsequently drop the subscript.
-
-The CBN convention is to denote an interventional distribution with $\mu(\cdot|do(\RV{X}^i=a))$. Here we associate every allowable set of $do$ statements with an element of the decision space $(D,\mathcal{D})$ equipped with random variables $\{\RV{D}^i\}_{i\in[N]}$ such that for $y\in D$, $\mu^y(\cdot) := P(\cdot|[do(\RV{X}^j=\RV{D}^i(y))]_{i\in N})$. The special element $*$ corresponds to a passive intervention which is denoted by the absence of a $do()$ statement in regular CBN notation.
-
-\begin{definition}[Compatibility]\label{def:compat}
-Given a DAG $\mathcal{G}$, $d$-separation is a ternary relation amongst sets of nodes the details for which we refer readers to \cite{pearl_causality:_2009}. For a set of nodes $\{\RV{X}^i\}_{i\in[N]}$ we write $\RV{X}^i\perp_{\mathcal{G}} \RV{X}^j | \mathbf{X}$ to say $\RV{X}^i$ is d-separated in $\mathcal{G}$ from $\RV{X}^j$ by $\mathbf{X}\subset \{\RV{X}^i\}_{[N]}$.
-
-Given a measurable space $(E,\mathcal{E})$, $\mu\in \Delta(\mathcal{E})$ and a set of random variables $\{\RV{X}^i\}_{i\in[N]}$ on $E$, $\RV{X}^i$ is independent of $\RV{X}^j$ conditional on $\mathbf{X}$ if $\mu_{|\mathbf{X}} \splitter{0.13}(F_{\RV{X}^i}\otimes F_{\RV{X}^j}) = \mu_{|\mathbf{X}} F_{\RV{X}^i} \mu_{|\mathbf{X}}F_{\RV{X}^j}$, $\mu$-almost surely. This is written $\RV{X}^i\CI_\mu \RV{X}^j|\mathbf{X}$.
-
-$\mu$ is compatible with $\mathcal{G}$ if $\RV{X}^i\perp_{\mathcal{G}} \RV{X}^j | \mathbf{X} \implies \RV{X}^i\CI_\mu \RV{X}^j|\mathbf{X}$
-\end{definition}
-
-
-
-$\PA{\mathcal{G}}{\RV{X}^i}$ are the parents of $\RV{X}^i$ with respect to the graph $\mathcal{G}$ and $\mu_{|\PA{\mathcal{G}}{\RV{X}^i}}$ is the conditional probability with respect to $\mu$ and the $\sigma$-algebra generated by the set $\PA{\mathcal{G}}{\RV{X}^i}$. Recall that $\mu \splitter{0.15}(\otimes_{i\not\in S(y)} F_{\RV{X}^i})$ is the joint distribution of $\{\RV{X}^i|i\in S(y)\}$.
-
-To establish that the map $\kappa^{\mathcal{G},\mu}:D\to \Delta(\mathcal{X})$ given by $y\mapsto \mu^{\mathcal{G},y}$ is a consequence map, we must shown that it is measurable with respect to the $\sigma$-algebra generated by the set of variables $\RV{D}^i$; this is shown by Theorem \ref{th:cbn_MK} provided in Appendix \ref{app:cbn_ct}. Defining $\mathscr{H}_{\mathcal{G}}\subset\Delta(\mathcal{X})$ to be the set of distributions compatible with $\mathcal{G}$, the set of pairs $\{(\mu, \kappa^\mu)|\mu\in \mathscr{H}_{\mathcal{G}}\}$ is the causal theory $\mathscr{T}_\mathcal{G}$.
-
-\paragraph*{Extending the theory induced by a CBN} The causal theory $T_{\mathcal{G}}$ defined above associates a consequence with every probability distribution compatible with $\mathcal{G}$ but not every probability distribution in $\Delta(\mathcal{X})$. It is arguably not reasonable to assume \emph{a priori} that the conditional independences implied by $\mathcal{G}$ hold in the observed data. We might therefore regard the theory $\mathscr{T}_{\mathcal{G}}$ to be incomplete, and seek some extension of the theory for distributions not in $\mathcal{H}_{\mathcal{G}}$.
-
-\begin{example}[Extension of a CBN]\label{ex:extn_cbn}
-
-Consider the graph $\mathcal{G}=$\begin{tikzpicture}[baseline=-1.5mm,-latex]
-\node (C) {$C$};
-\node [right of = C] (A) {$A$};
-\node [right of = A] (B) {$B$};
-\draw (C) -- (A);
-\draw (A) -- (B);
-\end{tikzpicture}, which implies a single conditional independence: $\RV{C}\CI \RV{B}|\RV{A}$.
-
-Suppose the three associated random variables $\RV{A}$, $\RV{B}$ and $\RV{C}$ each take values in $\{0,1\}$ and suppose (unrealistically) we know all $\mu$ in the set of possible joint distributions $\mathscr{H}$ share the marginal distribution $\mu F_{\RV{B}} := \zeta$ and the conditional distribution $\mu_{|\{\RV{A}\}} F_{\RV{B}} = \iota$ and $\RV{C}$ is ``almost'' independent of $\RV{B}$ given $\RV{A}$:
+At least in the case of discrete $E$ and $P_*(\#)$ positive definite, we have from this definition that for any $r\in V$ we have the \emph{truncated factorisation} property:
 \begin{align}
-    \max_{x\in\{0,1\}^3,y\in\{0,1\}}\left|\mu_{|\{\RV{A},\RV{C}\}} F_{\RV{B}}(x;\{y\}) - \iota(x;\{y\}) \right| &< \epsilon \label{eq:app_ci}
+S	P_* F_{\mathbf{X}}(r;A) = \prod_{i\in h(r)} \delta\sum_{(x^0,...,x^n)\in X} P_* F
 \end{align}
 
-Suppose that only interventions on $\RV{A}$ are possible and the problem supplies a generalised utility such that, overloading $\RV{B}$, $U(\xi)=\mathbb{E}_{\xi}[\RV{B}]$. For convenience, we restrict our attention to the subset of decisions $D'=\{y|\RV{D}_\RV{B}(y)=\RV{D}_\RV{C}(y)=*\}$ and consequence maps marginalised over $\RV{A}$ and $\RV{C}$. Define $\kappa^{\mathcal{G}}$ by
-\begin{align}
-    \kappa^{\mathcal{G}}(y;Z) := \begin{cases} \iota(\RV{D}_A(y);Z) & \RV{D}_\RV{A}(y) \neq *\\
-                                              \zeta(Z) & \RV{D}_\RV{A}(y) = *\end{cases}
-\end{align}
+So far, this is a standard definition of a CBN; the extra additions are making explicit some implicit elements of the definition found in \citet{pearl_causality:_2009}.
 
-It can be verified that the causal theory $\mathscr{T}_{\mathcal{G}}$ induced by $\mathcal{G}$ and the set of compatible distributions $\mathscr{H}_\mathcal{G}\subset\mathscr{H}$ is the set of pairs $\{(\nu,\kappa^{\mathcal{G}} )|\nu\in \mathscr{H}_{\mathcal{G}}\}$.
-
-Consider two options for extending this to distributions $\nu\in \mathscr{H}$ but not in $\mathscr{H}_{\mathcal{G}}$, noting that one could imagine many possibilities: $\mathscr{T}_{\mathcal{G}}^\subset$ is the union of causal theories given by all graphs $\mathcal{G}'$ on $\{A, B, C\}$ such that $\mathcal{G}\subset \mathcal{G}'$ (in this case, just $\mathcal{G}$ and \begin{tikzpicture}[baseline=-1.5mm,-latex]
-\node (C) {$C$};
-\node [right of = C] (A) {$A$};
-\node [right of = A] (B) {$B$};
-\draw (C) -- (A);
-\draw (A) -- (B);
-\draw (C) to [bend left] (B);
-\end{tikzpicture}), and  $\mathscr{T}_{\mathcal{G}}^\circ$ is the union of causal theories given by the all DAGs on the set of nodes $\{\RV{A}, \RV{B}, \RV{C}\}$.
-
-The theory $\mathscr{T}_{\mathcal{G}}^\subset$ is given by $\mathscr{T}_{\mathcal{G}}\cup\{(\nu,\eta^\nu )|\nu \in \mathscr{H}\setminus\mathscr{H}_\mathcal{G}\}$ where 
-\begin{align}
-    \eta^\nu:=\begin{cases}(y;Z)\mapsto \sum_{c\in\{0,1\}} \nu F_{\RV{C}}(\{c\}) \nu_{|\{\RV{A},\RV{C}\}} F_{\RV{B}}(\RV{D}_A(y),c;Z) &\RV{D}_A(y)\neq *\\
-    \zeta(Z) &\RV{D}_A(y)=*\end{cases}
-\end{align}
-
-$\mathscr{T}_{\mathcal{G}}^\circ$ is the set of states associated with three types of graph: those featuring no arrow \begin{tikzpicture}[baseline=-1.5mm,-latex]
-\node (A) {$A$};
-\node [right of = A] (B) {$B$};
-\draw (A) -- node[strike out,draw,-]{} (B);
-\end{tikzpicture}, those featuring \begin{tikzpicture}[baseline=-1.5mm,-latex]
-\node  (A) {$A$};
-\node [right of = A] (B) {$B$};
-\draw (A) -- (B);
-\end{tikzpicture} but not \begin{tikzpicture}[baseline=-1.5mm,-latex]
-\node  (C) {$C$};
-\node [right of = C] (B) {$B$};
-\draw (C) -- (B);
-\end{tikzpicture} and \begin{tikzpicture}[baseline=-1.5mm,-latex]
-\node  (C) {$C$};
-\node [right of = C] (A) {$A$};
-\draw (C) -- (A);
-\end{tikzpicture} and the graph \begin{tikzpicture}[baseline=-1.5mm,-latex]
-\node (C) {$C$};
-\node [right of = C] (A) {$A$};
-\node [right of = A] (B) {$B$};
-\draw (C) -- (A);
-\draw (A) -- (B);
-\draw (C) to [bend left] (B);
-\end{tikzpicture}. These possibilities yield $\mathscr{T}_{\mathcal{G}}^\circ=\mathscr{T}_{\mathcal{G}}^\subset\cup\{(\nu,y\mapsto \zeta)|\nu \in \mathscr{H}\setminus\mathscr{H}_\mathcal{G}\}$.
-
-By \ref{eq:app_ci}, $|\eta(x;\{y\})-\iota(x;\{y\})|<\epsilon$ for all $x\in A\cup\{*\}$ and $y\in B$ and therefore for $J\in \mathscr{J}$, $|U(\mu J\splitter{0.1} (I_{(D)}\otimes \eta)) - U(\mu J\splitter{0.1} (I_{(D)}\otimes \iota))|<\epsilon$. Therefore a small $\epsilon$ ensures $\mathscr{T}^\subset_{\mathcal{G}}$ yields a risk set ``close'' to the risk given by $\mathscr{T}_{\mathcal{G}}$ for any $J$. On the other hand, $|\iota(x;\{y\})-\zeta(\{y\})|$ is independent of $\epsilon$, so $\mathscr{T}^\circ_{\mathcal{G}}$ yields a risk set that contains points that do not converge to the risk set induced by $\mathscr{T}_{\mathcal{G}}$ with small $\epsilon$.
-\end{example}
-
-Extensions of the ``base theory'' $\mathscr{T}_{\mathcal{G}}$ can yield very different risk sets even when the departure from compatibility is slight and we limit those extensions to being based on CBNs. This example is complementary to results indicating that with unknown variable ordering (which may be regarded as analogous to $\mathscr{T}_{\mathcal{G}}^\circ$) or with unmeasured confounders it is not possible to construct a test that uniformly converges to the true graph equivalence class \citep{robins_uniform_2003,zhang_strong_2003}; our example shows that some misses may be benign and others may not. We will finally note that the more general theory $\mathscr{T}^\circ_{\mathcal{G}}$ still has a nontrivial risk set, and hence (potentially) nontrivial implications for decision making. We think that the investigation of risk sets for ``extended theories'' discussed here or graph learning algorithms considered in the CBN literature presents many interesting questions.
+As a consequence of (existence of conditional probability), given $\mathcal{G}$ and $P_*(\#) there exists a unique set of interventional distributions $P_*(r)$, $r\in V$ rendering $\mathcal{G}$ compatible.
