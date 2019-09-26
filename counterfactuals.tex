@@ -1,14 +1,40 @@
+%!TEX root = main.tex
 
-\section{Potential Outcomes}
+\section{Counterfactual models}
 
-Potential Outcomes is an alternative to the approach typified by Causal Bayesian Networks for formulating causal questions and hypotheses. Causal queries in the Potential Outcomes framework concern the distribution of random variables $\RV{X}_0, \RV{X}_1$ representing potential outcomes, or ``the value $\RV{X}$ would have taken if action 0 or 1 were taken respectively'' (\cite{hernan_causal_2018}). This is similar, but not the same, as the question answered by a consequence map which is ``what is the distribution of $\RV{X}$ if I take actions 0 or 1?''
+A counterfactual model poses a number of ordinary random variables $\RV{X}, \RV{Y}$ and a number of counterfactual random variables $\RV{Y}_x$. It is not clear what the set of counterfactual indices should be in general; we will posit that it can be taken to be the set of decisions $D$. It is also not clear whether every random variable should have counterfactual versions; we will consider that this is so (so we have $\RV{X}_x$, though this may be trivial).
 
-A natural connection between these informal notions of potential outcomes and consequence maps is given by the notion of consequence consistency. Let $\Delta(\mathcal{Y}_\circ)$ be the space of joint distributions over real and potential outcomes of $\RV{X}$. A consequence map $\kappa:D\to \Delta(\mathcal{Y}_\circ)$ is consequence consistent if
+Additionally, a counterfactual model poses certain restrictions on the values and joint distribution of random variables. Consistency is sometimes stronger than a restriction on the joint distribution:
 \begin{align}
-    (\delta_i\kappa)_{|\RV{X}_i} F_{\RV{X}} (w;A)=\delta_{\RV{X}_i(w)}(A) \label{eq:oc_consist}
-\end{align} 
-Consequence consistency is similar to the consistency condition \citep{richardson2013single}, but the latter does not involve consequences.
+\forall e\in E, \RV{X}(e) = x\implies \RV{Y}(e) = \RV{Y}_x (e)
+\end{align}
 
-A causal theory that is consequence consistent need not have any particular relationship between an ``observed'' distribution $\mu\in \Delta(\mathcal{Y}_\circ)$ and an associated consequence $\kappa$; one choice to make this connection is equality of the distributions of potential outcomes $\mu F_{\RV{X}_i} = \delta_i \kappa F_{\RV{X}_i}$, $i\in D$. Example \ref{ex:nonst_distn} in Appendix \ref{app:counfac} shows that other choices may be preferred.
+May additionally pose ignorability (or something else):
+\begin{align}
+\forall \mu\in \mathscr{H}, \{\RV{Y}_x\}_{D} \CI_\mu \RV{X}\}
+\end{align}
 
+and SUTVA:
+\begin{align}
 
+\end{align}
+
+\subsection{Can we consider causal theories to be counterfactual models?}
+
+There is an obvious way to do this, but it fails to capture the assumption of consistency.
+
+More generally we can employ the standard method of turning a SDP into a CSDP.
+
+\subsection{Can we consider counterfactual models to be causal theories?}
+
+Given a CSDP we can construct an SDP. Not a counterfactual SDP...but we can always turn an SDP into a censored version of an SDP with additional structure. 
+
+The backwards construction of interest: ill-posed counterfactual SDP to CSDP. ``Can a counterfactual SE do the job of a CT''?
+
+Yes, there is an obvious correspondence between a causal theory and a class of counterfactual models (injection CT -> P(CF)?). But: this correspondence is at odds with the way that people actually use counterfactual (see ATE (why take a difference?) and ETT (Heckman: incentives might mean ETT is appropriate rather than ATE)). Have people been using counterfactuals wrongly, or should we consider a richer set of CF->CT rules?
+
+More importantly, \textbf{any CF->CT rule is itself a causal theory!}. We can't avoid invoking a causal theory to go from ill-posed CF SDP to CSDP.
+
+\textbf{Proposition:} Isomorphism between rules: ill-posed SDP to CSDP and causal theories.
+
+Conclusion: contra three-level hierarchy, if we care about consequences we need a causal theory.

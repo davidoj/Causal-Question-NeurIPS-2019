@@ -46,7 +46,7 @@ For each state $\theta\in \Theta$, the Markov kernel
 \end{tikzpicture}\label{eq:ttheta_def}
 \end{align}
 
-Is sufficient to compute the causal risk. \todo{This is highly nonobvious, depends on the work of Jacobs, and is only known to be true for finite sets $E$ and $F$. On the other hand, there's a very intuitive graphical proof.} Thus we can replace $H$ and $C$ with the \emph{causal theory kernel} $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ given by $(\theta,d)\mapsto T_\theta(d;\cdot)$. A causal statistical decision problem (CSDP) is therefore a tuple $\langle \Theta, E, F, D, T, u\rangle$.
+Is sufficient to compute the causal risk. \todo{This is highly nonobvious, depends on the work of Jacobs, and is only known to be true for finite sets $E$ and $F$. On the other hand, there's a very intuitive graphical proof.} Thus we can replace $H$ and $C$ with the \emph{kernel causal theory} $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ given by $(\theta,d)\mapsto T_\theta(d;\cdot)$. A causal statistical decision problem (CSDP) is therefore a tuple $\langle \Theta, E, F, D, T, u\rangle$.
 
 Given a CSDP $\alpha = \langle \Theta, E, F, D, T, u\rangle$ where $T$ is a theory arising from some $H$ and $C$ as in Equation \ref{eq:ttheta_def}, we can recover $H= T(\ID{E}\otimes *_F)$ and $C=T(*_E\otimes \ID{F})$. Given $\alpha$ and letting $l:= Cu$ we induce the canonical SDP $\beta=\langle \Theta, E, D, H', l\rangle$ such that for any $\theta\in \Theta$, $\pi\in \Pi$, $R^{(\beta)}(\pi,\theta) = S^{(\alpha)}(\pi,\theta)$, and thus, if we accept that the risk functional is the only means of evaluating the desirability of a strategy (whether we choose Bayes, minimax or some other meta-rule to select a strategy), $\alpha$ and $\beta$ will always produce identical recommendations.
 
@@ -54,4 +54,29 @@ It is also possible to induce a CSDP from an arbitrary SDP $\beta:=\langle \Thet
 
 Thus, in some sense every problem that can be represented as an SDP can be represented as a CSDP and vise-versa (this may not hold true if we invoke some decision rule that doesn't just depend on the risk functional).
 
-We will finally note an alternative representation of a CSDP. Consider the set $\mathscr{T} = \{T_\theta|\theta\in \Theta\}$. Consider the evaulation map $\mathrm{Ev}_{\mathscr{T}}:\mathscr{T}\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ given by $(T_\theta,d)\mapsto T_\theta(d;\cdot)$. Then the problems $\alpha = \langle \Theta, E, F, D, T, u\rangle$ and $\alpha'=\langle \mathscr{T}, E, F, D, \mathrm{Ev}_{\mathcal{T}}, u\rangle$ are related in the sense that $S^{(\alpha)}(\pi,\theta)=S^{(\alpha')}(\pi,T_\theta)$. Thus, unlike with regular SDPs where $\Theta$ is an arbitrary set, for CSDPs we can regard $\Theta$ as a subset of kernels $D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ that can be written as in Eq. \ref{eq:ttheta_def} \todo{this might be equivalent to the set of 1-combs} with the canonical kernel $\mathrm{Ev}_{\mathscr{T}}$. We call $\mathscr{T}$ the \emph{causal theory set} and, as there is a bijection between theory kernels $T$ along with their domains $\Theta$ and theory sets $\mathscr{T}$, we typically refer to either as simply a \emph{causal theory}. We say that $\alpha$ is a CSDP in kernel form and $\alpha'$ is a CSDP in set form.
+We will finally note an alternative representation of a CSDP. Consider the set $\mathscr{T} = \{T_\theta|\theta\in \Theta\}$ and the evaulation map $\mathrm{Ev}_{\mathscr{T}}:\mathscr{T}\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ given by $(T_\theta,d)\mapsto T_\theta(d;\cdot)$. Then the problems $\alpha = \langle \Theta, E, F, D, T, u\rangle$ and $\alpha'=\langle \mathscr{T}, E, F, D, \mathrm{Ev}_{\mathcal{T}}, u\rangle$ are related in the sense that $S^{(\alpha)}(\pi,\theta)=S^{(\alpha')}(\pi,T_\theta)$. Thus, unlike with regular SDPs where $\Theta$ is an arbitrary set, for CSDPs we can regard $\Theta$ as a subset of kernels $D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ that can be written as in Eq. \ref{eq:ttheta_def} \todo{this might be equivalent to the set of 1-combs, see Jacobs} with the canonical kernel $\mathrm{Ev}_{\mathscr{T}}$. We call $\mathscr{T}$ the \emph{set causal theory} and, as there is a bijection between kernel theories $T$ along with their domains $\Theta$ and set theories $\mathscr{T}$, we typically refer to either as simply a \emph{causal theory}. We say that $\alpha$ is a CSDP in kernel form and $\alpha'$ is a CSDP in set form.
+
+Finally, we note that causal theories can \emph{also} be represented as a set of (distribution, consequence map) pairs.
+
+\begin{theorem}[Causal theories are sets of pairs]
+There is a bijection between the set of causal theories and the power set $\mathscr{P}(\Delta(\mathcal{E})\times \Delta(\mathcal{F})^D)$
+\end{theorem}
+
+\begin{proof}
+Sketch: Theories to pairs goes $\{(T_\theta (\ID{E}\otimes *_F),T_\theta (*_E\otimes \ID{F}))|T_\theta\in \mathscr{T}\}$ and pairs to theories goes $\{\mu\otimes \kappa|(\mu,\kappa)\in \mathrm{Pairs}\}$.
+\end{proof}
+
+A \emph{causal theory} - that is a ``consequence-aware'' analogue of a statistical experiment. It can be represented as a Markov kernel or a set of (observation, consequence) pairs. The kernel representation foregrounds the relationship between causal theories and statistical experiments, and we will exploit the latter to justify the following claim: \emph{Causal Bayesian Networks are a subset of causal theories}.
+
+In fact, this holds for the following generalisations of causal graphical models:
+\begin{itemize}
+\item Arbitrary sets of CBNs (e.g. ADMGs)
+\item Marginal models (e.g. mDAGs)
+\item CBNs with different intervention rules
+\item Cyclic SEMs (???)\todo{don't know about this one}
+\end{itemize}
+
+\todo[inline]{Show this for all the examples claimed}
+
+It is not the case, however, that \emph{every} type of ``causal graphical model'' is a representation of a causal theory - SWIGs are an important exception. This is because SWIGs, like all counterfactual models, represent hypothesis classes (a hypothesis class is the range of a statistical experiment).
+
