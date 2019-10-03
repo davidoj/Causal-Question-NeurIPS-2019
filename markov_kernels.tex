@@ -1,34 +1,47 @@
+%!TEX root = main.tex
+
 \section{Definitions \& Notation}\label{sec:dfin}
 
-We use the following standard notation: $[N]$ refers to the set of natural numbers $\{1,...,N\}$. Sets are ordinary capital letters $X$ while $\sigma$-algebras are calligraphic capitals $\mathcal{X}$ and random variables are sans serif capitals $\RV{X}:\_\to X$. The calligraphic $\mathcal{G}$ refers to a directed acyclic graph rather than a $\sigma$-algebra. Sets of probability measures or stochastic maps are script capitals: $\mathscr{H}$, $\mathscr{T}$, $\mathscr{J}$.
+We use the following standard notation: $[n]$ refers to the set of natural numbers $\{1,...,n\}$. Sets are ordinary capital letters $X$, $\sigma$-algebras are script letters $\mathcal{X}$ while random variables are sans serif capitals $\RV{X}:\_\to X$. The calligraphic $\mathcal{G}$ refers to a directed acyclic graph rather than a $\sigma$-algebra. Probability measures are greek letters $\mu,\xi,\gamma$ and stochastic maps are bold capitals $\mathbf{C},\mathbf{H}$. Sets of probability measures or stochastic maps are script capitals: $\mathscr{H}$, $\mathscr{T}$, $\mathscr{J}$. We write the set of all probability measures on $(X,\mathcal{X})$ as $\Delta(\mathcal{X})$ and the set of all stochastic maps $W\to \Delta(X)$ as $\Delta(\mathcal{X})^W$. $\delta_x:\mathcal(X)\to [0,1]$ is the probability measure such that $\delta_x(A)=1$ if $x\in A$ and $0$ otherwise.
 
-A measurable space $(E,\mathcal{E})$ is a set $E$ and a $\sigma$-algebra $\mathcal{E}\subset\mathcal{P}(\mathcal{E})$ containing the measurable sets. A probability measure $\mu\in \Delta(\mathcal{E})$ is a nonnegative map $\mathcal{E}\to[0,1]$ such that $\mu(\emptyset)=0$, $\mu(E)=1$ and for countable $\{E_i\}\in \mathcal{E}$, $\mu(\cup_i E_i) = \sum_i \mu(E_i)$. We assume all measurable spaces discussed are standard. That is, they are isomorphic to either a subset of $\mathbb{N}$ with the discrete $\sigma$-algebra, or $\mathbb{R}$ with the Borel $\sigma$-algebra.
+If $X$ is a discrete space, probability measures on $X$ are positive row vectors in $\mathbb{R}^{|X|}$ that sum to $1$, and stochastic maps or Markov kernels $X\to \Delta(Y)$ are $|X|\times |Y|$ positive matrices with row sums of 1. Using the standard notion of associative matrix-vector products, given $\mu\in \Delta(X)$ and $\mathbf{A}:X\to \Delta(Y)$, $\mu \mathbf{A}$ is a probability measure on $Y$. Given a random variable (or equivalently, measurable function) $\RV{T}:Y\to Z$, $\mathbf{A} \RV{T}$ is a measurable function $X\to Z$. Given $\mathbf{A}:X\to \Delta(Y)$ and $\mathbf{B}:Y\to \Delta(Z)$, $\mathbf{A}\mathbf{B}$ is a stochastic map $X\to \Delta(Z)$. We can use this same notation for continuous sets $X$ and $Y$, see \citet{cinlar_probability_2011}. 
 
-Given two measureable spaces $(E,\mathcal{E})$ and $(F,\mathcal{F})$, a \emph{Markov kernel} or \emph{stochastic map} $K:E\to \Delta(\mathcal{F})$ is a map where $x\mapsto K(x;B)$ is $\mathcal{E}$-measurable for every $B\in\mathcal{F}$ and $B\mapsto K(x;B)$ is a probability measure on $(F,\mathcal{F})$ for every $x\in E$. Abusing notation somewhat, we will write the set of Markov kernels of type $E\to \Delta(\mathcal{F})$ as $\Delta(\mathcal{F})^D$. 
+Write $\mathbf{A}_x$ for the probability measure given by $\delta_x \mathbf{A}$, for $E\subset X$ write $\mathbf{A}_E$ for $\mathbf{A} \mathds{1}_C$ where $\mathds{1}_E$ is the indicator function on $E$, and write $\mathbf{A}(x;E):=A_x(E):=\delta_x A_E$. The tensor product $\mathbf{A}\otimes\mathbf{B}$ is the stochastic map $X\times Y\to \Delta(Y\times Z)$ given by $(x,y)\mapsto \mathbf{A}_x\mathbf{B}_y$.
 
-If we have two random variables $\RV{X}:\_\to X$ and $\RV{Y}:\_\to Y$, the conditional probability $P(\RV{Y}|\RV{X})$ is a Markov kernel $X\to \Delta(\mathcal{Y})$. Formally, given $\mu\in \Delta(\mathcal{E})$ and a sub-$\sigma$-algebra $\mathcal{E}'\subset\mathcal{E}$, there is a Markov kernel $\mu_{|\mathcal{E}'}:E\to\Delta(\mathcal{E})$ such that for $A\in\mathcal{E}$ and $B\in \mathcal{E}'$, $\int_B \mu_{|\RV{E}'}(y;A) d\mu(y) = \mu(A\cap B)$. $\mu_{|\mathcal{E}'}$ is a \emph{conditional probability distribution} with respect to $\mathcal{E}'$. This result may not hold if $(E,\mathcal{E})$ is not a standard measureable space \citep{cinlar_probability_2011}.
+Product notation is useful for defining composite kernels and probability measures, but sometimes more elaborate constructions are called for. Here we use string diagrams. String diagrams can always be interpreted as a mixture of matrix products and tensor products of Markov kernels, but we introduce kernels with special notation that helps with interpreting the resulting objects. A kernel $\mathbf{A}:X\to \Delta(\mathcal{Y})$ is written $...$, where the input and output wires are associated with the measureable spaces $(X,\mathcal{X})$ and $(Y,\mathcal{Y})$. Probability measures $\mu\in \Delta(\mathcal{X})$ are written $...$ and measurable functions $X\to Y$ are written $...$. For a thorough definition of string diagrams, see \citet{cho_disintegration_2019}.
 
-Given a set of random variables $\mathbf{X}=\{\RV{X}^i\}_{i\in [N]}$ with domain $(E,\mathcal{E})$, $\mu_{\mathbf{X}}:E\to \Delta(\mathcal{E})$ is a conditional probability distribution with respect to the $\sigma$-algebra generated by $\mathbf{X}$: $\sigma(\cup_{i\in[N]}\sigma(\mathcal{X}^i))$.  We will use this subscript notation rather than the more common bar notation (e.g. $\mu(\cdot|\mathbf{X})$) to express conditional probability from here onwards.
+The identity $\mathrm{Id}_X:X\to \Delta(X)$ is the Markov kernel $x\mapsto \delta_x$, which we represent with a bare wire, leaving the space implicit. The copy map $\splitter{0.1}:X\to \Delta(X\times X)$ is the Markov kernel $x\mapsto \delta_{(x,x)}$. For $\mathbf{A}:X\to \Delta(Y)$ and $\mathbf{B}:X\to \Delta(Z)$, $\splitter{0.1} (A\otimes B) = \sum_{x\in X} A_x \otimes B_x$. The discard map $\stopper{0.1}$ is the Markov kernel $X\to \{*\}$ given by $x\mapsto \delta_*$, where $*$ is a one element set. 
 
-Two Markov kernels $K:E\to \Delta(\mathcal{F})$ and $K':E\to \Delta(\mathcal{F})$ are $\mu$-almost surely equivalent given $\mu\in \Delta(\mathcal{E})$ if for all $A\in \mathcal{E}, B\in\mathcal{F}$, $\int_A K(x;B) d\mu = \int_A K'(x;B)$.
+Given $\mu\in\Delta(X),\mathbf{A}:X\to \Delta(Y)$ as before, the joint distribution on $X\times Y$ that might be informally written $P(\RV{X}) P(\RV{Y}|\RV{X})$ is given in string diagram notation as
 
-
-\paragraph*{Kernel products:} Kernel products allow common operations to be written compactly. The notation here borrows heavily from \cite{cinlar_probability_2011} and \cite{fong_causal_2013}. More details can be found in Appendix \ref{app:markov_kernels}. For the following, assume $K:E\to \Delta(\mathcal{F})$, $L:F\to \Delta(\mathcal{G})$, and $M:G\to \Delta(\mathcal{H})$ are Markov kernels, $\mu$ is a probability measure on $(E,\mathcal{E})$. 
-
-The \emph{kernel-kernel} product $KL$ is a Markov kernel $E\to \Delta(\mathcal{G})$ such that $KL(x;B):= \int_F K(x;dy) L(y;B),\qquad x\in E, B\in \mathcal{G}$. Kernel-kernel products are associative: $(KL)M=K(LM)$.
-
-The \emph{measure-kernel} product of $\mu$ and $K$, $\mu K$ is a probability measure on $(F,\mathcal{F})$ such that $\mu K(B)=\int_E \mu(dx) K(x;B),\qquad B\in\mathcal{F}$. Measure-kernel products are also associative: $(\mu K)L = \mu (KL)$.
-
-\paragraph*{Special kernels:} $I_{(E)}$ is the identity kernel $E\to \Delta(\mathcal{E})$ defined by $x\mapsto \delta_x$. It has the properties $\mu I_{(E)}=\mu$, $KI_{(F)} = K$, $I_{(E)} K = K$.
-
-Given some measurable function $g:E\to F$, the kernel $F_g:E\to \Delta(\mathcal{F})$ is defined by $x\mapsto \delta_{g(x)}$. It is easy to check that $F_g F_g = F_g$. For $\mu\in \Delta(\mathcal{E})$, $\mu F_g (A) = \mu(g^{-1}(A))$. This notation allows us to consistently represent a marginal distribution $\mu F_\RV{X}$ and a marginal kernel $\kappa F_{\RV{X}}$.
-
-Given $\mu\in \Delta(\mathcal{E}$, $\mu\splitter{0.15}(I_{(E)}\otimes K)$ is a distribution in $\Delta(\mathcal{E}\otimes\mathcal{F})$ given by
 \begin{align}
-    \mu\splitter{0.15}(I_{(E)}\otimes K)(A\times B) = \int_A K(x;B) d\mu(x)\qquad \forall A\in \mathcal{E},B\in \mathcal{F}
+\nu:=\begin{tikzpicture}
+\path (0,0) node[dist] (mu) {$\mu$}
+++ (1,0) coordinate (copy0)
++ (1.2,0.5) node (X) {$\RV{X}$}
+++ (0.5,-0.5) node[kernel] (A) {$\mathbf{A}$}
+++(0.7,0) node (Y) {$\RV{Y}$};
+\draw (mu)--(copy0);
+\draw (copy0) to [bend left] (X);
+\draw (copy0) to [bend right] (A) (A) -- (Y);
+\end{tikzpicture}\label{eq:jdist}
 \end{align}
-The symbol $\splitter{0.15}$ is read ``splitter''.
 
+A string diagram such as \ref{eq:jdist} that is ``capped'' on the left by a probability measure defines a probability space where the sample space is the Cartesian product of the output wires, the measurable sets are the tensor product of the output $\sigma$-algebras and the probability measure is given by the composition of measures in the diagram. The projection map $\pi_X:X\times Y\to X$ is thus a measurable function; following this observation, we overload the notation for the random variable $\RV{X}$ to label wires on the diagram; when used as such, it always refers to the projetion map $\pi_X$. While a random variable technically requires a probability space, we also use this convention for string diagrams representing kernels $X\to \Delta(\mathcal{Y})$ for arbitrary $X,Y$ (such diagrams feature ``free'' wires on the left and right). Using this convention, the measurable function referred to by the wire label $\RV{X}$ is always unambiguous, but we need to define a prior $\xi \in \Delta(\mathcal{X})$ in order for it to have a distribution. 
 
+Finally, if we are given a set of kernels $\{\mathbf{A},\mathbf{B}\}$ where $\mathbf{A}:X\to \Delta(\mathcal{Y})$, $\mathbf{B}:W\to \Delta(\mathcal{Z})$ and a composition defining some kernel $$, we can always construct a 
 
+If we regard $\nu$ as a joint distribution of $\RV{X}$ and $\RV{Y}$, the marginal $\nu_{\RV{X}}$ is given by
 
+\begin{align}
+\nu:=\begin{tikzpicture}
+\path (0,0) node[dist] (mu) {$\mu$}
+++ (1,0) coordinate (copy0)
++ (1.2,0.5) node (X) {$\RV{X}$}
+++ (0.5,-0.5) node[kernel] (A) {$\mathbf{A}$}
+++(0.7,0) node[{-Rays [n=8]}] (Y) {};
+\draw (mu)--(copy0);
+\draw (copy0) to [bend left] (X);
+\draw (copy0) to [bend right] (A) (A) -- (Y);
+\end{tikzpicture}\label{eq:jdist}
+\end{align}
