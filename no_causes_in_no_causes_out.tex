@@ -1,9 +1,32 @@
 \section{No causes in no causes out}
 
-A key result in statistical learning theory is the requirement that, in order for a hypothesis class to be learnable, it must be limited in size for some measure of its size (a key example being the VC-dimension). 
+A key result in statistical learning theory is the requirement that, in order for a hypothesis class to be learnable, it must have finite VC-dimension. The concept of controlling the size of the hypothesis class plays a fundamental role across the field of machine learning, from formal proofs of learnability to techniques based less formally on the notion of the bias-variance tradeoff. CSDPs are closely related to statistical learning problems, and it is highly likely that results of this type can be developed for causal problems.
 
-\begin{itemize}
-\item Bias-variance
-\item Regularisation
-\item Occam's razor
-\end{itemize}
+Causal problems, however, require an additional ``kind'' of restriction is necessary on a causal theory over and above the ``kind'' of restriction represented by things like a limited VC-dimension. In particular, we require the set of consequence maps $\{C_\theta |\theta\in \Theta\}$ collectively have some tendency to treat particular decisions in a particular way. Formally, we require that this set is not closed under left multiplication by an invertible kernel\footnote{A set of functions limited by VC dimension is closed under the analogous operation of precomposition with an invertible function}.
+
+\begin{theorem}[No causes in, no causes out (minimax)]
+If a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ with finite $D$ is such that for every invertible $U:D\to \Delta(\mathcal{D})$, $\theta\in \Theta$ there is some $\theta'$ such that $T(\theta,\cdot;\cdot) = (I\otimes U)T(\theta',\cdot;\cdot)$ then the uniform decision strategy is minimax.
+\end{theorem}
+
+\begin{proof}
+For every $d\in D$, $x\in E$ let $J_d:(x;A)\mapsto \delta_d(A)$ be the decision strategy that stubbornly picks $d$. For arbitrary $d'\in D$, choose $U_{dd'}:(d;A)\mapsto \delta_{d'}(A)$, $(d';A)\mapsto \delta_d(A)$ and $(x;A)\mapsto \delta_x(A)$, $x\not\in \{d,d'\}$. Clearly $U_{dd'}U_{dd'}=I$. For arbitrary $\theta$ let $\theta'$ be such that $T(\theta,\cdot;\cdot) = (I\otimes U_{dd'})T(\theta',\cdot;\cdot)$. Then $S(J_d,\theta) = S(J_d',\theta')$. In particular, $\max_\theta S(J_d,\theta) = \max_\theta S(J_{d'},\theta):=S_0$ for all $d,d'$.
+
+
+\end{proof}
+
+\begin{theorem}[No causes in, no causes out (Bayes)]
+If a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ and a prior $\xi\in \Delta(\Theta)$ are such that for all invertible $U:D\to \Delta(\mathcal{D})$, $(\xi\otimes U)T = (\xi\otimes I)T$ then all decision strategies are Bayes.
+\end{theorem}
+
+\begin{proof}
+Consider the stubborn strategy $J_d$ as before. Then for all $d,d'\in D$
+\begin{align}
+	\int_\Theta \delta_d C_\theta u d\xi &= \int_\Theta \delta_d' C_\theta u d\xi
+\end{align}
+Thus for any $\gamma\in \Delta(\mathcal{D})$,
+\begin{align}
+	\int_\Theta 
+\end{align}
+
+\end{proof}
+A set of functions $\{f\}$ where $f:X\to \{0,1\}$ limited by VC dimension is 
