@@ -15,7 +15,14 @@ The identity $\mathrm{Id}_X:X\to \Delta(X)$ is the Markov kernel $x\mapsto \delt
 Given $\mu\in\Delta(X),\mathbf{A}:X\to \Delta(Y)$ as before, the joint distribution on $X\times Y$ that might be informally written $P(\RV{X}) P(\RV{Y}|\RV{X})$ is given in string diagram notation as
 
 \begin{align}
-\nu:=\begin{tikzpicture}
+\begin{tikzpicture}
+\path (0,0) node[dist] (nu) {$\nu$}
++ (0.5,0.15) node (X) {$\RV{X}$}
++(0.5,-0.15) node (Y) {$\RV{Y}$};
+\draw ($(nu.east) + (0,0.15)$) -- (X);
+\draw ($(nu.east) + (0,-0.15)$) -- (Y);
+\end{tikzpicture}
+:=\begin{tikzpicture}
 \path (0,0) node[dist] (mu) {$\mu$}
 ++ (1,0) coordinate (copy0)
 + (1.2,0.5) node (X) {$\RV{X}$}
@@ -29,19 +36,45 @@ Given $\mu\in\Delta(X),\mathbf{A}:X\to \Delta(Y)$ as before, the joint distribut
 
 A string diagram such as \ref{eq:jdist} that is ``capped'' on the left by a probability measure defines a probability space where the sample space is the Cartesian product of the output wires, the measurable sets are the tensor product of the output $\sigma$-algebras and the probability measure is given by the composition of measures in the diagram. The projection map $\pi_X:X\times Y\to X$ is thus a measurable function; following this observation, we overload the notation for the random variable $\RV{X}$ to label wires on the diagram; when used as such, it always refers to the projetion map $\pi_X$. While a random variable technically requires a probability space, we also use this convention for string diagrams representing kernels $X\to \Delta(\mathcal{Y})$ for arbitrary $X,Y$ (such diagrams feature ``free'' wires on the left and right). Using this convention, the measurable function referred to by the wire label $\RV{X}$ is always unambiguous, but we need to define a prior $\xi \in \Delta(\mathcal{X})$ in order for it to have a distribution. 
 
-Finally, if we are given a set of kernels $\{\mathbf{A},\mathbf{B}\}$ where $\mathbf{A}:X\to \Delta(\mathcal{Y})$, $\mathbf{B}:W\to \Delta(\mathcal{Z})$ and a composition defining some kernel $$, we can always construct a 
+Finally, if we are given a set of kernels $\{\mathbf{A},\mathbf{B}\}$ where $\mathbf{A}:X\to \Delta(\mathcal{Y})$, $\mathbf{B}:W\to \Delta(\mathcal{Z})$ and a composition defining some kernel $\mathbf{K}:T\to \Delta(\mathcal{U})$ where $T,U$ are each Cartesian products of some subset of of $\{W,X,Y,Z\}$, we can always construct $\mathbf{K}^*:T\to \Delta(\mathcal{W}\otimes\mathcal{X}\otimes\mathcal{Y}\otimes\mathcal{Z})$ by inserting copy maps in appropriate places. Thus if we have \emph{both} a set of kernels and a diagram defining their composition, we can cautiously regard the input and output wires of \emph{each} kernel as a random variable under the same interpretation as given above.
 
-If we regard $\nu$ as a joint distribution of $\RV{X}$ and $\RV{Y}$, the marginal $\nu_{\RV{X}}$ is given by
+If we regard $\nu$ as a joint distribution of $\RV{X}$ and $\RV{Y}$, the marginal $\nu_{\RV{X}}$, which by definition of $\nu$ is equal to $\mu$, is given by
 
 \begin{align}
-\nu:=\begin{tikzpicture}
-\path (0,0) node[dist] (mu) {$\mu$}
-++ (1,0) coordinate (copy0)
+\begin{tikzpicture}
+\path (0,0) node[dist] (NU) {$\nu$}
++ (0.5,0.15) node (X) {$\RV{X}$}
++(0.5,-0.15) node (Y) {};
+\draw ($(NU.east) + (0,0.15)$) -- (X);
+\draw[-{Rays [n=8]}] ($(NU.east) + (0,-0.15)$) -- (Y);
+\end{tikzpicture}=
+\begin{tikzpicture}
+\path (0,0) node[dist] (MU) {$\mu$}
++ (0.5,0) node (X) {$\RV{X}$};
+\draw (MU) -- (X);
+\end{tikzpicture}\label{eq:nu_mu}
+\end{align}
+
+A disintegration $\nu_{\RV{Y}|\RV{X}}$ is any kernel $X\to \Delta(\mathcal{Y})$ such that 
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node[dist] (mu) {$\nu$}
+++ (1,0.15) coordinate (copy0)
 + (1.2,0.5) node (X) {$\RV{X}$}
-++ (0.5,-0.5) node[kernel] (A) {$\mathbf{A}$}
-++(0.7,0) node[{-Rays [n=8]}] (Y) {};
-\draw (mu)--(copy0);
+++ (0.5,-0.5) node[kernel] (A) {$\nu_{\RV{Y}|\RV{X}}$}
+++(0.7,0) node (Y) {$\RV{Y}$};
+\draw ($(mu.east)+(0,0.15)$)--(copy0);
+\draw[-{Rays [n=8]}] ($(mu.east) + (0,-0.15)$) -- ($(mu.east) + (0.5,-0.15)$);
 \draw (copy0) to [bend left] (X);
 \draw (copy0) to [bend right] (A) (A) -- (Y);
-\end{tikzpicture}\label{eq:jdist}
+\end{tikzpicture}:=
+\begin{tikzpicture}
+\path (0,0) node[dist] (nu) {$\nu$}
++ (0.5,0.1) node (X) {$\RV{X}$}
++(0.5,-0.1) node (Y) {$\RV{Y}$};
+\draw ($(nu.east) + (0,0.1)$) -- (X);
+\draw ($(nu.east) + (0,-0.1)$) -- (Y);
+\end{tikzpicture}
 \end{align}
+
+Disintegrations are known to exist wherever $X$ and $Y$ are standard measurable spaces (ismorphic to a discrete space or the reals with the Borel $\sigma$-algebra), though in general they are not unique. We will use the notation $\nu_{\RV{Y}|\RV{X}}$ to refer to an arbitrary representative of the full set of disintegrations. Note that from Equations \ref{eq:jdist} and \ref{eq:nu_mu} it is clear that $\mathbf{A}$ is a disintegration $\nu_{\RV{Y}|\RV{X}}$. 
