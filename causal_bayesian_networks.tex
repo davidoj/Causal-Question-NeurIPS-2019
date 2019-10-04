@@ -16,7 +16,7 @@ Given $R$, $E$ and $P_*:R\to \Delta(\mathcal{E})$ and $\{\RV{X}^i\}_{i\in [n]}$,
 
 \begin{enumerate}
     \item $P_r$ is compatible with $\mathcal{G}$ (see \citet{pearl_causality:_2009})
-    \item For all $i\in h(r)$, $P_r F_{\RV{X}^i}=\delta_{\RV{X}^{i\prime}(r)} F_{\RV{X}^i}$
+    \item For all $i\in h(r)$, $P_r F_{\RV{X}^i}=\delta_{\RV{X}^{i\prime}(r)}$
     \item For all $i\not \in h(r)$, $P_{r|\PA{\mathcal{G}}{\RV{X}^i}} F_{\RV{X}^i}=P_{\underline{\#}|\PA{\mathcal{G}}{\RV{X}^i}}F_{\RV{X}^i} $, $P_{\underline{\#}}$-almost surely
 \end{enumerate}
 \end{definition}
@@ -44,3 +44,59 @@ Sketch: $\mathcal{G}$ and $\mathcal{G}'$ must disagree on at least one parental 
 \end{proof}
 
 Each DAG $\mathcal{G}$ represents a causal theory $\mathscr{T}^\mathcal{G}$. For every causal theory $\mathscr{T}$, either it is not represented by any graph or there is a unique graph $\mathcal{G}$ such that $\mathscr{T}=\mathscr{T}^\mathcal{G}$. It is in this sense that we claim Causal Bayesian Networks are a subset of causal theories.
+
+The string diagram notation we use to represent Markov kernels and the DAGs used to represent CBNs have clear similarities. \citet{fong_causal_2013} discusses how a DAG can be translated to a string diagram to yield a different type of ``causal theory''. It is in fact possible to represent the causal theory associated with what we call an elementary CBN compactly in string diagram notation. An elementary CBN is a CBN where only one node accepts intervention and the ``do-nothing'' action is not available. We define it directly as a causal theory. Rather than formally define how this translation may proceed we will present an example demonstrating how this is possible.
+
+\begin{definition}[Elementary Causal Bayesian Network]\label{def:CBN}
+
+Given $D$, $E$, $\Theta$, random variables $\{\RV{X}^i\}_{i\in [n]}$ on $E$, a distinguished variable $\RV{X}^0$ taking values in $D$ and a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{E})$ with $H:= T(\mathrm{Id}_E\otimes *_E)$ and $C:= T(*_E\otimes \mathrm{Id}_E)$, an \emph{elementary Causal Bayesian Network} (eCBN) compatible with $T$ is a directed acyclic graph (DAG) $\mathcal{G}$ with nodes $\{\RV{X}^i\}_{i\in [n]}$ such that
+
+\begin{enumerate}
+    \item $H_\theta$ and $C_{\theta,d}$ are compatible with $\mathcal{G}$ (see \citet{pearl_causality:_2009})
+    \item $C_{\theta,d} F_{\RV{X}^i}=\delta_{d}$
+    \item For all $i\neq 0$, $C_{\theta|\PA{\mathcal{G}}{\RV{X}^i}} F_{\RV{X}^i}=H_{\theta|\PA{\mathcal{G}}{\RV{X}^i}}F_{\RV{X}^i} $, $H_\theta$-almost surely
+\end{enumerate}
+\end{definition}
+
+Suppose we have the EDAG $\mathcal{G}:=X\rightarrowtriangle Y$, where $\RV{X}$ and $\RV{Y}$ are random variables taking values in some arbitrary spaces $X$ and $Y$. Then $\mathcal{G}$ is compatible with a causal theory $T:\Theta\times X\to \Delta([\mathcal{X}\otimes\mathcal{Y}]^2)$ if and only if there exist Markov kernels $\mathbf{X}:\Theta\to \Delta(\mathcal{X})$, $\mathbf{Y}:\Theta\times X\to \Delta(\mathcal{Y})$ such that
+\begin{align}
+\begin{tikzpicture}
+ \path (0,0) coordinate (T)
+  + (0,-1.15) coordinate (D)
+  ++(0.5,0) coordinate (copy0)
+  ++(1,0) coordinate (n0)
+  +(-0.5,0.8) coordinate (copy1)
+  +(0,1) node[kernel] (X) {$\mathbf{X}$}
+  +(0,-1) node[kernel] (Id) {$\mathrm{Id}_X$}
+  +(0.6,-1.15) coordinate (copy2)
+  ++(1.2,0) coordinate (n1)
+  +(-0.6,1) coordinate (copy3)
+  +(0,1) node[kernel] (Y) {$\mathbf{Y}$}
+  +(0,-1) node[kernel] (Y1) {$\mathbf{Y}$}
+  ++(1,0) coordinate (n2)
+  +(0,1.5) node (Xout) {$\RV{X}$}
+  +(0,1) node (Yout) {$\RV{Y}$}
+  +(0,-0.5) node (Xout1) {$\RV{X}$}
+  +(0,-1) node (Yout1) {$\RV{Y}$};
+  \draw (T) -- (copy0);
+  \draw (D) -- ($(Id.west)+(0,-0.15)$);
+  \draw (copy0) to [bend left] (copy1) to [bend left] (X);
+  \draw (copy1) to [bend right] ($(Y.west)+(0,-0.15)$);
+  \draw (copy0) to [bend right = 10] ($(Y1.west)+(0,0.15)$);
+  \draw ($(Id.east)+(0,-0.15)$) -- ($(Y1.west)+(0,-0.15)$);
+  \draw (copy2) to [bend left] (Xout1);
+  \draw (copy3) to [bend left] (Xout);
+  \draw (X) -- (Y) -- (Yout);
+  \draw (Y1) -- (Yout1);
+ \end{tikzpicture} 
+ \end{align} 
+
+Here we represent the identity kernel explicitly to make clear that it replaces $\mathbf{X}$ in the lower part of the diagram. This fact is hidden by the usual convention of representing the identity by a bare wire.
+
+\begin{proof}
+(Sketch): The topology of the top and bottom sub-structures guarantees 1 (compatibility) and 1 guarantees that some kernels exist exhibiting this topology (this condition is acutally trivial in this case; it is nontrivial where the graph is not fully connected). 2 is equivalent to asserting that $C_{\theta,d} F_{\RV{X}^i}$ is the identity map. The shared kernel $\mathbf{Y}$ guarantees 3 and if $\mathbf{Y}$ cannot be shared then 3 does not hold.
+\end{proof}
+
+A particularly interesting feature of this representation is the fact that the edge cutting behaviour, usually an implicit part of the definition of a CBN, is displayed explicitly by replacing $\mathbf{X}$ by the identity. 
+
+ \todo[inline]{We can't avoid one condition being trivial with two nodes, but three nodes starts looking very complex!}
