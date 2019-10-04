@@ -1,40 +1,214 @@
 %!TEX root = main.tex
 
-\section{Counterfactual models}
+\section{potential outcomes models}
 
-A counterfactual model poses a number of ordinary random variables $\RV{X}, \RV{Y}$ and a number of counterfactual random variables $\RV{Y}_x$. It is not clear what the set of counterfactual indices should be in general; we will posit that it can be taken to be the set of decisions $D$. It is also not clear whether every random variable should have counterfactual versions; we will consider that this is so (so we have $\RV{X}_x$, though this may be trivial).
+We will follow \cite{rubin_causal_2005} in our development of potential outcomes models, acknowledging that there are a wider variety of approaches to modelling potential outcomess than Rubin's version potential outcomes alone. Given an underlying state space $\Theta$, Rubin posits a number of Markov kernels and composes them to define a statistical experiment $H:\Theta\to \Delta(\mathcal{X}\otimes\mathcal{Y}\otimes \mathcal{W})$. We eschew the ``conditional probability'' notation Rubin uses as it masks the distinction between a Markov kernel that is the disintegration of a previously defined joint probability distribution and a Markov kernel that we are simply defining as such, and will not necessarily be a disintegration of any probability distribution.
 
-Additionally, a counterfactual model poses certain restrictions on the values and joint distribution of random variables. Consistency is sometimes stronger than a restriction on the joint distribution:
+Notationally, we will refer to the symbol $\RV{W}_i$ as the $i$-th treatment assignment ($i\in \{0,..,n\}$), $\RV{Y}_i(0)$ $\RV{Y}_i(1)$ as the $i$-th potential outcomes, $\RV{Y}_i$ as the $i$-th obseved outcome and $\RV{X}_i$ as the $i$-th ``vector of background facts''. $\RV{W}$ refers to the composite of all $\RV{W}_i$s and similarly for other symbols. We avoid strictly defining what these symbols represent for now, as the construction of $H$ allows us to be more explicit about what exactly these symbols represent. Suppose the vector $[\RV{Y}_0,...,\RV{Y}_n]$ takes values in $Y$ and similarly for other symbols.
+
+In particular, Rubin supplies:
+\begin{itemize}
+\item A ``model on the science'', $H_{PO}:\Theta \to \Delta(\mathcal{X}\otimes\mathcal{Y}\otimes\mathcal{Y})$ (In Rubin's notation, $\prod_i f(\RV{X}_i,\RV{Y}_i(0),\RV{Y}_i(1))$)
+\item An ``assignment mechanism'', $H_W:X\times Y^2 \to \Delta(\{0,1\}^n)$ (in Rubin's notation, $Pr(\RV{W}|X,Y(1),Y(0))$)
+\item An ``observation model'', $H_Y:\{0,1\}^n\times Y^2\to \Delta(\mathcal{Y})$, defined explicitly as $H_Y:(\mathbf{y}^0,\mathbf{y}^1,\mathbf{w})\mapsto (1-\mathbf{w}) \odot \delta_{\mathbf{y}^0} + \mathbf{w} \odot \delta_{\mathbf{y}^0}$ where $\odot$ is the elementwise product
+\end{itemize}
+
+Note that this construction does not permit the usual assumption of consistency ($W_i=w\implies \RV{Y}_i=\RV{Y}_i(w)$) because Markov kernels can at best give almost sure equality.
+
+We then define the experiment $H$ by
+
 \begin{align}
-\forall e\in E, \RV{X}(e) = x\implies \RV{Y}(e) = \RV{Y}_x (e)
+H:=\begin{tikzpicture}
+\path (0,0) coordinate (A)
+++ (0.8,0) node[kernel] (HPO) {$H_{PO}$}
+++ (0.8,0) coordinate (copy00)
++ (0,0.15) coordinate (copy01)
++ (0,-0.15) coordinate (copy02)
+++(0.8,0) node[kernel] (HW) {$H_W$}
++(0.2,-0.6) node[label={[label distance=-2.5mm]:$\RV{Y}(0)$}] (Y0) {}
++(0.2,-1.2) node[label={[label distance=-2.5mm]:$\RV{Y}(1)$}] (Y1) {}
+++(0.8,0) coordinate (copy1)
+++(0.8,0) node[kernel] (HY) {$H_Y$}
+++(0.8,0) node (Y) {$\RV{Y}$}
++(0,0.5) node (W) {$\RV{W}$}
++(0,1) node (X) {$\RV{X}$};
+\draw (A) -- (HPO) -- (HW) -- (HY) -- (Y);
+\draw ($(HPO.east)+(0,0.15)$) -- ($(HW.west)+(0,0.15)$);
+\draw ($(HPO.east)+(0,-0.15)$) -- ($(HW.west)+(0,-0.15)$);
+\draw (copy01) to [bend left] (X);
+\draw (copy00) to [bend right] (Y0) to [bend right] ($(HY.west)+(0,-0.1)$);
+\draw (copy02) to [bend right] (Y1.west) -- (Y1.east) to [bend right] ($(HY.west)+(0,-0.15)$);
+\draw (copy1) to [bend left] (W);
+\end{tikzpicture}
 \end{align}
 
-May additionally pose ignorability (or something else):
+Where we have labeled the wires ``carrying'' $\RV{Y}(0)$ and $\RV{Y}(1)$ for clarity. In fact, the ``vector'' symbols defined above are naturally associated with wires in the above diagram. Addtionally, we could draw an alternative diagram where each wire was copied $n$ times to reflect the unit level symbols $\RV{X}_i$ etc. It is also possible to define the symbols as random variables, though we require an expenanded sample space $\Omega:= X\times W\times Y^3$ to do so. Consider the kernel $H^*$ which is constructed from the same components as $H$:
+
 \begin{align}
-\forall \mu\in \mathscr{H}, \{\RV{Y}_x\}_{D} \CI_\mu \RV{X}\}
+H^*:=\begin{tikzpicture}
+\path (0,0) coordinate (A)
+++ (0.8,0) node[kernel] (HPO) {$H_{PO}$}
+++ (0.8,0) coordinate (copy00)
++ (0,0.15) coordinate (copy01)
++ (0,-0.15) coordinate (copy02)
+++(0.8,0) node[kernel] (HW) {$H_W$}
++(0.2,-0.6) node (Y0) {}
++(0.2,-1.2) node (Y1) {}
+++(0.8,0) coordinate (copy1)
+++(0.8,0) node[kernel] (HY) {$H_Y$}
+++(0.8,0) node (Y) {$\RV{Y}$}
++(0,0.5) node (W) {$\RV{W}$}
++(0,1) node (X) {$\RV{X}$}
++(0,-0.6) node (Y0l) {$\RV{Y}(0)$}
++(0,-1.2) node (Y1l) {$\RV{Y}(1)$};
+\draw (A) -- (HPO) -- (HW) -- (HY) -- (Y);
+\draw ($(HPO.east)+(0,0.15)$) -- ($(HW.west)+(0,0.15)$);
+\draw ($(HPO.east)+(0,-0.15)$) -- ($(HW.west)+(0,-0.15)$);
+\draw (copy01) to [bend left] (X);
+\draw (copy00) to [bend right] (Y0) to [bend right] ($(HY.west)+(0,-0.1)$);
+\draw (copy02) to [bend right] (Y1.west) -- (Y1.east) to [bend right] ($(HY.west)+(0,-0.15)$);
+\draw (copy1) to [bend left] (W);
+\draw (Y0) -- (Y0l);
+\draw (Y1) -- (Y1l);
+\end{tikzpicture}
 \end{align}
 
-and SUTVA:
-\begin{align}
+Then $\RV{X}$ is the random variable identical to the projection $\pi_X:\Omega\to X$ and similarly for other symbols.
 
+We are interested here in defining a ``general type'' of potential outcomes problem rather than investigate particular assumptions that may permit inference. Without a formal guide as to how to do this, we will postulate that a potential outcomes model is, in general, three Markov kernels $\langle H_{PO}, H_W, H_Y \rangle$ where $H_{PO}:\Theta\to \Delta(\mathcal{X}\otimes\mathcal{Y}^m)$, $H_W:\Theta\to \Delta(\{0,..,m-1\}^n)$ and $H_Y:\{0,..,m-1\}^n\times Y^m\to \Delta(\mathcal{Y})$ which is a ``selection function'' in the sense defined above. We adopt the alternative signature for $H_W$ as it seems reasonable to suppose that the details of this kernel aren't always known \emph{a priori}. Note that in general multiple potential outcomes models will yield the same statistical experiment $H$, though we postulate that in general different models will yield different $H^*$.
+
+\subsection{Can we consider potential outcomes models to be causal theories?}
+
+A potential outcomes model is a statistical experiment. Therefore, given a tuple $\langle \Theta, E, D, H, u\rangle$ where $H$ follows from a potential outcomes model $\langle H_{PO}, H_W, H_Y \rangle$ and $u:F\to \mathbb{R}$ is a utility function, we have an ill-posed causal problem. A potential outcomes model is not literally a causal model, but we might ask if it is possible that our potential outcomes model $H$ is a ``causal theory in disguise''; Is there a natural map from potential outcomes models to causal theories?
+
+We will propose, somewhat weakly, that given a well-specified potential outcomes model, decisions correspond to modifications of $H_W$. This supposition generalises the approach to policy modelling found in \cite{heckman_policy-relevant_2001.} As there is no general way to identify an arbitrary set of decisions $D$ with different assignment functions $H_W$, we offer (weakly) that the answer to the question in the paragraph above is ``no''. However, given knowledge of the ``decision-influenced treatment assignment'' $C_W:\Theta\times D\to \{0,1\}^n$, we \emph{can} define a causal theory via the four elements $\langle H_{PO}, H_W, H_Y, C_W\rangle$. We've supposed here there are $n$ ``observational'' units and $n$ ``consequence'' units, a restriction that simplifies the notation and is fairly easy to lift. Concretely, the causal theory is:
+
+\begin{align}
+	T:= \begin{tikzpicture}
+	\path (0,0) coordinate (A)
+	+ (0,-1.6) coordinate (D)
+	++ (1,0) coordinate (copy0)
+	++ (1,0) coordinate (cent0)
+	+(0,1.5) node[kernel] (HPO) {$H_{PO}$}
+	+(0,0.5) node[kernel] (HW) {$H_W$}
+	+(0,-0.5) node[kernel] (HPOC) {$H_{PO}$}
+	+(0,-1.5) node[kernel] (CW) {$C_W$}
+	++(1.3,0) coordinate (cent1)
+	+ (0,1) node[kernel] (HY) {$H_Y$}
+	+ (0,-1) node[kernel] (HYC) {$H_Y$}
+	++(1,0) coordinate (cent3)
+	+(0,1.6) node (X) {$X$}
+	+(0,1) node (Y) {$Y$}
+	+(0,0.5) node (W) {$W$}
+	+(0,-0.4) node (XC) {$X_C$}
+	+(0,-1) node (YC) {$Y_C$}
+	+(0,-1.5) node (WC) {$W_C$};
+	\draw (A) -- (copy0);
+	\draw (copy0) to [bend left] (HPO);
+	\draw (copy0) to [bend left] (HW);
+	\draw (copy0) to [bend right] (HPOC);
+	\draw (copy0) to [bend right] ($(CW.west)+(0,0.1)$);
+	\draw (D) -- ($(CW.west)+(0,-0.1)$);
+	\draw ($(HPO.east)+(0,0.1)$) -- (X) ($(HPOC.east)+(0,0.1)$) -- (XC) (HY) -- (Y) (HYC) -- (YC) (HW) -- (W) (CW) -- (WC);
+	\draw ($(HPO.east)+(0,-0.1)$) to [bend right] ($(HY.west)+(0,0.1)$) ($(HPOC.east)+(0,-0.1)$) to [bend right] ($(HYC.west)+(0,0.1)$);
+	\draw ($(HW.east)+(0,0.1)$) to [bend left] ($(HY.west)+(0,-0.1)$) ($(CW.east) + (0,0.1)$) to [bend left] ($(HYC.west)+(0,-0.1)$);
+\end{tikzpicture}\label{eq:po_causal_theory}
 \end{align}
 
-\subsection{Can we consider causal theories to be counterfactual models?}
+Where $\RV{X}_C$, $\RV{W}_C$, $\RV{Y}_C$ are the ``consequence'' analogues of observational variables $\RV{X}$, $\RV{W}$ and $\RV{Y}$. To simplify the diagram, we have merged the wires for $\RV{Y}(0)$ and $\RV{Y}(1)$ and ommitted the labels; the potential outcomes are carried by the wire from $H_{PO}$ to $H_Y$. Without detailed justification, we will note that this construction is unlikely to be appropriate if $H_{PO}$ does not define an exchangeable sequence of potential outcomes, an assumption that we have made as a result of following \citet{rubin_causal_2005}.
 
-There is an obvious way to do this, but it fails to capture the assumption of consistency.
+We can consider two cases where Eq. \ref{eq:po_causal_theory} appears to be appropriate.
 
-More generally we can employ the standard method of turning a SDP into a CSDP.
+First, suppose a potential outcomes model $\langle H_{PO}, H_W, H_Y \rangle$ is used in the evaluation of a public program, and it is intended to inform a choice between decisions $d=0$: cut funding or $d=1$: maintain funding. Suppose we also have $C_W$ such that
+\begin{itemize}
+\item $d=1$ leaves the assignment function unchanged; $C_W(\theta,1;A) = H_W(\theta;A)$ for all $\theta, A$
+\item $d_0$ means no-one receives treatment; $C_W(\theta,0;A) = \delta_0(A)$ for all $\theta, A$.
+\end{itemize}
 
-\subsection{Can we consider counterfactual models to be causal theories?}
+Supposing $Y=[0,1]$ and positing a utility function $u:=\pi_{Y}$, we can compare the utilities of decisions $0$ and $1$ for state $\theta$ by $Tu(\theta,1)-Tu(\theta,0)$ (in more familiar notation, $\mathbb{E}_{T(\theta,1;\cdot)}[u] - \mathbb{E}_{T(\theta,0;\cdot)}[u]$). By construction, if we let $H^*$ be the ``expanded'' version of $H$ above, $Tu(\theta,1)-Tu(\theta,0)=H^*_{\theta|\RV{W}}\pi_{\RV{Y}(1)}(1) - H^*_{\theta|\RV{W}}\pi_{\RV{Y}(0)}(1)$; this is because only the units for which $\RV{W}=1$ have different outcomes under the different decisions. This quantity is known as the \emph{effect of treatment on the treated} (ETT) \citep{heckman_randomization_1991}. 
 
-Given a CSDP we can construct an SDP. Not a counterfactual SDP...but we can always turn an SDP into a censored version of an SDP with additional structure. 
+\todo[inline]{ETT is common in the causal literature, but this is as far as I know the first example where it is formally derived as the difference between outcomes under different decisions, so I should probably do it properly)
 
-The backwards construction of interest: ill-posed counterfactual SDP to CSDP. ``Can a counterfactual SE do the job of a CT''?
+We can also consider the problem in medicine of evaluating the ``effect of assigning treatment'' vs ``the effect of receiving treatment'' (the former being known as \emph{intention to treat} analysis). From \citet{shrier_intention--treat_2017}:
 
-Yes, there is an obvious correspondence between a causal theory and a class of counterfactual models (injection CT -> P(CF)?). But: this correspondence is at odds with the way that people actually use counterfactual (see ATE (why take a difference?) and ETT (Heckman: incentives might mean ETT is appropriate rather than ATE)). Have people been using counterfactuals wrongly, or should we consider a richer set of CF->CT rules?
+\begin{quote}
+In public health, we are normally concerned with the first question -- the effect of assigning a treatment. If we implement a prevention or treatment program that is efficacious only under strict research conditions but people in the real world would not receive it for any possible reason, the program will not be effective. This real-world context is termed the “average causal effect” of assigning treatment and is best estimated by the intention-to-treat (ITT) analysis [...]
 
-More importantly, \textbf{any CF->CT rule is itself a causal theory!}. We can't avoid invoking a causal theory to go from ill-posed CF SDP to CSDP.
+There are 2 reasons why the average causal effect ofreceiving a treatment may be more important than the ITT for some people. First, even in the public health domain, investigators may want to know what the average causal effect of a treatment program would be if they could improve participation in the program. [...] Also, the average causal effect of receiving a treatment is of primary interest to a patient deciding whether or not to take the treatment as recommended.
+\end{quote}
 
-\textbf{Proposition:} Isomorphism between rules: ill-posed SDP to CSDP and causal theories.
+As Shrier suggests, we can consider the potential outcomes $\RV{Y}(0)$ and $\RV{Y}(1)$ to represent the outcomes of an individual who is merely \emph{assigned} a treatment or of an individual who is \emph{actually given} a treatment. Note that in the former case, at least for a public health decision maker, one could reasonably suppose that the assignment function $C_W$ was fully controlled by the decisions available - we can be absolutely certain, choosing $d=1$, that the patient is assigned a treatment and likewise that they are not assigned for $d=0$, for all $\theta$. However, if the patient's chance to actually take the treatment may differ from experimental conditions - or even worse, if we are the patient and we \emph{know} that we will take the treatment if we should decide to - then it is unclear how the potential outcomes model given would help to determine the expected consequences of a decision as the potential outcomes underlying the causal effect are now inappropriate. On the other hand, if we suppose that potential outcomes represent the outcomes of \emph{taking} a treatment, then we can understand the difference between the three scenarios as differences in $C_W$ - in the first case, we do not know $C_W(\theta,d;\cdot)$ but we do know that, supposing among the background facts provided we have the treatment assignment $\RV{X}_T$, $C_W(\theta,d;\cdot) = H_{W\theta|\RV{X}_T}(d;\cdot)$. In the second case we do not know $C_W(\theta,d;\cdot)$ or any particular relationship to $H_{W\theta|\RV{X}_T}$, but we might posit some similarity, and in the third case we know $C_W{\theta,d;\cdot)$ exactly -- deciding to take the treatment means we definitely take the treatment and vise versa.
 
-Conclusion: contra three-level hierarchy, if we care about consequences we need a causal theory.
+% We recall the abstract state space $\Theta$ and define a sequence of measurable ``potential outcomes'' $\RV{Y}_i^0,\RV{Y}_i^1:\Theta\to Y$ and measurable ``background facts'' $\RV{X}^*_i:\Theta\to X$ for all $i\in[n]$. As $\Theta$ is \emph{not} the sample space of a statistical experiment we will not call potential outcomes or background facts random variables. In addition, we have a Markov kernel $H:\Theta\to \Delta(E)$ for some measurable space $E$ and random variables $\RV{Y}_i:E\to Y$ and $\RV{W}_i:E\to \{0,1\}$, $\RV{X}_i:E\to X$. Let $\RV{X}$ stand for the composite variable made from the entire sequence of $\RV{X}_i$ and similar for other RVs. This is consistent with Rubin's approach:
+% \begin{quote}
+% [out of $\{\RV{X},\RV{Y}^0,\RV{Y}^1,\RV{X}^*\}$] the vector $\RV{W}$ is the only random variable; the science is regarded as fixed and waiting to be partially revealed by the assignment mechanism.
+% \end{quote}
+
+% Potential outcomes poses restrictions on $\Theta$ as well as $H$. A very common assumption is the \emph{stable unit treatment value assumption} (SUTVA). This consists of two parts:
+% \begin{align}
+% \forall e\in E, \theta\in \Theta, \RV{W}_i(e) = w \implies H_\theta F_{\RV{Y}_i} = \delta_{\RV{Y}^w_i(\theta)}\\
+% \forall \mathbf{w}:=(w_0,...,w_i,...,w_n)\in \{0,1\}^n, \RV{Y}^{\mathbf{w}}_i = \RV{Y}^{w_i}_i
+% \end{align}
+
+% We are not aware of a similarly formal statement of SUTVA anywhere.
+
+
+% The second an assumption on $\Theta$ while the first is an assumption on $H_\theta$.
+
+% A key point here is \emph{a potential outcomes model is a statistical experiment}. In fact, we can give a concrete representation of the model Rubin discusses. Let $W:=\{0,1\}$, $H_W:\Theta\to \Delta(W^n)$ be a Markov kernel representing the treatment assignment and let $H_Y:\Theta\times W^n\to \Delta(Y^n)$ be the deterministic Markov kernel $H_Y:(\theta,\mathbf{w})\mapsto (1-\mathbf{w}) \odot \delta_{\RV{Y}^0(\theta)} + \mathbf{w} \odot \delta_{\RV{Y}^1(\theta)} $ where $\odot$ refers to the elementwise product. Then, letting $E:=X^n\otimes Y^n\otimes W^n $, the statistical experiment $H$ is the Markov kernel
+
+% \begin{align}
+% H:=\begin{tikzpicture}
+% \path (0,0) coordinate (A)
+% ++ (0.5,0) coordinate (copy0)
+% ++ (1,0) node[kernel] (HW) {$H_W$}
+% +  (0,0.5) node[kernel] (FYY) {$F_{\RV{Y}^0 \RV{Y}^1}$}
+% +  (0,1) node[kernel] (FX) {$F_{\RV{X}^*}$}
+% ++ (0.5,0) coordinate (copy1)
+% ++ (1.3,0) node[kernel] (HY) {$H_Y$}
+% ++ (0.5,0) coordinate (Y)
+% + (0,-0.5) coordinate (W)
+% + (0,1) coordinate (X);
+% \draw (A) -- (HW) -- (HY) -- (Y);
+% \draw (copy0) to [bend left] (FYY);
+% \draw (copy0) to [bend left] (FX);
+% \draw (FX) -- (X);
+% \draw (FYY) to [bend left] ($(HY.west)+(0,0.1)$);
+% \draw (copy1) to [bend right] (W);
+% \end{tikzpicture}
+% \end{align}
+
+% An common assumption that permits inference is \emph{ignorability}. A treatment of this assumption in the present work would require a deeper dive into the graphical notation introduced here. For now it is sufficient that a potential outcomes model is a statistical experiment. For details on ignorability, we refer readers to \cite{rubin_causal_2005}.
+
+% \todo[inline]{I actually think the graphical notation is a superior means of dealing with ignorability; it is essentially a ``partial string lifting'' condition akin to my ``universal optimisability''. Perhaps as a result of \emph{not} using this notation, I think Rubin gets a bit confused: he assumes $H_W$ depends only on $\RV{X}^*,\RV{Y}^0,\RV{Y}^1$, introduces a limited prior, makes a mistake, and then doesn't clearly show how ignorability helps (not surprising, as we can always do fine if we know $H_W$). The real point is, however, that $H_W$ might have further dependence on the state, but if we know ignorability holds then we need no further information about this dependence.}
+
+
+
+
+% \begin{align}
+% H=\begin{tikzpicture}
+% \path (0,0) coordinate (A)
+% ++ (0.5,0) coordinate (copy0)
+% ++ (1,0) node[kernel] (HW) {$H_W$}
+% +  (0,0.5) node[kernel] (FYY) {$F_{\RV{Y}^0 \RV{Y}^1}$}
+% +  (0,1) node[kernel] (FX) {$F_{\RV{X}^*}$}
+% +(0.5,1) coordinate (copy1)
+% ++ (1.5,0) node[kernel] (HY) {$H_Y$}
+% ++(0.5,0) coordinate (copy2)
+% +(0.5,0.5) node[kernel] (HWP) {$H_W'$}
+% ++ (1,0) coordinate (Y)
+% + (0,0.5) coordinate (W)
+% + (0,1) coordinate (X);
+% \draw (A) -- (HW) -- (HY) -- (Y);
+% \draw (copy0) to [bend left] (FYY);
+% \draw (copy0) to [bend left] (FX);
+% \draw (FX) -- (X);
+% \draw (FYY) to [bend left] ($(HY.west)+(0,0.1)$);
+% \draw (copy1) to [bend right = 20] ($(HWP.west)+(0,0.1)$);
+% \draw (copy2) to [bend left] ($(HWP.west)+(0,-0.1)$) (HWP) -- (W);
+% \end{tikzpicture}
+% \end{align}
+
+\subsection{potential outcomes models via Structural Equation Models}
+
+
