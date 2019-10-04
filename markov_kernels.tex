@@ -77,4 +77,95 @@ A disintegration $\nu_{\RV{Y}|\RV{X}}$ is any kernel $X\to \Delta(\mathcal{Y})$ 
 \end{tikzpicture}
 \end{align}
 
-Disintegrations are known to exist wherever $X$ and $Y$ are standard measurable spaces (ismorphic to a discrete space or the reals with the Borel $\sigma$-algebra), though in general they are not unique. We will use the notation $\nu_{\RV{Y}|\RV{X}}$ to refer to an arbitrary representative of the full set of disintegrations. Note that from Equations \ref{eq:jdist} and \ref{eq:nu_mu} it is clear that $\mathbf{A}$ is a disintegration $\nu_{\RV{Y}|\RV{X}}$. 
+Disintegrations are known to exist wherever $X$ and $Y$ are standard measurable spaces (ismorphic to a discrete space or the reals with the Borel $\sigma$-algebra), though in general they are not unique. We will use the notation $\nu_{\RV{Y}|\RV{X}}$ to refer to an arbitrary representative of the full set of disintegrations. Note that from Equations \ref{eq:jdist} and \ref{eq:nu_mu} it is clear that $\mathbf{A}$ is a disintegration $\nu_{\RV{Y}|\RV{X}}$. We use disintegrations to represent conditional probability.
+
+The copy map and erase maps have the following properties:
+
+\begin{align}
+	\begin{tikzpicture}[scale=0.8]
+	\path (0,0) coordinate (A) 
+	++ (0.5,0) coordinate (B)
+	+ (0.5,0.5) coordinate (C)
+	++ (0.5,-0.5) coordinate (D)
+	+(0.5,0.5) coordinate (E)
+	+(0.5,-0.5) coordinate (F);
+	\draw (A) -- (B);
+	\draw (B) to [bend left] (C);
+	\draw (B) to [bend right] (D);
+	\draw (D) to [bend left] (E);
+	\draw (D) to [bend right] (F);
+	\end{tikzpicture}
+	=
+	\begin{tikzpicture}[scale=0.8]
+	\path (0,0) coordinate (A) 
+	++ (0.5,0) coordinate (B)
+	+ (0.5,-0.5) coordinate (C)
+	++ (0.5,0.5) coordinate (D)
+	+(0.5,0.5) coordinate (E)
+	+(0.5,-0.5) coordinate (F);
+	\draw (A) -- (B);
+	\draw (B) to [bend right] (C);
+	\draw (B) to [bend left] (D);
+	\draw (D) to [bend left] (E);
+	\draw (D) to [bend right] (F);
+	\end{tikzpicture}
+	:=
+		\begin{tikzpicture}[scale=0.8]
+	\path (0,0) coordinate (A) 
+	++ (0.5,0) coordinate (B)
+	+ (0.5,-0.5) coordinate (C)
+	+ (0.5,0) coordinate (D)
+	+(0.5,0.5) coordinate (E);
+	\draw (A) -- (B);
+	\draw (B) to [bend right] (C);
+	\draw (B) -- (D);
+	\draw (B) to [bend left] (E);
+	\end{tikzpicture}\label{eq:ccom1}
+\end{align}
+
+\begin{align}
+	\begin{tikzpicture}[scale=0.8]
+	\path (0,0) coordinate (A) 
+	++ (0.5,0) coordinate (B)
+	+ (0.5,0.5) coordinate (C)
+	+ (0.5,-0.5) node (D) {};
+	\draw (A) -- (B);
+	\draw (B) to [bend left] (C);
+	\draw[-{Rays [n=8]}] (B) to [bend right] (D);
+	\end{tikzpicture}
+	= 
+	\begin{tikzpicture}[scale=0.8]
+	\path (0,0) coordinate (A) 
+	++ (0.5,0) coordinate (B)
+	+ (0.5,0.5) node (C) {}
+	+ (0.5,-0.5) coordinate (D) ;
+	\draw (A) -- (B);
+	\draw[-{Rays [n=8]}] (B) to [bend left] (C);
+	\draw (B) to [bend right] (D);
+	\end{tikzpicture}
+	=
+	\begin{tikzpicture}[scale=0.8]
+	\path (0,0) coordinate (A) 
+	++ (1,0) coordinate (B);
+	\draw (A) -- (B);
+	\end{tikzpicture}\label{eq:ccom2}
+\end{align}
+And for all $\mathbf{A}$ with appropriate signature
+\begin{align}
+\begin{tikzpicture}
+ \path (0,0) node (A) {}
+ ++(0.5,0) node[kernel] (B) {$\mathbf{A}$}
+ ++(0.6,0) node (C) {};
+ \draw (A.center) -- (B);
+ \draw[-{Rays [n=8]}] (B) -- (C);
+\end{tikzpicture}
+=
+\begin{tikzpicture}
+ \path (0,0) node (A) {}
+  ++(0.5,0) node (C) {};
+ \draw[-{Rays [n=8]}] (A.center) -- (C);
+\end{tikzpicture}\label{eq:termobj}
+\end{align}
+
+
+A subset of the notation we use for string diagrams is the subject of a coherence theorem: taking a string diagram and applying a planar deformation or any of the rules \ref{eq:ccom1}, \ref{eq:ccom2} and \ref{eq:termobj} yields a string diagram that represents the same kernel \citep{selinger_survey_2010}. This is a key reason for the power of string diagrams.

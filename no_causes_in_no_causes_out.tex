@@ -2,31 +2,37 @@
 
 A key result in statistical learning theory is the requirement that, in order for a hypothesis class to be learnable, it must have finite VC-dimension. The concept of controlling the size of the hypothesis class plays a fundamental role across the field of machine learning, from formal proofs of learnability to techniques based less formally on the notion of the bias-variance tradeoff. CSDPs are closely related to statistical learning problems, and it is highly likely that results of this type can be developed for causal problems.
 
-Causal problems, however, require an additional ``kind'' of restriction is necessary on a causal theory over and above the ``kind'' of restriction represented by things like a limited VC-dimension. In particular, we require the set of consequence maps $\{C_\theta |\theta\in \Theta\}$ collectively have some tendency to treat particular decisions in a particular way. Formally, we require that this set is not closed under left multiplication by an invertible kernel\footnote{A set of functions limited by VC dimension is closed under the analogous operation of precomposition with an invertible function}.
+For a hypothesis class of functions to be learnable, we can make assumptions that do not require the class of functions to collectively have a tendency to treat certain points differently to other points. For example, a class of functions limited by VC-dimension is closed under the operation of precomposition with any invertible function on the class' shared domain - the union of images of any set of points over the entire class depends only on the size of the set of points and not on which particular points are represented. However, if a causal theory is closed under the analogous operation, or if we assume a prior that is invariant under this operation, we must prefer the uniform decision strategy or find no preference over strategies whatsoever.
 
-\begin{theorem}[No causes in, no causes out (minimax)]
-If a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ with finite $D$ is such that for every invertible $U:D\to \Delta(\mathcal{D})$, $\theta\in \Theta$ there is some $\theta'$ such that $T(\theta,\cdot;\cdot) = (I\otimes U)T(\theta',\cdot;\cdot)$ then the uniform decision strategy is minimax.
-\end{theorem}
-
-\begin{proof}
-For every $d\in D$, $x\in E$ let $J_d:(x;A)\mapsto \delta_d(A)$ be the decision strategy that stubbornly picks $d$. For arbitrary $d'\in D$, choose $U_{dd'}:(d;A)\mapsto \delta_{d'}(A)$, $(d';A)\mapsto \delta_d(A)$ and $(x;A)\mapsto \delta_x(A)$, $x\not\in \{d,d'\}$. Clearly $U_{dd'}U_{dd'}=I$. For arbitrary $\theta$ let $\theta'$ be such that $T(\theta,\cdot;\cdot) = (I\otimes U_{dd'})T(\theta',\cdot;\cdot)$. Then $S(J_d,\theta) = S(J_d',\theta')$. In particular, $\max_\theta S(J_d,\theta) = \max_\theta S(J_{d'},\theta):=S_0$ for all $d,d'$.
-
-
-\end{proof}
-
-\begin{theorem}[No causes in, no causes out (Bayes)]
+\begin{theorem}[No causes in, no causes out (Bayes)]\label{th:ncinco}
 If a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ and a prior $\xi\in \Delta(\Theta)$ are such that for all invertible $U:D\to \Delta(\mathcal{D})$, $(\xi\otimes U)T = (\xi\otimes I)T$ then all decision strategies are Bayes.
 \end{theorem}
 
 \begin{proof}
-Consider the stubborn strategy $J_d$ as before. Then for all $d,d'\in D$
+Consider the stubborn strategy $J_d:x\mapsto \delta_d$ for all $x\in E$. Define $U_{dd'}:D\to \Delta(\mathcal{D})$ to be the swap map that sends $d\to \delta_{d'}$, $d'\to \delta_{d}$ and leaves other decisions the same. Clearly, $U_{dd'} U_{dd'} = \mathrm{Id}_D$. For all $d,d'\in D$
 \begin{align}
-	\int_\Theta \delta_d C_\theta u d\xi &= \int_\Theta \delta_d' C_\theta u d\xi
+	\int_\Theta \delta_d C_\theta u d\xi &= \int_\Theta \delta_d U_{dd'} C_\theta u d\xi\\
+										&= \int_\Theta \delta_{d'} C_\theta u d\xi\\
+										 &:= S_0
 \end{align}
-Thus for any $\gamma\in \Delta(\mathcal{D})$,
+Thus for any $J\in \Delta(\mathcal{D})^E$,
 \begin{align}
-	\int_\Theta 
+	\int_\Theta \mu_\theta J C_\theta u d\xi &= \int_\theta \int_D \delta_d C_\theta u d\gamma d\mu_\theta J\\
+											 &= \int_D \int_\theta \delta_d C_\theta u d\gamma d\mu_\theta J\\
+											 &= S_0
 \end{align}
-
 \end{proof}
-A set of functions $\{f\}$ where $f:X\to \{0,1\}$ limited by VC dimension is 
+
+Somewhat surprisingly, the minimax rule may yield preferences over decisions under such circumstances; in particular, a uniform strategy is always minimax, though other strategies may not be.
+
+\begin{theorem}[No causes in, uniform strategy out (minimax)]
+If a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ with finite $D$ is such that for every invertible $U:D\to \Delta(\mathcal{D})$, $\theta\in \Theta$ there is some $\theta'$ such that $T_{\theta,\cdot} = (I\otimes U)T_{\theta',\cdot}$ then the uniform decision strategy is minimax.
+\end{theorem}
+
+\begin{proof}
+Call $J_U$ the stubborn uniform strategy $J_U:x\mapsto U(\mathcal{D})$ for all $x\in E$. Suppose there is some nonuniform $J$ such that $\max_\theta S(J,\theta) < \max_\theta S(J_U,\theta)$. Suppose $S(J_U,\theta)$ is maximised in some state $\theta^0$ where $S(J_d,\theta^0)=S(J_{d'},\theta^0)$ for all $d,d'\in D$. Then $S(J,\theta^0)=S(J_U,\theta^0)$, contraticting our assumption that $J$ achieved lower risk in the worst case. Suppose $S(J_U,\theta)$ is maximised in some state $\theta^1$ where there are some $d,d'\in D$ such that $S(J_d,\theta^1)>S(J_{d'},\theta^1)$. Then there are most $|D|/2$ decisions where $S(J_d,\theta^1)$ is greater than the median of $A=\{S(J_d,\theta^1)|d\in D\}$ and at least one such decision, and at least $|D|/2$ decisions such that $\mu_{\theta^1} J(d)$ is greater than or equal to the median of $B=\{\mu_{\theta^1} J(d)|d\in D\}$, with at least one strictly greater. Thus there is an invertible map $f:D\to D$ such that $f(A)\subset B$. But then there is some $\theta^2$ such that $S(J_d,\theta^1)=S(J_{f(d)},\theta^2)$ for all $d\in D$ and thus $S(J,\theta^2)> S(J_U,\theta^2) = S(J_U,\theta^1)$ contradicting our assumption that $J$ was better by the minimax rule than $J_U$.
+\end{proof}
+
+\begin{corollary}
+If the risk of the uniform strategy is maximised in some state $\theta^*$ such that $S(J_d,\theta^*)>S(J_{d'},\theta^*)$ for some $d,d'$, then the uniform strategy is strictly better than any nonuniform strategy.
+\end{corollary}
