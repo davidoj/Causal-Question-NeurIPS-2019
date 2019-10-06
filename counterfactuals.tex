@@ -42,7 +42,7 @@ H:=\begin{tikzpicture}
 \end{tikzpicture}
 \end{align}
 
-Where we have labeled the wires ``carrying'' $\RV{Y}(0)$ and $\RV{Y}(1)$ for clarity. In fact, the ``vector'' symbols defined above are naturally associated with wires in the above diagram. Addtionally, we could draw an alternative diagram where each wire was copied $n$ times to reflect the unit level symbols $\RV{X}_i$ etc. It is also possible to define the symbols as random variables, though we require an expenanded sample space $\Omega:= X\times W\times Y^3$ to do so. Consider the kernel $H^*$ which is constructed from the same components as $H$:
+Where we have labeled the wires ``carrying'' $\RV{Y}(0)$ and $\RV{Y}(1)$ for clarity. Addtionally, we could draw an alternative diagram where each wire was copied $n$ times to reflect the unit level variables. We can define an extended probability space $H^*$ on which potential outcomes are also random variables:
 
 \begin{align}
 H^*:=\begin{tikzpicture}
@@ -72,8 +72,6 @@ H^*:=\begin{tikzpicture}
 \draw (Y1) -- (Y1l);
 \end{tikzpicture}
 \end{align}
-
-Then $\RV{X}$ is the random variable identical to the projection $\pi_X:\Omega\to X$ and similarly for other symbols.
 
 We are interested here in defining a ``general type'' of potential outcomes problem rather than investigate particular assumptions that may permit inference. Without a formal guide as to how to do this, we will postulate that a potential outcomes model is, in general, three Markov kernels $\langle H_{PO}, H_W, H_Y \rangle$ where $H_{PO}:\Theta\to \Delta(\mathcal{X}\otimes\mathcal{Y}^m)$, $H_W:\Theta\to \Delta(\{0,..,m-1\}^n)$ and $H_Y:\{0,..,m-1\}^n\times Y^m\to \Delta(\mathcal{Y})$ which is a ``selection function'' in the sense defined above. We adopt the alternative signature for $H_W$ as it seems reasonable to suppose that the details of this kernel aren't always known \emph{a priori}. Note that in general multiple potential outcomes models will yield the same statistical experiment $H$, though we postulate that in general different models will yield different $H^*$.
 

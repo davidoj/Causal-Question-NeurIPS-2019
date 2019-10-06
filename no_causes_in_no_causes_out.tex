@@ -59,18 +59,73 @@ Then we ought to be indifferent between $d_1$ or $d_2$ whatever data we see.
 
 No causes in, no causes out (NCINCO) implies that some common principles commonly applied to causal inference, in isolation, can only yield trivial theoreis. Without any notion of intervention, causal inference based solely on principles such as the invariance of conditionals \citet{arjovsky_invariant_2019,peters_causal_2016}, a preference for low complexity consequences \citet{lemeire_replacing_2013} or faithfulness \citet{spirtes_causation_1993} would yield triviality. As discussed in Section \ref{sec:counterfactuals}, we also require assumptions on the effects of decisions to to get a causal theory from a potential outcomes model.
 
-This may seem to be an odd situation: while decision biases are clearly a crucial element of useful causal theories, both major approaches to causality discussed here tend to favour a thorough treatment of assumptions that permit ``inference'' but a cursory treatment assumptions that yield decision biases. CBNs supply a generic notion of intervention that is unlikely to be a generally appropriate notion of the effects of a decision (see, for example, \cite{hernan_does_2008}). In addition, a CBN defines many more interventions than are every going to be at the disposal of a decision maker in practice -- recall that we had to postulate a decision model for the CBN as well as the PO model in order to comapre the two. PO, on the other hand, appears to require a decision model to get off the ground at all. 
+While decision biases are clearly a crucial element of useful causal theories, both major approaches to causality discussed here tend to favour a thorough treatment of assumptions that permit ``inference'' but a cursory treatment assumptions that yield decision biases. CBNs supply a generic notion of intervention that is unlikely to be a generally appropriate notion of the effects of a decision (see, for example, \cite{hernan_does_2008}). In addition, a CBN defines many more interventions than are every going to be at the disposal of a decision maker in practice -- recall that we had to postulate a decision model for the CBN as well as the PO model in order to comapre the two. PO, on the other hand, appears to require a decision model to get off the ground at all. It appears to be the case that both approaches regard the details of ``effects of decisions'' as something that can be worked out later.
 
-We postulate that both of these approaches to causality aim to produce causal theories that may not be useful on their own, but permit \emph{modular extension} to potential theories of interest (a property we will define below). Informally, if a theory $T$ permits a modular extension to $T'$ then we can achieve the same result either by a) ``doing inference'' on $T'$ directly or b) ``doing inference'' on $T$ and then applying a decision model to yield $T'$. If $T$ is not a useful theory, but it can be modularly extended to a large number of theories $T'$ which we believe are useful, we may be best served by performing our analysis on $T$ and saving the results for later. Proponents of both CBN and PO approaches appear to endorse the interpretation that the theories they produce represent ``stable'' knowledge of the real world.
+We postulate the concept of \emph{modular extension} to formalise the notion of ``working out the effects of decisions later''. Informally, if a theory $T$ permits a modular extension to $T'$ then we can achieve the same result either by a) ``doing inference'' on $T'$ directly or b) ``doing inference'' on $T$ and then applying a decision model to yield $T'$. If $T$ is not a useful theory, but it can be modularly extended to a large number of theories $T'$ which we believe are useful, we may be best served by performing our analysis on $T$ and saving the results for later. Proponents of both CBN and PO approaches appear to endorse the interpretation that the theories they produce represent ``stable'' knowledge of the real world.
 
 We define this notion for theories equipped with a prior, and it is unclear if it can be extended to theories without a prior.
 
 \begin{definition}[Modular extension]
-A theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ equipped with a prior $\xi$ permits modular extension to $T':\Theta\times D'\to \Delta(\mathcal{E}\otimes\mathcal{F})$ if there exists $M:D'\to \Delta(\mathcal{D})$ such that for all $A\in \mathcal{E}$ we have 
-$(\xi \otimes \mathrm{Id}_D) T' (\mathds{1}_A \otimes \mathrm{Id}_F) = (\xi \otimes M) T' (\mathds{1}_A \otimes \mathrm{Id}_F)$
+A theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ equipped with a prior $\xi$ permits modular extension to a theory $T':\Theta\times D'\to \Delta(\mathcal{E}\otimes\mathcal{F})$ with the same prior $\xi$ if there exists $M:D'\to \Delta(\mathcal{D})$ such that $(\xi \otimes \mathrm{Id}_D) T'  = (\xi \otimes M) T$.
 \end{definition}
 
-This definition can be related back to regular Bayesian conditioning. Supposing $T'$ is the theory of interest and given a decision function $J:E\to \Delta(\mathcal{D}')$ we obtain some mixed decision $J_{x\in A}:= \frac{1}{\xi H' (A)} \int_A J_x d\xi H' $ conditional on the event $A$ occurring (supposing $A$ has positive measure). The consequence conditional on $A$ occurring is then 
+For the theory $T$, an event $A\in \mathcal{E}$ with $\xi H \mathds{1}_A >0$, write the theory conditioned on $A$ as $T_\xi|A:D\to \Delta(\mathcal{F})$, defined as
+\begin{align}
+ T_\xi|A:= (\xi H (A))^{-1}\begin{tikzpicture}
+\path (0,0) node[dist] (theta) {$\xi$}
+      +(0,-1) node (D) {}
+      ++(0.5,0) coordinate (copy0)
+      ++(0.5,0) node[kernel] (H) {$H$}
+      +(0,-1) node[kernel] (C) {$C$}
+      ++(0.7,0) node[expectation] (E) {$\mathds{1}_A$}
+      +(0,-1) node (F) {};
+\draw (theta) -- (copy0);
+\draw (D) -- (C) -- (F);
+\draw (copy0) to [bend right] (C);
+\draw (copy0) to [bend left] (H);
+\draw (H) -- (E);
+\end{tikzpicture}
+\end{align}
+
+Note that $T_\xi|A$ along with a strategy $\gamma\in \Delta(\mathcal{D})$ is the conditional probability of $\RV{F}$ by the elementary definition - for $B\in \mathcal{F}$, $T_{\xi,\gamma}|A:B\mapsto \frac{(\xi\otimes\gamma) T (A,B))}{\xi H (A)}$.
+
+\begin{theorem}\label{th:mod_extn}
+If $T'$ is a modular extension of $T$ under the shared prior $\xi$ and module $M$, then for any strategy $\gamma$ we have $T'_{\gamma,\xi} | A = \gamma M T_\xi|A$.  
+\end{theorem}
+
+\begin{proof}
+By definition,
+\begin{align}
+\gamma M T_\xi|A &= (\xi H (A))^{-1}\begin{tikzpicture}
+\path (0,0) node[dist] (theta) {$\xi$}
+      +(0,-1) node[dist] (D) {$\gamma$}
+      +(0.5,-1) node[kernel] (M) {$M$}
+      ++(1,0) coordinate (copy0)
+      ++(1,0) node[kernel] (H) {$H$}
+      +(0,-1) node[kernel] (C) {$C$}
+      ++(0.7,0) node[expectation] (E) {$\mathds{1}_A$}
+      +(0,-1) node (F) {};
+\draw (theta) -- (copy0);
+\draw (D) -- (M)--(C) -- (F);
+\draw (copy0) to [bend right] (C);
+\draw (copy0) to [bend left] (H);
+\draw (H) -- (E);
+\end{tikzpicture}\\
+&= (\xi H (A))^{-1}\gamma (\xi\otimes M) T (\mathds{1}_A\otimes \mathrm{Id}_F)\\
+&= (\xi H (A))^{-1}\gamma (\xi\otimes \mathrm{Id}_D) T' (\mathds{1}_A\otimes \mathrm{Id}_F)\\
+&= T'_{\gamma,\xi} | A
+\end{align}
+\end{proof}
+
+In other words, if $T$ can be extended to $T'$ via $M$, then we can ``save'' the results of conditioning $T_\xi$ on $A$ via $T_\xi|A$ and later on we can determine the effects of some strategy $\gamma$ with respect to $T'$ via $\gamma M T_\xi|A$.
+
+We will return to our discussion of the the ``effect of taking the treatment'' for an example. Suppose we have $\Theta=[0,1]^2:=\Theta_1\otimes \Theta_2$ where given $(\theta_1,\theta_2)\in\Theta$ we identify $\theta_1$ with ``treatment efficacy'' and $\theta_2$ with ``treatment susceptibility''. Let $Y,W=\{0,1\}$ where $Y$ is the set of outcomes and $W$ indicates whether or not a patient took the treatment. Define a potential outcomes model $H_{PO}:\Theta\to \Delta(\mathcal{Y}^2)$, $H_W:\Theta\to \Delta(\mathcal{W})$ and $H_Y:W\times Y^2\to \Delta(\mathcal{Y})$. Furthermore, suppose we have $D=[0,1]^2$ and $C_W:\Theta_2\times D\to \Delta(\mathcal{W})$ defined by $C_W(\theta_2,d_1,d_2;A):= \theta_2(d_1\delta_1(A) (1-d_1)\delta_0(A)) + (1-\theta_2)(d_2\delta_1(A)+(1-d_2)\delta_0(A))$; that is, $d_1$ and $d_2$ parametrise the set of Markov kernels $\Theta_2\to \Delta(\mathcal{W})$. Then $\langle H_{PO},H_W,H_Y,C_W\rangle$ defines a causal theory $T$. Suppose we observe $A\in \mathcal{E}$; then for $(d_1,d_2)\in D$, $B\in \mathcal{E}$:
+
+\begin{align}
+	T_\xi|A (d_1,d_2;B) = \frac{1}{\int_\Theta (H_{PO,\theta}\otimes H_{W,\theta})H_Y(A)}\int_\Theta (H_{PO,\theta}\otimes H_{W,\theta})H_Y(A) C_{W,\theta} (d_1,d_2;B) d\xi
+\end{align}
+
+$T_\xi|A$ describes a Markov kernel from $D\to \Delta(\mathcal{E})$. However, it is unlikely to be the case that $D$ describes the actual decisions we have available - we probably don't have the ability to choose the exact relationship between treatment susceptibility and treatment taking. In fact, all that may be actually available are some decisions $D'=\{0,1\}$ where 0 represents no prescription and 1 represents prescription; these may yield uncertain relationships between $\theta_2$ and $\RV{W}$. While we might not know which relationship a decision to prescribe or not induces, we might accept that influencing this relationship is the only important consequence of this decision. That is, we might accept that for \emph{some} $M:D'\to \Delta(\mathcal{D})$ a causal theory $T':\Theta\times D'\to \Delta(\mathcal{E}^2)$ of the form $T' = (\mathrm{Id}_\Theta\otimes M)T$ is appropriate. Then, because $T'$ is an extension of $T$, rather than having to rerun our inference we can simply compute $MT_\xi|A$.
 
 % While there are numerous differences between the Potential Outcomes and Causal Bayesian Network approach to causality, it is interesting to reflect on their different approaches to handling Theorem \ref{th:ncinco}. The CBN approach fixes a number of conditional probabilities among variables unless they are directly intervened on and combines this with a standard ``hard-intervention'' operation. Potential outcomes, in the form we discuss here, represents by potential outcomes a fixed set of properties of outcomes (``the science'', as Rubin calls it) which are then partially revealed by an assignment function which may respond in problem specific ways to decisions. As we have discussed regarding ETT, the potential outcomes approach is capable of representing decisions that are known to have certain effects but we may be uncertain as to how exactly they achieve these effects, though this is not always enough to satisfactorily represent the problem of interest (see the discussion of ITT). The CBN approach features a hard transition between fixed flexible conditional probabilities - either an intervention is not on a node, in which case its probability conditional on its parents is fixed, or it is on that node in which case the conditional probability is vastly different. This doesn't appear to be ideal for representing uncertainty over how a decision might correspond to an intervention. In fact \emph{any} CBN with hard interventions can in fact represent any causal theory if we permit decisions to correspond to unknown, state-dependent mixtures of interventions (this reflects the fact that every joint probability distribution can be achieved with the right mixture of hard interventions on every node). The fact that we lose dependence on the graph suggests that a na\"ive approach to uncertainty over the decision bias may be too general. There are many versions of CBNs with generalised interventions that may address this issue.
 
