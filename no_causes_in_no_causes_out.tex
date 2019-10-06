@@ -4,26 +4,33 @@
 
 A key result in statistical learning theory is the requirement that, in order for a hypothesis class to be learnable, it must have finite VC-dimension. The concept of controlling the size of the hypothesis class plays a fundamental role across the field of machine learning, from formal proofs of learnability to techniques based less formally on the notion of the bias-variance tradeoff. CSDPs are closely related to statistical learning problems, and it is highly likely that results of this type can be developed for causal problems.
 
-For a hypothesis class of functions to be learnable, we can make assumptions that do not require the class of functions to collectively have a tendency to treat certain points differently to other points. For example, a class of functions limited by VC-dimension is closed under the operation of precomposition with any invertible function on the class' shared domain - the union of images of any set of points over the entire class depends only on the size of the set of points and not on which particular points are represented. However, if a causal theory is closed under the analogous operation, or if we assume a prior that is invariant under this operation, we must prefer the uniform decision strategy or find no preference over strategies whatsoever.
+Apart from any inductive biases necessary for learnability, causal theories also require a \emph{decision bias} - a causal theory that does not distinguish decisions yields only trivial results. This is distinct from a restriction on the flexibility or capacity of a causal theory. Given a prior, the requirement is that, conditional on some set of observations, a causal theory yields different consequences for different decisions. 
+
+Define the pairwise swap $U_{dd'}:D\to \Delta(\mathcal{D})$ to be the kernel that sends $d\mapsto \delta_{d'}$, $d'\mapsto \delta_d$ and all other $d''\to \delta_{d''}$.
 
 \begin{theorem}[No causes in, no causes out (Bayes)]\label{th:ncinco}
-If a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ and a prior $\xi\in \Delta(\Theta)$ are such that for all pairwise swaps $U_{dd'}:D\to \Delta(\mathcal{D})$, $(\xi\otimes U)T = (\xi\otimes I)T$ then all decision strategies are Bayes.
+If a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ and a prior $\xi\in \Delta(\Theta)$ are such that for all pairwise swaps $U_{dd'}:D\to \Delta(\mathcal{D})$, $(\xi\otimes U_{dd'})T = (\xi\otimes I)T$ and $D$ is discrete then all decision strategies are Bayes.
 \end{theorem}
 
 \begin{proof}
-Consider the stubborn strategy $J_d:x\mapsto \delta_d$ for all $x\in E$. Define $U_{dd'}:D\to \Delta(\mathcal{D})$ to be the swap map that sends $d\to \delta_{d'}$, $d'\to \delta_{d}$ and leaves other decisions the same. Clearly, $U_{dd'} U_{dd'} = \mathrm{Id}_D$. For all $d,d'\in D$
+Defining $F_{\_d_0}:d\mapsto \delta_{d_0}$ for all $d\in D$, we will show that for all $J$, $S_\xi(J)=S_\xi(JF_{\_d_0}):=S_0$.
+
+By assumption, for all $d\in D$, utility functions $u$:
 \begin{align}
-	\int_\Theta \delta_d C_\theta u d\xi &= \int_\Theta \delta_d U_{dd'} C_\theta u d\xi\\
-										&= \int_\Theta \delta_{d'} C_\theta u d\xi\\
-										 &:= S_0
+	\int_\Theta H_\theta J(\{d\}) C_\theta u(d) d\xi &= \int_\Theta H_\theta J(\{d\}) U_{dd_0} C_\theta u(d) d\xi\\
+													 &= \int_\Theta H_\theta J(\{d\}) F_{\_d_0} C_\theta u(d) d\xi\label{eq:agree_on_d}\\
+\therefore \sum_{d\in D} \int_\Theta H_\theta J(\{d\}) F_{\_d_0} C_\theta(d;A) d\xi &= \sum_{d\in D} \int_\Theta H_\theta J(\{d\}) C_\theta u(d) d\xi\\
+													 &= \int_\Theta \sum_{d\in D} H_\theta J(\{d\}) C_\theta u (d) d\xi\\
+													 &= \int_\Theta H_\theta J C_\theta u d\xi\\
+													 &= S_\xi(J)\\
+													 &= S_\xi(JF_{\_d_0})
 \end{align}
-Thus for any $J\in \Delta(\mathcal{D})^E$,
-\begin{align}
-	\int_\Theta \mu_\theta J C_\theta u d\xi &= \int_\theta \int_D \delta_d C_\theta u d\gamma d\mu_\theta J\\
-											 &= \int_D \int_\theta \delta_d C_\theta u d\gamma d\mu_\theta J\\
-											 &= S_0
-\end{align}
+Where \ref{eq:agree_on_d} follows from the fact that evaluation at $d$ guarantees $U_{dd_0} C_\theta u(d) = F_{\_d_0} C_\theta u(d)$.
 \end{proof}
+
+\begin{corollary}
+If a causal theory $T$ with a prior $\xi$ and discrete decision set $D$ yields a nontrivial ordering of decision strategies, then there exists $d,d'\in D$ such that $(\xi\otimes \delta_d) T\neq (\xi\otimes \delta_{d'}) T$.
+\end{corollary}
 
 Somewhat surprisingly, the minimax rule may yield preferences over decisions under such circumstances; in particular, a uniform strategy is always minimax, though other strategies may not be. This is because the consequences of a uniform strategy may be less extreme than the consequences of any other strategy.
 
@@ -46,11 +53,26 @@ Thus for a causal theory to support nontrivial results, we require for Bayes rul
 From one point of view, this result might be expected: if we believe
 \begin{itemize}
 \item Any possible consequence of $d_1$ might equally be a consequence of $d_2$ and vise versa
-\item Any data we encounter is equally consistent with $d_1$ having some set of consequences or with $d_2$ having that same set of consequences (recall that a causal theory jointly specifies data and consequences)
+\item Any data we encounter is equally consistent with $d_1$ having some set of consequences or with $d_2$ having that same set of consequences
 \end{itemize}
-Then we will be indifferent between $d_1$ or $d_2$ and any data that might change our beliefs about $d_1$ must change our beliefs about $d_2$ in precisely the same way.
+Then we ought to be indifferent between $d_1$ or $d_2$ whatever data we see.
 
-While there are numerous differences between the Potential Outcomes and Causal Bayesian Network approach to causality, it is interesting to reflect on their different approaches to handling Theorem \ref{th:ncinco}. The CBN approach fixes a number of conditional probabilities among variables unless they are directly intervened on and combines this with a standard ``hard-intervention'' operation. Potential outcomes, in the form we discuss here, represents by potential outcomes a fixed set of properties of outcomes (``the science'', as Rubin calls it) which are then partially revealed by an assignment function which may respond in problem specific ways to decisions. As we have discussed regarding ETT, the potential outcomes approach is capable of representing decisions that are known to have certain effects but we may be uncertain as to how exactly they achieve these effects, though this is not always enough to satisfactorily represent the problem of interest (see the discussion of ITT). The CBN approach features a hard transition between fixed flexible conditional probabilities - either an intervention is not on a node, in which case its probability conditional on its parents is fixed, or it is on that node in which case the conditional probability is vastly different. This doesn't appear to be ideal for representing uncertainty over how a decision might correspond to an intervention. In fact \emph{any} CBN with hard interventions can in fact represent any causal theory if we permit decisions to correspond to unknown, state-dependent mixtures of interventions (this reflects the fact that every joint probability distribution can be achieved with the right mixture of hard interventions on every node). The fact that we lose dependence on the graph suggests that a na\"ive approach to uncertainty over the decision bias may be too general. There are many versions of CBNs with generalised interventions that may address this issue.
+No causes in, no causes out (NCINCO) implies that some common principles commonly applied to causal inference, in isolation, can only yield trivial theoreis. Without any notion of intervention, causal inference based solely on principles such as the invariance of conditionals \citet{arjovsky_invariant_2019,peters_causal_2016}, a preference for low complexity consequences \citet{lemeire_replacing_2013} or faithfulness \citet{spirtes_causation_1993} would yield triviality. As discussed in Section \ref{sec:counterfactuals}, we also require assumptions on the effects of decisions to to get a causal theory from a potential outcomes model.
 
-It is interesting to consider whether there might be principles of causal inference that eschew the two part approach of fixing some underlying notion of ``the science'' and separately adding in some kind of decision bias. One could imagine, for example, a causal theory that posits that consequences minimise some combination of causally appropriate dissimilarity measures from the observational distribution and from a decision-dependent target distribution without any clear commitments to invariant principles of science. It's not obvious how we should construct such measures without appealing to some notion of the underlying science, but we regard it as an interesting question nonetheless.
+This may seem to be an odd situation: while decision biases are clearly a crucial element of useful causal theories, both major approaches to causality discussed here tend to favour a thorough treatment of assumptions that permit ``inference'' but a cursory treatment assumptions that yield decision biases. CBNs supply a generic notion of intervention that is unlikely to be a generally appropriate notion of the effects of a decision (see, for example, \cite{hernan_does_2008}). In addition, a CBN defines many more interventions than are every going to be at the disposal of a decision maker in practice -- recall that we had to postulate a decision model for the CBN as well as the PO model in order to comapre the two. PO, on the other hand, appears to require a decision model to get off the ground at all. 
+
+We postulate that both of these approaches to causality aim to produce causal theories that may not be useful on their own, but permit \emph{modular extension} to potential theories of interest (a property we will define below). Informally, if a theory $T$ permits a modular extension to $T'$ then we can achieve the same result either by a) ``doing inference'' on $T'$ directly or b) ``doing inference'' on $T$ and then applying a decision model to yield $T'$. If $T$ is not a useful theory, but it can be modularly extended to a large number of theories $T'$ which we believe are useful, we may be best served by performing our analysis on $T$ and saving the results for later. Proponents of both CBN and PO approaches appear to endorse the interpretation that the theories they produce represent ``stable'' knowledge of the real world.
+
+We define this notion for theories equipped with a prior, and it is unclear if it can be extended to theories without a prior.
+
+\begin{definition}[Modular extension]
+A theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ equipped with a prior $\xi$ permits modular extension to $T':\Theta\times D'\to \Delta(\mathcal{E}\otimes\mathcal{F})$ if there exists $M:D'\to \Delta(\mathcal{D})$ such that for all $A\in \mathcal{E}$ we have 
+$(\xi \otimes \mathrm{Id}_D) T' (\mathds{1}_A \otimes \mathrm{Id}_F) = (\xi \otimes M) T' (\mathds{1}_A \otimes \mathrm{Id}_F)$
+\end{definition}
+
+This definition can be related back to regular Bayesian conditioning. Supposing $T'$ is the theory of interest and given a decision function $J:E\to \Delta(\mathcal{D}')$ we obtain some mixed decision $J_{x\in A}:= \frac{1}{\xi H' (A)} \int_A J_x d\xi H' $ conditional on the event $A$ occurring (supposing $A$ has positive measure). The consequence conditional on $A$ occurring is then 
+
+% While there are numerous differences between the Potential Outcomes and Causal Bayesian Network approach to causality, it is interesting to reflect on their different approaches to handling Theorem \ref{th:ncinco}. The CBN approach fixes a number of conditional probabilities among variables unless they are directly intervened on and combines this with a standard ``hard-intervention'' operation. Potential outcomes, in the form we discuss here, represents by potential outcomes a fixed set of properties of outcomes (``the science'', as Rubin calls it) which are then partially revealed by an assignment function which may respond in problem specific ways to decisions. As we have discussed regarding ETT, the potential outcomes approach is capable of representing decisions that are known to have certain effects but we may be uncertain as to how exactly they achieve these effects, though this is not always enough to satisfactorily represent the problem of interest (see the discussion of ITT). The CBN approach features a hard transition between fixed flexible conditional probabilities - either an intervention is not on a node, in which case its probability conditional on its parents is fixed, or it is on that node in which case the conditional probability is vastly different. This doesn't appear to be ideal for representing uncertainty over how a decision might correspond to an intervention. In fact \emph{any} CBN with hard interventions can in fact represent any causal theory if we permit decisions to correspond to unknown, state-dependent mixtures of interventions (this reflects the fact that every joint probability distribution can be achieved with the right mixture of hard interventions on every node). The fact that we lose dependence on the graph suggests that a na\"ive approach to uncertainty over the decision bias may be too general. There are many versions of CBNs with generalised interventions that may address this issue.
+
+% It is interesting to consider whether there might be principles of causal inference that eschew the two part approach of fixing some underlying notion of ``the science'' and separately adding in some kind of decision bias. One could imagine, for example, a causal theory that posits that consequences minimise some combination of causally appropriate dissimilarity measures from the observational distribution and from a decision-dependent target distribution without any clear commitments to invariant principles of science. It's not obvious how we should construct such measures without appealing to some notion of the underlying science, but we regard it as an interesting question nonetheless.
 
