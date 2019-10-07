@@ -1,0 +1,14 @@
+%!TEX root = main.tex
+
+\section{Appendix: CBN representation as a causal theory}\label{sec:cbn_as_ct}
+
+\begin{definition}[Elementary Causal Bayesian Network]
+
+Given $D$, $E$, $\Theta$, random variables $\{\RV{X}^i\}_{i\in [n]}$ on $E$, a distinguished variable $\RV{X}^0$ taking values in $D$ and a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{E})$ with $H:= T(\mathrm{Id}_E\otimes *_E)$ and $C:= T(*_E\otimes \mathrm{Id}_E)$, an \emph{elementary Causal Bayesian Network} (eCBN) compatible with $T$ is a directed acyclic graph (DAG) $\mathcal{G}$ with nodes $\{\RV{X}^i\}_{i\in [n]}$ such that
+
+\begin{enumerate}
+    \item $H_\theta$ and $C_{\theta,d}$ are compatible with $\mathcal{G}$ (see \citet{pearl_causality:_2009})
+    \item $C_{\theta,d} F_{\RV{X}^i}=\delta_{d}$
+    \item For all $i\neq 0$, $C_{\theta|\PA{\mathcal{G}}{\RV{X}^i}} F_{\RV{X}^i}=H_{\theta|\PA{\mathcal{G}}{\RV{X}^i}}F_{\RV{X}^i} $, $H_\theta$-almost surely
+\end{enumerate}
+\end{definition}

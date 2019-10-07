@@ -2,132 +2,154 @@
 
 \section{Potential outcomes models}\label{sec:counterfactuals}
 
-We will follow \cite{rubin_causal_2005} in our development of potential outcomes models, acknowledging that there are a wider variety of approaches to modelling potential outcomess than Rubin's version potential outcomes alone. Given an underlying state space $\Theta$, Rubin posits a number of Markov kernels and composes them to define a statistical experiment $H:\Theta\to \Delta(\mathcal{X}\otimes\mathcal{Y}\otimes \mathcal{W})$. We eschew the ``conditional probability'' notation Rubin uses as it masks the distinction between a Markov kernel that is the disintegration of a previously defined joint probability distribution and a Markov kernel that we are simply defining as such, and will not necessarily be a disintegration of any probability distribution.
+We follow \cite{rubin_causal_2005} for the definition of a potential outcomes model, noting any points of divergence. 
 
-Notationally, we will refer to the symbol $\RV{W}_i$ as the $i$-th treatment assignment ($i\in \{0,..,n\}$), $\RV{Y}_i(0)$ $\RV{Y}_i(1)$ as the $i$-th potential outcomes, $\RV{Y}_i$ as the $i$-th obseved outcome and $\RV{X}_i$ as the $i$-th ``vector of background facts''. $\RV{W}$ refers to the composite of all $\RV{W}_i$s and similarly for other symbols. We avoid strictly defining what these symbols represent for now, as the construction of $H$ allows us to be more explicit about what exactly these symbols represent. Suppose the vector $[\RV{Y}_0,...,\RV{Y}_n]$ takes values in $Y$ and similarly for other symbols.
+Notationally, we will refer to the symbol $\RV{W}_i$ as the $i$-th treatment assignment ($i\in \{0,..,n\}$), $\RV{Y}_i(0)$ $\RV{Y}_i(1)$ as the $i$-th potential outcomes, $\RV{Y}_i$ as the $i$-th obseved outcome and $\RV{X}_i$ as the $i$-th ``vector of background facts''. $\RV{W}$ refers to the bundle of all $\RV{W}_i$s and similarly for other symbols. Following the convention set out in our introduction, we consider these symbols to represent random variables and to label strings in our string diagram. Suppose the vector $[\RV{Y}_0,...,\RV{Y}_n]$ takes values in $Y$ and similarly for other symbols.
 
-In particular, Rubin supplies:
+Given an underlying state space $\Theta$, a potential outcomes model $\mathscr{O}$ consists of a set of Markov kernels $\langle \mathbf{P}, \mathbf{W}, \mathbf{Y} \rangle$ and a canonical composition that yields a statistical experiment $\mathbf{H}:\Theta\to \Delta(\mathcal{X}\otimes\mathcal{Y}\otimes \mathcal{W})$. 
+
+The kernels are
 \begin{itemize}
-\item A ``model on the science'', $H_{PO}:\Theta \to \Delta(\mathcal{X}\otimes\mathcal{Y}\otimes\mathcal{Y})$ (In Rubin's notation, $\prod_i f(\RV{X}_i,\RV{Y}_i(0),\RV{Y}_i(1))$)
-\item An ``assignment mechanism'', $H_W:X\times Y^2 \to \Delta(\{0,1\}^n)$ (in Rubin's notation, $Pr(\RV{W}|X,Y(1),Y(0))$)
-\item An ``observation model'', $H_Y:\{0,1\}^n\times Y^2\to \Delta(\mathcal{Y})$, defined explicitly as $H_Y:(\mathbf{y}^0,\mathbf{y}^1,\mathbf{w})\mapsto (1-\mathbf{w}) \odot \delta_{\mathbf{y}^0} + \mathbf{w} \odot \delta_{\mathbf{y}^0}$ where $\odot$ is the elementwise product
+\item A ``model on the science'', $\mathbf{P}:\Theta \to \Delta(\mathcal{X}\otimes\mathcal{Y}\otimes\mathcal{Y})$ (In Rubin's notation, $mathbf{P}$ is $\prod_i f(\RV{X}_i,\RV{Y}_i(0),\RV{Y}_i(1)|\theta)$)
+\item An ``assignment mechanism'', $\mathbf{W}:\Theta\times X\times Y^2 \to \Delta(\{0,1\}^n)$ (in Rubin's notation, $\mathbf{W}$ is $Pr(\RV{W}|X,Y(1),Y(0))$)
+\item An ``observation model'', $\mathbf{Y}:\{0,1\}^n\times Y^2\to \Delta(\mathcal{Y})$, defined explicitly as $\mathbf{Y}:(\mathbf{y}^0,\mathbf{y}^1,\mathbf{w})\mapsto (1-\mathbf{w}) \odot \delta_{\mathbf{y}^0} + \mathbf{w} \odot \delta_{\mathbf{y}^0}$ where $\odot$ is the elementwise product
 \end{itemize}
 
-Note that this construction does not permit the usual assumption of consistency ($W_i=w\implies \RV{Y}_i=\RV{Y}_i(w)$) because Markov kernels can at best give almost sure equality.
+We differ from Rubin by defining $\mathbf{Y}$ as a Markov kernel rather than a function. This approach means that we can at best assert $W_i=w\implies \RV{Y}_i=\RV{Y}_i(w)$ \emph{almost surely} in some probability space, as a Markov kernel cannot guarantee exact equality. We also differ from Rubin by including $\Theta$ in the domain of $\mathbf{W}$ as in our framework leaving this dependence out is equivalent to assuming that the treatment assignment mechanism is known \emph{a priori} (as a result, our state $\Theta$ is larger than Rubin's).
 
-We then define the experiment $H$ by
-
-\begin{align}
-H:=\begin{tikzpicture}
-\path (0,0) coordinate (A)
-++ (0.8,0) node[kernel] (HPO) {$H_{PO}$}
-++ (0.8,0) coordinate (copy00)
-+ (0,0.15) coordinate (copy01)
-+ (0,-0.15) coordinate (copy02)
-++(0.8,0) node[kernel] (HW) {$H_W$}
-+(0.2,-0.6) node[label={[label distance=-2.5mm]:$\RV{Y}(0)$}] (Y0) {}
-+(0.2,-1.2) node[label={[label distance=-2.5mm]:$\RV{Y}(1)$}] (Y1) {}
-++(0.8,0) coordinate (copy1)
-++(0.8,0) node[kernel] (HY) {$H_Y$}
-++(0.8,0) node (Y) {$\RV{Y}$}
-+(0,0.5) node (W) {$\RV{W}$}
-+(0,1) node (X) {$\RV{X}$};
-\draw (A) -- (HPO) -- (HW) -- (HY) -- (Y);
-\draw ($(HPO.east)+(0,0.15)$) -- ($(HW.west)+(0,0.15)$);
-\draw ($(HPO.east)+(0,-0.15)$) -- ($(HW.west)+(0,-0.15)$);
-\draw (copy01) to [bend left] (X);
-\draw (copy00) to [bend right] (Y0) to [bend right] ($(HY.west)+(0,-0.1)$);
-\draw (copy02) to [bend right] (Y1.west) -- (Y1.east) to [bend right] ($(HY.west)+(0,-0.15)$);
-\draw (copy1) to [bend left] (W);
-\end{tikzpicture}
-\end{align}
-
-Where we have labeled the wires ``carrying'' $\RV{Y}(0)$ and $\RV{Y}(1)$ for clarity. Addtionally, we could draw an alternative diagram where each wire was copied $n$ times to reflect the unit level variables. We can define an extended probability space $H^*$ on which potential outcomes are also random variables:
+We then define the \emph{canonical experiment} $\mathbf{H}^{\mathscr{O}}$ by
 
 \begin{align}
-H^*:=\begin{tikzpicture}
-\path (0,0) coordinate (A)
-++ (0.8,0) node[kernel] (HPO) {$H_{PO}$}
-++ (0.8,0) coordinate (copy00)
-+ (0,0.15) coordinate (copy01)
-+ (0,-0.15) coordinate (copy02)
-++(0.8,0) node[kernel] (HW) {$H_W$}
-+(0.2,-0.6) node (Y0) {}
-+(0.2,-1.2) node (Y1) {}
-++(0.8,0) coordinate (copy1)
-++(0.8,0) node[kernel] (HY) {$H_Y$}
-++(0.8,0) node (Y) {$\RV{Y}$}
-+(0,0.5) node (W) {$\RV{W}$}
-+(0,1) node (X) {$\RV{X}$}
-+(0,-0.6) node (Y0l) {$\RV{Y}(0)$}
-+(0,-1.2) node (Y1l) {$\RV{Y}(1)$};
-\draw (A) -- (HPO) -- (HW) -- (HY) -- (Y);
-\draw ($(HPO.east)+(0,0.15)$) -- ($(HW.west)+(0,0.15)$);
-\draw ($(HPO.east)+(0,-0.15)$) -- ($(HW.west)+(0,-0.15)$);
-\draw (copy01) to [bend left] (X);
-\draw (copy00) to [bend right] (Y0) to [bend right] ($(HY.west)+(0,-0.1)$);
-\draw (copy02) to [bend right] (Y1.west) -- (Y1.east) to [bend right] ($(HY.west)+(0,-0.15)$);
-\draw (copy1) to [bend left] (W);
-\draw (Y0) -- (Y0l);
-\draw (Y1) -- (Y1l);
-\end{tikzpicture}
-\end{align}
-
-We are interested here in defining a ``general type'' of potential outcomes problem rather than investigate particular assumptions that may permit inference. Without a formal guide as to how to do this, we will postulate that a potential outcomes model is, in general, three Markov kernels $\langle H_{PO}, H_W, H_Y \rangle$ where $H_{PO}:\Theta\to \Delta(\mathcal{X}\otimes\mathcal{Y}^m)$, $H_W:\Theta\to \Delta(\{0,..,m-1\}^n)$ and $H_Y:\{0,..,m-1\}^n\times Y^m\to \Delta(\mathcal{Y})$ which is a ``selection function'' in the sense defined above. We adopt the alternative signature for $H_W$ as it seems reasonable to suppose that the details of this kernel aren't always known \emph{a priori}. Note that in general multiple potential outcomes models will yield the same statistical experiment $H$, though we postulate that in general different models will yield different $H^*$.
-
-\subsection{Can we consider potential outcomes models to be causal theories?}
-
-A potential outcomes model is a statistical experiment. Therefore, given a tuple $\langle \Theta, E, D, H, u\rangle$ where $H$ follows from a potential outcomes model $\langle H_{PO}, H_W, H_Y \rangle$ and $u:F\to \mathbb{R}$ is a utility function, we have an ill-posed causal problem. A potential outcomes model is not literally a causal model, but we might ask if it is possible that our potential outcomes model $H$ is a ``causal theory in disguise''; Is there a natural map from potential outcomes models to causal theories?
-
-We will propose, somewhat weakly, that given a well-specified potential outcomes model, decisions correspond to modifications of $H_W$. This supposition generalises the approach to policy modelling found in \cite{heckman_policy-relevant_2001.} As there is no general way to identify an arbitrary set of decisions $D$ with different assignment functions $H_W$, we offer (weakly) that the answer to the question in the paragraph above is ``no''. However, given knowledge of the ``decision-influenced treatment assignment'' $C_W:\Theta\times D\to \{0,1\}^n$, we \emph{can} define a causal theory via the four elements $\langle H_{PO}, H_W, H_Y, C_W\rangle$. We've supposed here there are $n$ ``observational'' units and $n$ ``consequence'' units, a restriction that simplifies the notation and is fairly easy to lift. Concretely, the causal theory is:
-
-\begin{align}
-	T:= \begin{tikzpicture}
+\mathbf{H}^{\mathscr{O}}:=
+\begin{tikzpicture}
 	\path (0,0) coordinate (A)
-	+ (0,-1.6) coordinate (D)
+	++ (0.5,0) coordinate (copy0)
+	++ (1,0) coordinate (cent0)
+	+(0,0.5) node[kernel] (HPO) {$\mathbf{P}$}
+	+(0.5,0.4) coordinate (copy1)
+	++ (1.3,0) coordinate (cent1)
+	+(0,-0.5) node[kernel] (HW) {$\mathbf{W}$}
+	++(1,0) coordinate (cent2)
+	+ (0,0) node[kernel] (HY) {$\mathbf{Y}$}
+	++(1,0) coordinate (cent3)
+	+(0,0.65) node (X) {$X$}
+	+(0,0) node (Y) {$Y$}
+	+(0,-0.5) node (W) {$W$};
+	\draw (A) -- (copy0);
+	\draw (copy0) to [bend left=20] (HPO);
+	\draw (copy0) to [bend right=20] ($(HW.west)+(0,-0.1)$);
+	\draw ($(HPO.east)+(0,-0.1)$) -- (copy1);
+	\draw (copy1) edge[out=0,in=180] (HW);
+	\draw ($(HPO.east)+(0,0.15)$) -- (X) (HY) -- (Y) (HW) -- (W);
+	\draw (copy1) edge[out=0,in=180] ($(HY.west)+(0,0.1)$);
+	\draw ($(HW.east)+(0,0.1)$) to [bend left = 20] ($(HY.west)+(0,-0.1)$);
+\end{tikzpicture}
+\end{align}
+
+The internal wire from $\mathbf{P}$ to $\mathbf{Y}$ and $\mathbf{W}$ carries the bundle of potential outcomes $\RV{Y}(0)\underline{\otimes}\RV{Y}(1)$. This is consistent with Rubin, though the notation is substantially different.
+
+% Where we have labeled the wires ``carrying'' $\RV{Y}(0)$ and $\RV{Y}(1)$ for clarity. Addtionally, we could draw an alternative diagram where each wire was copied $n$ times to reflect the unit level variables. We can define an extended probability space $H^*$ on which potential outcomes are also random variables:
+
+% \begin{align}
+% H^*:=\begin{tikzpicture}
+% \path (0,0) coordinate (A)
+% ++ (0.8,0) node[kernel] (HPO) {$H_{PO}$}
+% ++ (0.8,0) coordinate (copy00)
+% + (0,0.15) coordinate (copy01)
+% + (0,-0.15) coordinate (copy02)
+% ++(0.8,0) node[kernel] (HW) {$H_W$}
+% +(0.2,-0.6) node (Y0) {}
+% +(0.2,-1.2) node (Y1) {}
+% ++(0.8,0) coordinate (copy1)
+% ++(0.8,0) node[kernel] (HY) {$H_Y$}
+% ++(0.8,0) node (Y) {$\RV{Y}$}
+% +(0,0.5) node (W) {$\RV{W}$}
+% +(0,1) node (X) {$\RV{X}$}
+% +(0,-0.6) node (Y0l) {$\RV{Y}(0)$}
+% +(0,-1.2) node (Y1l) {$\RV{Y}(1)$};
+% \draw (A) -- (HPO) -- (HW) -- (HY) -- (Y);
+% \draw ($(HPO.east)+(0,0.15)$) -- ($(HW.west)+(0,0.15)$);
+% \draw ($(HPO.east)+(0,-0.15)$) -- ($(HW.west)+(0,-0.15)$);
+% \draw (copy01) to [bend left] (X);
+% \draw (copy00) to [bend right] (Y0) to [bend right] ($(HY.west)+(0,-0.1)$);
+% \draw (copy02) to [bend right] (Y1.west) -- (Y1.east) to [bend right] ($(HY.west)+(0,-0.15)$);
+% \draw (copy1) to [bend left] (W);
+% \draw (Y0) -- (Y0l);
+% \draw (Y1) -- (Y1l);
+% \end{tikzpicture}
+% \end{align}
+
+% Following this example, we will define a potential outcomes model with $m$ potential outcomes as three Markov kernels $\langle \mathbf{P}, \mathbf{W}, \mathbf{Y} \rangle$ where $\mathbf{P}:\Theta\to \Delta(\mathcal{X}\otimes\mathcal{Y}^m)$, $\mathbf{W}:\Theta\times X\times Y^m\to \Delta([m]^n)$ and $\mathbf{Y}:[m]^n\times Y^m\to \Delta(\mathcal{Y})$ which is always a ``selection kernel'' as defined above. We adopt the alternative signature for $\mathbf{W}$ as the treatment assignment isn't always known \emph{a priori}; it may itself depend on some unknown state. Furthermore, a potential outcomes model induces a statistical experiment $\mathbf{H}$ under the canonical composition shown above. Note that in general multiple potential outcomes models will yield the same statistical experiment $\mathbf{H}$.
+
+\subsection{Are potential outcomes models causal theories?}
+
+By assumption, a potential outcomes model induces a canonical statistical experiment. Given that potential outcomes models are a type of causal model, we can ask whether they induce a canonical \emph{causal theory}. We propose one strategy for constructing such a theory below, though it is known to work only where all associated spaces are discrete.
+
+Given a potential outcomes model $\mathscr{O}:=\langle \mathbf{P}, \mathbf{W}, \mathbf{Y} \rangle$ with associated discrete spaces $\Theta,X,Y,[m]$, define $D:=[0,1]^{|\Theta|+2|Y|+|X|}$. Then there is a kernel $\mathbf{B}:D\times\Theta\times X \times Y^2\to \Delta(\mathcal{W})$ such that for every Markov kernel $\mathbf{W}':\Theta\times X\times Y^m\to \Delta([m]^n)$ there exists $d\in D$ such that $\mathbf{W}'=\mathbf{B}_d$; that is, $D$ indexes the set possible treatment assignment maps. The assumption of discrete spaces is to guarantee the existence of such a $\mathbf{B}$.
+
+From $\mathscr{O}$ and $\mathbf{B}$ we define the \emph{canonical theory} $\mathbf{T}^{\mathscr{O}}$:
+
+\begin{align}
+	\mathbf{T}^{\mathscr{O}}:= \begin{tikzpicture}
+	\path (0,0) coordinate (A)
+	+ (0,-1.65) coordinate (D)
 	++ (1,0) coordinate (copy0)
 	++ (1,0) coordinate (cent0)
-	+(0,1.5) node[kernel] (HPO) {$H_{PO}$}
-	+(0,0.5) node[kernel] (HW) {$H_W$}
-	+(0,-0.5) node[kernel] (HPOC) {$H_{PO}$}
-	+(0,-1.5) node[kernel] (CW) {$C_W$}
-	++(1.3,0) coordinate (cent1)
-	+ (0,1) node[kernel] (HY) {$H_Y$}
-	+ (0,-1) node[kernel] (HYC) {$H_Y$}
+	+(0,1.5) node[kernel] (HPO) {$\mathbf{P}$}
+	+(0.5,1.5) coordinate(copy1)
+	+(0,-0.5) node[kernel] (HPOC) {$\mathbf{P}$}
+	+(0.5,-0.5) coordinate (copy1C)
+	++ (1.3,0) coordinate (cent1)
+	+(0,0.5) node[kernel] (HW) {$\mathbf{W}$}
+	+(0,-1.5) node[kernel] (CW) {$\mathbf{B}$}
+	++(1,0) coordinate (cent2)
+	+ (0,1) node[kernel] (HY) {$\mathbf{Y}$}
+	+ (0,-1) node[kernel] (HYC) {$\mathbf{Y}$}
 	++(1,0) coordinate (cent3)
-	+(0,1.6) node (X) {$X$}
+	+(0,1.65) node (X) {$X$}
 	+(0,1) node (Y) {$Y$}
 	+(0,0.5) node (W) {$W$}
-	+(0,-0.4) node (XC) {$X_C$}
+	+(0,-0.35) node (XC) {$X_C$}
 	+(0,-1) node (YC) {$Y_C$}
 	+(0,-1.5) node (WC) {$W_C$};
 	\draw (A) -- (copy0);
-	\draw (copy0) to [bend left] (HPO);
-	\draw (copy0) to [bend left] (HW);
-	\draw (copy0) to [bend right] (HPOC);
-	\draw (copy0) to [bend right] ($(CW.west)+(0,0.1)$);
-	\draw (D) -- ($(CW.west)+(0,-0.1)$);
-	\draw ($(HPO.east)+(0,0.1)$) -- (X) ($(HPOC.east)+(0,0.1)$) -- (XC) (HY) -- (Y) (HYC) -- (YC) (HW) -- (W) (CW) -- (WC);
-	\draw ($(HPO.east)+(0,-0.1)$) to [bend right] ($(HY.west)+(0,0.1)$) ($(HPOC.east)+(0,-0.1)$) to [bend right] ($(HYC.west)+(0,0.1)$);
-	\draw ($(HW.east)+(0,0.1)$) to [bend left] ($(HY.west)+(0,-0.1)$) ($(CW.east) + (0,0.1)$) to [bend left] ($(HYC.west)+(0,-0.1)$);
+	\draw (HPO) -- (copy1);
+	\draw (HPOC) -- (copy1C);
+	\draw (copy0) to [bend left=20] (HPO);
+	\draw (copy0) to [bend left=20] ($(HW.west)+(0,-0.1)$);
+	\draw (copy0) to [bend right=20] (HPOC);
+	\draw (copy0) to [bend right=40] ($(CW.west)+(0,0)$);
+	\draw (copy1) edge[out=0,in=180] (HW);
+	\draw (copy1C) edge[out=0,in=180] ($(CW.west)+(0,0.15)$);
+	\draw (D) -- ($(CW.west)+(0,-0.15)$);
+	\draw ($(HPO.east)+(0,0.15)$) -- (X) ($(HPOC.east)+(0,0.15)$) -- (XC) (HY) -- (Y) (HYC) -- (YC) (HW) -- (W) (CW) -- (WC);
+	\draw (copy1) edge[out=0,in=180] ($(HY.west)+(0,0.1)$) (copy1C) edge[out=0,in=180] ($(HYC.west)+(0,0.1)$);
+	\draw ($(HW.east)+(0,0.1)$) to [bend left = 20] ($(HY.west)+(0,-0.1)$) ($(CW.east) + (0,0.1)$) to [bend left = 20] ($(HYC.west)+(0,-0.1)$);
 \end{tikzpicture}\label{eq:po_causal_theory}
 \end{align}
 
-Where $\RV{X}_C$, $\RV{W}_C$, $\RV{Y}_C$ are the ``consequence'' analogues of observational variables $\RV{X}$, $\RV{W}$ and $\RV{Y}$. To simplify the diagram, we have merged the wires for $\RV{Y}(0)$ and $\RV{Y}(1)$ and ommitted the labels; the potential outcomes are carried by the wire from $H_{PO}$ to $H_Y$. Without detailed justification, we will note that this construction is unlikely to be appropriate if $H_{PO}$ does not define an exchangeable sequence of potential outcomes, an assumption that we have made as a result of following \citet{rubin_causal_2005}.
+$\mathbf{T}^{\mathscr{O}}$ is two parallel copies of $\mathscr{H}^{\mathscr{O}}$ where $\mathbf{W}$ is replaced by $\mathbf{B}$ in the lower version. We justify the claim that is is appropriate to consider $\mathbf{T}^{\mathscr{O}}$ the causal theory associated with $\mathscr{O}$ on the basis of two considerations: firstly, in practice decisions are often considered to cause modifications of the treatment assignment function $\mathbf{W}$. Secondly, the map $\mathscr{O}\mapsto \mathbf{T}^{\mathscr{O}}$ identifies two potential outcomes models $\mathscr{O}$ and $\mathscr{O}'$ if and only if they feature the same ``science'' $\mathbf{P}$ and induce the same statistical experiment $\mathbf{H}$. 
 
-We can consider two cases where Eq. \ref{eq:po_causal_theory} appears to be appropriate.
+\begin{theorem}
+Given potential outcomes models $\mathscr{O}=\langle \mathbf{P}, \mathbf{W}, \mathbf{Y} \rangle$, $\mathscr{O}'=\langle \mathbf{P}', \mathbf{W}', \mathbf{Y} \rangle$ sharing spaces $\Theta,X,Y,[m]$, then $\mathbf{T}^{\mathscr{O}}=\mathbf{T}^{\mathscr{O}'}$ if and only if $\mathbf{P}=\mathbf{P'}$ and $\mathbf{H}=\mathbf{H}'$.
+\end{theorem}
 
-First, suppose a potential outcomes model $\langle H_{PO}, H_W, H_Y \rangle$ is used in the evaluation of a public program, and it is intended to inform a choice between decisions $d=0$: cut funding or $d=1$: maintain funding. Suppose we also have $C_W$ such that
-\begin{itemize}
-\item $d=1$ leaves the assignment function unchanged; $C_W(\theta,1;A) = H_W(\theta;A)$ for all $\theta, A$
-\item $d_0$ means no-one receives treatment; $C_W(\theta,0;A) = \delta_0(A)$ for all $\theta, A$.
-\end{itemize}
+\begin{proof}
 
-Supposing $Y=[0,1]$ and positing a utility function $u:=\pi_{Y}$, we can compare the utilities of decisions $0$ and $1$ for state $\theta$ by $Tu(\theta,1)-Tu(\theta,0)$ (in more familiar notation, $\mathbb{E}_{T(\theta,1;\cdot)}[u] - \mathbb{E}_{T(\theta,0;\cdot)}[u]$). By construction, if we let $H^*$ be the ``expanded'' version of $H$ above, $Tu(\theta,1)-Tu(\theta,0)=H^*_{\theta|\RV{W}}\pi_{\RV{Y}(1)}(1) - H^*_{\theta|\RV{W}}\pi_{\RV{Y}(0)}(1)$; this is because only the units for which $\RV{W}=1$ have different outcomes under the different decisions. This quantity is known as the \emph{effect of treatment on the treated} (ETT) \citep{heckman_randomization_1991}. 
+Let $\mathbf{T}:=\mathbf{T}^{\mathscr{O}}$ and $\mathbf{T}':=\mathbf{T}^{\mathscr{O}'}$.
 
-\todo[inline]{ETT is common in the causal literature, but this is as far as I know the first example where it is formally derived as the difference between outcomes under different decisions, so I should probably do it properly}
+If $\mathbf{P}=\mathbf{P}'$ and $\mathbf{H}=\mathbf{H}'$ we clearly have $\mathbf{C}:=\mathbf{T}(*\otimes \mathrm{Id}) = \mathbf{T}(*\otimes \mathrm{Id})$ as all kernels in the bottom half of \ref{eq:po_causal_theory} ($\mathbf{P},\mathbf{B}$ and $\mathbf{Y}$) are the same by definition. But then $\mathbf{T} = \splitter{0.1}(\mathbf{H}\otimes\mathbf{C}) = \mathbf{T}'$.
 
-We can also consider the problem in medicine of evaluating the ``effect of assigning treatment'' vs ``the effect of receiving treatment'' (the former being known as \emph{intention to treat} analysis). From \citet{shrier_intention--treat_2017}:
+Suppose $\mathbf{T}=\mathbf{T}'$ and $\mathbf{P}\neq \mathbf{P}'$. Then there exists some $A\in \mathcal{X}\otimes\mathcal{Y}^2$, $\theta\in \Theta$ such that $\mathbf{P}_\theta (A) \neq \mathbf{P}'_\theta(A)$. Choose $d\in D$ such that $\mathbf{B}_{\theta,d,x,y_0,y_1} = \delta_0$ if $(x,y_0,y_1)\in A$ and $\mathbf{B}_{\theta,d,x,y_0,y_1} = \delta_1$ otherwise. But then $\mathbf{T}^\mathscr{O}_{\theta,d} \pi_{\RV{W}} (\{0\})  =\mathbf{P}_\theta (A) \neq \mathbf{P}'_\theta(A) = \mathbf{T}^{\mathscr{O}\prime}_{\theta,d} \pi_{\RV{W}} (\{0\})$, a contradiction. Thus $\mathbf{P}=\mathbf{P}'$. In addition, $\mathbf{H} = \mathbf{T}(\mathrm{Id}\otimes *) = \mathbf{H}'$.
+\end{proof}
+
+Note that the assignment $\mathbf{W}$ may differ between $\mathscr{O}$ and $\mathscr{O}'$. Suppose $X=\emptyset$, $Y=\{0,1\}$ and for some $\theta$, $\mathbf{P}_\theta = \frac{1}{4}(\delta_{0,0}+\delta_{0,1}+\delta_{1,0}+\delta_{1,1})$. Then $\mathbf{W}_\theta:(y_0,y_1)\mapsto \llbracket y_0=y_1\rrbracket\delta_0 + \llbracket y_0\neq y_1\rrbracket \delta_1$ and $\mathbf{W}'_\theta := 1-\mathbf{W}_\theta$ both yield the same observations $\mathbf{H}_\theta$.
+
+The causal theory $\mathbf{T}^{\mathscr{O}}$ is an unrealistic theory. We usually do not have at our disposal a set of decisions that can induce any possible treatment assignment function. Uner $\mathbf{T}^{\mathscr{O}}$ we have the possibility (among others) of deciding to assign treatment if and only if $y_1 > y_0$. Note that this appears to have something in common with CBNs: both feature a causal theory with unreasonably many actions, and in fact both include the possibility of decisions that render the problem trivial. We will call such theories that posit unrealistic amounts of control \emph{dextrous theories}.
+
+In order to choose a decision, we want to work with a \emph{pragmatic theory} $\mathbf{T}^p$ that describes a more restricted set of decisions $D^p$ that correspond to those actions we believe we can actually take. However, it might be the case that we are willing to believe that all pragmatic decisions $d_p\in D^p$ have the same consequences as corresponding decisions $f(d_p)\in D$ in the dextrous theory.
+
+To illustrate this, consider the problem of evaluating the ``effect of assigning treatment'' vs ``the effect of receiving treatment'' (the former being known as \emph{intention to treat} analysis). From \citet{shrier_intention--treat_2017}:
 
 \begin{quote}
 In public health, we are normally concerned with the first question -- the effect of assigning a treatment. If we implement a prevention or treatment program that is efficacious only under strict research conditions but people in the real world would not receive it for any possible reason, the program will not be effective. This real-world context is termed the “average causal effect” of assigning treatment and is best estimated by the intention-to-treat (ITT) analysis [...]
@@ -135,7 +157,98 @@ In public health, we are normally concerned with the first question -- the effec
 There are 2 reasons why the average causal effect ofreceiving a treatment may be more important than the ITT for some people. First, even in the public health domain, investigators may want to know what the average causal effect of a treatment program would be if they could improve participation in the program. [...] Also, the average causal effect of receiving a treatment is of primary interest to a patient deciding whether or not to take the treatment as recommended.
 \end{quote}
 
-As Shrier suggests, we can consider the potential outcomes $\RV{Y}(0)$ and $\RV{Y}(1)$ to represent the outcomes of an individual who is merely \emph{assigned} a treatment or of an individual who is \emph{actually given} a treatment. Note that in the former case, at least for a public health decision maker, one could reasonably suppose that the assignment function $C_W$ was fully controlled by the decisions available - we can be absolutely certain, choosing $d=1$, that the patient is assigned a treatment and likewise that they are not assigned for $d=0$, for all $\theta$. However, if the patient's chance to actually take the treatment may differ from experimental conditions - or even worse, if we are the patient and we \emph{know} that we will take the treatment if we should decide to - then it is unclear how the potential outcomes model given would help to determine the expected consequences of a decision as the potential outcomes underlying the causal effect are now inappropriate. On the other hand, if we suppose that potential outcomes represent the outcomes of \emph{taking} a treatment, then we can understand the difference between the three scenarios as differences in $C_W$ - in the first case, we do not know $C_W$ or $H_W$, but we do know that $H_W$ factorises as $H_W = \splitter{0.1}(I\otimes H_A)H_W'$ where $H_A:\Theta\to \Delta(A)$ is a treatment assignment function and $H_W':\Theta\times A\to \Delta(W)$ is the treatment taking function. We also know $C_W = (I\otimes C_A) H_W'$ where $C_A:D\to \Delta(A)$ is a known assignment function. In the second case we do not know $H_W$ or $C_W$ nor do we necessarily have a relationship between the two, but we might posit some similarity. In the third case we know $C_W(\theta,d;\cdot)$ exactly -- deciding to take the treatment means we definitely take the treatment and vise versa.
+Concretely, suppose we have two dextrous theories $\mathbf{T}^{\mathrm{ITT}}$ and $\mathbf{T}^{\mathrm{RT}}$ modelling effects of intention-to-treat and receiving treatment respectively, and we want pragmatic theories $\mathbf{T}^p,\mathbf{T}^t$ describing the effects of prescribing treatment and taking treatment respectively. Consider the first decision problem described: we have two pragmatic decisions $D^p=\{0,1\}$ where $d_p=1$ corresponds to ``implement a treatment program'' and $d_p=0$ corresponds to ``do nothing''. Under the intention to treat model $\mathbf{T}^{\mathrm{ITT}}$ we are willing to accept that these decisions correspond determinisically setting $\RV{W}=1$ and $\RV{W}=0$ respectively. That is, we suppose that the consequence of choosing $d_p=1$ in the pragmatic theory $\mathbf{T}^p$ is the same as the consequence of choosing the decision $e\in D^{\mathrm{ITT}}$ such that for all $\theta,x,y_0,y_1$, $\mathbf{B}^{\mathrm{ITT}}_{\theta,d,x,y_0,y_1} = \delta_1$. 
+
+Consider the same problem -- that of implementing a treatment program -- for the dextrous theory of receiving treatment $\mathbf{T}^{\mathrm{RT}}$. Here, a correspondence between $D^p$ and $D^{\mathrm{RT}}$ is less clear. We may accept that implementing a treatment program corresponds to \emph{some} choice of treatment taking function $\mathbf{B}^{\mathrm{RT}}$, one that is perhaps more likely to result in treatment than that for doing nothing. That is, we have a vague idea that there might be a correspondence between $D^{\mathrm{RT}}$ and $D^p$, and we could express our uncertainty with a set of possible correspondences or a probability measure over correspondences, but we don't clearly have a single correspondence to work with.
+
+Finally, consider the third decision problem, where decisions correspond to taking the treatment, and in particular consider using the dextrous theory $\mathbf{T}^{\mathrm{ITT}}$. It is very likely that \emph{no} choice of prescription function $\RV{W}^{\mathrm{ITT}}$ is consistent with the test subjects always taking the treatment. That is, we're not just uncertain about the correspondence between dextrous decisions $D^{\mathrm{ITT}}$ and pragmatic decisions $D^t$ - we are in fact confident that there is no such correspondence.
+
+\section{Comparing Causal Bayesian Networks and Potential Outcomes theories}
+
+We can easily see that the causal theories associated with a CBN and a potential outcomes model are typically rather different. For example, a CBN $\mathcal{G}$ defines an intervention operation for every random variable that has been represented as a node of $\mathcal{G}$ while a PO model $\mathscr{O}$ (at least in the version developed here) will typically not allow any decisions that deterministically set $\RV{Y}$ and no decisions may affect $\RV{X}$ at all. On the other hand, decisions in a theory $\mathbf{T}^{\mathscr{O}}$ may yield arbitrary dependence of $\RV{W}$ on a number of unobserved quantities, which is not a possibility at least for the basic type of CBN discussed here.
+
+However, it may be the case that the pragmatic theory we derive from a dextrous CBN or PO theory is common to both.
+
+Suppose we have a CBN $\mathcal{G}:=W\rightarrowtriangle Y$, where $\RV{W}$ and $\RV{Y}$ are random variables taking values in some arbitrary spaces $W$ and $Y$. Suppose also that we require a pragmatic theory $\mathbf{T}^\mathcal{G}:\Theta\times W\to \Delta([\mathcal{W}\otimes\mathcal{Y}]^2)$ where our decisions correspond only to ``hard do interventions'' $do(W=w)$ on $\RV{W}$ under the full CBN theory -- that is, we have no decisions corresponding to do-interventions on $\RV{Y}$ or do-nothing. Then there exist Markov kernels $\mathbf{W}:\Theta\to \Delta(\mathcal{W})$, $\mathbf{Y}:\Theta\times W\to \Delta(\mathcal{Y})$  such that $\mathbf{T}^\mathcal{G}$ can be represented as in the diagram \ref{eq:twovar_ecbn}. Conversely, any causal theory that can be represented in this manner is a candidate for $\mathbf{T}^\mathcal{G}$ (see \ref{sec:cbn_as_ct})
+\begin{align}
+\begin{tikzpicture}
+ \path (0,0) coordinate (T)
+  + (0,-1.15) coordinate (D)
+  ++(0.5,0) coordinate (copy0)
+  ++(1,0) coordinate (n0)
+  +(-0.5,0.8) coordinate (copy1)
+  +(0,1) node[kernel] (X) {$\mathbf{X}$}
+  +(0,-1) node[kernel] (Id) {$\mathbf{Id}_W$}
+  +(0.6,-1.15) coordinate (copy2)
+  ++(1.2,0) coordinate (n1)
+  +(-0.6,1) coordinate (copy3)
+  +(0,1) node[kernel] (Y) {$\mathbf{Y}$}
+  +(0,-1) node[kernel] (Y1) {$\mathbf{Y}$}
+  ++(1,0) coordinate (n2)
+  +(0,1.5) node (Xout) {$\RV{W}$}
+  +(0,1) node (Yout) {$\RV{Y}$}
+  +(0,-0.5) node (Xout1) {$\RV{W}_C$}
+  +(0,-1) node (Yout1) {$\RV{Y}_C$};
+  \draw (T) -- (copy0);
+  \draw (D) -- ($(Id.west)+(0,-0.15)$);
+  \draw (copy0) to [bend left] (copy1) to [bend left] (X);
+  \draw (copy1) to [bend right] ($(Y.west)+(0,-0.15)$);
+  \draw (copy0) to [bend right = 10] ($(Y1.west)+(0,0.15)$);
+  \draw ($(Id.east)+(0,-0.15)$) -- ($(Y1.west)+(0,-0.15)$);
+  \draw (copy2) to [bend left] (Xout1);
+  \draw (copy3) to [bend left] (Xout);
+  \draw (X) -- (Y) -- (Yout);
+  \draw (Y1) -- (Yout1);
+ \end{tikzpicture} \label{eq:twovar_ecbn}
+ \end{align}
+
+ Suppose we have a PO model $\mathscr{O}=\langle \mathbf{P}, \mathbf{W}, \mathbf{Y} \rangle$ on $\Theta$, $W$ and $Y$ such that $\mathbf{W}$ depends only on $\Theta$. Suppose also that we require a pragmatic theory where, similarly to the case above, decisions correspond only to ``setting'' $\RV{W}$ in the standard theory associated with $\mathscr{O}$. Then the resulting theory can be represented by the diagram \ref{eq:twovar_epo}. Conversely, there is a PO model for every causal theory with this representation.
+
+\begin{align}
+\begin{tikzpicture}
+	\path (0,0) coordinate (A)
+	+ (0,-1.65) coordinate (D)
+	++ (1,0) coordinate (copy0)
+	++ (1,0) coordinate (cent0)
+	+(0,1) node[kernel] (HPO) {$\mathbf{P}$}
+	+(0,-1) node[kernel] (HPOC) {$\mathbf{P}$}
+	++ (1.3,0) coordinate (cent1)
+	+(0,0.5) node[kernel] (HW) {$\mathbf{W}$}
+	+(0,-1.5) node[kernel] (CW) {$\mathbf{Id}_W$}
+	++(1,0) coordinate (cent2)
+	+ (0,1) node[kernel] (HY) {$\mathbf{Y}$}
+	+ (0,-1) node[kernel] (HYC) {$\mathbf{Y}$}
+	++(1,0) coordinate (cent3)
+	+(0,1) node (Y) {$\RV{Y}$}
+	+(0,0.5) node (W) {$\RV{W}$}
+	+(0,-1) node (YC) {$\RV{Y}_C$}
+	+(0,-1.5) node (WC) {$\RV{W}_C$};
+	\draw (A) -- (copy0);
+	\draw (copy0) to [bend left=20] (HPO);
+	\draw (copy0) to [bend left=20] ($(HW.west)+(0,-0.1)$);
+	\draw (copy0) to [bend right=20] (HPOC);
+	\draw (D) -- ($(CW.west)+(0,-0.15)$);
+	\draw (HY) -- (Y) (HYC) -- (YC) (HW) -- (W) (CW) -- (WC);
+	\draw (HPO) -- (HY) (HPOC) -- (HYC);
+	\draw ($(HW.east)+(0,0.1)$) to [bend left = 20] ($(HY.west)+(0,-0.1)$) ($(CW.east) + (0,0.1)$) to [bend left = 20] ($(HYC.west)+(0,-0.1)$);
+\end{tikzpicture} \label{eq:twovar_epo}
+ \end{align}
+
+
+
+% We will propose, somewhat weakly, that given a well-specified potential outcomes model, decisions correspond to modifications of $H_W$. This supposition generalises the approach to policy modelling found in \cite{heckman_policy-relevant_2001.} As there is no general way to identify an arbitrary set of decisions $D$ with different assignment functions $H_W$, we offer (weakly) that the answer to the question in the paragraph above is ``no''. However, given knowledge of the ``decision-influenced treatment assignment'' $C_W:\Theta\times D\to \{0,1\}^n$, we \emph{can} define a causal theory via the four elements $\langle H_{PO}, H_W, H_Y, C_W\rangle$. We've supposed here there are $n$ ``observational'' units and $n$ ``consequence'' units, a restriction that simplifies the notation and is fairly easy to lift. Concretely, the causal theory is:
+
+% First, suppose a potential outcomes model $\langle H_{PO}, H_W, H_Y \rangle$ is used in the evaluation of a public program, and it is intended to inform a choice between decisions $d=0$: cut funding or $d=1$: maintain funding. Suppose we also have $C_W$ such that
+% \begin{itemize}
+% \item $d=1$ leaves the assignment function unchanged; $C_W(\theta,1;A) = H_W(\theta;A)$ for all $\theta, A$
+% \item $d_0$ means no-one receives treatment; $C_W(\theta,0;A) = \delta_0(A)$ for all $\theta, A$.
+% \end{itemize}
+
+% Supposing $Y=[0,1]$ and positing a utility function $u:=\pi_{Y}$, we can compare the utilities of decisions $0$ and $1$ for state $\theta$ by $Tu(\theta,1)-Tu(\theta,0)$ (in more familiar notation, $\mathbb{E}_{T(\theta,1;\cdot)}[u] - \mathbb{E}_{T(\theta,0;\cdot)}[u]$). By construction, if we let $H^*$ be the ``expanded'' version of $H$ above, $Tu(\theta,1)-Tu(\theta,0)=H^*_{\theta|\RV{W}}\pi_{\RV{Y}(1)}(1) - H^*_{\theta|\RV{W}}\pi_{\RV{Y}(0)}(1)$; this is because only the units for which $\RV{W}=1$ have different outcomes under the different decisions. This quantity is known as the \emph{effect of treatment on the treated} (ETT) \citep{heckman_randomization_1991}. 
+
+% \todo[inline]{ETT is common in the causal literature, but this is as far as I know the first example where it is formally derived as the difference between outcomes under different decisions, so I should probably do it properly}
+
+
 
 % We recall the abstract state space $\Theta$ and define a sequence of measurable ``potential outcomes'' $\RV{Y}_i^0,\RV{Y}_i^1:\Theta\to Y$ and measurable ``background facts'' $\RV{X}^*_i:\Theta\to X$ for all $i\in[n]$. As $\Theta$ is \emph{not} the sample space of a statistical experiment we will not call potential outcomes or background facts random variables. In addition, we have a Markov kernel $H:\Theta\to \Delta(E)$ for some measurable space $E$ and random variables $\RV{Y}_i:E\to Y$ and $\RV{W}_i:E\to \{0,1\}$, $\RV{X}_i:E\to X$. Let $\RV{X}$ stand for the composite variable made from the entire sequence of $\RV{X}_i$ and similar for other RVs. This is consistent with Rubin's approach:
 % \begin{quote}
