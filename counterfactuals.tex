@@ -165,9 +165,7 @@ Finally, consider the third decision problem, where decisions correspond to taki
 
 \section{Comparing Causal Bayesian Networks and Potential Outcomes theories}
 
-We can easily see that the causal theories associated with a CBN and a potential outcomes model are typically rather different. For example, a CBN $\mathcal{G}$ defines an intervention operation for every random variable that has been represented as a node of $\mathcal{G}$ while a PO model $\mathscr{O}$ (at least in the version developed here) will typically not allow any decisions that deterministically set $\RV{Y}$ and no decisions may affect $\RV{X}$ at all. On the other hand, decisions in a theory $\mathbf{T}^{\mathscr{O}}$ may yield arbitrary dependence of $\RV{W}$ on a number of unobserved quantities, which is not a possibility at least for the basic type of CBN discussed here.
-
-However, it may be the case that the pragmatic theory we derive from a dextrous CBN or PO theory is common to both.
+Expressing both CBNs and PO models as causal theories allows us to compare theories expressed with each system, and we see that causal theories associated with each framework are are typically rather different. For example, a CBN $\mathcal{G}$ defines an intervention operation for every random variable that has been represented as a node of $\mathcal{G}$ while a PO model $\mathscr{O}$ (at least in the version developed here) will typically not allow any decisions that deterministically set $\RV{Y}$ and no decisions may affect $\RV{X}$ at all. On the other hand, decisions in a theory $\mathbf{T}^{\mathscr{O}}$ may yield arbitrary dependence of $\RV{W}$ on a number of unobserved quantities, which is not a possibility at least for the basic type of CBN discussed here. However, it may be the case that the pragmatic theory we derive from a dextrous CBN or PO theory is common to both.
 
 Suppose we have a CBN $\mathcal{G}:=W\rightarrowtriangle Y$, where $\RV{W}$ and $\RV{Y}$ are random variables taking values in some arbitrary spaces $W$ and $Y$. Suppose also that we require a pragmatic theory $\mathbf{T}^\mathcal{G}:\Theta\times W\to \Delta([\mathcal{W}\otimes\mathcal{Y}]^2)$ where our decisions correspond only to ``hard do interventions'' $do(W=w)$ on $\RV{W}$ under the full CBN theory -- that is, we have no decisions corresponding to do-interventions on $\RV{Y}$ or do-nothing. Then there exist Markov kernels $\mathbf{W}:\Theta\to \Delta(\mathcal{W})$, $\mathbf{Y}:\Theta\times W\to \Delta(\mathcal{Y})$  such that $\mathbf{T}^\mathcal{G}$ can be represented as in the diagram \ref{eq:twovar_ecbn}. Conversely, any causal theory that can be represented in this manner is a candidate for $\mathbf{T}^\mathcal{G}$ (see \ref{sec:cbn_as_ct})
 \begin{align}
@@ -177,7 +175,7 @@ Suppose we have a CBN $\mathcal{G}:=W\rightarrowtriangle Y$, where $\RV{W}$ and 
   ++(0.5,0) coordinate (copy0)
   ++(1,0) coordinate (n0)
   +(-0.5,0.8) coordinate (copy1)
-  +(0,1) node[kernel] (X) {$\mathbf{X}$}
+  +(0,1) node[kernel] (X) {$\mathbf{W}$}
   +(0,-1) node[kernel] (Id) {$\mathbf{Id}_W$}
   +(0.6,-1.15) coordinate (copy2)
   ++(1.2,0) coordinate (n1)
@@ -216,8 +214,8 @@ Suppose we have a CBN $\mathcal{G}:=W\rightarrowtriangle Y$, where $\RV{W}$ and 
 	+(0,0.5) node[kernel] (HW) {$\mathbf{W}$}
 	+(0,-1.5) node[kernel] (CW) {$\mathbf{Id}_W$}
 	++(1,0) coordinate (cent2)
-	+ (0,1) node[kernel] (HY) {$\mathbf{Y}$}
-	+ (0,-1) node[kernel] (HYC) {$\mathbf{Y}$}
+	+ (0,1) node[kernel] (HY) {$\mathbf{Y}'$}
+	+ (0,-1) node[kernel] (HYC) {$\mathbf{Y}'$}
 	++(1,0) coordinate (cent3)
 	+(0,1) node (Y) {$\RV{Y}$}
 	+(0,0.5) node (W) {$\RV{W}$}
@@ -232,9 +230,9 @@ Suppose we have a CBN $\mathcal{G}:=W\rightarrowtriangle Y$, where $\RV{W}$ and 
 	\draw (HPO) -- (HY) (HPOC) -- (HYC);
 	\draw ($(HW.east)+(0,0.1)$) to [bend left = 20] ($(HY.west)+(0,-0.1)$) ($(CW.east) + (0,0.1)$) to [bend left = 20] ($(HYC.west)+(0,-0.1)$);
 \end{tikzpicture} \label{eq:twovar_epo}
- \end{align}
+\end{align}
 
-
+In the lower diagram we can define $\mathbf{Y}^*:= (\mathbf{P}\otimes\matbf{Id})\mathbf{Y}'$ to produce a diagram that is topologically equivalent to \ref{eq:twovar_ecbn}. While $\mathbf{P}$ and $\mathbf{W}$ are arbitrary, $\mathbf{Y}'$ has a particular form. It is still possible to express a general kernel $\mathbf{Y}:\Theta\times W\to \Delta(\mathcal{Y})$ in the form of $\mathbf{Y}^*$; let $\mathbf{P}:\theta\mapsto \mathbf{Y}_{\theta,0}\otimes\mathbf{Y}_{\theta,1}$. Then $\mathbf{Y}^*=\mathbf{Y}$. Thus under the restrictions given, the sets of viable pragmatic theories derived from the CBN and the PO model are exactly the same.
 
 % We will propose, somewhat weakly, that given a well-specified potential outcomes model, decisions correspond to modifications of $H_W$. This supposition generalises the approach to policy modelling found in \cite{heckman_policy-relevant_2001.} As there is no general way to identify an arbitrary set of decisions $D$ with different assignment functions $H_W$, we offer (weakly) that the answer to the question in the paragraph above is ``no''. However, given knowledge of the ``decision-influenced treatment assignment'' $C_W:\Theta\times D\to \{0,1\}^n$, we \emph{can} define a causal theory via the four elements $\langle H_{PO}, H_W, H_Y, C_W\rangle$. We've supposed here there are $n$ ``observational'' units and $n$ ``consequence'' units, a restriction that simplifies the notation and is fairly easy to lift. Concretely, the causal theory is:
 

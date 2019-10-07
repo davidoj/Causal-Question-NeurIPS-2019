@@ -12,3 +12,63 @@ Given $D$, $E$, $\Theta$, random variables $\{\RV{X}^i\}_{i\in [n]}$ on $E$, a d
     \item For all $i\neq 0$, $C_{\theta|\PA{\mathcal{G}}{\RV{X}^i}} F_{\RV{X}^i}=H_{\theta|\PA{\mathcal{G}}{\RV{X}^i}}F_{\RV{X}^i} $, $H_\theta$-almost surely
 \end{enumerate}
 \end{definition}
+
+
+\section{Appendix: No causes in no causes out}\label{sec:ncinco}
+
+A key result in statistical learning theory is the requirement that, in order for a hypothesis class to be learnable, it must have finite VC-dimension. The concept of controlling the size of the hypothesis class plays a fundamental role across the field of machine learning, from formal proofs of learnability to techniques based less formally on the notion of the bias-variance tradeoff. CSDPs are closely related to statistical learning problems, and it is highly likely that results of this type can be developed for causal problems.
+
+Apart from any inductive biases necessary for learnability, causal theories also require a \emph{decision bias} - a causal theory that does not distinguish decisions yields only trivial results. This is distinct from a restriction on the flexibility or capacity of a causal theory. Given a prior, the requirement is that, conditional on some set of observations, a causal theory yields different consequences for different decisions. 
+
+Define the pairwise swap $U_{dd'}:D\to \Delta(\mathcal{D})$ to be the kernel that sends $d\mapsto \delta_{d'}$, $d'\mapsto \delta_d$ and all other $d''\to \delta_{d''}$.
+
+\begin{theorem}[No causes in, no causes out (Bayes)]\label{th:ncinco}
+If a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ and a prior $\xi\in \Delta(\Theta)$ are such that for all pairwise swaps $U_{dd'}:D\to \Delta(\mathcal{D})$, $(\xi\otimes U_{dd'})T = (\xi\otimes I)T$ and $D$ is discrete then all decision strategies are Bayes.
+\end{theorem}
+
+\begin{proof}
+Defining $F_{\_d_0}:d\mapsto \delta_{d_0}$ for all $d\in D$, we will show that for all $J$, $S_\xi(J)=S_\xi(JF_{\_d_0}):=S_0$.
+
+By assumption, for all $d\in D$, utility functions $u$:
+\begin{align}
+	\int_\Theta H_\theta J(\{d\}) C_\theta u(d) d\xi &= \int_\Theta H_\theta J(\{d\}) U_{dd_0} C_\theta u(d) d\xi\\
+													 &= \int_\Theta H_\theta J(\{d\}) F_{\_d_0} C_\theta u(d) d\xi\label{eq:agree_on_d}\\
+\therefore \sum_{d\in D} \int_\Theta H_\theta J(\{d\}) F_{\_d_0} C_\theta(d;A) d\xi &= \sum_{d\in D} \int_\Theta H_\theta J(\{d\}) C_\theta u(d) d\xi\\
+													 &= \int_\Theta \sum_{d\in D} H_\theta J(\{d\}) C_\theta u (d) d\xi\\
+													 &= \int_\Theta H_\theta J C_\theta u d\xi\\
+													 &= S_\xi(J)\\
+													 &= S_\xi(JF_{\_d_0})
+\end{align}
+Where \ref{eq:agree_on_d} follows from the fact that evaluation at $d$ guarantees $U_{dd_0} C_\theta u(d) = F_{\_d_0} C_\theta u(d)$.
+\end{proof}
+
+\begin{corollary}
+If a causal theory $T$ with a prior $\xi$ and discrete decision set $D$ yields a nontrivial ordering of decision strategies, then there exists $d,d'\in D$ such that $(\xi\otimes \delta_d) T\neq (\xi\otimes \delta_{d'}) T$.
+\end{corollary}
+
+Somewhat surprisingly, the minimax rule may yield preferences over decisions under such circumstances; in particular, a uniform strategy is always minimax, though other strategies may not be. This is because the consequences of a uniform strategy may be less extreme than the consequences of any other strategy.
+
+\begin{theorem}[No causes in, uniform strategy out (minimax)]
+If a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ with finite $D$ is such that for all pairwise swaps $U_{dd'}:D\to \Delta(\mathcal{D})$, $\theta\in \Theta$ there is some $\theta'$ such that $T_{\theta,\cdot} = (I\otimes U)T_{\theta',\cdot}$ then the uniform decision strategy is minimax.
+\end{theorem}
+
+\begin{proof}
+Note that for finite $D$, the invertible maps $D\to \Delta(\mathcal{D})$ are permutation maps which can be factorised as a sequence of pairwise swaps.
+
+Call $J_U$ the stubborn uniform strategy $J_U:x\mapsto U(\mathcal{D})$ for all $x\in E$. Suppose there is some nonuniform $J$ such that $\max_\theta S(J,\theta) < \max_\theta S(J_U,\theta)$. Suppose $S(J_U,\theta)$ is maximised in some state $\theta^0$ where $S(J_d,\theta^0)=S(J_{d'},\theta^0)$ for all $d,d'\in D$. Then $S(J,\theta^0)=S(J_U,\theta^0)$, contraticting our assumption that $J$ achieved lower risk in the worst case. Suppose $S(J_U,\theta)$ is maximised in some state $\theta^1$ where there are some $d,d'\in D$ such that $S(J_d,\theta^1)>S(J_{d'},\theta^1)$. Then there are most $|D|/2$ decisions where $S(J_d,\theta^1)$ is greater than the median of $A=\{S(J_d,\theta^1)|d\in D\}$ and at least one such decision, and at least $|D|/2$ decisions such that $\mu_{\theta^1} J(d)$ is greater than or equal to the median of $B=\{\mu_{\theta^1} J(d)|d\in D\}$, with at least one strictly greater. Thus there is an invertible map $f:D\to D$ such that $f(A)\subset B$. But then there is some $\theta^2$ such that $S(J_d,\theta^1)=S(J_{f(d)},\theta^2)$ for all $d\in D$ and thus $S(J,\theta^2)> S(J_U,\theta^2) = S(J_U,\theta^1)$ contradicting our assumption that $J$ was better by the minimax rule than $J_U$.
+\end{proof}
+
+\begin{corollary}
+If the risk of the uniform strategy is maximised in some state $\theta^*$ such that $S(J_d,\theta^*)>S(J_{d'},\theta^*)$ for some $d,d'$, then the uniform strategy is strictly better than any nonuniform strategy.
+\end{corollary}
+
+Thus for a causal theory to support nontrivial results, we require for Bayes rules a prior $xi$ such that $(\xi\otimes \delta_d)T$ depends on $d$, or for the minimax rule that the \emph{set} of distributions mapped by the theory $\mathscr{T}_d:=\{T_{\theta,d}|\theta\in\Theta\}$ depends on the decision $d$. We will say that such theories/priors exhibit a \emph{decision bias}. 
+
+From one point of view, this result might be expected: if we believe
+\begin{itemize}
+\item Any possible consequence of $d_1$ might equally be a consequence of $d_2$ and vise versa
+\item Any data we encounter is equally consistent with $d_1$ having some set of consequences or with $d_2$ having that same set of consequences
+\end{itemize}
+Then we ought to be indifferent between $d_1$ or $d_2$ whatever data we see.
+
+No causes in, no causes out (NCINCO) implies that some common principles commonly applied to causal inference, in isolation, can only yield trivial theoreis. Without any notion of intervention, causal inference based solely on principles such as the invariance of conditionals \citet{arjovsky_invariant_2019,peters_causal_2016}, a preference for low complexity consequences \citet{lemeire_replacing_2013} or faithfulness \citet{spirtes_causation_1993} would yield triviality. As discussed in Section \ref{sec:counterfactuals}, we also require assumptions on the effects of decisions to to get a causal theory from a potential outcomes model.

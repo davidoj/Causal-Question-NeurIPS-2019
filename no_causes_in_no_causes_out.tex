@@ -1,77 +1,28 @@
 %!TEX root = main.tex
 
-\section{No causes in no causes out}
+\section{Coarsening and Saved Inference}
 
-A key result in statistical learning theory is the requirement that, in order for a hypothesis class to be learnable, it must have finite VC-dimension. The concept of controlling the size of the hypothesis class plays a fundamental role across the field of machine learning, from formal proofs of learnability to techniques based less formally on the notion of the bias-variance tradeoff. CSDPs are closely related to statistical learning problems, and it is highly likely that results of this type can be developed for causal problems.
+The causal theories associated with both CBN and PO models are very profligate. They define many decisions that are unlikely to be considered in a pragmatic decision problem, and in practice it is usually only possible to determine the consequences of a small subset of these decisions if it is possible to determine any at all. In additon, proponents of both theories have advocated for the universality of the ``causal effects'' they represent:
 
-Apart from any inductive biases necessary for learnability, causal theories also require a \emph{decision bias} - a causal theory that does not distinguish decisions yields only trivial results. This is distinct from a restriction on the flexibility or capacity of a causal theory. Given a prior, the requirement is that, conditional on some set of observations, a causal theory yields different consequences for different decisions. 
+\begin{quote}
+The perspective that (1) the science exists independently of how we try to learn about it and that (2) if the model used for analysis of the resulting data is approximately correct, then the resulting posterior distribution will give a fair summary of the current state of knowledge of that science seems, at least to me, consistent with common views of the scientific enterprise
+[...]
+The potential outcomes, together with covariates, define the science in the sense that all causal estimands are functions of these values \citep{rubin_causal_2005}
+\end{quote}
 
-Define the pairwise swap $U_{dd'}:D\to \Delta(\mathcal{D})$ to be the kernel that sends $d\mapsto \delta_{d'}$, $d'\mapsto \delta_d$ and all other $d''\to \delta_{d''}$.
+\begin{quote}
+By representing the domain in the form of an assembly of stable mechanisms, we have in fact created an oracle capable of answering queries about the effects of a huge set of actions and action combinations \citep{pearl_causality:_2009}
+\end{quote}
 
-\begin{theorem}[No causes in, no causes out (Bayes)]\label{th:ncinco}
-If a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ and a prior $\xi\in \Delta(\Theta)$ are such that for all pairwise swaps $U_{dd'}:D\to \Delta(\mathcal{D})$, $(\xi\otimes U_{dd'})T = (\xi\otimes I)T$ and $D$ is discrete then all decision strategies are Bayes.
-\end{theorem}
+We present here a somewhat speculative account of what both of these approaches are trying to achieve based on the notions of \emph{coarsening} and \emph{saved inference}. With these, we can show that it is sometimes possible to reuse the results of inference performed with a dextrous theory $\mathbf{T}$ with a more pragmatic theory $\mathbf{T}'$.
 
-\begin{proof}
-Defining $F_{\_d_0}:d\mapsto \delta_{d_0}$ for all $d\in D$, we will show that for all $J$, $S_\xi(J)=S_\xi(JF_{\_d_0}):=S_0$.
-
-By assumption, for all $d\in D$, utility functions $u$:
-\begin{align}
-	\int_\Theta H_\theta J(\{d\}) C_\theta u(d) d\xi &= \int_\Theta H_\theta J(\{d\}) U_{dd_0} C_\theta u(d) d\xi\\
-													 &= \int_\Theta H_\theta J(\{d\}) F_{\_d_0} C_\theta u(d) d\xi\label{eq:agree_on_d}\\
-\therefore \sum_{d\in D} \int_\Theta H_\theta J(\{d\}) F_{\_d_0} C_\theta(d;A) d\xi &= \sum_{d\in D} \int_\Theta H_\theta J(\{d\}) C_\theta u(d) d\xi\\
-													 &= \int_\Theta \sum_{d\in D} H_\theta J(\{d\}) C_\theta u (d) d\xi\\
-													 &= \int_\Theta H_\theta J C_\theta u d\xi\\
-													 &= S_\xi(J)\\
-													 &= S_\xi(JF_{\_d_0})
-\end{align}
-Where \ref{eq:agree_on_d} follows from the fact that evaluation at $d$ guarantees $U_{dd_0} C_\theta u(d) = F_{\_d_0} C_\theta u(d)$.
-\end{proof}
-
-\begin{corollary}
-If a causal theory $T$ with a prior $\xi$ and discrete decision set $D$ yields a nontrivial ordering of decision strategies, then there exists $d,d'\in D$ such that $(\xi\otimes \delta_d) T\neq (\xi\otimes \delta_{d'}) T$.
-\end{corollary}
-
-Somewhat surprisingly, the minimax rule may yield preferences over decisions under such circumstances; in particular, a uniform strategy is always minimax, though other strategies may not be. This is because the consequences of a uniform strategy may be less extreme than the consequences of any other strategy.
-
-\begin{theorem}[No causes in, uniform strategy out (minimax)]
-If a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ with finite $D$ is such that for all pairwise swaps $U_{dd'}:D\to \Delta(\mathcal{D})$, $\theta\in \Theta$ there is some $\theta'$ such that $T_{\theta,\cdot} = (I\otimes U)T_{\theta',\cdot}$ then the uniform decision strategy is minimax.
-\end{theorem}
-
-\begin{proof}
-Note that for finite $D$, the invertible maps $D\to \Delta(\mathcal{D})$ are permutation maps which can be factorised as a sequence of pairwise swaps.
-
-Call $J_U$ the stubborn uniform strategy $J_U:x\mapsto U(\mathcal{D})$ for all $x\in E$. Suppose there is some nonuniform $J$ such that $\max_\theta S(J,\theta) < \max_\theta S(J_U,\theta)$. Suppose $S(J_U,\theta)$ is maximised in some state $\theta^0$ where $S(J_d,\theta^0)=S(J_{d'},\theta^0)$ for all $d,d'\in D$. Then $S(J,\theta^0)=S(J_U,\theta^0)$, contraticting our assumption that $J$ achieved lower risk in the worst case. Suppose $S(J_U,\theta)$ is maximised in some state $\theta^1$ where there are some $d,d'\in D$ such that $S(J_d,\theta^1)>S(J_{d'},\theta^1)$. Then there are most $|D|/2$ decisions where $S(J_d,\theta^1)$ is greater than the median of $A=\{S(J_d,\theta^1)|d\in D\}$ and at least one such decision, and at least $|D|/2$ decisions such that $\mu_{\theta^1} J(d)$ is greater than or equal to the median of $B=\{\mu_{\theta^1} J(d)|d\in D\}$, with at least one strictly greater. Thus there is an invertible map $f:D\to D$ such that $f(A)\subset B$. But then there is some $\theta^2$ such that $S(J_d,\theta^1)=S(J_{f(d)},\theta^2)$ for all $d\in D$ and thus $S(J,\theta^2)> S(J_U,\theta^2) = S(J_U,\theta^1)$ contradicting our assumption that $J$ was better by the minimax rule than $J_U$.
-\end{proof}
-
-\begin{corollary}
-If the risk of the uniform strategy is maximised in some state $\theta^*$ such that $S(J_d,\theta^*)>S(J_{d'},\theta^*)$ for some $d,d'$, then the uniform strategy is strictly better than any nonuniform strategy.
-\end{corollary}
-
-Thus for a causal theory to support nontrivial results, we require for Bayes rules a prior $xi$ such that $(\xi\otimes \delta_d)T$ depends on $d$, or for the minimax rule that the \emph{set} of distributions mapped by the theory $\mathscr{T}_d:=\{T_{\theta,d}|\theta\in\Theta\}$ depends on the decision $d$. We will say that such theories/priors exhibit a \emph{decision bias}. 
-
-From one point of view, this result might be expected: if we believe
-\begin{itemize}
-\item Any possible consequence of $d_1$ might equally be a consequence of $d_2$ and vise versa
-\item Any data we encounter is equally consistent with $d_1$ having some set of consequences or with $d_2$ having that same set of consequences
-\end{itemize}
-Then we ought to be indifferent between $d_1$ or $d_2$ whatever data we see.
-
-No causes in, no causes out (NCINCO) implies that some common principles commonly applied to causal inference, in isolation, can only yield trivial theoreis. Without any notion of intervention, causal inference based solely on principles such as the invariance of conditionals \citet{arjovsky_invariant_2019,peters_causal_2016}, a preference for low complexity consequences \citet{lemeire_replacing_2013} or faithfulness \citet{spirtes_causation_1993} would yield triviality. As discussed in Section \ref{sec:counterfactuals}, we also require assumptions on the effects of decisions to to get a causal theory from a potential outcomes model.
-
-While decision biases are clearly a crucial element of useful causal theories, both major approaches to causality discussed here tend to favour a thorough treatment of assumptions that permit ``inference'' but a cursory treatment assumptions that yield decision biases. CBNs supply a generic notion of intervention that is unlikely to be a generally appropriate notion of the effects of a decision (see, for example, \cite{hernan_does_2008}). In addition, a CBN defines many more interventions than are every going to be at the disposal of a decision maker in practice -- recall that we had to postulate a decision model for the CBN as well as the PO model in order to comapre the two. PO, on the other hand, appears to require a decision model to get off the ground at all. It appears to be the case that both approaches regard the details of ``effects of decisions'' as something that can be worked out later.
-
-We postulate the concept of \emph{modular extension} to formalise the notion of ``working out the effects of decisions later''. Informally, if a theory $T$ permits a modular extension to $T'$ then we can achieve the same result either by a) ``doing inference'' on $T'$ directly or b) ``doing inference'' on $T$ and then applying a decision model to yield $T'$. If $T$ is not a useful theory, but it can be modularly extended to a large number of theories $T'$ which we believe are useful, we may be best served by performing our analysis on $T$ and saving the results for later. Proponents of both CBN and PO approaches appear to endorse the interpretation that the theories they produce represent ``stable'' knowledge of the real world.
-
-We define this notion for theories equipped with a prior, and it is unclear if it can be extended to theories without a prior.
-
-\begin{definition}[Modular extension]
-A theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ equipped with a prior $\xi$ permits modular extension to a theory $T':\Theta\times D'\to \Delta(\mathcal{E}\otimes\mathcal{F})$ with the same prior $\xi$ if there exists $M:D'\to \Delta(\mathcal{D})$ such that $(\xi \otimes \mathrm{Id}_D) T'  = (\xi \otimes M) T$.
+\begin{definition}[Coarsening]
+A theory $\mathbf{T}:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ can be coarsened to a theory $\mathbf{T}':\Theta\times D'\to \Delta(\mathcal{E}\otimes\mathcal{F})$ if there exists $M:D'\to \Delta(\mathcal{D})$ such that $(\xi \otimes \mathrm{Id}_D) \mathbf{T}'  = (\xi \otimes M) \mathbf{T}$. We say that $\mathbf{T}'$ is \emph{clumsier} than $\mathbf{T}$ or $\mathbf{T}$ is \emph{more dextrous} than $\mathbf{T}'$.
 \end{definition}
 
-For the theory $T$, an event $A\in \mathcal{E}$ with $\xi H \mathds{1}_A >0$, write the theory conditioned on $A$ as $T_\xi|A:D\to \Delta(\mathcal{F})$, defined as
+Given $\mathbf{T}$, an event $A\in \mathcal{E}$ with $\xi H \mathds{1}_A >0$, write the theory conditioned on $A$ as $\mathbf{T}_\xi|A:D\to \Delta(\mathcal{F})$, defined as
 \begin{align}
- T_\xi|A:= (\xi H (A))^{-1}\begin{tikzpicture}
+ \mathbf{T}_\xi|A:= (\xi H (A))^{-1}\begin{tikzpicture}
 \path (0,0) node[dist] (theta) {$\xi$}
       +(0,-1) node (D) {}
       ++(0.5,0) coordinate (copy0)
@@ -87,22 +38,22 @@ For the theory $T$, an event $A\in \mathcal{E}$ with $\xi H \mathds{1}_A >0$, wr
 \end{tikzpicture}
 \end{align}
 
-Note that $T_\xi|A$ along with a strategy $\gamma\in \Delta(\mathcal{D})$ is the conditional probability of $\RV{F}$ by the elementary definition - for $B\in \mathcal{F}$, $T_{\xi,\gamma}|A:B\mapsto \frac{(\xi\otimes\gamma) T (A,B))}{\xi H (A)}$.
+Note that $\mathbf{T}_\xi|A$ along with a strategy $\gamma\in \Delta(\mathcal{D})$ is the conditional probability of $\RV{F}$ by the elementary definition - for $B\in \mathcal{F}$, $\mathbf{T}_{\xi,\gamma}|A:B\mapsto \frac{(\xi\otimes\gamma) \mathbf{T} (A,B))}{\xi H (A)}$.
 
 \begin{theorem}\label{th:mod_extn}
-If $T'$ is a modular extension of $T$ under the shared prior $\xi$ and module $M$, then for any strategy $\gamma$ we have $T'_{\gamma,\xi} | A = \gamma M T_\xi|A$.  
+Given any prior $\xi$, a strategy $\gamma$ and $A\in \mathcal{E}$ such that $\mathbf{T}_\xi|A$ is defined, then there exists $\mathbf{M}$ such that $\mathbf{T}'_{\gamma,\xi} | A = \gamma M \mathbf{T}_\xi|A$ if and only if $\mathbf{T}'$ is a coarsening of $\mathbf{T}$.
 \end{theorem}
 
 \begin{proof}
-By definition,
+Let the coarsening from $\mathbf{T}$ to $\mathbf{T}'$ be witnessed by $\mathbf{M}:D'\to \Delta(\mathcal{D})$. For arbitrary $\xi$, $A$ such that $\xi \mathbf{H} (A)>0$ and arbitrary $\gamma$:
 \begin{align}
-\gamma M T_\xi|A &= (\xi H (A))^{-1}\begin{tikzpicture}
+\gamma M \mathbf{T}_\xi|A &= (\xi \mathbf{H} (A))^{-1}\begin{tikzpicture}
 \path (0,0) node[dist] (theta) {$\xi$}
       +(0,-1) node[dist] (D) {$\gamma$}
-      +(0.5,-1) node[kernel] (M) {$M$}
+      +(0.5,-1) node[kernel] (M) {$\mathbf{M}$}
       ++(1,0) coordinate (copy0)
-      ++(1,0) node[kernel] (H) {$H$}
-      +(0,-1) node[kernel] (C) {$C$}
+      ++(1,0) node[kernel] (H) {$\mathbf{H}$}
+      +(0,-1) node[kernel] (C) {$\mathbf{C}$}
       ++(0.7,0) node[expectation] (E) {$\mathds{1}_A$}
       +(0,-1) node (F) {};
 \draw (theta) -- (copy0);
@@ -111,13 +62,16 @@ By definition,
 \draw (copy0) to [bend left] (H);
 \draw (H) -- (E);
 \end{tikzpicture}\\
-&= (\xi H (A))^{-1}\gamma (\xi\otimes M) T (\mathds{1}_A\otimes \mathrm{Id}_F)\\
-&= (\xi H (A))^{-1}\gamma (\xi\otimes \mathrm{Id}_D) T' (\mathds{1}_A\otimes \mathrm{Id}_F)\\
-&= T'_{\gamma,\xi} | A
+&= (\xi \mathbf{H} (A))^{-1}\gamma (\xi\otimes \mathbf{M}) \mathbf{T} (\mathds{1}_A\otimes \mathrm{Id}_F)\\
+&= (\xi \mathbf{H} (A))^{-1}\gamma (\xi\otimes \mathrm{Id}_D) \mathbf{T}' (\mathds{1}_A\otimes \mathrm{Id}_F)\\
+&= \mathbf{T}'_{\gamma,\xi} | A
 \end{align}
+
+
+
 \end{proof}
 
-In other words, if $T$ can be extended to $T'$ via $M$, then we can ``save'' the results of conditioning $T_\xi$ on $A$ via $T_\xi|A$ and later on we can determine the effects of some strategy $\gamma$ with respect to $T'$ via $\gamma M T_\xi|A$.
+In other words, if and only if $\mathbf{T}$ can be coarsened to $\mathbf{T}'$ then we can ``save'' the results of conditioning $\mathbf{T}_\xi$ on $A$ via $\mathbf{T}_\xi|A$ and later on we can determine the effects of some strategy $\gamma$ on $\mathbf{T}'$ via $\gamma \mathbf{M} \mathbf{T}_\xi|A$.
 
 We will return to our discussion of the the ``effect of taking the treatment'' for an example. Suppose we have $\Theta=[0,1]^2:=\Theta_1\otimes \Theta_2$ where given $(\theta_1,\theta_2)\in\Theta$ we identify $\theta_1$ with ``treatment efficacy'' and $\theta_2$ with ``treatment susceptibility''. Let $Y,W=\{0,1\}$ where $Y$ is the set of outcomes and $W$ indicates whether or not a patient took the treatment. Define a potential outcomes model $H_{PO}:\Theta\to \Delta(\mathcal{Y}^2)$, $H_W:\Theta\to \Delta(\mathcal{W})$ and $H_Y:W\times Y^2\to \Delta(\mathcal{Y})$. Furthermore, suppose we have $D=[0,1]^2$ and $C_W:\Theta_2\times D\to \Delta(\mathcal{W})$ defined by $C_W(\theta_2,d_1,d_2;A):= \theta_2(d_1\delta_1(A) (1-d_1)\delta_0(A)) + (1-\theta_2)(d_2\delta_1(A)+(1-d_2)\delta_0(A))$; that is, $d_1$ and $d_2$ parametrise the set of Markov kernels $\Theta_2\to \Delta(\mathcal{W})$. Then $\langle H_{PO},H_W,H_Y,C_W\rangle$ defines a causal theory $T$. Suppose we observe $A\in \mathcal{E}$; then for $(d_1,d_2)\in D$, $B\in \mathcal{E}$:
 
