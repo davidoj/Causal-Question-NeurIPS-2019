@@ -1,21 +1,27 @@
-\documentclass{article}
+\documentclass[twoside]{article}
 
-% if you need to pass options to natbib, use, e.g.:
-%     \PassOptionsToPackage{numbers, compress}{natbib}
-% before loading neurips_2019
+\usepackage{aistats2020}
+% If your paper is accepted, change the options for the package
+% aistats2020 as follows:
+%
+% \usepackage[accepted]{aistats2020}
+%
+% This option will print headings for the title of your paper and
+% headings for the authors names, plus a copyright note at the end of
+% the first column of the first page.
 
-% ready for submission
-% \usepackage{neurips_2019}
+% If you set papersize explicitly, activate the following three lines:
+%\special{papersize = 8.5in, 11in}
+%\setlength{\pdfpageheight}{11in}
+%\setlength{\pdfpagewidth}{8.5in}
 
-% to compile a preprint version, e.g., for submission to arXiv, add add the
-% [preprint] option:
-\usepackage[preprint]{neurips_2019}
+% If you use natbib package, activate the following three lines:
+\usepackage[round]{natbib}
+\renewcommand{\bibname}{References}
+\renewcommand{\bibsection}{\subsubsection*{\bibname}}
 
-% to compile a camera-ready version, add the [final] option, e.g.:
-    %  \usepackage[final]{neurips_2019}
-
-% to avoid loading the natbib package, add option nonatbib:
-%     \usepackage[nonatbib]{neurips_2019}
+% If you use BibTeX in apalike style, activate the following line:
+%\bibliographystyle{apalike}
 
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
@@ -29,7 +35,6 @@
 % My packages
 
 \usepackage[mathscr]{euscript}
-\usepackage{natbib}
 \usepackage{graphicx}
 \usepackage {tikz}
 \usetikzlibrary {positioning}
@@ -176,6 +181,7 @@
 \input{causal_bayesian_networks}
 \input{counterfactuals}
 \input{no_causes_in_no_causes_out}
+\input{discussion}
 % \input{when_is_PO_CBN_same}
 % \input{stable_consequences}
 % \input{category_theory_string_diagrams}

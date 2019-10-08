@@ -2,34 +2,21 @@
 
 \section{Statistical Decision Problems and Causal Statistical Decision Problems}
 
-A statistical decision problem (SDP) poses the following scenario: suppose we have a set of ``states of nature'' $\Theta$, a set of decisions $D$ and a loss function $l:\Theta\times D\to \mathbb{R}$. For each state of nature $\theta\in \Theta$ there is an associated probability measure $\mu_\theta\in \Delta(\mathcal{E})$ where $(E,\mathcal{E})$ is some measurable space. Call the stochastic map $H:\theta\mapsto \mu_\theta$ a \emph{statistical experiment}.\todo{Need a canonical measure on $\Theta$; the coarsest measure rendering the evaluation maps measurable?} Given a \emph{decision strategy} $\pi:E\to \Delta(\mathcal{D})$, define the \emph{risk} of $\pi$ given state $\theta$ to be the expected loss of $\pi$ in state $\theta$. Specifically, $R:\Pi\times \Theta\to \mathbb{R}$ given by $R:(\pi,\theta)\mapsto \delta_\theta \splitter{0.1}(H \pi\otimes \ID{\Theta}) l$, where we make use of the product notation and copy map for brevity.
+A statistical decision problem (SDP) poses the following scenario: suppose we have a set of ``states of nature'' $\Theta$, a set of decisions $D$ and a loss function $l:\Theta\times D\to \mathbb{R}$. For each state of nature $\theta\in \Theta$ there is an associated probability measure $\mu_\theta\in \Delta(\mathcal{E})$ where $(E,\mathcal{E})$ is some measurable space. Call the stochastic map $\mathbf{H}:\theta\mapsto \mu_\theta$ a \emph{statistical experiment}. Given a \emph{decision strategy} $\mathbf{J}:E\to \Delta(\mathcal{D})$, define the \emph{risk} of $\mathbf{J}$ given state $\theta$ to be the expected loss of $\mathbf{J}$ in state $\theta$. Specifically, $R:\Delta(\mathcal{D})^E\times \Theta\to \mathbb{R}$ given by $R:(\mathbf{J},\theta)\mapsto \mathbf{H}_\theta \mathrm{J} l_\theta$, where we make use of the product notation for brevity.
 
-Supposing some unknown true state $\theta^*$, we would ideally find a strategy $\pi$ that minimises the risk in $\theta^*$. Unfortunately, most statistical decision problems do not admit such strategies. Two alternative decision rules are available:
+We would ideally find a strategy $\mathbf{J}$ that minimises the risk in the ``true state'' $\theta^*$. Unfortunately, we don't know the true state. If there were a decision strategy that minimised the loss in every state, such a strategy would clearly minimise the loss in the true state, but most statistical decision problems don't admit such a strategy.  Two alternative decision rules are available:
 
-Given a measure $\xi\in \Delta(\Theta)$ called a prior, $\xi$-\emph{Bayes decision rule} is a decision rule $\pi^*_{\mathrm{Ba}}$ such that the \emph{Bayes risk} $R_\xi:\pi\mapsto \xi \splitter{0.1}(H\pi \otimes \ID{\Theta})l$ is minimised:
-\begin{align}
-    \pi^*_{\mathrm{Ba}}\in \argmin_{\pi\in \Pi} R_\xi (\pi)
-\end{align}
-
-A \emph{minimax} decision rule $\pi^*_{\mathrm{MM}}$ minimises the worst-case risk. Unlike a Bayes rule, it does not invoke a prior:
-
-\begin{align}
-    \pi^*_{\mathrm{Mm}}\in \argmin_{\pi\in \Pi} \max_{\theta\in \Theta} R(\theta,\pi)
-\end{align}
-
-We emphasise here that we regard the set $\Theta$ as a ``state of nature'' or a ``theory of nature'' and not a ``parameter set'' - it is possible that for some $\theta\neq \theta'$ we have $\mu_\theta=\mu_{\theta'}$, a possibility not supported by the interpretation of $\Theta$ as a set of distribution parameters. If there were a decision strategy that minimised the loss in every state, such a strategy would clearly minimise the loss in the true state. 
+Given a measure $\xi\in \Delta(\Theta)$ called a prior, $\xi$-\emph{Bayes decision rule} is a decision rule $\mathbf{J}^*_{\mathrm{Ba}}$ such that the \emph{Bayes risk} $R_\xi:\mathbf{J}\mapsto \int_\Theta H_\theta \mathbf{J} l_\theta d\xi$ is minimised. A \emph{minimax} decision rule $\mathbf{J}^*_{\mathrm{MM}}$ minimises the worst-case risk: $\mathbf{J}^*_{\mathrm{Mm}}\in \argmin_{\mathbf{J}} \max_{\theta\in \Theta} R(\mathbf{J},\theta)$ Unlike a Bayes rule, a minimax rule does not invoke a prior. In general, a decision rule is some rule that selects a decision on the basis of the risk functional $R(\mathbf{J},\cdot)$.
 
 Our representation of statistical experiment is slightly different to, for example, \citet{le_cam_comparison_1996}, who introduces statistical experiments as an ordered collection of probability measures. Both representations do the same job, and the representation as a map makes for a clearer connection with causal statistical decision problems. 
 
-Formally, we define an SDP as the tuple $\langle \Theta, E, D, H, l\rangle$ where $\Theta, E$ and $D$ are measurable sets, $H$ is a stochastic map $\Theta\to \Delta(\mathcal{E})$ and $l$ a measurable function $E\to \mathbb{R}$. We leave implicit the set $\Pi$ of decision strategies $E\to \Delta(\mathcal{D})$ and $\mathbb{R}$, the codomain of $l$.
+Formally, we define an SDP as the tuple $\langle \Theta, E, D, \mathbf{H}, l\rangle$ where $\Theta, E$ and $D$ are measurable sets, $\mathbf{H}$ is a stochastic map $\Theta\to \Delta(\mathcal{E})$ and $l$ a measurable function $E\to \mathbb{R}$. We leave implicit the set of decision strategies $E\to \Delta(\mathcal{D})$. This is a very bare bones exposition of the theory of SDPs, and for more details we refer readers to \cite{toutenburg_ferguson_1967}.
 
-This is a very bare bones exposition of the theory of SDPs, and for more details we refer readers to \cite{toutenburg_ferguson_1967}.
-
-Observe that a statistical decision problem supplies a loss $l$ that tells us immediately how desirable a pair $(\theta,d)\in\Theta\times D$ is. In many areas it is more typical to talk about how desirable the \emph{consequences} of a decision are than how desirable a (state, decision) pair is. If the set of possible consequences of a decision is denoted by a set $F$, let the desirability of an element $f\in F$ be given by a utility function $u:F\to \mathbb{R}$; ``utility'' being a very conventional term for such a desirability function. Given such a $u$, the tuple $\langle \Theta, E, D, H, u\rangle$ is an ill-posed problem; we want to evaluate the desirability of decisions $D$ (or decision strategies $\pi$), but we have no means of connecting decisions with consequences $F$. An obvious move is to introduce for each state of nature $\theta$ a \emph{consequence map} $\kappa_\theta:D\to \Delta(\mathcal{F})$; let $C$ be the map $\theta\mapsto \kappa_\theta$. We can then define the \emph{causal risk} $S:\Pi\times \Theta\to \mathbb{R}$ by $S:(\pi,\theta)\mapsto -\delta_\theta \splitter{0.1}(H\pi \otimes ID{\Theta}) C u$, and Bayes and minimax risks are defined by obvious analogy.
+Observe that a statistical decision problem supplies a loss $l$ that tells us immediately how desirable a pair $(\theta,d)\in\Theta\times D$ is. It is more typical to talk about how desirable the \emph{consequences} of a decision are than how desirable a (state, decision) pair is. If the set of possible consequences of a decision is denoted by a set $F$, let the desirability of an element $f\in F$ be given by a utility function $u:F\to \mathbb{R}$. Given such a $u$, the tuple $\langle \Theta, E, D, \mathbf{H}, u\rangle$ is an ill-posed problem: we want to evaluate the desirability of decision strategies $\mathbf{J}$, but we have no means of connecting decisions with consequences $F$. We introduce for each state of nature $\theta$ a \emph{consequence map} $\mathbf{C}_\theta:D\to \Delta(\mathcal{F})$; let $\mathbf{C}$ be the Markov kernel $\theta\mapsto \kappa_\theta$. We can then define the \emph{causal risk} $S:\Delta(\mathcal{D})^E\times \Theta\to \mathbb{R}$ by $S:(\mathbf{J},\theta)\mapsto -H_\theta \mathbf{F} C_\theta u$, and Bayes and minimax risks are defined analogously.
 
 For each state $\theta\in \Theta$, the Markov kernel
 \begin{align}
-    T_\theta := 
+    \mathbf{T}_\theta := 
 \begin{tikzpicture}
 \path (0,0) node[dist] (theta) {$\delta_\theta$}
       +(0,-0.5) coordinate (D)
@@ -46,37 +33,10 @@ For each state $\theta\in \Theta$, the Markov kernel
 \end{tikzpicture}\label{eq:ttheta_def}
 \end{align}
 
-Is sufficient to compute the causal risk. \todo{This is highly nonobvious, depends on the work of Jacobs, and is only known to be true for finite sets $E$ and $F$. On the other hand, there's a very intuitive graphical proof.} Thus we can replace $H$ and $C$ with the \emph{kernel causal theory} $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ given by $(\theta,d)\mapsto T_\theta(d;\cdot)$. A causal statistical decision problem (CSDP) is therefore a tuple $\langle \Theta, E, F, D, T, u\rangle$.
+Is sufficient to compute the causal risk. Thus we can replace $\mathbf{H}$ and $\mathbf{C}$ with the \emph{causal theory} $\mathbf{T}:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ given by $(\theta,d)\mapsto \mathbf{T}_\theta(d;\cdot)$. A causal statistical decision problem (CSDP) is therefore a tuple $\langle \Theta, E, F, D, \mathbf{T}, u\rangle$.
 
-Given a CSDP $\alpha = \langle \Theta, E, F, D, T, u\rangle$ where $T$ is a theory arising from some $H$ and $C$ as in Equation \ref{eq:ttheta_def}, we can recover $H= T(\ID{E}\otimes *_F)$ and $C=T(*_E\otimes \ID{F})$. Given $\alpha$ and letting $l:= Cu$ we induce the canonical SDP $\beta=\langle \Theta, E, D, H', l\rangle$ such that for any $\theta\in \Theta$, $\pi\in \Pi$, $R^{(\beta)}(\pi,\theta) = S^{(\alpha)}(\pi,\theta)$, and thus, if we accept that the risk functional is the only means of evaluating the desirability of a strategy (whether we choose Bayes, minimax or some other meta-rule to select a strategy), $\alpha$ and $\beta$ will always produce identical recommendations.
+Given a CSDP $\alpha = \langle \Theta, E, F, D, T, u\rangle$ where $\mathbf{T}$ is a theory arising from some $\mathbf{H}$ and $\mathbf{C}$ as in Equation \ref{eq:ttheta_def}, we can recover the original kernels by marginalisation: $\mathbf{H}= T(mathbf{Id}\otimes *)$ and $\mathbf{C}=\mathbf{T}(*\otimes \mathbf{Id})$. Given $\alpha$ and letting $l:= \mathbf{C}u$ we induce the canonical SDP $\beta=\langle \Theta, E, D, \mathbf{H}', l\rangle$ such that for any $\theta\in \Theta$, $\mathbf{J}$, $R^{(\beta)}(\mathbf{J},\theta) = S^{(\alpha)}(\mathbf{J},\theta)$, and thus $\alpha$ and $\beta$ will always produce identical recommendations.
 
-It is also possible to induce a CSDP from an arbitrary SDP $\beta:=\langle \Theta, E, D, H, l\rangle$. First, define $F:=\Theta\times D$ and then let $u:=-l$. Define $C:\Theta\to (D\to \Delta(\mathcal{F}))$ by $C:\theta\mapsto (d\mapsto (\theta,d))$, and then construct $T$ from $\Theta, H$ and $C$ as above.Then the CSDP $\alpha:=\langle \Theta, E, F, D, T, u\rangle$ has the property $S^{(\alpha)}(\pi, \theta) = R^{(\beta)}(\pi,\theta)$.
+It is also possible to induce a CSDP from an arbitrary SDP $\beta:=\langle \Theta, E, D, \mathbf{H}, l\rangle$. First, define $F:=\Theta\times D$ and then let $u:=-l$. Define $\mathbf{C}:\Theta\to (D\to \Delta(\mathcal{F}))$ by $\mathbf{C}:\theta\mapsto (d\mapsto (\theta,d))$, and then construct $\mathbf{T}$ from $\Theta, \mathbf{H}$ and $\mathbf{C}$ as in \ref{eq:ttheta_def}. Then the CSDP $\alpha:=\langle \Theta, E, F, D, \mathbf{T}, u\rangle$ has the property $S^{(\alpha)}(\mathbf{J}, \theta) = R^{(\beta)}(\mathbf{J},\theta)$.
 
-Thus, in some sense every problem that can be represented as an SDP can be represented as a CSDP and vise-versa (this may not hold true if we invoke some decision rule that doesn't just depend on the risk functional).
-
-We will finally note an alternative representation of a CSDP. Consider the set $\mathscr{T} = \{T_\theta|\theta\in \Theta\}$ and the evaulation map $\mathrm{Ev}_{\mathscr{T}}:\mathscr{T}\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ given by $(T_\theta,d)\mapsto T_\theta(d;\cdot)$. Then the problems $\alpha = \langle \Theta, E, F, D, T, u\rangle$ and $\alpha'=\langle \mathscr{T}, E, F, D, \mathrm{Ev}_{\mathcal{T}}, u\rangle$ are related in the sense that $S^{(\alpha)}(\pi,\theta)=S^{(\alpha')}(\pi,T_\theta)$. Thus, unlike with regular SDPs where $\Theta$ is an arbitrary set, for CSDPs we can regard $\Theta$ as a subset of kernels $D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ that can be written as in Eq. \ref{eq:ttheta_def} \todo{this might be equivalent to the set of 1-combs, see Jacobs} with the canonical kernel $\mathrm{Ev}_{\mathscr{T}}$. We call $\mathscr{T}$ the \emph{set causal theory} and, as there is a bijection between kernel theories $T$ along with their domains $\Theta$ and set theories $\mathscr{T}$, we typically refer to either as simply a \emph{causal theory}. We say that $\alpha$ is a CSDP in kernel form and $\alpha'$ is a CSDP in set form.
-
-Finally, we note that causal theories can \emph{also} be represented as a set of (distribution, consequence map) pairs.
-
-\begin{theorem}[Causal theories are sets of pairs]
-There is a bijection between the set of causal theories and the power set $\mathscr{P}(\Delta(\mathcal{E})\times \Delta(\mathcal{F})^D)$
-\end{theorem}
-
-\begin{proof}
-Sketch: Theories to pairs goes $\{(T_\theta (\ID{E}\otimes *_F),T_\theta (*_E\otimes \ID{F}))|T_\theta\in \mathscr{T}\}$ and pairs to theories goes $\{\mu\otimes \kappa|(\mu,\kappa)\in \mathrm{Pairs}\}$.
-\end{proof}
-
-A \emph{causal theory} - that is a ``consequence-aware'' analogue of a statistical experiment. It can be represented as a Markov kernel or a set of (observation, consequence) pairs. The kernel representation foregrounds the relationship between causal theories and statistical experiments, and we will exploit the latter to justify the following claim: \emph{Causal Bayesian Networks are a subset of causal theories}.
-
-In fact, this holds for the following generalisations of causal graphical models:
-\begin{itemize}
-\item Arbitrary sets of CBNs (e.g. ADMGs)
-\item Marginal models (e.g. mDAGs)
-\item CBNs with different intervention rules
-\item Cyclic SEMs (???)\todo{don't know about this one}
-\end{itemize}
-
-\todo[inline]{Show this for all the examples claimed}
-
-It is not the case, however, that \emph{every} type of ``causal graphical model'' is a representation of a causal theory - SWIGs are an important exception. This is because SWIGs, like all counterfactual models, represent hypothesis classes (a hypothesis class is the range of a statistical experiment).
-
+Causal theories are the central object of study here. They provide a bridge between the experiment $\mathbf{H}$ and the consequences $\mathbf{C}$ and allow us to use the former to make inferences about the latter. 

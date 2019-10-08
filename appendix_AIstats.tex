@@ -1,6 +1,6 @@
 %!TEX root = main.tex
 
-\section{Appendix: CBN representation as a causal theory}\label{sec:cbn_as_ct}
+\section{CBN representation as a causal theory}\label{sec:cbn_as_ct}
 
 \begin{definition}[Elementary Causal Bayesian Network]
 
@@ -13,62 +13,255 @@ Given $D$, $E$, $\Theta$, random variables $\{\RV{X}^i\}_{i\in [n]}$ on $E$, a d
 \end{enumerate}
 \end{definition}
 
-
-\section{Appendix: No causes in no causes out}\label{sec:ncinco}
-
-A key result in statistical learning theory is the requirement that, in order for a hypothesis class to be learnable, it must have finite VC-dimension. The concept of controlling the size of the hypothesis class plays a fundamental role across the field of machine learning, from formal proofs of learnability to techniques based less formally on the notion of the bias-variance tradeoff. CSDPs are closely related to statistical learning problems, and it is highly likely that results of this type can be developed for causal problems.
-
-Apart from any inductive biases necessary for learnability, causal theories also require a \emph{decision bias} - a causal theory that does not distinguish decisions yields only trivial results. This is distinct from a restriction on the flexibility or capacity of a causal theory. Given a prior, the requirement is that, conditional on some set of observations, a causal theory yields different consequences for different decisions. 
-
-Define the pairwise swap $U_{dd'}:D\to \Delta(\mathcal{D})$ to be the kernel that sends $d\mapsto \delta_{d'}$, $d'\mapsto \delta_d$ and all other $d''\to \delta_{d''}$.
-
-\begin{theorem}[No causes in, no causes out (Bayes)]\label{th:ncinco}
-If a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ and a prior $\xi\in \Delta(\Theta)$ are such that for all pairwise swaps $U_{dd'}:D\to \Delta(\mathcal{D})$, $(\xi\otimes U_{dd'})T = (\xi\otimes I)T$ and $D$ is discrete then all decision strategies are Bayes.
-\end{theorem}
-
-\begin{proof}
-Defining $F_{\_d_0}:d\mapsto \delta_{d_0}$ for all $d\in D$, we will show that for all $J$, $S_\xi(J)=S_\xi(JF_{\_d_0}):=S_0$.
-
-By assumption, for all $d\in D$, utility functions $u$:
+Suppose we have the EDAG $\mathcal{G}:=X\rightarrowtriangle Y$, where $\RV{X}$ and $\RV{Y}$ are random variables taking values in some arbitrary spaces $X$ and $Y$. Then $\mathcal{G}$ is compatible with a causal theory $T:\Theta\times X\to \Delta([\mathcal{X}\otimes\mathcal{Y}]^2)$ if and only if there exist Markov kernels $\mathbf{X}:\Theta\to \Delta(\mathcal{X})$, $\mathbf{Y}:\Theta\times X\to \Delta(\mathcal{Y})$ such that
 \begin{align}
-	\int_\Theta H_\theta J(\{d\}) C_\theta u(d) d\xi &= \int_\Theta H_\theta J(\{d\}) U_{dd_0} C_\theta u(d) d\xi\\
-													 &= \int_\Theta H_\theta J(\{d\}) F_{\_d_0} C_\theta u(d) d\xi\label{eq:agree_on_d}\\
-\therefore \sum_{d\in D} \int_\Theta H_\theta J(\{d\}) F_{\_d_0} C_\theta(d;A) d\xi &= \sum_{d\in D} \int_\Theta H_\theta J(\{d\}) C_\theta u(d) d\xi\\
-													 &= \int_\Theta \sum_{d\in D} H_\theta J(\{d\}) C_\theta u (d) d\xi\\
-													 &= \int_\Theta H_\theta J C_\theta u d\xi\\
-													 &= S_\xi(J)\\
-													 &= S_\xi(JF_{\_d_0})
-\end{align}
-Where \ref{eq:agree_on_d} follows from the fact that evaluation at $d$ guarantees $U_{dd_0} C_\theta u(d) = F_{\_d_0} C_\theta u(d)$.
-\end{proof}
+\begin{tikzpicture}
+ \path (0,0) coordinate (T)
+  + (0,-1.15) coordinate (D)
+  ++(0.5,0) coordinate (copy0)
+  ++(1,0) coordinate (n0)
+  +(-0.5,0.8) coordinate (copy1)
+  +(0,1) node[kernel] (X) {$\mathbf{X}$}
+  +(0,-1) node[kernel] (Id) {$\mathrm{Id}_X$}
+  +(0.6,-1.15) coordinate (copy2)
+  ++(1.2,0) coordinate (n1)
+  +(-0.6,1) coordinate (copy3)
+  +(0,1) node[kernel] (Y) {$\mathbf{Y}$}
+  +(0,-1) node[kernel] (Y1) {$\mathbf{Y}$}
+  ++(1,0) coordinate (n2)
+  +(0,1.5) node (Xout) {$\RV{X}$}
+  +(0,1) node (Yout) {$\RV{Y}$}
+  +(0,-0.5) node (Xout1) {$\RV{X}$}
+  +(0,-1) node (Yout1) {$\RV{Y}$};
+  \draw (T) -- (copy0);
+  \draw (D) -- ($(Id.west)+(0,-0.15)$);
+  \draw (copy0) to [bend left] (copy1) to [bend left] (X);
+  \draw (copy1) to [bend right] ($(Y.west)+(0,-0.15)$);
+  \draw (copy0) to [bend right = 10] ($(Y1.west)+(0,0.15)$);
+  \draw ($(Id.east)+(0,-0.15)$) -- ($(Y1.west)+(0,-0.15)$);
+  \draw (copy2) to [bend left] (Xout1);
+  \draw (copy3) to [bend left] (Xout);
+  \draw (X) -- (Y) -- (Yout);
+  \draw (Y1) -- (Yout1);
+ \end{tikzpicture} 
+ \end{align} 
 
-\begin{corollary}
-If a causal theory $T$ with a prior $\xi$ and discrete decision set $D$ yields a nontrivial ordering of decision strategies, then there exists $d,d'\in D$ such that $(\xi\otimes \delta_d) T\neq (\xi\otimes \delta_{d'}) T$.
-\end{corollary}
-
-Somewhat surprisingly, the minimax rule may yield preferences over decisions under such circumstances; in particular, a uniform strategy is always minimax, though other strategies may not be. This is because the consequences of a uniform strategy may be less extreme than the consequences of any other strategy.
-
-\begin{theorem}[No causes in, uniform strategy out (minimax)]
-If a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ with finite $D$ is such that for all pairwise swaps $U_{dd'}:D\to \Delta(\mathcal{D})$, $\theta\in \Theta$ there is some $\theta'$ such that $T_{\theta,\cdot} = (I\otimes U)T_{\theta',\cdot}$ then the uniform decision strategy is minimax.
-\end{theorem}
+Here we represent the identity kernel explicitly to make clear that it replaces $\mathbf{X}$ in the lower part of the diagram. This fact is hidden by the usual convention of representing the identity by a bare wire.
 
 \begin{proof}
-Note that for finite $D$, the invertible maps $D\to \Delta(\mathcal{D})$ are permutation maps which can be factorised as a sequence of pairwise swaps.
-
-Call $J_U$ the stubborn uniform strategy $J_U:x\mapsto U(\mathcal{D})$ for all $x\in E$. Suppose there is some nonuniform $J$ such that $\max_\theta S(J,\theta) < \max_\theta S(J_U,\theta)$. Suppose $S(J_U,\theta)$ is maximised in some state $\theta^0$ where $S(J_d,\theta^0)=S(J_{d'},\theta^0)$ for all $d,d'\in D$. Then $S(J,\theta^0)=S(J_U,\theta^0)$, contraticting our assumption that $J$ achieved lower risk in the worst case. Suppose $S(J_U,\theta)$ is maximised in some state $\theta^1$ where there are some $d,d'\in D$ such that $S(J_d,\theta^1)>S(J_{d'},\theta^1)$. Then there are most $|D|/2$ decisions where $S(J_d,\theta^1)$ is greater than the median of $A=\{S(J_d,\theta^1)|d\in D\}$ and at least one such decision, and at least $|D|/2$ decisions such that $\mu_{\theta^1} J(d)$ is greater than or equal to the median of $B=\{\mu_{\theta^1} J(d)|d\in D\}$, with at least one strictly greater. Thus there is an invertible map $f:D\to D$ such that $f(A)\subset B$. But then there is some $\theta^2$ such that $S(J_d,\theta^1)=S(J_{f(d)},\theta^2)$ for all $d\in D$ and thus $S(J,\theta^2)> S(J_U,\theta^2) = S(J_U,\theta^1)$ contradicting our assumption that $J$ was better by the minimax rule than $J_U$.
+Condition 1 is vacuous. Condition 2 is equivalent to asserting that $C_{\theta,d} F_{\RV{X}^i}$ is the identity map. The shared kernel $\mathbf{Y}$ guarantees 3 and if $\mathbf{Y}$ cannot be shared then 3 does not hold.
 \end{proof}
 
-\begin{corollary}
-If the risk of the uniform strategy is maximised in some state $\theta^*$ such that $S(J_d,\theta^*)>S(J_{d'},\theta^*)$ for some $d,d'$, then the uniform strategy is strictly better than any nonuniform strategy.
-\end{corollary}
+A particularly interesting feature of this representation is the fact that the edge cutting behaviour, usually an implicit part of the definition of a CBN, is displayed explicitly by replacing $\mathbf{X}$ by the identity. 
 
-Thus for a causal theory to support nontrivial results, we require for Bayes rules a prior $xi$ such that $(\xi\otimes \delta_d)T$ depends on $d$, or for the minimax rule that the \emph{set} of distributions mapped by the theory $\mathscr{T}_d:=\{T_{\theta,d}|\theta\in\Theta\}$ depends on the decision $d$. We will say that such theories/priors exhibit a \emph{decision bias}. 
+% \section{No causes in no causes out}\label{sec:ncinco}
 
-From one point of view, this result might be expected: if we believe
-\begin{itemize}
-\item Any possible consequence of $d_1$ might equally be a consequence of $d_2$ and vise versa
-\item Any data we encounter is equally consistent with $d_1$ having some set of consequences or with $d_2$ having that same set of consequences
-\end{itemize}
-Then we ought to be indifferent between $d_1$ or $d_2$ whatever data we see.
+% A key result in statistical learning theory is the requirement that, in order for a hypothesis class to be learnable, it must have finite VC-dimension. The concept of controlling the size of the hypothesis class plays a fundamental role across the field of machine learning, from formal proofs of learnability to techniques based less formally on the notion of the bias-variance tradeoff. CSDPs are closely related to statistical learning problems, and it is highly likely that results of this type can be developed for causal problems.
 
-No causes in, no causes out (NCINCO) implies that some common principles commonly applied to causal inference, in isolation, can only yield trivial theoreis. Without any notion of intervention, causal inference based solely on principles such as the invariance of conditionals \citet{arjovsky_invariant_2019,peters_causal_2016}, a preference for low complexity consequences \citet{lemeire_replacing_2013} or faithfulness \citet{spirtes_causation_1993} would yield triviality. As discussed in Section \ref{sec:counterfactuals}, we also require assumptions on the effects of decisions to to get a causal theory from a potential outcomes model.
+% Apart from any inductive biases necessary for learnability, causal theories also require a \emph{decision bias} - a causal theory that does not distinguish decisions yields only trivial results. This is distinct from a restriction on the flexibility or capacity of a causal theory. Given a prior, the requirement is that, conditional on some set of observations, a causal theory yields different consequences for different decisions. 
+
+% Define the pairwise swap $U_{dd'}:D\to \Delta(\mathcal{D})$ to be the kernel that sends $d\mapsto \delta_{d'}$, $d'\mapsto \delta_d$ and all other $d''\to \delta_{d''}$.
+
+% \begin{theorem}[No causes in, no causes out (Bayes)]\label{th:ncinco}
+% If a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ and a prior $\xi\in \Delta(\Theta)$ are such that for all pairwise swaps $U_{dd'}:D\to \Delta(\mathcal{D})$, $(\xi\otimes U_{dd'})T = (\xi\otimes I)T$ and $D$ is discrete then all decision strategies are Bayes.
+% \end{theorem}
+
+% \begin{proof}
+% Defining $F_{\_d_0}:d\mapsto \delta_{d_0}$ for all $d\in D$, we will show that for all $J$, $S_\xi(J)=S_\xi(JF_{\_d_0}):=S_0$.
+
+% By assumption, for all $d\in D$, utility functions $u$:
+% \begin{align}
+% 	\int_\Theta H_\theta J(\{d\}) C_\theta u(d) d\xi &= \int_\Theta H_\theta J(\{d\}) U_{dd_0} C_\theta u(d) d\xi\\
+% 													 &= \int_\Theta H_\theta J(\{d\}) F_{\_d_0} C_\theta u(d) d\xi\label{eq:agree_on_d}\\
+% \therefore \sum_{d\in D} \int_\Theta H_\theta J(\{d\}) F_{\_d_0} C_\theta(d;A) d\xi &= \sum_{d\in D} \int_\Theta H_\theta J(\{d\}) C_\theta u(d) d\xi\\
+% 													 &= \int_\Theta \sum_{d\in D} H_\theta J(\{d\}) C_\theta u (d) d\xi\\
+% 													 &= \int_\Theta H_\theta J C_\theta u d\xi\\
+% 													 &= S_\xi(J)\\
+% 													 &= S_\xi(JF_{\_d_0})
+% \end{align}
+% Where \ref{eq:agree_on_d} follows from the fact that evaluation at $d$ guarantees $U_{dd_0} C_\theta u(d) = F_{\_d_0} C_\theta u(d)$.
+% \end{proof}
+
+% \begin{corollary}
+% If a causal theory $T$ with a prior $\xi$ and discrete decision set $D$ yields a nontrivial ordering of decision strategies, then there exists $d,d'\in D$ such that $(\xi\otimes \delta_d) T\neq (\xi\otimes \delta_{d'}) T$.
+% \end{corollary}
+
+% Somewhat surprisingly, the minimax rule may yield preferences over decisions under such circumstances; in particular, a uniform strategy is always minimax, though other strategies may not be. This is because the consequences of a uniform strategy may be less extreme than the consequences of any other strategy.
+
+% \begin{theorem}[No causes in, uniform strategy out (minimax)]
+% If a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ with finite $D$ is such that for all pairwise swaps $U_{dd'}:D\to \Delta(\mathcal{D})$, $\theta\in \Theta$ there is some $\theta'$ such that $T_{\theta,\cdot} = (I\otimes U)T_{\theta',\cdot}$ then the uniform decision strategy is minimax.
+% \end{theorem}
+
+% \begin{proof}
+% Note that for finite $D$, the invertible maps $D\to \Delta(\mathcal{D})$ are permutation maps which can be factorised as a sequence of pairwise swaps.
+
+% Call $J_U$ the stubborn uniform strategy $J_U:x\mapsto U(\mathcal{D})$ for all $x\in E$. Suppose there is some nonuniform $J$ such that $\max_\theta S(J,\theta) < \max_\theta S(J_U,\theta)$. Suppose $S(J_U,\theta)$ is maximised in some state $\theta^0$ where $S(J_d,\theta^0)=S(J_{d'},\theta^0)$ for all $d,d'\in D$. Then $S(J,\theta^0)=S(J_U,\theta^0)$, contraticting our assumption that $J$ achieved lower risk in the worst case. Suppose $S(J_U,\theta)$ is maximised in some state $\theta^1$ where there are some $d,d'\in D$ such that $S(J_d,\theta^1)>S(J_{d'},\theta^1)$. Then there are most $|D|/2$ decisions where $S(J_d,\theta^1)$ is greater than the median of $A=\{S(J_d,\theta^1)|d\in D\}$ and at least one such decision, and at least $|D|/2$ decisions such that $\mu_{\theta^1} J(d)$ is greater than or equal to the median of $B=\{\mu_{\theta^1} J(d)|d\in D\}$, with at least one strictly greater. Thus there is an invertible map $f:D\to D$ such that $f(A)\subset B$. But then there is some $\theta^2$ such that $S(J_d,\theta^1)=S(J_{f(d)},\theta^2)$ for all $d\in D$ and thus $S(J,\theta^2)> S(J_U,\theta^2) = S(J_U,\theta^1)$ contradicting our assumption that $J$ was better by the minimax rule than $J_U$.
+% \end{proof}
+
+% \begin{corollary}
+% If the risk of the uniform strategy is maximised in some state $\theta^*$ such that $S(J_d,\theta^*)>S(J_{d'},\theta^*)$ for some $d,d'$, then the uniform strategy is strictly better than any nonuniform strategy.
+% \end{corollary}
+
+% Thus for a causal theory to support nontrivial results, we require for Bayes rules a prior $xi$ such that $(\xi\otimes \delta_d)T$ depends on $d$, or for the minimax rule that the \emph{set} of distributions mapped by the theory $\mathscr{T}_d:=\{T_{\theta,d}|\theta\in\Theta\}$ depends on the decision $d$. We will say that such theories/priors exhibit a \emph{decision bias}. 
+
+% From one point of view, this result might be expected: if we believe
+% \begin{itemize}
+% \item Any possible consequence of $d_1$ might equally be a consequence of $d_2$ and vise versa
+% \item Any data we encounter is equally consistent with $d_1$ having some set of consequences or with $d_2$ having that same set of consequences
+% \end{itemize}
+% Then we ought to be indifferent between $d_1$ or $d_2$ whatever data we see.
+
+% No causes in, no causes out (NCINCO) implies that some common principles commonly applied to causal inference, in isolation, can only yield trivial theoreis. Without any notion of intervention, causal inference based solely on principles such as the invariance of conditionals \citet{arjovsky_invariant_2019,peters_causal_2016}, a preference for low complexity consequences \citet{lemeire_replacing_2013} or faithfulness \citet{spirtes_causation_1993} would yield triviality. As discussed in Section \ref{sec:counterfactuals}, we also require assumptions on the effects of decisions to to get a causal theory from a potential outcomes model.
+
+
+% \section{Markov Kernels and String Diagrams}
+
+
+% A string diagram such as \ref{eq:jdist} that is ``capped'' on the left by a probability measure defines a probability space where the sample space is the Cartesian product of the output wires, the measurable sets are the tensor product of the output $\sigma$-algebras and the probability measure is given by the composition of measures in the diagram. The projection map $\pi_X:X\times Y\to X$ is thus a measurable function; following this observation, we overload the notation for the random variable $\RV{X}$ to label wires on the diagram; when used as such, it always refers to the projetion map $\pi_X$. While a random variable technically requires a probability space, we also use this convention for string diagrams representing kernels $X\to \Delta(\mathcal{Y})$ for arbitrary $X,Y$ (such diagrams feature ``free'' wires on the left and right). Using this convention, the measurable function referred to by the wire label $\RV{X}$ is always unambiguous, but we need to define a prior $\xi \in \Delta(\mathcal{X})$ in order for it to have a distribution. 
+
+% Finally, if we are given a set of kernels $\{\mathbf{A},\mathbf{B}\}$ where $\mathbf{A}:X\to \Delta(\mathcal{Y})$, $\mathbf{B}:W\to \Delta(\mathcal{Z})$ and a composition defining some kernel $\mathbf{K}:T\to \Delta(\mathcal{U})$ where $T,U$ are each Cartesian products of some subset of of $\{W,X,Y,Z\}$, we can always construct $\mathbf{K}^*:T\to \Delta(\mathcal{W}\otimes\mathcal{X}\otimes\mathcal{Y}\otimes\mathcal{Z})$ by inserting copy maps in appropriate places. Thus if we have \emph{both} a set of kernels and a diagram defining their composition, we can cautiously regard the input and output wires of \emph{each} kernel as a random variable under the same interpretation as given above.
+
+
+
+% A disintegration $\nu_{\RV{Y}|\RV{X}}$ is any kernel $X\to \Delta(\mathcal{Y})$ such that 
+% \begin{align}
+% \begin{tikzpicture}
+% \path (0,0) node[dist] (mu) {$\nu$}
+% ++ (1,0.15) coordinate (copy0)
+% + (1.2,0.5) node (X) {$\RV{X}$}
+% ++ (0.5,-0.5) node[kernel] (A) {$\nu_{\RV{Y}|\RV{X}}$}
+% ++(0.7,0) node (Y) {$\RV{Y}$};
+% \draw ($(mu.east)+(0,0.15)$)--(copy0);
+% \draw[-{Rays [n=8]}] ($(mu.east) + (0,-0.15)$) -- ($(mu.east) + (0.5,-0.15)$);
+% \draw (copy0) to [bend left] (X);
+% \draw (copy0) to [bend right] (A) (A) -- (Y);
+% \end{tikzpicture}:=
+% \begin{tikzpicture}
+% \path (0,0) node[dist] (nu) {$\nu$}
+% + (0.5,0.1) node (X) {$\RV{X}$}
+% +(0.5,-0.1) node (Y) {$\RV{Y}$};
+% \draw ($(nu.east) + (0,0.1)$) -- (X);
+% \draw ($(nu.east) + (0,-0.1)$) -- (Y);
+% \end{tikzpicture}
+% \end{align}
+
+% Disintegrations are known to exist wherever $X$ and $Y$ are standard measurable spaces (ismorphic to a discrete space or the reals with the Borel $\sigma$-algebra), though in general they are not unique. We will use the notation $\nu_{\RV{Y}|\RV{X}}$ to refer to an arbitrary representative of the full set of disintegrations. Note that from Equations \ref{eq:jdist} and \ref{eq:nu_mu} it is clear that $\mathbf{A}$ is a disintegration $\nu_{\RV{Y}|\RV{X}}$. We use disintegrations to represent conditional probability.
+
+% The copy map and erase maps have the following properties:
+
+% \begin{align}
+% 	\begin{tikzpicture}[scale=0.8]
+% 	\path (0,0) coordinate (A) 
+% 	++ (0.5,0) coordinate (B)
+% 	+ (0.5,0.5) coordinate (C)
+% 	++ (0.5,-0.5) coordinate (D)
+% 	+(0.5,0.5) coordinate (E)
+% 	+(0.5,-0.5) coordinate (F);
+% 	\draw (A) -- (B);
+% 	\draw (B) to [bend left] (C);
+% 	\draw (B) to [bend right] (D);
+% 	\draw (D) to [bend left] (E);
+% 	\draw (D) to [bend right] (F);
+% 	\end{tikzpicture}
+% 	=
+% 	\begin{tikzpicture}[scale=0.8]
+% 	\path (0,0) coordinate (A) 
+% 	++ (0.5,0) coordinate (B)
+% 	+ (0.5,-0.5) coordinate (C)
+% 	++ (0.5,0.5) coordinate (D)
+% 	+(0.5,0.5) coordinate (E)
+% 	+(0.5,-0.5) coordinate (F);
+% 	\draw (A) -- (B);
+% 	\draw (B) to [bend right] (C);
+% 	\draw (B) to [bend left] (D);
+% 	\draw (D) to [bend left] (E);
+% 	\draw (D) to [bend right] (F);
+% 	\end{tikzpicture}
+% 	:=
+% 		\begin{tikzpicture}[scale=0.8]
+% 	\path (0,0) coordinate (A) 
+% 	++ (0.5,0) coordinate (B)
+% 	+ (0.5,-0.5) coordinate (C)
+% 	+ (0.5,0) coordinate (D)
+% 	+(0.5,0.5) coordinate (E);
+% 	\draw (A) -- (B);
+% 	\draw (B) to [bend right] (C);
+% 	\draw (B) -- (D);
+% 	\draw (B) to [bend left] (E);
+% 	\end{tikzpicture}\label{eq:ccom1}
+% \end{align}
+
+% \begin{align}
+% 	\begin{tikzpicture}[scale=0.8]
+% 	\path (0,0) coordinate (A) 
+% 	++ (0.5,0) coordinate (B)
+% 	+ (0.5,0.5) coordinate (C)
+% 	+ (0.5,-0.5) node (D) {};
+% 	\draw (A) -- (B);
+% 	\draw (B) to [bend left] (C);
+% 	\draw[-{Rays [n=8]}] (B) to [bend right] (D);
+% 	\end{tikzpicture}
+% 	= 
+% 	\begin{tikzpicture}[scale=0.8]
+% 	\path (0,0) coordinate (A) 
+% 	++ (0.5,0) coordinate (B)
+% 	+ (0.5,0.5) node (C) {}
+% 	+ (0.5,-0.5) coordinate (D) ;
+% 	\draw (A) -- (B);
+% 	\draw[-{Rays [n=8]}] (B) to [bend left] (C);
+% 	\draw (B) to [bend right] (D);
+% 	\end{tikzpicture}
+% 	=
+% 	\begin{tikzpicture}[scale=0.8]
+% 	\path (0,0) coordinate (A) 
+% 	++ (1,0) coordinate (B);
+% 	\draw (A) -- (B);
+% 	\end{tikzpicture}\label{eq:ccom2}
+% \end{align}
+% And for all $\mathbf{A}$ with appropriate signature
+% \begin{align}
+% \begin{tikzpicture}
+%  \path (0,0) node (A) {}
+%  ++(0.5,0) node[kernel] (B) {$\mathbf{A}$}
+%  ++(0.6,0) node (C) {};
+%  \draw (A.center) -- (B);
+%  \draw[-{Rays [n=8]}] (B) -- (C);
+% \end{tikzpicture}
+% =
+% \begin{tikzpicture}
+%  \path (0,0) node (A) {}
+%   ++(0.5,0) node (C) {};
+%  \draw[-{Rays [n=8]}] (A.center) -- (C);
+% \end{tikzpicture}\label{eq:termobj}
+% \end{align}
+
+% If we know that one causal theory $\mathbf{T}$ is a coarsening of another $\mathbf{T}^*$ and we have some (not necessarily complete) knowledge of each theory then we may be able to uniquely determine the kernel $\mathbf{M}$ that induces the coarsening. Take, for example, a theory $\mathbf{T}^*$ induced by a CBN. For some realistic theory $\mathbf{T}$, if we know a decision $d$ leaves $\RV{X}$ distributed as $\delta_x$ and that $\mathbf{T}$ is a coarsening of $\mathbf{T}^*$ then the full consequences of $d$ are the same as the full consequences of $do(\RV{X}=x)$ under $\mathbf{T}^*$.
+
+% Suppose we have a theory $\mathbf{T}^*:\Theta\times D^*\to \Delta(\mathcal{E}\otimes\mathcal{F})$. If for some $\mathbf{A}:F\to \Delta(\mathcal{G})$ we have for all $\gamma,\gamma'\in C^*\subset D^*$ that $(\mathbf{Id}\otimes \gamma)\mathbf{T}^*(\mathbf{Id}\otimes \mathbf{A}) = (\mathbf{Id}\otimes \gamma')\mathbf{T}^*(\mathbf{Id}\otimes \mathbf{A})$ implies $(\mathbf{Id}\otimes \gamma)\mathbf{T}^* = (\mathbf{Id}\otimes \gamma')\mathbf{T}^*$ we say that $\mathbf{A}$ is sufficient to determine the consequences of $\mathbf{T}^*$ on $C^*$.
+
+% Returning to our example, if $\mathbf{T}^*$ supplies a unique consequence of $do(\RV{X}=x)$ all $x\in X$ for each state $\theta$ (which standard CBNs do), then the kernel $\mathbf{A}$ that yields the marginal distribution of $\RV{X}$ is sufficient for the consequences of $\mathbf{T}^*$ on $\{do(\RV{X}=x)|x\in X\}$.
+
+% \begin{lemma}[Coarsening preserves sufficiency]\label{lem:csuff}
+% If $\mathbf{A}$ is sufficient on $\{\delta_d \mathbf{M}|d\in D^*\}$ for the consequences of $\mathbf{T}^*$ and $\mathbf{T}:\Theta\times D\to \Delta(\mathcal{E}\otimes \mathcal{F})$ is a coarsening of $\mathbf{T}^*$ via $\mathbf{M}$ then $\mathbf{A}$ is sufficient for the consequences of $\mathbf{T}$ on $\Delta(\mathcal{D})$.
+% \end{lemma}
+
+% \begin{proof}
+% If $\mathbf{A}$ is sufficient on $\{\delta_d \mathbf{M}|d\in D^*\}$ then it is sufficient on $\{\gamma \mathbf{M}|\gamma\in \Delta(\mathcal{D}^*)\}$ as $(\mathbf{Id}\otimes \gamma)\mathbf{T}^*(\mathbf{Id}\otimes \mathbf{A}) = \int_{D^*} (\mathbf{Id}\otimes delta_d)\mathbf{T}^*(\mathbf{Id}\otimes \mathbf{A}) d\gamma$.
+
+% For all $\zeta \in \Delta(\mathcal{D})$ we have $\gamma\in \Delta(\mathcal{D}^*)$ such that $\gamma \mathbf{M}=\zeta $. For all $\zeta,\zeta'\in \Delta(\mathcal{D})$, we apply the definition of coarsening and the existence of such a $\gamma$ to yield $(\mathbf{Id}\otimes \zeta)\mathbf{T}(\mathbf{Id}\otimes \mathbf{A}) = (\mathbf{Id}\otimes \zeta')\mathbf{T}(\mathbf{Id}\otimes \mathbf{A})$ implies $(\mathbf{Id}\otimes \zeta)\mathbf{T} = (\mathbf{Id}\otimes \zeta')\mathbf{T}$.
+% \end{proof}
+
+% \begin{theorem}[Coarsening is determined via consequentially sufficient randomisation]
+% Given $\mathbf{M}$ and $\mathbf{T}^*$, let $\{\mathbf{T}^\alpha\}_\alpha$ be the class of causal theories such that $(\mathbf{Id} \otimes \mathbf{M}) \mathbf{T}^*(\mathbf{Id}\otimes \mathbf{A}) = \mathbf{T}^\alpha(\mathbf{Id}\otimes \mathbf{A})$ and $\mathbf{T}^\alpha$ is a coarsening of $\mathbf{T}^*$. This class defines a unique theory if and only if $\mathbf{A}$ is consequentially sufficient on $\{\delta_d \mathbf{M}|\gamma\in D^*\}$.
+% \end{theorem}
+
+% \begin{proof}
+% For all $\alpha$, $(\mathbf{Id} \otimes \mathbf{M}) \mathbf{T}^*(\mathbf{Id}\otimes \mathbf{A}) = \mathbf{T}^\alpha(\mathbf{Id}\otimes \mathbf{A})$. Suppose sufficiency of $\mathbf{A}$, then by Lemma \ref{lem:csuff}, this implies $(\mathbf{Id} \otimes \mathbf{M}) \mathbf{T}^* = \mathbf{T}^\alpha$ for all $\alpha$.
+
+% Suppose $\mathbf{A}$ is not consequentially sufficient. Then we have $\delta_d \mathbf{M}$, $\delta_{d'} \mathbf{M}$ such that $(\mathbf{Id}\otimes \delta_d \mathbf{M})\mathbf{T}^*(\mathbf{Id}\otimes \mathbf{A}) = (\mathbf{Id}\otimes \delta_{d'} \mathbf{M})\mathbf{T}^*(\mathbf{Id}\otimes \mathbf{A})$ but $(\mathbf{Id}\otimes \delta_d \mathbf{M})\mathbf{T}^* \neq (\mathbf{Id}\otimes \delta_{d'} \mathbf{M})\mathbf{T}^*$. Define $\mathbf{N}$ such that $\mathbf{N}_x=\mathbf{M}_x$ if $x\neq d$ but $\mathbf{N}_d = \delta_{d'} \mathbf{M}$. Then clearly $(\matbf{Id}\otimes\mathbf{N})\mathbf{T}^* \neq (\mathbf{Id}\otimes \delta_{d} \mathbf{M})\mathbf{T}^*$.
+% \end{proof}
+
+% If we have a theory $\mathbf{T}^*$ and the promise that any reasonable realistic theory must be a coarsening we are in a very powerful position. Firstly, we can ``reuse'' inferences on $\mathbf{T}^*$ via the process described in Theorem \ref{th:mod_extn}. Additonally, we only need to
+
+
+%  - given any decision $d$ under any realistic theory $\mathbf{T}^\alpha$ that posits enough prior knowledge of the consequences of $d$ we can, via $\mathbf{T}^*$, extend this to complete knowledge of the consequences given any state $\theta$. Furthermore, by the procedure described in Theorem \ref{th:mod_extn} inference performed on $\mathbf{T}^*$ can be applied to realistic theories provided we are also willing to accept the same prior $\xi$. We posit that this is a key aim of both causal modelling approaches discussed so far: inducing fantastic causal theories for which realistic causal theories are likely to be at least ``approximate'' coarsenings. 

@@ -2,101 +2,50 @@
 
 \section{Causal Bayesian Networks}
 
-Suppose we have a set of ``interventions'' $R$ which factorises as $R=\otimes_{i\in [n]} \{\#\}\cup X^i$ for some $n\in \mathbb{N}$, collection of sets $\{X^i\}_{i\in [n]}$ and distinguished element $*\not\in R^i$ for any $i$. Suppose we also have a measurable space $E$ and set of random variables $\{\RV{X}^i|i\in \mathbb{N}\}$ such that $\RV{X}^i:E\to X^i$. We denote an element $(x^0,\#,...,\#,x^n)\in R$, $x^0,x^n\neq \#$ by the notation $do(\RV{X}^0=x^0,\RV{X}^n=x^n)$ where occurrences of the distinguished element $*$ are ommitted. Denote by $\underline{\#}$ the element of $R$ consisting entirely of $\#$ (equivalently, $do()$).
+We formulate causal Bayesian networks following \citet{pearl_causality:_2009}, relying on the source to define the key concept of \emph{compatibility} as it is not a central concern here. We argue for the following claim: a causal Bayesian network represents a causal theory. 
 
-For $n\in \mathbb{N}$, directed acyclic graph (DAG) of degree $n$ is a graph $\mathcal{G}=(V,A)$ where $V$ is a set of vertices such that $|V|=n$ and $A\subset V\times V$ is a set of directed edges (``arrows'') such that $A$ induces no cycles (for a definition of cycles see \citet{pearl_causality:_2009}). 
+Suppose we have a set of ``interventions'' $R$ which factorises as $R=\times_{i\in [n]} \{\#\}\cup X^i$ for some $n\in \mathbb{N}$, collection of sets $\{X^i\}_{i\in [n]}$ and distinguished element $\#\not\in R^i$ for any $i$. Suppose we also have a measurable space $E$ and set of random variables $\{\RV{X}^i|i\in \mathbb{N}\}$ such that $\RV{X}^i:E\to X^i$. To explain this setup, an element $(x^0,\#,...,\#,\#)\in R$ identifies a do intervention where the only non-$\#$ component $x^0$ is the ``active'' element and the components taking the value $\#$ are ``do-nothing'' elements. Thus $(x^0,\#,...,\#,\#)$ corresponds to $do(\RV{X}^0=x^0)$ where occurrences of the passive elements are ommitted. Denote by $\underline{\#}$ the element of $R$ consisting entirely of $\#$ (equivalently, $do()$).
 
-Strictly, we are considering labeled graphs $\mathcal{G}$ and sets $\{\RV{X}^i\}_{[n]}$ of random variables. That is, we have bijective functions $f:V\to [n]$ and $g:\{\RV{X}^i\}_{[n]}\to [n]$ and we adopt the convention that $f(i):=V^i$ and $g(i):=\RV{X}^i$. In addition, we will sometimes let a set $U\subset V$ or $a\subset[n]$ to denote a set of random variables rather than vertices or natural numbers; this is licenced by the bijections $f$ and $g$. We will therefore overload notation and simply refer the nodes of $\mathcal{G}$ \emph{as} the random variables $\RV{X}^i$.
+For $n\in \mathbb{N}$, a directed acyclic graph (DAG) of degree $n$ is a graph $\mathcal{G}=(V,A)$ where $V$ is a set of vertices such that $|V|=n$ and $A\subset V\times V$ is a set of directed edges (``arrows'') such that $A$ induces no cycles (for a definition of cycles see \citet{pearl_causality:_2009}). 
 
-We also suppose we have surjective $h:R\to \mathscr{P}([n])$ such that $h:(x^0,...,x^n)\mapsto \{i|x^i\neq *\}$. That is, $h$ picks out the indices that aren't suppressed in the $do(...)$ notation for elements of $V$. Define $\RV{X}^{i\prime}:R\to \{\#\}\cup X^i$ by the function returning the $i$-th element of $r$ for $r\in R$. Again, we suppose we have a bijection between primed random variables and natural numbers and can therefore pick out corresponding sets of primed RVs and unprimed RVs or natural numbers.
+Strictly, we are considering labeled graphs $\mathcal{G}$ and sets $\{\RV{X}^i\}_{[n]}$ of random variables. That is, we suppose there is a bijective correspondence between graph nodes and random variables in $\{\RV{X}^i\}_{[n]}$ and, leaning on this correspondence, we simply label nodes of $\mathcal{G}$ with the random variables.
+
+We also suppose we have surjective $h:R\to \mathscr{P}([n])$ such that $h:(x^0,...,x^n)\mapsto \{i|x^i\neq \#\}$. That is, $h$ picks out the active components of $r$. Define $\RV{X}^{i\prime}:R\to \{\#\}\cup X^i$ by the function returning the $i$-th element of $r$ for $r\in R$. We identify primed and unprimed random variables in the obvious way.
+
+Let $\Pi_{\RV{X}^i} := \delta_{\pi_{\RV{X}^i}}$ be the Markov kernel that takes the marginal distribution of $\RV{X}^i$, and denote by $\mathbf{P}_{r|A}\Pi_{\RV{X}^i}:E\to \Delta(\mathcal{X}^i)$ the conditional probability of $\RV{X}^i$ given the set of random variables $A$.
 
 \begin{definition}[Causal Bayesian Network]\label{def:CBN}
 
-Given $R$, $E$ and $P_*:R\to \Delta(\mathcal{E})$ and $\{\RV{X}^i\}_{i\in [n]}$, a Causal Bayesian Network (CBN) compatible with $P_*$ is a directed acyclic graph (DAG) $\mathcal{G}$ of degree $n$ such that for all $r\in R$
+Given discrete $R$, $E$, $\mathbf{P}:R\to \Delta(\mathcal{E})$ and $\{\RV{X}^i\}_{i\in [n]}$, a Causal Bayesian Network (CBN) compatible with $\mathbf{P}$ is a directed acyclic graph (DAG) $\mathcal{G}$ of degree $n$ such that for all $r\in R$
 
 \begin{enumerate}
-    \item $P_r$ is compatible with $\mathcal{G}$ (see \citet{pearl_causality:_2009})
-    \item For all $i\in h(r)$, $P_r F_{\RV{X}^i}=\delta_{\RV{X}^{i\prime}(r)}$
-    \item For all $i\not \in h(r)$, $P_{r|\PA{\mathcal{G}}{\RV{X}^i}} F_{\RV{X}^i}=P_{\underline{\#}|\PA{\mathcal{G}}{\RV{X}^i}}F_{\RV{X}^i} $, $P_{\underline{\#}}$-almost surely
+    \item $\mathbf{P}_r$ is compatible with $\mathcal{G}$ (see \citet{pearl_causality:_2009})
+    \item For all $i\in h(r)$, $\mathbf{P}_r \Pi_{\RV{X}^i}=\delta_{\RV{X}^{i\prime}(r)}$
+    \item For all $i\not \in h(r)$, $\mathbf{P}_{r|\PA{\mathcal{G}}{\RV{X}^i}} \Pi_{\RV{X}^i}=\mathbf{P}_{\underline{\#}|\PA{\mathcal{G}}{\RV{X}^i}}\Pi_{\RV{X}^i} $, $\mathbf{P}_{\underline{\#}}$-almost surely
 \end{enumerate}
 \end{definition}
 
-This definition differs slightly from that given in \citet{pearl_causality:_2009}; for example $P_*$ is a map to $\Delta(\mathcal{E})$ rather than a set of labeled members of $\Delta(\mathcal{E})$, and we forumlate it in directly in terms of measure theoretic probability rather than elementary probability. Nonetheless, we claim these choices don't meaningfully alter the standard definition, at least if we restrict $E$ to be finite\todo{I haven't found a formulation of CBNs on infinite spaces, let alone continuous ones}, and they make for a more convenient connection with CSDPs.
+This definition differs slightly from \citet{pearl_causality:_2009} in that $\mathbf{P}$ is a Markov kernel rather than a set of labeled elements of $\Delta(\mathcal{E})$.
 
-A graph $\mathcal{G}$ and a measure $\mu\in \Delta(\mathcal{E})$ compatible with $\mathcal{G}$ together define a class of stochastic maps $K\subset \Delta(\mathcal{E})^V$ such that every $P_*\in K$ is compatible with $\mathcal{G}$ and $P_*(\#)=\mu$. Let the notation $\mathcal{G}(\mu)$ stand for the set $K$ as defined here; note that $\mathcal{G}(\mu)$ is in general a set-valued function.
+Given a graph $\mathcal{G}$ and a measure $\mu\in \Delta(\mathcal{E})$ compatible with $\mathcal{G}$ we can define a class of stochastic maps $\mathscr{K}\subset \Delta(\mathcal{E})^V$ such that every $\mathbf{P}\in \mathscr{K}$ is compatible with $\mathcal{G}$ and $\mathbf{P}(\#)=\mu$. Let the notation $\mathcal{G}(\mu)$ stand for the set $\mathscr{K}$ as defined here; note that $\mathcal{G}(\mu)$ is in general set-valued. 
 
-At least in the case of discrete $E$ and $P_*(\#)$ positive definite, we have from this definition for any $r\in V$ the \emph{truncated factorisation} property:
+We have from this definition for any $r\in V$ the \emph{truncated factorisation} property:
 \begin{align}
-	P_r F_{\mathbf{X}}(A) = \prod_{i\in h(r)} \delta_{\RV{X}^{i\prime} (r)} (\RV{X}^i(A)) \sum_{a\in A} \prod_{i\not \in h(r)} P_{\#|\PA{\mathcal{G}}{\RV{X}^i}} F_{\RV{X}^i} (a;\{\RV{X}^i(a)\})\label{eq:trunc_fac}
-\end{align}\todo{General definition: $f(A)$ is the image of $A$ under $f$ and $X$ as the copy-mapped tensor product of variables in set $X$}
-As a consequence of the existence of conditional probability, given $\mathcal{G}$ and $\mu$ there exists a unique set of interventional maps $P_*$ compatible with both $\mathcal{G}$ and $\mu$ as above. This property licenses a typical use case of CBNs: $\mathcal{G}(\cdot)$ is treated as a \emph{map} from the subset of $\Delta(\mathcal{E})$ compatible with $\mathcal{G}$ to interventional maps $V\to \Delta(\mathcal{E})$. More generally, provided $\mu$ is compatible with $\mathcal{G}$ we have that \ref{eq:trunc_fac} exists, and so $\mathcal{G}(\mu)$ is non-empty.
+	&P_r F_{\mathbf{X}}(A) =\nonumber\\
+	 &\prod_{i\in h(r)} \delta_{\RV{X}^{i\prime} (r)} (\RV{X}^i(A)) \sum_{a\in A} \prod_{i\not \in h(r)} \mathbf{P}_{\#|\PA{\mathcal{G}}{\RV{X}^i}} \Pi_{\RV{X}^i} (a;\{\RV{X}^i(a)\})\label{eq:trunc_fac}
+\end{align}
+As a consequence of the existence of conditional probability for standard measurable spaces, provided $\mu$ is compatible with $\mathcal{G}$ we have that the right hand side of\ref{eq:trunc_fac} exists, and so $\mathcal{G}(\mu)$ is non-empty. If $\mu$ is positive definite this relationship is functional; in such a case we could treat $\mathcal{G}(\mu)$ as a function from $\Delta(\mathcal{E})$ to interventional maps $\mathbf{P}$.
 
-Condition 3 presents some difficulties in the presence of measure 0 sets, as when a conditional probability such as $P_{\#|\PA{\mathcal{G}}{\RV{V}^i}}$ may be variously intended to mean a particular element of the class of conditional probabilities, any element or every element in the class class \citep{cinlar_probability_2011}; condition 3 will have different implications for these various interpretations. \todo{Surely Pearl or a student has dealt with this somewhere? Any element seems to be the most appropriate choice, but this renders CBNs useless for continuous spaces unless we place extra restrictions on $P_*$}
+Suppose we define some arbitrary hypothesis class $\mathscr{H}^{\mathcal{G}}\subset\Delta(\mathcal{E})$ of possible observed distributions. Then let $\Theta:=\{(\mu,\mathbf{P})|\mu\in\mathscr{H},\mathbf{P}\in \mathcal{G}(\mu)\}$ and define $\mathbf{T}^\mathscr{G}:\Theta\times R \to \Delta(\mathcal{E}^2)$ by $(\mu,\mathbf{P},r)\mapsto \mu\otimes \mathbf{P}_r$. It is natural to consider $\mathbf{T}^\mathscr{G}$ the causal theory represented by $\mathcal{G}$ for two reasons: first, it is a natural construction from the definition of a CBN if we take the set of possible $do$-interventions to be the set of decisions for $\mathbf{T}$. Secondly, if we take $\mathscr{H}=\Delta(\mathcal{E})$ then the map from DAGs to causal theories is injective (this is in contrast to, for example, the map from DAGs to probability distributions as in ordinary Bayesian networks\citep{bishop_pattern_2006}).
 
-Letting $\mathscr{H}^{\mathcal{G}}\subset\Delta(\mathcal{E})$ be some \emph{hypothesis class} of probability measures compatible with a causal graph $\mathcal{G}$, define the set of pairs $\mathscr{T}^{\mathcal{G}}:= \{(\mu,\kappa)|\mu\in \mathscr{H}, \kappa\in \mathcal{G}(\mu)\}$. Recall that a causal theory can be represented as a set of (observation, consequence map) pairs; i.e. $\mathscr{T}^{\mathcal{G}}$ is a causal theory. The map $\mathrm{Th}:\mathcal{G}\mapsto \mathscr{T}^{\mathcal{G}}$ is therefore a map from directed acyclic graphs to causal theories. Unlike the map from DAGs to sets of probability measures, the map from DAGs to causal theories is injective.
-
-\begin{theorem}[The map $\mathrm{Th}$ is injective]
-For DAGs $\mathcal{G}$, $\mathcal{G}'$ on the same set of RV's $\{\RV{X}^i\}_{[n]}$, $\mathcal{G}\neq \mathcal{G}'\implies \mathscr{T}^{\mathcal{G}}\neq \mathscr{T}^{\mathcal{G}'}$.
+\begin{theorem}[The map $\mathcal{G}\mapsto \mathbf{T}^\mathcal{G}$ is injective]
+For DAGs $\mathcal{G}$, $\mathcal{G}'$ on the same set of RV's $\{\RV{X}^i\}_{[n]}$, $\mathcal{G}\neq \mathcal{G}'\implies \mathscr{T}^{\mathcal{G}}\neq \mathscr{T}^{\mathcal{G}'}$ if these theories are induced by a complete hypothesis class.
 \end{theorem}
 
 \begin{proof}
-Sketch: $\mathcal{G}$ and $\mathcal{G}'$ must disagree on at least one parental set. Choose some $\mu$ such that $P_{\underline{\#}|\PA{\mathcal{G}}{\RV{X}^i}}F_{\RV{X}^i} \neq  P_{\underline{\#}|\PA{\mathcal{G}'}{\RV{X}^i}}F_{\RV{X}^i}$. Then take $r,r'$ such that $h(r) = h(r') = \PA{\mathcal{G}}{\RV{X}^i}\cup \PA{\mathcal{G}'}{\RV{X}^i}$, $\PA{\mathcal{G}}{\RV{X}'^i}(r) = \PA{\mathcal{G}}{\RV{X}'^i}(r')$ but $r\neq r'$. Then $P_r F_{\RV{X}^i} \neq P_{r'} F_{\RV{X}^i}$ so $P_r\neq P_{r'}$.
+$\mathcal{G}$ and $\mathcal{G}'$ must disagree on at least one parental set. Suppose this is on the parents of $\RV{X}^i$. Choose some $\mu$ such that $\mu_{|\PA{\mathcal{G}}{\RV{X}^i}}\Pi_{\RV{X}^i} \neq  \mu_{|\PA{\mathcal{G}'}{\RV{X}^i}}\Pi_{\RV{X}^i}$. By the non-equality of these conditional probabilities there are some $r,r'$ such that $h(r) = h(r') = \PA{\mathcal{G}}{\RV{X}^i}\cup \PA{\mathcal{G}'}{\RV{X}^i}$, $\PA{\mathcal{G}}{\RV{X}'^i}(r) = \PA{\mathcal{G}}{\RV{X}'^i}(r')$ but $\mathbf{P}^{\mathcal{G}'}_r \Pi_{\RV{X}^i} \neq \mathbf{P}^{\mathcal{G}'}_{r'} \Pi_{\RV{X}^i}$, but we also have $\mathbf{P}^{\mathcal{G}}_r \Pi_{\RV{X}^i} = \mathbf{P}^{\mathcal{G}}_{r'} \Pi_{\RV{X}^i}$ by equality of $r$ and $r'$ on $\PA{\mathcal{G}}{\RV{X}^i}$. Thus $\mathbf{T}^\mathcal{G}\neq \mathbf{T}^\mathcal{G}$.
 \end{proof}
 
-Each DAG $\mathcal{G}$ represents a causal theory $\mathscr{T}^\mathcal{G}$. For every causal theory $\mathscr{T}$, either it is not represented by any graph or there is a unique graph $\mathcal{G}$ such that $\mathscr{T}=\mathscr{T}^\mathcal{G}$. It is in this sense that we claim Causal Bayesian Networks are a subset of causal theories.
+\subsection{Decisions and Interventions in a Causal Bayesian Network}
 
-The string diagram notation we use to represent Markov kernels and the DAGs used to represent CBNs have clear similarities. \citet{fong_causal_2013} discusses how a DAG can be translated to a string diagram to yield a different type of ``causal theory''. It is in fact possible to represent the causal theory associated with what we call an elementary CBN compactly in string diagram notation. An elementary CBN is a CBN where only one node accepts intervention and the ``do-nothing'' action is not available. We define it directly as a causal theory. Rather than formally define how this translation may proceed we will present an example demonstrating how this is possible.
-
-\begin{definition}[Elementary Causal Bayesian Network]\label{def:CBN}
-
-Given $D$, $E$, $\Theta$, random variables $\{\RV{X}^i\}_{i\in [n]}$ on $E$, a distinguished variable $\RV{X}^0$ taking values in $D$ and a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{E})$ with $H:= T(\mathrm{Id}_E\otimes *_E)$ and $C:= T(*_E\otimes \mathrm{Id}_E)$, an \emph{elementary Causal Bayesian Network} (eCBN) compatible with $T$ is a directed acyclic graph (DAG) $\mathcal{G}$ with nodes $\{\RV{X}^i\}_{i\in [n]}$ such that
-
-\begin{enumerate}
-    \item $H_\theta$ and $C_{\theta,d}$ are compatible with $\mathcal{G}$ (see \citet{pearl_causality:_2009})
-    \item $C_{\theta,d} F_{\RV{X}^i}=\delta_{d}$
-    \item For all $i\neq 0$, $C_{\theta|\PA{\mathcal{G}}{\RV{X}^i}} F_{\RV{X}^i}=H_{\theta|\PA{\mathcal{G}}{\RV{X}^i}}F_{\RV{X}^i} $, $H_\theta$-almost surely
-\end{enumerate}
-\end{definition}
-
-Suppose we have the EDAG $\mathcal{G}:=X\rightarrowtriangle Y$, where $\RV{X}$ and $\RV{Y}$ are random variables taking values in some arbitrary spaces $X$ and $Y$. Then $\mathcal{G}$ is compatible with a causal theory $T:\Theta\times X\to \Delta([\mathcal{X}\otimes\mathcal{Y}]^2)$ if and only if there exist Markov kernels $\mathbf{X}:\Theta\to \Delta(\mathcal{X})$, $\mathbf{Y}:\Theta\times X\to \Delta(\mathcal{Y})$ such that
-\begin{align}
-\begin{tikzpicture}
- \path (0,0) coordinate (T)
-  + (0,-1.15) coordinate (D)
-  ++(0.5,0) coordinate (copy0)
-  ++(1,0) coordinate (n0)
-  +(-0.5,0.8) coordinate (copy1)
-  +(0,1) node[kernel] (X) {$\mathbf{X}$}
-  +(0,-1) node[kernel] (Id) {$\mathrm{Id}_X$}
-  +(0.6,-1.15) coordinate (copy2)
-  ++(1.2,0) coordinate (n1)
-  +(-0.6,1) coordinate (copy3)
-  +(0,1) node[kernel] (Y) {$\mathbf{Y}$}
-  +(0,-1) node[kernel] (Y1) {$\mathbf{Y}$}
-  ++(1,0) coordinate (n2)
-  +(0,1.5) node (Xout) {$\RV{X}$}
-  +(0,1) node (Yout) {$\RV{Y}$}
-  +(0,-0.5) node (Xout1) {$\RV{X}$}
-  +(0,-1) node (Yout1) {$\RV{Y}$};
-  \draw (T) -- (copy0);
-  \draw (D) -- ($(Id.west)+(0,-0.15)$);
-  \draw (copy0) to [bend left] (copy1) to [bend left] (X);
-  \draw (copy1) to [bend right] ($(Y.west)+(0,-0.15)$);
-  \draw (copy0) to [bend right = 10] ($(Y1.west)+(0,0.15)$);
-  \draw ($(Id.east)+(0,-0.15)$) -- ($(Y1.west)+(0,-0.15)$);
-  \draw (copy2) to [bend left] (Xout1);
-  \draw (copy3) to [bend left] (Xout);
-  \draw (X) -- (Y) -- (Yout);
-  \draw (Y1) -- (Yout1);
- \end{tikzpicture} 
- \end{align} 
-
-Here we represent the identity kernel explicitly to make clear that it replaces $\mathbf{X}$ in the lower part of the diagram. This fact is hidden by the usual convention of representing the identity by a bare wire.
-
-\begin{proof}
-(Sketch): The topology of the top and bottom sub-structures guarantees 1 (compatibility) and 1 guarantees that some kernels exist exhibiting this topology (this condition is acutally trivial in this case; it is nontrivial where the graph is not fully connected). 2 is equivalent to asserting that $C_{\theta,d} F_{\RV{X}^i}$ is the identity map. The shared kernel $\mathbf{Y}$ guarantees 3 and if $\mathbf{Y}$ cannot be shared then 3 does not hold.
-\end{proof}
-
-A particularly interesting feature of this representation is the fact that the edge cutting behaviour, usually an implicit part of the definition of a CBN, is displayed explicitly by replacing $\mathbf{X}$ by the identity. 
-
- \todo[inline]{We can't avoid one condition being trivial with two nodes, but three nodes starts looking very complex!}
+The causal theory $\mathbf{T}^\mathcal{G}$ associated with a CBN $\mathcal{G}$ features a large number of decisions. Given some utility function $u:\times_{i\in [n]} X^i\to \mathbb{R}$, there is always a decision that fixes the values of all $\RV{X}^i$ deterministically to a value maximising $u$, if such a maximum exists. Clearly, for a practical decision problem $\mathbf{T}^\mathcal{G}$ is inappropriate. There may be some cases where there is an obvious alternative theory $\mathbf{T}^\mathcal{G\prime}$ that features, for example, decisions limited to interventions on particular variables. For now, it is sufficient to note that to actually solve a decision problem, it is necessary to move from the theory $\mathbf{T}^\mathcal{G}$ to a modified theory.

@@ -1,4 +1,162 @@
 
+@book{bishop_pattern_2006,
+	address = {New York},
+	series = {Information {Science} and {Statistics}},
+	title = {Pattern {Recognition} and {Machine} {Learning}},
+	isbn = {978-0-387-31073-2},
+	url = {https://www.springer.com/gp/book/9780387310732},
+	abstract = {The dramatic growth in practical applications for machine learning over the last ten years has been accompanied by many important developments in the underlying algorithms and techniques. For example, Bayesian methods have grown from a specialist niche to become mainstream, while graphical models have emerged as a general framework for describing and applying probabilistic techniques. The practical applicability of Bayesian methods has been greatly enhanced by the development of a range of approximate inference algorithms such as variational Bayes and expectation propagation, while new models based on kernels have had a significant impact on both algorithms and applications. This completely new textbook reflects these recent developments while providing a comprehensive introduction to the fields of pattern recognition and machine learning. It is aimed at advanced undergraduates or first-year PhD students, as well as researchers and practitioners. No previous knowledge of pattern recognition or machine learning concepts is assumed. Familiarity with multivariate calculus and basic linear algebra is required, and some experience in the use of probabilities would be helpful though not essential as the book includes a self-contained introduction to basic probability theory. The book is suitable for courses on machine learning, statistics, computer science, signal processing, computer vision, data mining, and bioinformatics. Extensive support is provided for course instructors, including more than 400 exercises, graded according to difficulty. Example solutions for a subset of the exercises are available from the book web site, while solutions for the remainder can be obtained by instructors from the publisher. The book is supported by a great deal of additional material, and the reader is encouraged to visit the book web site for the latest information. Christopher M. Bishop is Deputy Director of Microsoft Research Cambridge, and holds a Chair in Computer Science at the University of Edinburgh. He is a Fellow of Darwin College Cambridge, a Fellow of the Royal Academy of Engineering, and a Fellow of the Royal Society of Edinburgh. His previous textbook "Neural Networks for Pattern Recognition" has been widely adopted. Coming soon: *For students, worked solutions to a subset of exercises available on a public web site (for exercises marked "www" in the text) *For instructors, worked solutions to remaining exercises from the Springer web site *Lecture slides to accompany each chapter *Data sets available for download},
+	language = {en},
+	urldate = {2019-10-08},
+	publisher = {Springer-Verlag},
+	author = {Bishop, Christopher},
+	year = {2006},
+	file = {Snapshot:/home/users/u4533535/Zotero/storage/5YXBHEIR/9780387310732.html:text/html}
+}
+
+@book{savage_foundations_1972,
+	address = {New York},
+	edition = {Revised edition},
+	title = {Foundations of {Statistics}},
+	isbn = {978-0-486-62349-8},
+	abstract = {Classic analysis of the foundations of statistics and development of personal probability, one of the greatest controversies in modern statistical thought. Revised edition. Calculus, probability, statistics, and Boolean algebra are recommended.},
+	language = {English},
+	publisher = {Dover Publications},
+	author = {Savage, Leonard J.},
+	month = jun,
+	year = {1972}
+}
+
+@phdthesis{shpitser_complete_2008,
+	address = {Los Angeles, CA, USA},
+	type = {{PhD} {Thesis}},
+	title = {Complete {Identification} {Methods} for {Causal} {Inference}},
+	abstract = {Human beings organize their intuitive understanding of the world in terms of causes and effects. Primitive humanity posited gods and spirits as invisible causes of phenomena they did not comprehend. As our attempts to understand the world began to be formalized and codified as empirical science, the emphasis on discerning cause-effect relationships remained. Though we, the modern humanity, are armed with powerful computers, sophisticated technology, and highly developed mathematics and statistics, our fundamental questions remain the same as those of our cave dwelling ancestors – we seek to understand the causes of windfalls and misfortunes that befall us, what effects our actions have, and what would happen if the past were different from what it is. This thesis will address these ancient questions with the rigor and generality of modern mathematics. Using the framework of graphical causal models which formalizes a variety of causal queries, such as causal effects, counterfactuals and path-specific effects as certain types of probability distributions, I will develop algorithms which will evaluate these probability distributions from available information; prove that whenever these algorithms fail to evaluate a query, no other method could succeed; provide characterizations based on directed graphs for cases where these algorithms do succeed; and finally show how a class of constraints placed on the causal model by its directed graph are due to conditional independence in these probability distributions, and how these conditional independencies can be exploited for testing causal theories.},
+	school = {University of California at Los Angeles},
+	author = {Shpitser, Ilya},
+	year = {2008},
+	annote = {AAI3351728}
+}
+@article{dawid_influence_2002,
+	title = {Influence {Diagrams} for {Causal} {Modelling} and {Inference}},
+	volume = {70},
+	issn = {1751-5823},
+	url = {https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1751-5823.2002.tb00354.x},
+	doi = {10.1111/j.1751-5823.2002.tb00354.x},
+	abstract = {We consider a variety of ways in which probabilistic and causal models can be represented in graphical form. By adding nodes to our graphs to represent parameters, decision, etc., we obtain a generalisation of influence diagrams that supports meaningful causal modelling and inference, and only requires concepts and methods that are already standard in the purely probabilistic case. We relate our representations to others, particularly functional models, and present arguments and examples in favour of their superiority.},
+	language = {en},
+	number = {2},
+	urldate = {2019-02-07},
+	journal = {International Statistical Review},
+	author = {Dawid, A. P.},
+	year = {2002},
+	keywords = {Causal inference, Augmented DAG, Confounder, Counterfactual, Directed acyclic graph, Functional model, Graphical model, Intervention},
+	pages = {161--189},
+	file = {Full Text PDF:/home/users/u4533535/Zotero/storage/8TXLJKZ3/Dawid - 2002 - Influence Diagrams for Causal Modelling and Infere.pdf:application/pdf;Snapshot:/home/users/u4533535/Zotero/storage/5HXYMQZ8/j.1751-5823.2002.tb00354.html:text/html}
+}
+
+@article{maathuis_estimating_2009,
+	title = {Estimating high-dimensional intervention effects from observational data},
+	volume = {37},
+	issn = {0090-5364, 2168-8966},
+	url = {https://projecteuclid.org/euclid.aos/1250515382},
+	doi = {10.1214/09-AOS685},
+	abstract = {We assume that we have observational data generated from an unknown underlying directed acyclic graph (DAG) model. A DAG is typically not identifiable from observational data, but it is possible to consistently estimate the equivalence class of a DAG. Moreover, for any given DAG, causal effects can be estimated using intervention calculus. In this paper, we combine these two parts. For each DAG in the estimated equivalence class, we use intervention calculus to estimate the causal effects of the covariates on the response. This yields a collection of estimated causal effects for each covariate. We show that the distinct values in this set can be consistently estimated by an algorithm that uses only local information of the graph. This local approach is computationally fast and feasible in high-dimensional problems. We propose to use summary measures of the set of possible causal effects to determine variable importance. In particular, we use the minimum absolute value of this set, since that is a lower bound on the size of the causal effect. We demonstrate the merits of our methods in a simulation study and on a data set about riboflavin production.},
+	language = {EN},
+	number = {6A},
+	urldate = {2019-05-21},
+	journal = {The Annals of Statistics},
+	author = {Maathuis, Marloes H. and Kalisch, Markus and Bühlmann, Peter},
+	month = dec,
+	year = {2009},
+	mrnumber = {MR2549555},
+	zmnumber = {1191.62118},
+	keywords = {sparsity, Causal analysis, directed acyclic graph (DAG), graphical modeling, intervention calculus, PC-algorithm},
+	pages = {3133--3164},
+	file = {Full Text PDF:/home/users/u4533535/Zotero/storage/X3Q5F5VH/Maathuis et al. - 2009 - Estimating high-dimensional intervention effects f.pdf:application/pdf;Snapshot:/home/users/u4533535/Zotero/storage/XNRZYFY5/1250515382.html:text/html}
+}
+
+@article{sachs_causal_2005,
+	title = {Causal {Protein}-{Signaling} {Networks} {Derived} from {Multiparameter} {Single}-{Cell} {Data}},
+	volume = {308},
+	copyright = {American Association for the Advancement of Science},
+	issn = {0036-8075, 1095-9203},
+	url = {https://science.sciencemag.org/content/308/5721/523},
+	doi = {10.1126/science.1105809},
+	abstract = {Machine learning was applied for the automated derivation of causal influences in cellular signaling networks. This derivation relied on the simultaneous measurement of multiple phosphorylated protein and phospholipid components in thousands of individual primary human immune system cells. Perturbing these cells with molecular interventions drove the ordering of connections between pathway components, wherein Bayesian network computational methods automatically elucidated most of the traditionally reported signaling relationships and predicted novel interpathway network causalities, which we verified experimentally. Reconstruction of network models from physiologically relevant primary single cells might be applied to understanding native-state tissue signaling biology, complex drug actions, and dysfunctional signaling in diseased cells.
+Probabilistic analysis of the biochemical consequences of immune cell stimulation allows construction of causal signaling networks and prediction of new relationships.
+Probabilistic analysis of the biochemical consequences of immune cell stimulation allows construction of causal signaling networks and prediction of new relationships.},
+	language = {en},
+	number = {5721},
+	urldate = {2019-10-08},
+	journal = {Science},
+	author = {Sachs, Karen and Perez, Omar and Pe'er, Dana and Lauffenburger, Douglas A. and Nolan, Garry P.},
+	month = apr,
+	year = {2005},
+	pmid = {15845847},
+	pages = {523--529},
+	file = {Full Text PDF:/home/users/u4533535/Zotero/storage/VZ6QGNZV/Sachs et al. - 2005 - Causal Protein-Signaling Networks Derived from Mul.pdf:application/pdf}
+}
+
+@article{imbens_identification_1994,
+	title = {Identification and {Estimation} of {Local} {Average} {Treatment} {Effects}},
+	volume = {62},
+	issn = {0012-9682},
+	url = {https://www.jstor.org/stable/2951620},
+	doi = {10.2307/2951620},
+	number = {2},
+	urldate = {2019-02-05},
+	journal = {Econometrica},
+	author = {Imbens, Guido W. and Angrist, Joshua D.},
+	year = {1994},
+	pages = {467--475}
+}
+
+@article{carneiro_evaluating_2010,
+	title = {Evaluating {Marginal} {Policy} {Changes} and the {Average} {Effect} of {Treatment} for {Individuals} at the {Margin}},
+	volume = {78},
+	copyright = {© 2010 The Econometric Society},
+	issn = {1468-0262},
+	url = {http://onlinelibrary.wiley.com/doi/abs/10.3982/ECTA7089},
+	doi = {10.3982/ECTA7089},
+	abstract = {This paper develops methods for evaluating marginal policy changes. We characterize how the effects of marginal policy changes depend on the direction of the policy change, and show that marginal policy effects are fundamentally easier to identify and to estimate than conventional treatment parameters. We develop the connection between marginal policy effects and the average effect of treatment for persons on the margin of indifference between participation in treatment and nonparticipation, and use this connection to analyze both parameters. We apply our analysis to estimate the effect of marginal changes in tuition on the return to going to college.},
+	language = {en},
+	number = {1},
+	urldate = {2019-02-06},
+	journal = {Econometrica},
+	author = {Carneiro, Pedro and Heckman, James J. and Vytlacil, Edward},
+	year = {2010},
+	keywords = {average marginal treatment effect, effects of marginal policy changes, marginal policy relevant treatment effect, Marginal treatment effect},
+	pages = {377--394},
+	file = {Full Text PDF:/home/users/u4533535/Zotero/storage/IR869UEY/Carneiro et al. - 2010 - Evaluating Marginal Policy Changes and the Average.pdf:application/pdf;Snapshot:/home/users/u4533535/Zotero/storage/QIQALWGZ/ECTA7089.html:text/html}
+}
+
+@book{angrist_mastering_2014,
+	address = {Princeton ; Oxford},
+	edition = {with French flaps edition},
+	title = {Mastering '{Metrics}: {The} {Path} from {Cause} to {Effect}},
+	isbn = {978-0-691-15284-4},
+	shorttitle = {Mastering '{Metrics}},
+	abstract = {Applied econometrics, known to aficionados as 'metrics, is the original data science. 'Metrics encompasses the statistical methods economists use to untangle cause and effect in human affairs. Through accessible discussion and with a dose of kung fu–themed humor, Mastering 'Metrics presents the essential tools of econometric research and demonstrates why econometrics is exciting and useful.The five most valuable econometric methods, or what the authors call the Furious Five--random assignment, regression, instrumental variables, regression discontinuity designs, and differences in differences--are illustrated through well-crafted real-world examples (vetted for awesomeness by Kung Fu Panda's Jade Palace). Does health insurance make you healthier? Randomized experiments provide answers. Are expensive private colleges and selective public high schools better than more pedestrian institutions? Regression analysis and a regression discontinuity design reveal the surprising truth. When private banks teeter, and depositors take their money and run, should central banks step in to save them? Differences-in-differences analysis of a Depression-era banking crisis offers a response. Could arresting O. J. Simpson have saved his ex-wife's life? Instrumental variables methods instruct law enforcement authorities in how best to respond to domestic abuse.Wielding econometric tools with skill and confidence, Mastering 'Metrics uses data and statistics to illuminate the path from cause to effect.Shows why econometrics is importantExplains econometric research through humorous and accessible discussionOutlines empirical methods central to modern econometric practiceWorks through interesting and relevant real-world examples},
+	language = {English},
+	publisher = {Princeton University Press},
+	author = {Angrist, Joshua D. and Pischke, Jörn-Steffen},
+	month = dec,
+	year = {2014}
+}
+
+@book{joyce_foundations_1999,
+	address = {Cambridge ; New York},
+	title = {The {Foundations} of {Causal} {Decision} {Theory}},
+	isbn = {978-0-521-64164-7},
+	abstract = {This book defends the view that any adequate account of rational decision making must take a decision maker's beliefs about causal relations into account. The early chapters of the book introduce the nonspecialist to the rudiments of expected utility theory. The major technical advance offered by the book is a "representation theorem" that shows that both causal decision theory and its main rival, Richard Jeffrey's logic of decision, are both instances of a more general conditional decision theory. In providing the most complete and robust defense of causal decision theory the book will be of interest to a broad range of readers in philosophy, economics, psychology, mathematics, and artificial intelligence.},
+	language = {English},
+	publisher = {Cambridge University Press},
+	author = {Joyce, James M.},
+	month = apr,
+	year = {1999}
+}
+
 @article{hernan_does_2008,
 	title = {Does obesity shorten life? {The} importance of well-defined interventions to answer causal questions},
 	volume = {32},
@@ -87,7 +245,6 @@
 @article{le_cam_comparison_1996,
 	title = {Comparison of {Experiments} - {A} {Short} {Review}.pdf},
 	volume = {30},
-	url = {https://www.fastmailusercontent.com/mail-attachment/f2132276u33762/%3CB868E7FAD8F0C04FA0207113AD7C77A9%40ausprd01.prod.outlook.com%3E/Comparison%20of%20Experiments%20-%20A%20Short%20Review.pdf?u=9a2e41ab&a=195efd739077a3e70251567c111372cb67a6dcf0},
 	urldate = {2018-02-15},
 	journal = {IMS  Lecture  Notes  - Monograph  Series},
 	author = {Le Cam, L.},
