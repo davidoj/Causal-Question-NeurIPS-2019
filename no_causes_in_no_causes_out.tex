@@ -1,8 +1,8 @@
 %!TEX root = main.tex
 
-\subsection{Coarsening and Saved Inference}
+\subsection{Coarsening and Reusable Inferences}
 
-The causal theories associated with both CBN and PO models are very profligate. They define many decisions that are unlikely to be considered in a pragmatic decision problem, and in practice it is usually only possible to determine the consequences of a small subset of these decisions if it is possible to determine any at all. In additon, proponents of both theories have advocated for the universality of the ``causal effects'' they represent:
+We turn our attention in more detail to the operation of finding a ``realistic'' theory $\mathbf{T}$ that corresponds to a rich theory $\mathbf{T}^*$. As a motivation for this development, note that proponents of both approaches discussed here have advocated for the universality of the ``causal effects'' their models represent:
 
 \begin{quote}
 The perspective that (1) the science exists independently of how we try to learn about it and that (2) if the model used for analysis of the resulting data is approximately correct, then the resulting posterior distribution will give a fair summary of the current state of knowledge of that science seems, at least to me, consistent with common views of the scientific enterprise
@@ -14,15 +14,17 @@ The potential outcomes, together with covariates, define the science in the sens
 By representing the domain in the form of an assembly of stable mechanisms, we have in fact created an oracle capable of answering queries about the effects of a huge set of actions and action combinations \citep{pearl_causality:_2009}
 \end{quote}
 
-We present here a somewhat speculative account of what both of these approaches are trying to achieve based on the notions of \emph{coarsening} and \emph{saved inference}. The basic story is: suppose our job is to study the causal dynamics of some system, but we're not quite sure of who will put our results to use or what decisions they will have available. We adopt a theory $\mathbf{T}$ with the hope that we can pass along results to end users, even if they are operating with a more pragmatic theory $\mathbf{T}'$. In this section we specify precisely when it is possible to do so.
+We present here a somewhat speculative account of what both of these approaches are trying to achieve based on the notion of \emph{coarsening}. The basic story is: suppose our job is to study the causal dynamics of some system, but we're not quite sure of who will put our results to use or what decisions they will have available. We adopt a rich theory $\mathbf{T}^*$ with the hope that our results can be useful to end users, even if they are operating with a more realistic theory $\mathbf{T}$. Here we show that if $\mathbf{T}$ is related to $\mathbf{T}^*$ via a coarsening, inference on $\mathbf{T}^*$ can be reused on $\mathbf{T}$.
 
 \begin{definition}[Coarsening]
-A theory $\mathbf{T}:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ can be coarsened to a theory $\mathbf{T}':\Theta\times D'\to \Delta(\mathcal{E}\otimes\mathcal{F})$ if there exists $M:D'\to \Delta(\mathcal{D})$ such that $\mathbf{T}'  = (\mathbf{Id} \otimes M) \mathbf{T}$. We say that $\mathbf{T}'$ is \emph{clumsier} than $\mathbf{T}$ or $\mathbf{T}$ is \emph{more dextrous} than $\mathbf{T}'$.
+A theory $\mathbf{T}^*:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ can be coarsened to a theory $\mathbf{T}:\Theta\times D'\to \Delta(\mathcal{E}\otimes\mathcal{F})$ if there exists $M:D'\to \Delta(\mathcal{D})$ such that $\mathbf{T}  = (\mathbf{Id} \otimes M) \mathbf{T}^*$.
 \end{definition}
 
-Given $\mathbf{T}$, an event $A\in \mathcal{E}$ with $\xi H \mathds{1}_A >0$, write the theory conditioned on $A$ as $\mathbf{T}_\xi|A:D\to \Delta(\mathcal{F})$, defined as
+We recall the convention for denoting by $\mathbf{H}$ the statistical experiment associated with a causal theory $\mathbf{T}^*$. That is, $\mathbf{H}:=\mathbf{T}(\mathbf{Id}\otimes *)$.
+
+Given $\mathbf{T}^*$, an event $A\in \mathcal{E}$ with $\xi \mathbf{H}^* \mathds{1}_A >0$, write the theory conditioned on $A$ as $\mathbf{T}_\xi|A:D\to \Delta(\mathcal{F})$, defined as
 \begin{align}
- \mathbf{T}_\xi|A:= (\xi H (A))^{-1}\begin{tikzpicture}
+ \mathbf{T}_\xi|A:= (\xi \mathbf{H} (A))^{-1}\begin{tikzpicture}
 \path (0,0) node[dist] (theta) {$\xi$}
       +(0,-1) node (D) {}
       ++(0.5,0) coordinate (copy0)
@@ -38,76 +40,41 @@ Given $\mathbf{T}$, an event $A\in \mathcal{E}$ with $\xi H \mathds{1}_A >0$, wr
 \end{tikzpicture}
 \end{align}
 
-Note that $\mathbf{T}_\xi|A$ along with a strategy $\gamma\in \Delta(\mathcal{D})$ is the conditional probability of $\RV{F}$ by the elementary definition - for $B\in \mathcal{F}$, $\mathbf{T}_{\xi,\gamma}|A:B\mapsto \frac{(\xi\otimes\gamma) \mathbf{T} (A,B))}{\xi \mathbf{H} (A)}$.
+Note that $\mathbf{T}_\xi|A$ along with a strategy $\gamma\in \Delta(\mathcal{D})$ is the conditional probability of $\RV{F}$ by the elementary definition -- for $B\in \mathcal{F}$, $\mathbf{T}_{\xi,\gamma}|A:B\mapsto \frac{(\xi\otimes\gamma) \mathbf{T} (A,B))}{\xi \mathbf{H} (A)}$.
 
 \begin{theorem}\label{th:mod_extn}
-Given $\mathbf{T}:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ and $\mathbf{T}':\Theta\times D'\to \Delta(\mathcal{E}\otimes\mathcal{F})$, there exists $\mathbf{M}$ such that $\mathbf{T}'_{\gamma,\xi} | A = \gamma M \mathbf{T}_\xi|A$ for all $\xi\in\Delta(\Theta)$, $\gamma\in\Delta(\mathcal{D}')$ and $A\in \mathcal{E}$ where $\xi \mathbf{H} (A) > 0$  if and only if $\mathbf{T}'$ is a coarsening of $\mathbf{T}$.
+Given $\mathbf{T}^*:\Theta\times D^*\to \Delta(\mathcal{E}\otimes\mathcal{F})$ and $\mathbf{T}:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$, there exists $\mathbf{M}$ such that $\mathbf{T}_{\gamma,\xi} | A = \gamma \mathbf{M} \mathbf{T}^*_\xi|A$ for all $\xi\in\Delta(\Theta)$, $\gamma\in\Delta(\mathcal{D})$ and $A\in \mathcal{E}$ where $\xi \mathbf{H}^* (A) > 0$  if and only if $\mathbf{T}$ is a coarsening of $\mathbf{T}^*$.
 \end{theorem}
 
 \begin{proof}
-Let the coarsening from $\mathbf{T}$ to $\mathbf{T}'$ be witnessed by $\mathbf{M}:D'\to \Delta(\mathcal{D})$. For arbitrary $\xi$, $A$ such that $\xi \mathbf{H} (A)>0$ and arbitrary $\gamma$:
-\begin{align}
-\gamma \mathbf{M} \mathbf{T}_\xi|A &= (\xi \mathbf{H} (A))^{-1}\begin{tikzpicture}
-\path (0,0) node[dist] (theta) {$\xi$}
-      +(0,-1) node[dist] (D) {$\gamma$}
-      +(0.5,-1) node[kernel] (M) {$\mathbf{M}$}
-      ++(1,0) coordinate (copy0)
-      ++(1,0) node[kernel] (H) {$\mathbf{H}$}
-      +(0,-1) node[kernel] (C) {$\mathbf{C}$}
-      ++(0.7,0) node[expectation] (E) {$\mathds{1}_A$}
-      +(0,-1) node (F) {};
-\draw (theta) -- (copy0);
-\draw (D) -- (M)--(C) -- (F);
-\draw (copy0) to [bend right] (C);
-\draw (copy0) to [bend left] (H);
-\draw (H) -- (E);
-\end{tikzpicture}\\
-&= (\xi \mathbf{H} (A))^{-1}\gamma (\xi\otimes \mathbf{M}) \mathbf{T} (\mathds{1}_A\otimes \mathrm{Id}_F)\\
-&= (\xi \mathbf{H} (A))^{-1}\gamma (\xi\otimes \mathrm{Id}_D) \mathbf{T}' (\mathds{1}_A\otimes \mathrm{Id}_F)\\
-&= \mathbf{T}'_{\gamma,\xi} | A
-\end{align}
-
-Suppose we have $\mathbf{M}$ such that $\mathbf{T}'_{\gamma,\xi} | A = \gamma M \mathbf{T}_\xi|A$ for all $\xi\in\Delta(\Theta)$, $\gamma\in\Delta(\mathcal{D}')$ and $A\in \mathcal{E}$ where $\xi \mathbf{H} (A) > 0$. Choose some arbitrary $\theta$. Then for \emph{all} $A\in \mathcal{E}$ either $\mathbf{H}_\theta (A) = 0$ in which case $\mathbf{M} \mathbf{T}_{\theta,d'}(A\times B)=\mathbf{T}'_{\theta,d'}(A\times B)=0$ for all $d'\in D',B\in \mathcal{F}$ or $\mathbf{H}_\theta (A) > 0$ in which case for all $d'$, $B$:
-\begin{align}
-	(\mathbf{H}_\theta(A))^{-1} (\delta_\theta\otimes \delta_{d'})\mathbf{T}'(\mathds{1}_A\otimes \mathds{1}_B) &=  (\mathbf{H}_\theta(A))^{-1} (\delta_\theta\otimes \delta_{d'} \mathbf{M})\mathbf{T}(\mathds{1}_A\otimes \mathds{1}_B)\\
-	(\delta_\theta\otimes \delta_{d'})\mathbf{T}'(\mathds{1}_A\otimes \mathds{1}_B) &=  (\delta_\theta\otimes \delta_{d'} \mathbf{M})\mathbf{T}(\mathds{1}_A\otimes \mathds{1}_B)
-\end{align}
-
-Hence
-\begin{align}
-	(\mathbf{Id}\otimes \mathbf{M}) \mathbf{T} = \mathbf{T}'
-\end{align}
-
-
+This follows from the fact that $\xi \mathbf{H}^* (A)>0$ iff $\xi\mathbf{H} (A) > 0$ and that the two Markov kernels $\mathbf{T}$ and $(\mathbf{Id} \otimes M) \mathbf{T}^*$ are equal if and only if they are equal on all inputs and outputs. See \ref{sec:reu_inf} for a complete proof.
 \end{proof}
 
-In other words, if and only if $\mathbf{T}$ can be coarsened to $\mathbf{T}'$ then we can ``save'' the results of conditioning $\mathbf{T}_\xi$ on $A$ via $\mathbf{T}_\xi|A$ and later on we can determine the effects of some strategy $\gamma$ on $\mathbf{T}'$ via $\gamma \mathbf{M} \mathbf{T}_\xi|A$.
+In other words, if and only if $\mathbf{T}$ can be coarsened to $\mathbf{T}'$ then we can ``save'' the results of conditioning $\mathbf{T}^*_\xi$ on $A$ via $\mathbf{T}^*_\xi|A$, which is a kernel $D\to \Delta(\mathcal{F})$. We can then ``reuse'' this kernel to determine the consequences of some mixed decision $\gamma$ on $\mathbf{T}$ via $\gamma \mathbf{M} \mathbf{T}^*_\xi|A$.
 
-Recall our discussion of the problems of determining the effects of a treatment program vs determining the effects of taking the treatment. We had established that there was known correspondence between $D^{\mathrm{ITT}}$ and $D^p$ -- this correspondence was, precisely, a coarsening from $\mathbf{T}^{\mathrm{ITT}}$ to $\mathbf{T}^p$ (concretely, it proceeds via the kernel $\mathbf{M}:1\mapsto \delta_{e_1}$ and $0\mapsto \delta_{e_0}$). On the other hand, while we didn't identify a known coarsening from $\mathbf{T}^{\mathrm{RT}}$ to $\mathbf{T}^p$, we were argued that such a coarsening likely existed. Finally, we rejected the possibility of a coarsening from $\mathbf{T}^{\mathrm{ITT}}$ to $\mathbf{T}^t$.
+Recall our discussion of the problems of determining the effects of a treatment program and determining the effects of taking the treatment. We had established that there was known correspondence between $D^{\mathrm{ITT}}$ and $D^p$ -- this correspondence was, precisely, a coarsening from $\mathbf{T}^{\mathrm{ITT}}$ to $\mathbf{T}^p$ (concretely, it proceeds via the kernel $\mathbf{M}:1\mapsto \delta_{e_1}$ and $0\mapsto \delta_{e_0}$). On the other hand, while we didn't identify a known coarsening from $\mathbf{T}^{\mathrm{RT}}$ to $\mathbf{T}^p$, we were argued that such a coarsening likely existed. If we represented our uncertainty in this second case with a Markov kernel -- i.e. a mixture over correspondences $D^p\to D^{\mathrm{ITT}}$ then we would also have a coarsening. Finally, we rejected the possibility of a coarsening from $\mathbf{T}^{\mathrm{ITT}}$ to $\mathbf{T}^t$.
 
-Note that coarsening doesn't require a functional relationship between $D'$ and $D$ -- a stochastic map $D'\to \Delta(\mathcal{D})$ is good enough. Thus a coarsening can represent uncertainty over which decisions correspond. This is another potential reason for the profligate decision sets associated with the canonical causal theories we have discussed - it is desirable to feature decisions that we might be certain correspond to decisions in some realistic theory, and also decisions that \emph{might} correspond.
+\subsection{Limits of Coarsening}
 
+We postulate that at least one of the aims of the modelling approaches we study here is to yield rich causal theories can be coarsened to a wide variety of useful realistic theories. One way that such theories might be useful is as follows: suppose we do not know the appropriate theory $\mathbf{T}$, but we do believe that it should be a coarsening of $\mathbf{T}^*$. In that case, all we have to do is work out which decisions in $D$ correspond to which mixtures of decisions in $D^*$, a task that may be substantially easier than determining the full causal theory $\mathbf{T}$; it is the difference between ``what are the consequences of $d_0$'' and ``given that $d_0$ is a do-intervention, is it $do(X=x)?$'' 
 
-\subsection{Universal Coarsening}
+There are limits on this enterprise, however. If a theory $\mathbf{T}^*$ can be coarsened to the entire set of viable realistic theories then there must be at least as many coarsenings as realistic theories. If factorisation into a rich theory and a coarsening helps with the problem of choosing a causal theory, it cannot be by reducing the number of options available to choose from.
 
-We postulate on the basis of the quoted statements from Pearl and Rubin as well as the nature of the causal theories associated with CBNs and PO models that these modelling approaches aim to yield ``fantastical'' causal theories that aren't only useful for solving particular decision problems, but can be coarsened to a wide variety of useful realistic theories. We conclude this discussion with a result showing that there are limits on this enterprise. The only causal theories that can be universally coarsened are consequentially saturated. In this case, we have a theory that offloads all responsibility for informing about consequences onto the choice of coarsening kernel $\mathbf{M}$.
+% \begin{theorem}[Universal Coarsening]
+% Fixing discrete spaces $\Theta,D^*,E,F$, define a \emph{saturated} causal theory $\mathbf{T}^*:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ as a theory where, for every $\mathbf{K}:\Theta\to \Delta(\mathcal{F})$, there exists $\gamma\in \Delta(D^*)$ such that $\mathbf{K}=(\mathbf{Id}\otimes \gamma)\mathbf{T}^*$.
 
-\begin{theorem}[Universal Coarsening]
-Fixing discrete spaces $\Theta,D^*,E,F$, define a \emph{saturated} causal theory $\mathbf{T}^*:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$ as a theory where, for every $\mathbf{K}:\Theta\to \Delta(\mathcal{F})$, there exists $\gamma\in \Delta(D^*)$ such that $\mathbf{K}=(\mathbf{Id}\otimes \gamma)\mathbf{T}^*$.
+% The following statements are equivalent:
+% \begin{itemize}
+%  \item $\mathbf{T}^*$ is a saturated theory
+%  \item For all discrete $D$ and all theories $\mathbf{T}:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$, $\mathbf{T}$ is a coarsening of $\mathbf{T}^*$.
+% \end{itemize}
+% \end{theorem}
 
-The following statements are equivalent:
-\begin{itemize}
- \item $\mathbf{T}^*$ is a saturated theory
- \item For all discrete $D$ and all theories $\mathbf{T}:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$, $\mathbf{T}$ is a coarsening of $\mathbf{T}^*$.
-\end{itemize}
-\end{theorem}
+% \begin{proof}
+% Suppose $\mathbf{T}^*$ is saturated. For every $d\in D$ there is some $f(d)\in D^*$ such that $\mathbf{T}_d = \mathbf{T}_{f(d)}$. Let $\mathbf{M}:d\mapsto \delta_{f(d)}$; then $\mathbf{T}$ is a coarsening of $\mathbf{T}^*$ by $\mathbf{M}$.
 
-\begin{proof}
-Suppose $\mathbf{T}^*$ is saturated. For every $d\in D$ there is some $f(d)\in D^*$ such that $\mathbf{T}_d = \mathbf{T}_{f(d)}$. Let $\mathbf{M}:d\mapsto \delta_{f(d)}$; then $\mathbf{T}$ is a coarsening of $\mathbf{T}^*$ by $\mathbf{M}$.
-
-If every theory is a coarsening of $\mathbf{T}^*$, then in particular the saturated theory $\mathbf{T}^{\mathrm{sat}}:\Theta\times D^*\to \Delta(\mathcal{E}\otimes\mathcal{F})$ is a coarsening of $\mathbf{T}^*$. But then there is some $\mathbf{M}$ such that $(\mathbf{Id}\otimes \mathbf{M})\mathbf{T}^* = \mathbf{T}^{\mathrm{sat}}$, so $\mathbf{T}^*$ must also be saturated. 
-\end{proof}
-
+% If every theory is a coarsening of $\mathbf{T}^*$, then in particular the saturated theory $\mathbf{T}^{\mathrm{sat}}:\Theta\times D^*\to \Delta(\mathcal{E}\otimes\mathcal{F})$ is a coarsening of $\mathbf{T}^*$. But then there is some $\mathbf{M}$ such that $(\mathbf{Id}\otimes \mathbf{M})\mathbf{T}^* = \mathbf{T}^{\mathrm{sat}}$, so $\mathbf{T}^*$ must also be saturated. 
+% \end{proof}
 
 
 % We will return to our discussion of the the ``effect of taking the treatment'' for an example. Suppose we have $\Theta=[0,1]^2:=\Theta_1\otimes \Theta_2$ where given $(\theta_1,\theta_2)\in\Theta$ we identify $\theta_1$ with ``treatment efficacy'' and $\theta_2$ with ``treatment susceptibility''. Let $Y,W=\{0,1\}$ where $Y$ is the set of outcomes and $W$ indicates whether or not a patient took the treatment. Define a potential outcomes model $H_{PO}:\Theta\to \Delta(\mathcal{Y}^2)$, $H_W:\Theta\to \Delta(\mathcal{W})$ and $H_Y:W\times Y^2\to \Delta(\mathcal{Y})$. Furthermore, suppose we have $D=[0,1]^2$ and $C_W:\Theta_2\times D\to \Delta(\mathcal{W})$ defined by $C_W(\theta_2,d_1,d_2;A):= \theta_2(d_1\delta_1(A) (1-d_1)\delta_0(A)) + (1-\theta_2)(d_2\delta_1(A)+(1-d_2)\delta_0(A))$; that is, $d_1$ and $d_2$ parametrise the set of Markov kernels $\Theta_2\to \Delta(\mathcal{W})$. Then $\langle H_{PO},H_W,H_Y,C_W\rangle$ defines a causal theory $T$. Suppose we observe $A\in \mathcal{E}$; then for $(d_1,d_2)\in D$, $B\in \mathcal{E}$:

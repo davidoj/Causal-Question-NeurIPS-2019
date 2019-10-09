@@ -2,15 +2,15 @@
 
 \section{Potential outcomes models}\label{sec:counterfactuals}
 
-We follow \cite{rubin_causal_2005} for the definition of a potential outcomes model, noting any points of divergence. 
+We present one formalisation of potential outcomes (we do not claim it is authoritative) based on \cite{rubin_causal_2005}, and note any points of divergence. 
 
-We will eschew any discussion of sequences. Following the convention set out in the introduction, we will interchangeably use sans serif letters to refer to ``random variables'' and ``particular strings in the string diagram''. $\RV{W}$ is the treatment assignment taking values in $\{0,1\}$, $\RV{Y}(0)$ $\RV{Y}(1)$ are the potential outcomes taking values in $Y$, $\RV{Y}$ is the obseved outcome also taking values in $Y$ and $\RV{X}$ is a ``vector of background facts'' taking values in $X$.
+We will eschew any discussion of sequences. Following the convention set out in the introduction, we will interchangeably use sans serif letters to refer to ``random variables'' and ``particular strings in the string diagram''. $\RV{W}$ is the treatment assignment taking values in $\{0,1\}$, $\RV{Y}(0)$ $\RV{Y}(1)$ are the potential outcomes taking values in $Y$, $\RV{Y}$ is the observed outcome also taking values in $Y$ and $\RV{X}$ is a ``vector of background facts'' taking values in $X$.
 
 Given an underlying state space $\Theta$, a potential outcomes model $\mathscr{O}$ consists of a set of Markov kernels $\langle \mathbf{P}, \mathbf{W}, \mathbf{Y} \rangle$ and a canonical composition that yields a statistical experiment $\mathbf{H}:\Theta\to \Delta(\mathcal{X}\otimes\mathcal{Y}\otimes \mathcal{W})$. 
 
-The kernels are
+The kernels are:
 \begin{itemize}
-\item A ``model on the science'', $\mathbf{P}:\Theta \to \Delta(\mathcal{X}\otimes\mathcal{Y}\otimes\mathcal{Y})$ (In Rubin's notation, $\mathbf{P}$ is $\prod_i f(\RV{X}_i,\RV{Y}_i(0),\RV{Y}_i(1)|\theta)$)
+\item A ``model of the science'', $\mathbf{P}:\Theta \to \Delta(\mathcal{X}\otimes\mathcal{Y}\otimes\mathcal{Y})$ (In Rubin's notation, $\mathbf{P}$ is $\prod_i f(\RV{X}_i,\RV{Y}_i(0),\RV{Y}_i(1)|\theta)$, though as noted we do not consider sequences here)
 \item An ``assignment mechanism'', $\mathbf{W}:\Theta\times X\times Y^2 \to \Delta(\{0,1\})$ (in Rubin's notation, $\mathbf{W}$ is $Pr(\RV{W}|X,Y(1),Y(0))$)
 \item An ``observation model'', $\mathbf{Y}:\{0,1\}\times Y^2\to \Delta(\mathcal{Y})$, defined explicitly as $\mathbf{Y}:(\mathbf{y}^0,\mathbf{y}^1,\mathbf{w})\mapsto (1-\mathbf{w}) \odot \delta_{\mathbf{y}^0} + \mathbf{w} \odot \delta_{\mathbf{y}^0}$ where $\odot$ is the elementwise product
 \end{itemize}
@@ -29,12 +29,13 @@ We then define the \emph{canonical experiment} $\mathbf{H}^{\mathscr{O}}$ by
 	+(0.5,0.4) coordinate (copy1)
 	++ (1.3,0) coordinate (cent1)
 	+(0,-0.5) node[kernel] (HW) {$\mathbf{W}$}
+	+(0.5,-0.5) coordinate (copy2)
 	++(1,0) coordinate (cent2)
 	+ (0,0) node[kernel] (HY) {$\mathbf{Y}$}
 	++(1,0) coordinate (cent3)
-	+(0,0.65) node (X) {$X$}
-	+(0,0) node (Y) {$Y$}
-	+(0,-0.5) node (W) {$W$};
+	+(0,0.65) node (X) {$\RV{X}$}
+	+(0,0) node (Y) {$\RV{Y}$}
+	+(0,-0.5) node (W) {$\RV{W}$};
 	\draw (A) -- (copy0);
 	\draw (copy0) to [bend left=20] (HPO);
 	\draw (copy0) to [bend right=20] ($(HW.west)+(0,-0.1)$);
@@ -42,11 +43,11 @@ We then define the \emph{canonical experiment} $\mathbf{H}^{\mathscr{O}}$ by
 	\draw (copy1) edge[out=0,in=180] (HW);
 	\draw ($(HPO.east)+(0,0.15)$) -- (X) (HY) -- (Y) (HW) -- (W);
 	\draw (copy1) edge[out=0,in=180] ($(HY.west)+(0,0.1)$);
-	\draw ($(HW.east)+(0,0.1)$) to [bend left = 20] ($(HY.west)+(0,-0.1)$);
+	\draw (copy2) to [bend left = 20] ($(HY.west)+(0,-0.1)$);
 \end{tikzpicture}
 \end{align}
 
-The internal wire from $\mathbf{P}$ to $\mathbf{Y}$ and $\mathbf{W}$ carries the bundle of potential outcomes $\RV{Y}(0)\underline{\otimes}\RV{Y}(1)$. Apart from the connection between $\Theta$ and $\mathbf{W}$, this is consistent with Rubin, though the notation is substantially different.
+We have labeled the wires carrying the three observed random variables $\RV{X}, \RV{Y}$ and $\RV{W}$. The potential outcomes $[\RV{Y}(0),\RV{Y}(1)]$ are jointly carried by the lower wire exiting from $\mathbf{P}$  -- drawing separate wires would make the diagram quite crowded.  Apart from the connection between $\Theta$ and $\mathbf{W}$, this composition is consistent with Rubin, though the notation is substantially different.
 
 % Where we have labeled the wires ``carrying'' $\RV{Y}(0)$ and $\RV{Y}(1)$ for clarity. Addtionally, we could draw an alternative diagram where each wire was copied $n$ times to reflect the unit level variables. We can define an extended probability space $H^*$ on which potential outcomes are also random variables:
 
@@ -83,9 +84,9 @@ The internal wire from $\mathbf{P}$ to $\mathbf{Y}$ and $\mathbf{W}$ carries the
 
 \subsection{Are potential outcomes models causal theories?}
 
-By assumption, a potential outcomes model induces a canonical statistical experiment. Given that potential outcomes models are a type of causal model, we can ask whether we can induce a canonical \emph{causal theory}. Clearly, there is no possibility of doing this as naturally as with causal Bayesian networks, as potential outcomes models do not feature consequence maps. We nevertheless propose a tentative answer to this question by considering the science $\mathbf{P}$ to be fixed and the assignment function $\mathbf{W}$ to be variable, which seems to be in line with the intuitive ideas underpinning the potential outcomes approach. In addition, it leads to the every potential outcomes model with different science $\mathbf{P}$ having a different associated causal theory, which we consider a minimal requirement for any rule claiming to represent potential outcomes models as causal theories.
+By assumption, a potential outcomes model induces a canonical statistical experiment. Given that potential outcomes models are a type of causal model, we can ask whether we can induce a canonical \emph{causal theory}. It is not possible to do this as naturally as with causal Bayesian networks because potential outcomes models do not feature consequence maps. Nevertheless, a causal theory can be induced by considering the science $\mathbf{P}$ to be fixed and the assignment function $\mathbf{W}$ to be variable, which seems to us to be in line with the ideas underpinning the potential outcomes approach. In addition, the rule we obtain distinguishes every potential outcomes model with different science $\mathbf{P}$, which we consider a minimal requirement for any rule claiming to represent potential outcomes models as causal theories.
 
-Suppose a potential outcomes model $\mathscr{O}$ is equipped with associated discrete spaces $\Theta,X,Y,\{0,1\}$, define $D:=[0,1]^{|\Theta|+2|Y|+|X|}$. There is a kernel $\mathbf{B}:D\times\Theta\times X \times Y^2\to \Delta(\mathcal{W})$ such that for every Markov kernel $\mathbf{W}':\Theta\times X\times Y^m\to \Delta(\{0,1\})$ there exists $d\in D$ such that $\mathbf{W}'=\mathbf{B}_d$; that is, $D$ indexes the set possible treatment assignment maps. The assumption of discrete spaces is to guarantee the existence of such a $\mathbf{B}$.
+Suppose a potential outcomes model $\mathscr{O}$ is equipped with discrete spaces $\Theta,X,Y,\{0,1\}$ and define $D:=[0,1]^{|\Theta|+2|Y|+|X|}$. There is a kernel $\mathbf{B}:D\times\Theta\times X \times Y^2\to \Delta(\mathcal{W})$ such that for every Markov kernel $\mathbf{W}':\Theta\times X\times Y^m\to \Delta(\{0,1\})$ there exists $d\in D$ with $\mathbf{W}'=\mathbf{B}_d$; that is, $D$ indexes the set possible treatment assignment maps. The assumption of discrete spaces is to guarantee the existence of such a $\mathbf{B}$.
 
 From $\mathscr{O}$ and $\mathbf{B}$ we define the \emph{canonical theory} $\mathbf{T}^{\mathscr{O}}$:
 
@@ -101,7 +102,9 @@ From $\mathscr{O}$ and $\mathbf{B}$ we define the \emph{canonical theory} $\math
 	+(0.5,-0.5) coordinate (copy1C)
 	++ (1.3,0) coordinate (cent1)
 	+(0,0.5) node[kernel] (HW) {$\mathbf{W}$}
+	+(0.5,0.5) coordinate (copy2)
 	+(0,-1.5) node[kernel] (CW) {$\mathbf{B}$}
+	+(0.5,-1.5) coordinate (copy2C)
 	++(1,0) coordinate (cent2)
 	+ (0,1) node[kernel] (HY) {$\mathbf{Y}$}
 	+ (0,-1) node[kernel] (HYC) {$\mathbf{Y}$}
@@ -124,7 +127,7 @@ From $\mathscr{O}$ and $\mathbf{B}$ we define the \emph{canonical theory} $\math
 	\draw (D) -- ($(CW.west)+(0,-0.15)$);
 	\draw ($(HPO.east)+(0,0.15)$) -- (X) ($(HPOC.east)+(0,0.15)$) -- (XC) (HY) -- (Y) (HYC) -- (YC) (HW) -- (W) (CW) -- (WC);
 	\draw (copy1) edge[out=0,in=180] ($(HY.west)+(0,0.1)$) (copy1C) edge[out=0,in=180] ($(HYC.west)+(0,0.1)$);
-	\draw ($(HW.east)+(0,0.1)$) to [bend left = 20] ($(HY.west)+(0,-0.1)$) ($(CW.east) + (0,0.1)$) to [bend left = 20] ($(HYC.west)+(0,-0.1)$);
+	\draw (copy2) to [bend left = 20] ($(HY.west)+(0,-0.1)$) (copy2C) to [bend left = 20] ($(HYC.west)+(0,-0.1)$);
 \end{tikzpicture}\label{eq:po_causal_theory}
 \end{align}
 
@@ -137,38 +140,38 @@ Given potential outcomes models $\mathscr{O}=\langle \mathbf{P}, \mathbf{W}, \ma
 
 Let $\mathbf{T}:=\mathbf{T}^{\mathscr{O}}$ and $\mathbf{T}':=\mathbf{T}^{\mathscr{O}'}$.
 
-If $\mathbf{P}=\mathbf{P}'$ and $\mathbf{H}=\mathbf{H}'$ we clearly have $\mathbf{C}:=\mathbf{T}(*\otimes \mathrm{Id}) = \mathbf{T}(*\otimes \mathrm{Id})$ as all kernels in the bottom half of \ref{eq:po_causal_theory} ($\mathbf{P},\mathbf{B}$ and $\mathbf{Y}$) are the same by definition. But then $\mathbf{T} = \splitter{0.1}(\mathbf{H}\otimes\mathbf{C}) = \mathbf{T}'$.
+If $\mathbf{P}=\mathbf{P}'$ and $\mathbf{H}=\mathbf{H}'$ we clearly have $\mathbf{T}(*\otimes \mathrm{Id}) = \mathbf{T}'(*\otimes \mathrm{Id}):=\mathbf{C}$ as all kernels in the bottom half of \ref{eq:po_causal_theory} ($\mathbf{P},\mathbf{B}$ and $\mathbf{Y}$) are the same by definition. But then $\mathbf{T} = \splitter{0.1}(\mathbf{H}\otimes\mathbf{C}) = \mathbf{T}'$.
 
-Suppose $\mathbf{T}=\mathbf{T}'$ and $\mathbf{P}\neq \mathbf{P}'$. Then there exists some $A\in \mathcal{X}\otimes\mathcal{Y}^2$, $\theta\in \Theta$ such that $\mathbf{P}_\theta (A) \neq \mathbf{P}'_\theta(A)$. Choose $d\in D$ such that $\mathbf{B}_{\theta,d,x,y_0,y_1} = \delta_0$ if $(x,y_0,y_1)\in A$ and $\mathbf{B}_{\theta,d,x,y_0,y_1} = \delta_1$ otherwise. But then $\mathbf{T}^\mathscr{O}_{\theta,d} \pi_{\RV{W}} (\{0\})  =\mathbf{P}_\theta (A) \neq \mathbf{P}'_\theta(A) = \mathbf{T}^{\mathscr{O}\prime}_{\theta,d} \pi_{\RV{W}} (\{0\})$, a contradiction. Thus $\mathbf{P}=\mathbf{P}'$. In addition, $\mathbf{H} = \mathbf{T}(\mathrm{Id}\otimes *) = \mathbf{H}'$.
+Suppose $\mathbf{T}=\mathbf{T}'$ and $\mathbf{P}\neq \mathbf{P}'$. Then there exists some $A\in \mathcal{X}\otimes\mathcal{Y}^2$, $\theta\in \Theta$ such that $\mathbf{P}_\theta (A) \neq \mathbf{P}'_\theta(A)$. Choose $d\in D$ such that $\mathbf{B}_{d,\theta,x,y_0,y_1} = \delta_0$ if $(x,y_0,y_1)\in A$ and $\mathbf{B}_{d,\theta,x,y_0,y_1} = \delta_1$ otherwise. Then $\mathbf{T}^\mathscr{O}_{\theta,d} \Pi_{\RV{W}} (\{0\})  =\mathbf{P}_\theta (A) \neq \mathbf{P}'_\theta(A) = \mathbf{T}^{\mathscr{O}\prime}_{\theta,d} \Pi_{\RV{W}} (\{0\})$, a contradiction. Thus $\mathbf{P}=\mathbf{P}'$. In addition, $\mathbf{H} = \mathbf{T}(\mathrm{Id}\otimes *) = \mathbf{T}'(\mathrm{Id}\otimes *) =\mathbf{H}'$.
 \end{proof}
 
 Note that the assignment $\mathbf{W}$ may differ between $\mathscr{O}$ and $\mathscr{O}'$. Suppose $X=\emptyset$, $Y=\{0,1\}$ and for some $\theta$, $\mathbf{P}_\theta = \frac{1}{4}(\delta_{0,0}+\delta_{0,1}+\delta_{1,0}+\delta_{1,1})$. Then $\mathbf{W}_\theta:(y_0,y_1)\mapsto \llbracket y_0=y_1\rrbracket\delta_0 + \llbracket y_0\neq y_1\rrbracket \delta_1$ and $\mathbf{W}'_\theta := 1-\mathbf{W}_\theta$ both yield the same observations $\mathbf{H}_\theta$. It may be desirable that a mapping from PO models to causal theories also distinguishes PO models that differ only on $\mathbf{W}$ - for example, we might want some decision $d\in D$ to always be interpretable as ``in the state $\theta$, raise the probability of treatment above the observed level iff $y_0\neq y_1$'', a decision which would yield different consequences given a theory based on $\mathbf{W}_\theta$ or $\mathbf{W}'_\theta$. 
 
-\section{Dextrous Theories and Pragmatic Theories}
+\section{Potential Outcomes Models Induce Rich Causal Theories}
 
-While we began by defining causal theories as objects to be used in the solution of CSDPs, we have for both potential outcomes models and CBNs constructed theories that are clearly unfit for this task. Under $\mathbf{T}^{\mathscr{O}}$ we have the possibility (among others) of deciding to assign treatment if and only if $y_1 > y_0$. Under a CBN theory, we can simply apply a $do()$ intervention that sets all variables to their most desirable state; in neither case is any inference warranted whatsoever. We will call theories that posit unreasonably fine levels of control \emph{dextrous theories}.
+Though the theory $\mathbf{T}^{\mathscr{O}}$ appears to be quite different in a number of ways from theories induced by a causal graph $\mathbf{T}^\mathcal{G}$, it also features a rich set of decisions. If it is possible to choose any assignment function from $\Theta\times X\times Y^2\to\Delta(\{0,1\})$, then it is (for example) possible to choose a functon that assigns treatment if and only if $y_1 > y_0$ independent of state $\theta$.
 
-For the purpose of choosing a strategy to solve a decision problem, we want to work with a \emph{pragmatic theory} describing a more restricted set of decisions that correspond to actions we believe we can actually take. However, we may be willing to accept that a dextrous theory $\mathbf{T}^x$ models our pragmatic theory $\mathbf{T}^g$ in the sense that there is a correspondence $m$ between decisions in each theory such that the consequences of $d$ via $\mathbf{T}^g$ are the same as the consequences of $m(d)$ via $\mathbf{T}^x$. In this sense a dextrous theory may still be useful for strategy choice in real decision problems. To illustrate this, consider the problem of evaluating the ``effect of assigning treatment'' vs ``the effect of receiving treatment''. From \citet{shrier_intention--treat_2017}:
+As with causal Bayesian networks, for a real decision problem we would like to work with a realistic theory $\mathbf{T}^r$ on a set of decisions $D^r$ that correspond to actions we believe we can actually take. However, we may be willing to accept that the realistic theory $\mathbf{T}^r$ corresponds closely to the rich theory $\mathbf{T}^\mathscr{O}$ with, for example, a limited set of decisions. To illustrate this, consider the problem of evaluating the ``effect of assigning treatment'' vs ``the effect of receiving treatment''. From \citet{shrier_intention--treat_2017}:
 
 \begin{quote}
-In public health, we are normally concerned with the first question -- the effect of assigning a treatment. If we implement a prevention or treatment program that is efficacious only under strict research conditions but people in the real world would not receive it for any possible reason, the program will not be effective. This real-world context is termed the “average causal effect” of assigning treatment and is best estimated by the intention-to-treat (ITT) analysis [...]
+In public health, we are normally concerned with the effect of assigning a treatment. If we implement a prevention or treatment program that is efficacious only under strict research conditions but people in the real world would not receive it for any possible reason, the program will not be effective. This real-world context is best estimated by the intention-to-treat (ITT) analysis [...]
 
-There are 2 reasons why the average causal effect ofreceiving a treatment may be more important than the ITT for some people. First, even in the public health domain, investigators may want to know what the average causal effect of a treatment program would be if they could improve participation in the program. [...] Also, the average causal effect of receiving a treatment is of primary interest to a patient deciding whether or not to take the treatment as recommended.
+There are 2 reasons why the average causal effect of receiving a treatment may be more important than the ITT for some people. First, investigators may want to know what the average causal effect of a treatment program would be if they could improve participation in the program. [...] Also, the average causal effect of receiving a treatment is of primary interest to a patient deciding whether or not to take the treatment as recommended.
 \end{quote}
 
-Concretely, suppose we have two dextrous theories $\mathbf{T}^{\mathrm{ITT}}$ and $\mathbf{T}^{\mathrm{RT}}$ modelling effects of intention-to-treat and receiving treatment respectively, and we want pragmatic theories $\mathbf{T}^p,\mathbf{T}^t$ describing the effects of prescribing treatment and taking treatment respectively. Consider the first decision problem described: we have two pragmatic decisions $D^p=\{0,1\}$ where $d_p=1$ corresponds to ``implement a treatment program'' and $d_p=0$ corresponds to ``do nothing''. Under the intention to treat model $\mathbf{T}^{\mathrm{ITT}}$ we are willing to accept that these decisions correspond determinisically setting $\RV{W}=1$ and $\RV{W}=0$ respectively. That is, we suppose that the consequence of choosing $d_p=1$ in the pragmatic theory $\mathbf{T}^p$ is the same as the consequence of choosing the decision $e_1\in D^{\mathrm{ITT}}$ such that for all $\theta,x,y_0,y_1$, $\mathbf{B}^{\mathrm{ITT}}_{\theta,d,x,y_0,y_1} = \delta_1$ and analogously $d_p=0$ corresponds to the elemet $e_0\in D^{\mathrm{ITT}}$ that sets $\RV{W}$ to 0.
+Concretely, suppose we have two rich theories $\mathbf{T}^{\mathrm{ITT}}$ and $\mathbf{T}^{\mathrm{RT}}$ modelling effects of intention-to-treat and receiving treatment respectively, and we want realistic theories $\mathbf{T}^p,\mathbf{T}^t$ describing the effects of prescribing treatment and taking treatment respectively. Consider the first decision problem: we have two decisions $D^p=\{d_0,d_1\}$ where $d_1$ corresponds to ``implement a treatment program'' and $d_0$ corresponds to ``do nothing''. Under the intention to treat model $\mathbf{T}^{\mathrm{ITT}}$ it is plausible that these decisions correspond to determinisically setting $\RV{W}=1$ and $\RV{W}=0$ respectively. In detail, we suppose that the consequence of choosing $d_1$ in the pragmatic theory $\mathbf{T}^p$ is the same as the consequence of choosing the decision $e_1\in D^{\mathrm{ITT}}$ such that for all $\theta,x,y_0,y_1$, $\mathbf{B}^{\mathrm{ITT}}_{\theta,d,x,y_0,y_1} = \delta_1$ and analogously $d_0$ corresponds to the element $e_0\in D^{\mathrm{ITT}}$ that sets $\RV{W}$ to 0.
 
-Consider the same problem -- that of implementing a treatment program -- for the dextrous theory of receiving treatment $\mathbf{T}^{\mathrm{RT}}$. Here, a correspondence between $D^p$ and $D^{\mathrm{RT}}$ is less clear. We may accept that implementing a treatment program corresponds to \emph{some} choice of treatment taking function $\mathbf{B}^{\mathrm{RT}}$, one that is perhaps more likely to result in treatment than that for doing nothing. However, without more information we have only the idea that there is a correspondence between $D^{\mathrm{RT}}$ and $D^p$ and not what this correspondence is. We could, of course, express our uncertainty with a set of possible correspondences or a probability measure over correspondences and proceed from there.
+Consider the same problem -- that of implementing a treatment program -- for the rich theory of receiving treatment $\mathbf{T}^{\mathrm{RT}}$. Here, a correspondence between $D^p$ and $D^{\mathrm{RT}}$ is less clear. We may accept that implementing a treatment program corresponds to \emph{some} choice of treatment taking function $\mathbf{B}^{\mathrm{RT}}$, one that is perhaps more likely to result in treatment than that for doing nothing. However, without more information we have only that there is a correspondence between $D^{\mathrm{RT}}$ and $D^p$ and not what this correspondence is. We could, for example, express our uncertainty with a set of possible correspondences or a probability measure over over this set and proceed from there.
 
-Consider the third decision problem, where decisions correspond to taking the treatment, and in particular consider using the dextrous theory $\mathbf{T}^{\mathrm{ITT}}$. It is very likely that \emph{no} choice of prescription function $\RV{W}^{\mathrm{ITT}}$ is consistent with the test subjects always taking the treatment. That is, we're not just uncertain about the correspondence between dextrous decisions $D^{\mathrm{ITT}}$ and pragmatic decisions $D^t$ - we are in fact confident that there is no such correspondence.
+Consider the third decision problem, where decisions correspond to taking the treatment, and in particular consider using the rich theory $\mathbf{T}^{\mathrm{ITT}}$. It is very likely that \emph{no} choice of prescription function $\RV{W}^{\mathrm{ITT}}$ is consistent with the test subjects always taking the treatment. In this case we're not just uncertain about the correspondence between rich decisions $D^{\mathrm{ITT}}$ and realistic decisions $D^t$ -- we are are actually confident that there is no such correspondence.
 
-\section{Comparing Causal Bayesian Networks and Potential Outcomes theories}
+\section{Comparing Induced Causal Theories}
 
-Expressing both CBNs and PO models as causal theories allows us to compare models from framework, and we see that causal theories typically obtained are rather different. For example, a CBN $\mathcal{G}$ defines an intervention operation for every random variable that has been represented as a node of $\mathcal{G}$ while a PO model $\mathscr{O}$ (at least in the version developed here) will typically not allow any decisions that deterministically set $\RV{Y}$ and no decisions may affect $\RV{X}$ at all. On the other hand, decisions in a theory $\mathbf{T}^{\mathscr{O}}$ may yield arbitrary dependence of $\RV{W}$ on a number of unobserved quantities, which is not a possibility at least for the basic type of CBN discussed here. However, it may be the case that the pragmatic theory we derive starting from either a CBN or PO theory is the same.
+Causal theories induced by CBN and PO models are directly comparable, and the induces theories are typically rather different. For example, a CBN $\mathcal{G}$ defines an intervention operation for every random variable that has been represented as a node of $\mathcal{G}$, which is reflected in $\mathbf{T}^\mathcal{G}$, while an induced PO theory $\mathbf{T}^\mathscr{O}$ will typically not allow any decisions that deterministically set $\RV{Y}$ in all states, and no decisions may affect $\RV{X}$ at all. On the other hand, decisions in a theory $\mathbf{T}^{\mathscr{O}}$ allow $\RV{W}$ to depend arbitrarily on $\RV{X}$ and $\theta$ together, which is not possible for a theory induced by a CBN. Despite these differences, when we move from rich theories to realistic theories we may end up with the same result using either method.
 
-Suppose we have a CBN $\mathcal{G}:=W\rightarrowtriangle Y$, where $\RV{W}$ and $\RV{Y}$ are random variables taking values in some arbitrary spaces $W$ and $Y$. Suppose also that we require a pragmatic theory $\mathbf{T}^\mathcal{G}:\Theta\times W\to \Delta([\mathcal{W}\otimes\mathcal{Y}]^2)$ where our decisions correspond only to ``hard do interventions'' $do(W=w)$ on $\RV{W}$ under the full CBN theory -- that is, we have no decisions corresponding to do-interventions on $\RV{Y}$ or do-nothing. Then there exist Markov kernels $\mathbf{W}:\Theta\to \Delta(\mathcal{W})$, $\mathbf{Y}:\Theta\times W\to \Delta(\mathcal{Y})$  such that $\mathbf{T}^\mathcal{G}$ can be represented as in the diagram \ref{eq:twovar_ecbn}. Conversely, any causal theory that can be represented in this manner is a candidate for $\mathbf{T}^\mathcal{G}$ (see \ref{sec:cbn_as_ct})
+Suppose we have a CBN $\mathcal{G}:=W\rightarrowtriangle Y$, where $\RV{W}$ and $\RV{Y}$ are random variables taking values in some arbitrary spaces $W$ and $Y$. Suppose also that we require a realistic theory $\mathbf{T}^\mathcal{G}:\Theta\times W\to \Delta([\mathcal{W}\otimes\mathcal{Y}]^2)$ where our decisions correspond only to ``hard do interventions'' $do(W=w)$ on $\RV{W}$ under the full CBN theory -- that is, we have no decisions corresponding to do-interventions on $\RV{Y}$ or do-nothing. Then there exist Markov kernels $\mathbf{W}:\Theta\to \Delta(\mathcal{W})$, $\mathbf{Y}:\Theta\times W\to \Delta(\mathcal{Y})$  such that $\mathbf{T}^\mathcal{G}$ can be represented as in the diagram \ref{eq:twovar_ecbn}. Conversely, any causal theory that can be represented in this manner is a candidate for $\mathbf{T}^\mathcal{G}$ (see \ref{sec:cbn_as_ct})
 \begin{align}
-\begin{tikzpicture}
+\begin{tikzpicture}[yscale=0.7]
  \path (0,0) coordinate (T)
   + (0,-1.15) coordinate (D)
   ++(0.5,0) coordinate (copy0)
@@ -199,10 +202,10 @@ Suppose we have a CBN $\mathcal{G}:=W\rightarrowtriangle Y$, where $\RV{W}$ and 
  \end{tikzpicture} \label{eq:twovar_ecbn}
  \end{align}
 
- Suppose we have a PO model $\mathscr{O}=\langle \mathbf{P}, \mathbf{W}, \mathbf{Y} \rangle$ on $\Theta$, $W$ and $Y$ such that $\mathbf{W}$ depends only on $\Theta$. Suppose also that we require a pragmatic theory where, similarly to the case above, decisions correspond only to ``setting'' $\RV{W}$ in the standard theory associated with $\mathscr{O}$. Then the resulting theory can be represented by the diagram \ref{eq:twovar_epo}. Conversely, there is a PO model for every causal theory with this representation.
+ Suppose we have a PO model $\mathscr{O}=\langle \mathbf{P}, \mathbf{W}, \mathbf{Y} \rangle$ on $\Theta$, $W$ and $Y$ such that $\mathbf{W}$ depends only on $\Theta$. Suppose also that we require a realistic theory where, similarly to the case above, decisions correspond only to ``setting'' $\RV{W}$ in the standard theory associated with $\mathscr{O}$. Then the resulting theory can be represented by the diagram \ref{eq:twovar_epo}. Conversely, there is a PO model for every causal theory with this representation.
 
 \begin{align}
-\begin{tikzpicture}
+\begin{tikzpicture}[yscale=0.8]
 	\path (0,0) coordinate (A)
 	+ (0,-1.65) coordinate (D)
 	++ (1,0) coordinate (copy0)
@@ -231,7 +234,7 @@ Suppose we have a CBN $\mathcal{G}:=W\rightarrowtriangle Y$, where $\RV{W}$ and 
 \end{tikzpicture} \label{eq:twovar_epo}
 \end{align}
 
-In the lower diagram we can define $\mathbf{Y}^*:= (\mathbf{P}\otimes\mathbf{Id})\mathbf{Y}'$ to produce a diagram that is topologically equivalent to \ref{eq:twovar_ecbn}. While $\mathbf{P}$ and $\mathbf{W}$ are arbitrary, $\mathbf{Y}'$ has a particular form. It is still possible to express a general kernel $\mathbf{Y}:\Theta\times W\to \Delta(\mathcal{Y})$ in the form of $\mathbf{Y}^*$; let $\mathbf{P}:\theta\mapsto \mathbf{Y}_{\theta,0}\otimes\mathbf{Y}_{\theta,1}$. Then $\mathbf{Y}^*=\mathbf{Y}$. Thus under the restrictions given, the sets of viable pragmatic theories derived from the CBN and the PO model are exactly the same.
+In the lower diagram we can define $\mathbf{Y}^*:= (\mathbf{P}\otimes\mathbf{Id})\mathbf{Y}'$ to produce a diagram that is equivalent to \ref{eq:twovar_ecbn}. While $\mathbf{P}$ and $\mathbf{W}$ are arbitrary, $\mathbf{Y}'$ has a particular form. It is still possible to express a general kernel $\mathbf{Y}:\Theta\times W\to \Delta(\mathcal{Y})$ in the form of $\mathbf{Y}^*$; let $\mathbf{P}:\theta\mapsto \mathbf{Y}_{\theta,0}\otimes\mathbf{Y}_{\theta,1}$. Then $\mathbf{Y}^*=\mathbf{Y}$. Thus under the restrictions given, the sets of viable realistic theories derived from the CBN and the PO models are exactly the same.
 
 % We will propose, somewhat weakly, that given a well-specified potential outcomes model, decisions correspond to modifications of $H_W$. This supposition generalises the approach to policy modelling found in \cite{heckman_policy-relevant_2001.} As there is no general way to identify an arbitrary set of decisions $D$ with different assignment functions $H_W$, we offer (weakly) that the answer to the question in the paragraph above is ``no''. However, given knowledge of the ``decision-influenced treatment assignment'' $C_W:\Theta\times D\to \{0,1\}^n$, we \emph{can} define a causal theory via the four elements $\langle H_{PO}, H_W, H_Y, C_W\rangle$. We've supposed here there are $n$ ``observational'' units and $n$ ``consequence'' units, a restriction that simplifies the notation and is fairly easy to lift. Concretely, the causal theory is:
 

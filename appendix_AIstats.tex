@@ -4,16 +4,16 @@
 
 \begin{definition}[Elementary Causal Bayesian Network]
 
-Given $D$, $E$, $\Theta$, random variables $\{\RV{X}^i\}_{i\in [n]}$ on $E$, a distinguished variable $\RV{X}^0$ taking values in $D$ and a causal theory $T:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{E})$ with $H:= T(\mathrm{Id}_E\otimes *_E)$ and $C:= T(*_E\otimes \mathrm{Id}_E)$, an \emph{elementary Causal Bayesian Network} (eCBN) compatible with $T$ is a directed acyclic graph (DAG) $\mathcal{G}$ with nodes $\{\RV{X}^i\}_{i\in [n]}$ such that
+Given $D$, $E$, $\Theta$, random variables $\{\RV{X}^i\}_{i\in [n]}$ on $E$, a distinguished variable $\RV{X}^0$ taking values in $D$ and a causal theory $\mathbf{T}:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{E})$ with $\mathbf{H}:= \mathbf{T}(\mathrm{Id}_E\otimes *_E)$ and $\mathbf{C}:= \mathbf{T}(*_E\otimes \mathrm{Id}_E)$, an \emph{elementary Causal Bayesian Network} (eCBN) compatible with $\mathbf{T}$ is a directed acyclic graph (DAG) $\mathcal{G}$ with nodes $\{\RV{X}^i\}_{i\in [n]}$ such that
 
 \begin{enumerate}
-    \item $H_\theta$ and $C_{\theta,d}$ are compatible with $\mathcal{G}$ (see \citet{pearl_causality:_2009})
-    \item $C_{\theta,d} F_{\RV{X}^i}=\delta_{d}$
-    \item For all $i\neq 0$, $C_{\theta|\PA{\mathcal{G}}{\RV{X}^i}} F_{\RV{X}^i}=H_{\theta|\PA{\mathcal{G}}{\RV{X}^i}}F_{\RV{X}^i} $, $H_\theta$-almost surely
+    \item $\mathbf{H}_\theta$ and $\mathbf{C}_{\theta,d}$ are compatible with $\mathcal{G}$ (see \citet{pearl_causality:_2009})
+    \item $\mathbf{C}_{\theta,d} \Pi_{\RV{X}^i}=\delta_{d}$
+    \item For all $i\neq 0$, $\mathbf{C}_{\theta|\PA{\mathcal{G}}{\RV{X}^i}} \Pi_{\RV{X}^i}=\mathbf{H}_{\theta|\PA{\mathcal{G}}{\RV{X}^i}}\Pi_{\RV{X}^i} $, $\mathbf{H}_\theta$-almost surely
 \end{enumerate}
 \end{definition}
 
-Suppose we have the EDAG $\mathcal{G}:=X\rightarrowtriangle Y$, where $\RV{X}$ and $\RV{Y}$ are random variables taking values in some arbitrary spaces $X$ and $Y$. Then $\mathcal{G}$ is compatible with a causal theory $T:\Theta\times X\to \Delta([\mathcal{X}\otimes\mathcal{Y}]^2)$ if and only if there exist Markov kernels $\mathbf{X}:\Theta\to \Delta(\mathcal{X})$, $\mathbf{Y}:\Theta\times X\to \Delta(\mathcal{Y})$ such that
+Suppose we have the EDAG $\mathcal{G}:=X\rightarrowtriangle Y$, where $\RV{X}$ and $\RV{Y}$ are random variables taking values in some arbitrary spaces $X$ and $Y$. Then $\mathcal{G}$ is compatible with a causal theory $\mathbf{T}:\Theta\times X\to \Delta([\mathcal{X}\otimes\mathcal{Y}]^2)$ if and only if there exist Markov kernels $\mathbf{X}:\Theta\to \Delta(\mathcal{X})$, $\mathbf{Y}:\Theta\times X\to \Delta(\mathcal{Y})$ such that
 \begin{align}
 \begin{tikzpicture}
  \path (0,0) coordinate (T)
@@ -43,16 +43,67 @@ Suppose we have the EDAG $\mathcal{G}:=X\rightarrowtriangle Y$, where $\RV{X}$ a
   \draw (copy3) to [bend left] (Xout);
   \draw (X) -- (Y) -- (Yout);
   \draw (Y1) -- (Yout1);
- \end{tikzpicture} 
+ \end{tikzpicture} \label{eq:graphtheory}
  \end{align} 
 
 Here we represent the identity kernel explicitly to make clear that it replaces $\mathbf{X}$ in the lower part of the diagram. This fact is hidden by the usual convention of representing the identity by a bare wire.
 
 \begin{proof}
-Condition 1 is vacuous. Condition 2 is equivalent to asserting that $C_{\theta,d} F_{\RV{X}^i}$ is the identity map. The shared kernel $\mathbf{Y}$ guarantees 3 and if $\mathbf{Y}$ cannot be shared then 3 does not hold.
+Condition 1 is vacuous. 
+
+Condition 2 is equivalent to asserting that $C_{\theta} \Pi_{\RV{X}^i}$ is the identity map. 
+
+Suppose $\mathbf{T}$ is compatible with $\mathcal{G}$. Then for any $\theta$, $d$, both $\mathbf{C}_{\theta,d|\{\RV{X}\}} \Pi_{\RV{Y}}$ and $\mathbf{H}_{\theta|\{\RV{X}\}} \Pi_{\RV{Y}}$ must be $\mathbf{H}_\theta$ almost surely equal, and both may be arbitrary on any set of measure 0. $X\times Y$ is a discrete space, so they may both in fact be arbitrary on every set of measure 0. Thus for all events they are either equal or jointly arbitrary, and so we can always choose them to be equal. Defining the resulting choice $\mathbf{Y}$, it is a property of conditional probability that the construction in \ref{eq:graphtheory} agrees with $\mathbf{T}$ for any $\theta$, $d$, and hence the construction is equal to $\mathbf{T}$.
+
+Suppose $\mathbf{T}$ is represented by \ref{eq:graphtheory}. Then $\mathbf{C}_{\theta|\{\RV{X}\}} \Pi_{\RV{Y}}$ and $\mathbf{H}_{\theta|\{\RV{X}\}} \Pi_{\RV{Y}}$ are equal, so they are equal $\mathbf{H}_\theta$ almost surely.
 \end{proof}
 
-A particularly interesting feature of this representation is the fact that the edge cutting behaviour, usually an implicit part of the definition of a CBN, is displayed explicitly by replacing $\mathbf{X}$ by the identity. 
+An interesting feature of this representation is the fact that the edge cutting behaviour, usually an implicit part of the definition of a CBN, is displayed explicitly by replacing $\mathbf{X}$ with the identity kernel. We also note that \ref{eq:graphtheory} has what looks like a backdoor path between $\mathbf{X}$ and $\mathbf{Y}$ which is not in $\mathcal{G}$. Though we do not know which if any correspondences between DAG and causal theory diagrams exist, we speculate that this backdoor is ``blocked'' by the fact that we invoke particular values of $\theta$ in the defintion of an eCBN.
+
+\section{Reusable Inference}\label{sec:reu_inf}
+
+\begin{theorem}
+Given $\mathbf{T}^*:\Theta\times D^*\to \Delta(\mathcal{E}\otimes\mathcal{F})$ and $\mathbf{T}:\Theta\times D\to \Delta(\mathcal{E}\otimes\mathcal{F})$, there exists $\mathbf{M}$ such that $\mathbf{T}_{\gamma,\xi} | A = \gamma \mathbf{M} \mathbf{T}^*_\xi|A$ for all $\xi\in\Delta(\Theta)$, $\gamma\in\Delta(\mathcal{D})$ and $A\in \mathcal{E}$ where $\xi \mathbf{H}^* (A) > 0$  if and only if $\mathbf{T}$ is a coarsening of $\mathbf{T}^*$.
+\end{theorem}
+
+\begin{proof}
+Let the coarsening from $\mathbf{T}^*$ to $\mathbf{T}$ be induced by $\mathbf{M}:D\to \Delta(\mathcal{D}^*)$. For arbitrary $\xi$, $A$ such that $\xi \mathbf{H}^* (A)>0$ and arbitrary $\gamma$:
+\begin{align}
+\gamma \mathbf{M} \mathbf{T}^*_\xi|A &= (\xi \mathbf{H}^* (A))^{-1}\begin{tikzpicture}
+\path (0,0) node[dist] (theta) {$\xi$}
+      +(0,-1) node[dist] (D) {$\gamma$}
+      +(0.5,-1) node[kernel] (M) {$\mathbf{M}$}
+      ++(1,0) coordinate (copy0)
+      ++(1,0) node[kernel] (H) {$\mathbf{H}$}
+      +(0,-1) node[kernel] (C) {$\mathbf{C}$}
+      ++(0.7,0) node[expectation] (E) {$\mathds{1}_A$}
+      +(0,-1) node (F) {};
+\draw (theta) -- (copy0);
+\draw (D) -- (M)--(C) -- (F);
+\draw (copy0) to [bend right] (C);
+\draw (copy0) to [bend left] (H);
+\draw (H) -- (E);
+\end{tikzpicture}\label{eq:mts}\\
+&= (\xi \mathbf{H} (A))^{-1} (\xi\otimes \gamma) \mathbf{T} (\mathds{1}_A\otimes \mathrm{Id}_F) \label{eq:ts_to_t}\\
+&= \mathbf{T}_{\gamma,\xi} | A
+\end{align}
+Where \ref{eq:ts_to_t} follows from the fact that $\mathbf{T}$ is by assumption equal to the central subdiagram on line \ref{eq:mts}.
+
+Suppose we have $\mathbf{M}$ such that $\mathbf{T}_{\gamma,\xi} | A = \gamma M \mathbf{T}^*_\xi|A$ for all $\xi\in\Delta(\Theta)$, $\gamma\in\Delta(\mathcal{D})$ and $A\in \mathcal{E}$ where $\xi \mathbf{H}^* (A) > 0$. Choose some arbitrary $\theta$. Then for \emph{all} $A\in \mathcal{E}$ either $\mathbf{H}^*_\theta (A) = 0$ in which case $\mathbf{M} \mathbf{T}^*_{\theta,d}(A\times B)=\mathbf{T}_{\theta,d}(A\times B)=0$ for all $d\in D,B\in \mathcal{F}$ or $\mathbf{H}^*_\theta (A) > 0$ in which case for all $d$, $B$:
+\begin{align}
+	&(\mathbf{H}^*_\theta(A))^{-1} (\delta_\theta\otimes \delta_{d})\mathbf{T}(\mathds{1}_A\otimes \mathds{1}_B) \\
+	&=  (\mathbf{H}^*_\theta(A))^{-1} (\delta_\theta\otimes \delta_{d} \mathbf{M})\mathbf{T}^*(\mathds{1}_A\otimes \mathds{1}_B)\\
+	&\therefore (\delta_\theta\otimes \delta_{d'})\mathbf{T}(\mathds{1}_A\otimes \mathds{1}_B)\\
+	 &=  (\delta_\theta\otimes \delta_{d'} \mathbf{M})\mathbf{T}^*(\mathds{1}_A\otimes \mathds{1}_B)
+\end{align}
+
+Hence
+\begin{align}
+	(\mathbf{Id}\otimes \mathbf{M}) \mathbf{T} = \mathbf{T}'
+\end{align}
+
+
+\end{proof}
 
 % \section{No causes in no causes out}\label{sec:ncinco}
 

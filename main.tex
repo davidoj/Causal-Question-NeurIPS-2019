@@ -121,59 +121,22 @@
 
 \newcommand{\cheng}[1]{ {\color{purple}[{\bf Cheng:~{#1}}]} }
 
-\newcommand{\papertitle}{AIStats Submission Sept 26: up to "CBNs are causal theories"}
-\title{\papertitle}
-
-
-
-% The \author macro works with any number of authors. There are two commands
-% used to separate the names and addresses of multiple authors: \And and \AND.
-%
-% Using \And between authors leaves it to LaTeX to determine where to break the
-% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
-% authors names on the first line, and the last on the second line, try using
-% \AND instead of \And before the third author name.
-
-% \author{%
-%   David Johnston \\
-%     ANU and DATA61\\
-%   \texttt{david.johnston1@anu.edu.au} \\
-%   % examples of more authors
-%    \And
-%   Cheng Soon Ong\\
-%   DATA61 and ANU\\
-%   \texttt{chengsoon.ong@anu.edu.au} \\
-%   % Address \\
-%   % \texttt{email} \\
-%    \And
-%    Robert Williamson \\
-%    ANU and DATA61\\
-%    \texttt{bob.williamson@anu.edu.au} \\
-%   % Address \\
-%   % \texttt{email} \\
-%   % \And
-%   % Coauthor \\
-%   % Affiliation \\
-%   % Address \\
-%   % \texttt{email} \\
-%   % \And
-%   % Coauthor \\
-%   % Affiliation \\
-%   % Address \\
-%   % \texttt{email} \\
-% }
-
-
 \begin{document}
 
-\maketitle
 
-% \begin{abstract}
+\twocolumn[
 
-% We develop the notion of a causal statistical decision problem as an extension of the statistical decision theory of Wald. Suppose we have a dataset and some set of available decisions. Assume we know what state we would like the world to occupy, but we are uncertain about how our decisions affect the state of the world. We introduce the notion of \emph{consequences} that relate decisions to states of the world, and \emph{causal theories} that relate observations to consequences. A strength of this perspective is that it is not motivated by any notion of a ``true cause'' or ``causal effect''. We connect causal statistical decision problems to statistical decision problems and show that two leading approaches to causality - Causal Bayesian Networks and Potential Outcomes - have natural representations as causal theories. We argue that the causal theory associated with a CBN may be considered incomplete and discuss how different extensions can lead to very different properties.
+\aistatstitle{Understanding Causal Inference with Causal Statistical Decision Theory}
 
+% \aistatsauthor{ David Johnston \And Cheng Soon Ong \And  Bob Williamson }
 
-% \end{abstract}
+% \aistatsaddress{ ANU and Data61 \And  ANU and Data61  \And ANU and Data61  } 
+]
+
+\begin{abstract}
+We develop \emph{causal statistical decison theory} (CSDT) a novel theory of causal inference which we derive by introducing the idea that ``decisions have consequences'' to statistical decision theory. CSDT features \emph{causal theories} as the central object of study. We show that causal Bayesian networks have a natural representation as a causal theory and that potential outcomes models may arguably be represented as causal theories as well. In both cases the resulting theories feature unreasonably rich sets of decisions, which we suggest is because both approaches aim to produce reusable causal models. Using causal theories, we investigate reusability -- when can knowledge gained using one causal theory be applied to another -- and show that this is possible when the theories are related by a \emph{coarsening}.
+\end{abstract}
+
 
 \input{story}
 \input{markov_kernels}
@@ -182,30 +145,16 @@
 \input{counterfactuals}
 \input{no_causes_in_no_causes_out}
 \input{discussion}
-% \input{when_is_PO_CBN_same}
-% \input{stable_consequences}
-% \input{category_theory_string_diagrams}
-% \input{types_of_causal_assumptions}
 
 
-% \section{Conclusion}
-
-% We have shown that CSDPs are an intuitive extension of SDPs and that causal theories that play a fundamental role in CSDPs can naturally represent models posed using the language of CBNs or PO. We believe that causal theories are quite general and capable of representing alternative approaches to causality such as IFMOCS \citep{peters_identifiability_2012} or approaches based on group invariance \citep{besserve_group_2017}.
-
-% This perspective raises many questions, for example: 1) Under what conditions do versions of the No-Free Lunch theorems hold for CSDPs? 2) Example \ref{ex:extn_cbn} deals with a crude notion of ``continuity'' of a causal theory - whether a ``nearby'' distribution induces a similar risk set, which itelf has implications for learnability of a causal theory. More generally, what properties may be used to characterise the learnability of a causal theory? 3) The notation here borrows heavily from \citep{fong_causal_2013}, whose diagrammatic representation of Markov kernels is closely related to the DAGs associated with CBNs. Can consequence maps be generically and informatively represented using diagrams similar to DAGs? 4) We have proposed consequence maps and causal theories as ``relatively minimal'' objects to satisfy the need to connect data, decisions and outcomes. Are there strictly more general objects that may be used instead, and if so under what assumptions are consequence maps and causal theories necessary?
-
-% The general perspective proposed in this paper naturally incorporates the two major causal inference frameworks and, for the first time to our knowledge, allows a range of fundamental questions to be formally posed, such as \emph{what are the characteristics of a causal statistical decision problem that make it ``learnable”?} Whilst we don’t have all the answers, at least we have opened the way to ask such foundational questions!
 
 \bibliographystyle{plainnat}
 \bibliography{references}
 
 \appendix
 \newpage
-\section*{Supplement to: \papertitle}
+\section*{Appendix:}
 
 \input{appendix_AIstats}
-% \include{appendix_CSDP}
-% \include{appendix_CB}
-% \include{appendix_counterfactuals}
 
 \end{document}
