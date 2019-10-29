@@ -1,0 +1,27 @@
+%!TEX root = main.tex
+
+\section{Invariance and Capital C Causality}
+
+CSDT features \emph{consequences} - that is, probabilistic relations between decisions and results - but it does not feature \emph{causal effects}, which seem to be probabilistic relations between random variables on the observation space $E$ that are not necessarily disintegrations of a joint distribution. Here is a provisional account of how causal effects might arise in CSDT.
+
+Suppose $\mathbf{C}:D\times \Theta\to\Delta(\mathcal{E})$ is the consequence of interest, and furthermore that given some $\theta\in\Theta$, the observations are distributed according to
+\begin{align}
+	\begin{tikzpicture}
+		\path (0,0) coordinate (S)
+		++ (0.5,0) coordinate (copy0)
+		++ (0.5,0) node[kernel] (C) {$\mathbf{C}_\theta$}
+		+  (0,1) node[kernel] (A) {$\mathbf{A}_\theta$}
+		++ (0.5,0) coordinate (copy1)
+		++ (0.5,0) node[kernel] (B) {$\mathbf{B}$}
+		+  (0,0.5) node[kernel] (Y) {$\mathbf{Y}$}
+		++ (0.5,0) coordinate (Bout)
+		+  (0,1) coordinate (Aout)
+		+  (0,0.5) coordinate (Yout);
+		\draw (S) -- (C) -- (B) -- (Bout);
+		\draw (copy0) to [bend left] (A) (A) -- (Aout);
+		\draw (copy1) to [bend left] (Y) (Y) -- (Yout);
+	\end{tikzpicture}
+\end{align}
+
+For all $\theta$, $\mathbf{A}_\theta$ is invertible. This is a strong assumption that will be relaxed \todo[inline]{at a later date.}
+
