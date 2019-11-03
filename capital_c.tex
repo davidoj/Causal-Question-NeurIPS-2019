@@ -1,27 +1,320 @@
 %!TEX root = main.tex
 
-\section{Invariance and Capital C Causality}
+\section{Invariance and Capital-C Causality}
 
-CSDT features \emph{consequences} - that is, probabilistic relations between decisions and results - but it does not feature \emph{causal effects}, which seem to be probabilistic relations between random variables on the observation space $E$ that are not necessarily disintegrations of a joint distribution. Here is a provisional account of how causal effects might arise in CSDT.
+CSDT features \emph{consequences} - that is, probabilistic relations between decisions and results - but it does not feature \emph{causal effects}, which seem to be probabilistic relations between random variables on the observation space $E$ that are not necessarily disintegrations of a joint distribution. Here I propose the following notion of a causal effect in CSDT: if I have prior knowledge about the consequences of my decisions $D$ on some random variable $\RV{B}$ via $\mathbf{C}_0\mathbf{B}$ and I can extend this to the consequences on $\RV{Y}$ using some Markov kernel $\mathbf{G}_\theta:B\to \Delta(\mathcal{Y})$ via composition $\mathbf{C}_\theta \mathbf{Y} = \mathbf{C}_0\mathbf{B}\mathbf{G}_\theta$ then we'll say that $\mathbf{G}_\theta$ is the ``causal effect'' of $\RV{B}$ on $\RV{Y}$ in state $\theta$.
 
-Suppose $\mathbf{C}:D\times \Theta\to\Delta(\mathcal{E})$ is the consequence of interest, and furthermore that given some $\theta\in\Theta$, the observations are distributed according to
+This notion accords with intuitions about do-interventions - if I have the option to $do(\RV{B})$ then I definitely know the effect of my decision on $\RV{B}$. Furthermore, using do interventions I assume that the effect of $do(\RV{B}=x)$ on $\RV{Y}$ is given by fixing $\RV{B}$ to $x$ and then computing $P(\RV{Y}|do(\RV{B})=x)$, a special case of the composition above if we let $\mathbf{G}_\theta=P(\RV{Y}|do(\RV{B}))$. 
+
+However, the notion of causal effect proposed here doesn't make additional commitments that $do(\RV{B})$ does - namely, that I also know $do(\RV{B})$ has no direct effect on any other variable. Unlike the assumption of prior knowledge, the ``no direct effects'' assumption is cannot even be formulated within CSDT.
+
+The notion of ``causal effect'' given here permits a (to my knowledge) novel set of assumptions under which this type of causal effect of $\RV{B}$ on $\RV{Y}$ can be inferred. Importantly, it avoids any assumptions of ``conditional independence of unobservables'', and is to my knowledge the only known case of ``causal identifiability'' that achieves this.
+
+Suppose $\mathbf{C}:D\times \Theta\to\Delta(\mathcal{E})$ is the consequence of interest, and furthermore given some $\theta\in\Theta$ we have $\mathbf{A}_\theta:D\to \Delta(\mathcal{A})$ and $\mathbf{B}:E\to \Delta(\mathcal{B})$ such that the observations are distributed according to
 \begin{align}
-	\begin{tikzpicture}
-		\path (0,0) coordinate (S)
+	\mathbf{H}_\theta := \begin{tikzpicture}
+		\path (0,0) node[dist] (S) {$\gamma_\theta$}
 		++ (0.5,0) coordinate (copy0)
 		++ (0.5,0) node[kernel] (C) {$\mathbf{C}_\theta$}
 		+  (0,1) node[kernel] (A) {$\mathbf{A}_\theta$}
 		++ (0.5,0) coordinate (copy1)
 		++ (0.5,0) node[kernel] (B) {$\mathbf{B}$}
-		+  (0,0.5) node[kernel] (Y) {$\mathbf{Y}$}
-		++ (0.5,0) coordinate (Bout)
-		+  (0,1) coordinate (Aout)
-		+  (0,0.5) coordinate (Yout);
+		+  (0,0.5) coordinate (Y)
+		++ (0.7,0) node (Bout) {$\RV{B}$}
+		+  (0,1) node (Aout) {$\RV{A}$}
+		+  (0,0.5) node (Yout) {$\RV{Y}$};
 		\draw (S) -- (C) -- (B) -- (Bout);
 		\draw (copy0) to [bend left] (A) (A) -- (Aout);
-		\draw (copy1) to [bend left] (Y) (Y) -- (Yout);
+		\draw (copy1) to [bend left] (Y) -- (Yout);
+	\end{tikzpicture}\label{eq:capital_c_observations}
+\end{align}
+
+That is, the observations $\mathbf{H}_\theta$ are the inputs and outputs of $\mathbf{C}_\theta$ where the inputs are masked by $\mathbf{A}_\theta$ and we run one copy of the outputs through a fixed $\mathbf{B}$. Without the mask, we could recover $\mathbf{C}_\theta$ from $\mathbf{H}_\theta$ via disintegration $\RV{D}\dashrightarrow \RV{Y}$.
+
+For all $\theta$, assume $\mathbf{A}_\theta$ is $\gamma_\theta$-almost surely right invertible and that $\gamma_\theta$ is strictly positive. Together these are strong assumptions. Note that as $\theta$ is unknown, despite the fact that $\mathbf{A}_\theta$ is right invertible, we can't recover it's inputs, so we can't simply disintegrate.
+
+This setup is something like an instrumental variables (IV) setup where $\gamma_\theta$ is a source of ``exogenous'' variation. It is stronger than a typical IV setup in that $\gamma_\theta$ is strictly positive and $\mathbf{A}_\theta$ is right invertible, but it is weaker than a typical IV setup in that we make no assumptions at all about model class and fewer assumptions about the relationships between $\RV{A}$, $\RV{B}$ and $\RV{Y}$.
+
+It is also somewhat similar to \citet{arjovsky_invariant_2019}, itself based on \citet{peters_causal_2016}, if $\RV{A}$ is understood as an environment indicator. Under this interpretation, the assumption that $\gamma_\theta$ is strictly positive is much stronger than \citet{arjovsky_invariant_2019}, but on the other hand we do not assume any particular relationship between $\RV{B}$ and $\RV{Y}$ where \citet{arjovsky_invariant_2019} assumes a particular form of SEM. An interpretational difference is that while we regard $D$ as a set of feasible decisions, \citet{arjovsky_invariant_2019} considers the set of environments thus:
+\begin{quote}
+Here, the set of all environments contains all possible experimental conditions concerning oursystem of variables, both observable and hypothetical.
+\end{quote}
+As an aside, we could potentially interpret such a set of environments as an rich set of decisions which may be coarsened to a realistic set of decisions.
+
+Under certain conditions, this setup allows for the extension of causal knowledge via observed data. In particular, if we find the conditional probability of $\RV{Y}$ on $\RV{A}$ and $\RV{B}$ (written $[\RV{Y}|\RV{A}\utimes\RV{B}]_\theta$) is independent of $\RV{A}$, then given prior knowledge for the effect of a decision on $\RV{B}$ we can deduce the full consequence map $\mathbf{C}_\theta$ from our prior knowledge and the disintegration $[\RV{Y}|\RV{B}]_\theta$ (see Theorem \ref{th:inv_ci}). Note that no assumptions have been made about ``causal'' relationships between $\RV{B}$ and $\RV{Y}$ - $[\RV{Y}|\RV{B}]_\theta$ is an ordinary disintegration, not a platonic Markov kernel/structural equation/FFRCISTG/whatever.
+
+A kernel $\RV{B}$ that throws away more information is advantageous in the sense that less prior knowledge is needed to determine $\mathbf{C}_\theta$.
+\begin{example}[Waste collection]
+A council is deciding on how to implement a waste collection service to reduce littering $\RV{Y}$. For every possible service $d\in D$, the collection schedule $\RV{S}$ that will be achieved is known prior to any investigation (services may differ in other ways - e.g. the bin types may differ, and these differences may or may not be known in advance). In addition, the council has obtained weekly collection and littering data from a set $A$ of other councils with their own waste collection services that are known to have faced the same unknown consequence map $\mathbf{C}_\theta$. Each other council has implemented exactly one possible service $d\in D$ and enough councils were surveyed that all possible choices of service have been sampled, though they do not know which councils have implemented which systems. These conditions ensure that for each service $d$ the set of councils $A_d\subset A$ implementing that service is disjoint from the set of councils implementing any other service, and hence the unknown map from services to councils $\mathbf{A}_\theta:D\to \Delta(\mathcal{A})$ is right invertible.
+
+It is found by the council's statisticians that the disintegration $[\RV{Y}|\RV{A}\utimes\RV{S}]_\theta$ is independent of $\RV{A}$. Thus by theorem \ref{th:inv_ci} the impact of any service $d$ on the rate of littering $\RV{Y}$ can be found via the collection schedule $\RV{S}$ that will be achieved by that service and the disintegration $[\RV{Y}|\RV{S}]_\theta$.
+
+This is a surprisingly strong conclusion from the assumptions made. We appear to have the ability to deduce a ``causal effect'' from observational data in a context that looks remarkably similar to standard examples of when this \emph{can't} be done. In fact, the conclusion is stronger than a $do$-style causal relationship, as $do$ interventions assume we know a decision has no ``direct effect'' on any variable other than the target, whereas here we only assume the consequence of $d$ on $\RV{S}$ is known.
+
+An objection might be that other councils' waste collection service choices are determined, in part, by some unobserved background factors. Suppose that these background factors take values in some space $K$. One means of formalising this is that $\mathbf{C}_\theta$ factorises:
+\begin{align}
+\begin{tikzpicture}
+ \path (0,0) node (D) {$\RV{D}$}
+   ++(0.8,0) node[kernel] (C) {$\mathbf{C}_\theta$}
+   ++(0.7,0) node (E) {$\RV{E}$};
+ \draw (D) -- (C) -- (E);
+\end{tikzpicture}=
+\begin{tikzpicture}
+	\path (0,0) node (D) {$\RV{D}$}
+	+ (0,-0.4) node[dist] (K) {$\kappa$}
+	++(0.8,-0.2) node[kernel] (C) {$\mathbf{F}_\theta$}
+	++ (0.7,0) node (E) {$\RV{E}$};
+	\draw (D) -- ($(C.west)+(0,0.15)$) (C) -- (E);
+	\draw (K) -- ($(C.west)+(0,-0.15)$);
+\end{tikzpicture}
+\end{align}
+
+Where $\kappa\in \Delta(\mathcal{K})$ is a distribution on background factors and $\mathbf{F}_\theta:D\times K\to \Delta(\mathcal{E})$ maps decisions and background factors to consequences. For $d\neq d'$ we may have:
+\begin{align}
+\begin{tikzpicture}
+	\path (0,0) node[dist] (D) {$\delta_d$}
+	+ (0,-1) node (K) {$\RV{K}$}
+	++(0.8,-0.5) node[kernel] (C) {$\mathbf{F}_\theta$}
+	++(0.7,0) node[kernel] (S) {$\mathbf{S}$}
+	++ (0.5,0) node (E) {$\RV{S}$};
+	\draw (D) -- ($(C.west)+(0,0.15)$) (C) -- (S) -- (E);
+	\draw (K) -- ($(C.west)+(0,-0.15)$);
+\end{tikzpicture}\neq
+\begin{tikzpicture}
+	\path (0,0) node[dist] (D) {$\delta_{d'}$}
+	+ (0,-1) node (K) {$\RV{K}$}
+	++(0.8,-0.5) node[kernel] (C) {$\mathbf{F}_\theta$}
+	++(0.7,0) node[kernel] (S) {$\mathbf{S}$}
+	++ (0.5,0) node (E) {$\RV{S}$};
+	\draw (D) -- ($(C.west)+(0,0.15)$) (C) -- (S) -- (E);
+	\draw (K) -- ($(C.west)+(0,-0.15)$);
+\end{tikzpicture}
+\end{align}
+
+That is, different decisions may induce different relationships between background characteristics $\RV{K}$ and collection schedules $\RV{S}$. Formally, introducing this extra complication has not violated any of our assumptions - the causal inference is still valid! Practically, we would typically need a much larger set of decisions $D$ in this case to account for the number of plausible relationships between $\RV{K}$ and $\RV{S}$, and this may give us more reason to question the assumption that $\gamma_\theta$ is strictly positive - i.e. that the set of councils implementing each decision has positive measure. Nonetheless, this appears to be quite different to existing conditions for observational causal inference: we have allowed for $\RV{K}$ to affect both $\RV{S}$ and $\RV{Y}$ but in contrast to existing approaches \textbf{we do not need to see $\RV{K}$ in order to -- sometimes -- infer the ``causal effect'' of $\RV{S}$ on $\RV{Y}$}.
+
+
+\end{example}
+
+
+
+\begin{theorem}\label{th:inv_ci}
+ Suppose we have a causal theory $\mathbf{T}:\Theta\times D\to \Delta(\mathcal{E}^2)$ where for $\theta\in \Theta$ we have consequence $\mathbf{C}_\theta$ and experiment $\mathbf{H}_\theta$ given by \ref{eq:capital_c_observations}. Suppose for some $\mathbf{C}_0:D\to \Delta(\mathcal{E})$ we have $\mathbf{C}_\theta \mathbf{B} = \mathbf{C}_0 \mathbf{B}$ for all $\theta\in \Theta$.
+
+ For all $\theta\in \Theta$ such that $[\RV{Y}|\RV{A}\utimes\RV{B}]_{\theta}$ is independent of $\RV{A}$ we have $\mathbf{C}_{\theta} =\mathbf{C}_0 \mathbf{B} [\mathbf{Y|B}]_{\theta}$
+\end{theorem}
+
+\begin{proof}
+By the definition of disintegration
+
+\begin{align}
+\begin{tikzpicture}
+		\path (0,0) node[dist] (S) {$\gamma_\theta$}
+		++ (0.5,0) coordinate (copy0)
+		++ (0.5,0) node[kernel] (C) {$\mathbf{C}_\theta$}
+		+  (0,1) node[kernel] (A) {$\mathbf{A}_\theta$}
+		++ (0.5,0) coordinate (copy1)
+		++ (0.5,0) node[kernel] (B) {$\mathbf{B}$}
+		+  (0,0.5) coordinate (Y)
+		++ (0.7,0) node (Bout) {$\RV{B}$}
+		+  (0,1) node (Aout) {$\RV{A}$}
+		+  (0,0.5) node (Yout) {$\RV{Y}$};
+		\draw (S) -- (C) -- (B) -- (Bout);
+		\draw (copy0) to [bend left] (A) (A) -- (Aout);
+		\draw (copy1) to [bend left] (Y) -- (Yout);
+	\end{tikzpicture} &= 
+	\begin{tikzpicture}
+		\path (0,0) node[dist] (S) {$\gamma_\theta$}
+		++ (0.5,0) coordinate (copy0)
+		++ (0.5,0) node[kernel] (C) {$\mathbf{C}_\theta$}
+		+  (0,1) node[kernel] (A) {$\mathbf{A}_\theta$}
+		+  (0.6,1) coordinate (copy2)
+		++ (.8,0) node[kernel] (B) {$\mathbf{B}$}
+		++ (0.5,0) coordinate (copy1)
+		++  (1,0.5) node[kernel] (Y) {$[\RV{Y}|\RV{A}\utimes \RV{B}]_\theta$}
+		++ (1.3,-0.5) node (Bout) {$\RV{B}$}
+		+  (0,1) node (Aout) {$\RV{A}$}
+		+  (0,0.5) node (Yout) {$\RV{Y}$};
+		\draw (S) -- (C) -- (B) -- (Bout);
+		\draw (copy0) to [bend left] (A) (A) -- (Aout);
+		\draw (copy1) to [bend left] ($(Y.west)+(0,-0.15)$) (Y) -- (Yout);
+		\draw (copy2) to [bend right] ($(Y.west)+(0,0.15)$);
+	\end{tikzpicture}\\
+	&= 	\begin{tikzpicture}
+		\path (0,0) node[dist] (S) {$\gamma_\theta$}
+		++ (0.5,0) coordinate (copy0)
+		++ (0.5,0) node[kernel] (C) {$\mathbf{C}_\theta$}
+		+  (0,1) node[kernel] (A) {$\mathbf{A}_\theta$}
+		+  (0.6,1) coordinate (copy2)
+		++ (.8,0) node[kernel] (B) {$\mathbf{B}$}
+		++ (0.5,0) coordinate (copy1)
+		++  (1,0.5) node[kernel] (Y) {$[\RV{Y}|\RV{B}]_\theta$}
+		++ (1.3,-0.5) node (Bout) {$\RV{B}$}
+		+  (0,1) node (Aout) {$\RV{A}$}
+		+  (0,0.5) node (Yout) {$\RV{Y}$};
+		\draw (S) -- (C) -- (B) -- (Bout);
+		\draw (copy0) to [bend left] (A) (A) -- (Aout);
+		\draw (copy1) to [bend left] ($(Y.west)+(0,-0.15)$) (Y) -- (Yout);
+	\end{tikzpicture}\label{eq:from_independence}
+\end{align}
+Where \ref{eq:from_independence} follows from the independence of $[\RV{Y}|\RV{A}\utimes\RV{B}]_{\theta}$ from $\RV{A}$.
+
+In addition, we have 
+
+\begin{align}
+\begin{tikzpicture}
+		\path (0,0) node[dist] (S) {$\gamma_\theta$}
+		++ (0.5,0) coordinate (copy0)
+		++ (0.5,0) node[kernel] (C) {$\mathbf{C}_\theta$}
+		+  (0,1) coordinate (A) 
+		++ (0.5,0) coordinate (copy1)
+		++ (0.5,0) node[kernel] (B) {$\mathbf{B}$}
+		+  (0,0.5) coordinate (Y)
+		++ (0.7,0) node (Bout) {$\RV{B}$}
+		+  (0,1) node (Aout) {$\RV{D}$}
+		+  (0,0.5) node (Yout) {$\RV{Y}$};
+		\draw (S) -- (C) -- (B) -- (Bout);
+		\draw (copy0) to [bend left] (A) (A) -- (Aout);
+		\draw (copy1) to [bend left] (Y) -- (Yout);
+	\end{tikzpicture} = 
+	\begin{tikzpicture}
+		\path (0,0) node[dist] (S) {$\gamma_\theta$}
+		++ (0.5,0) coordinate (copy0)
+		++ (0.5,0) node[kernel] (C) {$\mathbf{C}_\theta$}
+		+  (0,1) node[kernel] (A) {$\mathbf{A}_\theta$}
+		+  (1,1) node[kernel] (Ainv) {$\mathbf{A}_\theta^{-1}$}
+		++ (0.5,0) coordinate (copy1)
+		++ (0.5,0) node[kernel] (B) {$\mathbf{B}$}
+		+  (0,0.5) coordinate (Y)
+		++ (0.7,0) node (Bout) {$\RV{B}$}
+		+  (0,1) node (Aout) {$\RV{D}$}
+		+  (0,0.5) node (Yout) {$\RV{Y}$};
+		\draw (S) -- (C) -- (B) -- (Bout);
+		\draw (copy0) to [bend left] (A) (A) -- (Ainv) -- (Aout);
+		\draw (copy1) to [bend left] (Y) -- (Yout);
+	\end{tikzpicture}\label{eq:mult_by_inverse}
+\end{align}
+
+Thus
+
+\begin{align}
+\begin{tikzpicture}
+		\path (0,0) node[dist] (S) {$\gamma_\theta$}
+		++ (0.5,0) coordinate (copy0)
+		++ (0.5,0) node[kernel] (C) {$\mathbf{C}_\theta$}
+		+  (0,1) coordinate (A) 
+		++ (0.5,0) coordinate (copy1)
+		++ (0.5,0) node[kernel] (B) {$\mathbf{B}$}
+		+  (0,0.5) coordinate (Y)
+		++ (0.7,0) node (Bout) {$\RV{B}$}
+		+  (0,1) node (Aout) {$\RV{D}$}
+		+  (0,0.5) node (Yout) {$\RV{Y}$};
+		\draw (S) -- (C) -- (B) -- (Bout);
+		\draw (copy0) to [bend left] (A) (A) -- (Aout);
+		\draw (copy1) to [bend left] (Y) -- (Yout);
+	\end{tikzpicture} = 
+\begin{tikzpicture}
+		\path (0,0) node[dist] (S) {$\gamma_\theta$}
+		++ (0.5,0) coordinate (copy0)
+		++ (0.5,0) node[kernel] (C) {$\mathbf{C}_\theta$}
+		+  (0,1) coordinate (A)	
+		+  (0.6,1) coordinate (copy2)
+		++ (.8,0) node[kernel] (B) {$\mathbf{B}$}
+		++ (0.5,0) coordinate (copy1)
+		++  (1,0.5) node[kernel] (Y) {$[\RV{Y}|\RV{B}]_\theta$}
+		++ (1.3,-0.5) node (Bout) {$\RV{B}$}
+		+  (0,1) node (Aout) {$\RV{D}$}
+		+  (0,0.5) node (Yout) {$\RV{Y}$};
+		\draw (S) -- (C) -- (B) -- (Bout);
+		\draw (copy0) to [bend left] (A) (A) -- (Aout);
+		\draw (copy1) to [bend left] ($(Y.west)+(0,-0.15)$) (Y) -- (Yout);
 	\end{tikzpicture}
 \end{align}
 
-For all $\theta$, $\mathbf{A}_\theta$ is invertible. This is a strong assumption that will be relaxed \todo[inline]{at a later date.}
+From Lemma \ref{lem:eq_disints} and by the assumption of strict positivity on $\gamma_\theta$, we therefore have
+\begin{align}
+\begin{tikzpicture}
+		\path (0,0) coordinate (S)
+		++ (0.5,0) node[kernel] (C) {$\mathbf{C}_\theta$}
+		+  (0,1) coordinate (A) 
+		++ (0.5,0) coordinate (copy1)
+		++ (0.5,0) node[kernel] (B) {$\mathbf{B}$}
+		+  (0,0.5) coordinate (Y)
+		++ (0.7,0) node (Bout) {$\RV{B}$}
+		+  (0,0.5) node (Yout) {$\RV{Y}$};
+		\draw (S) -- (C) -- (B) -- (Bout);
+		\draw (copy1) to [bend left] (Y) -- (Yout);
+	\end{tikzpicture} &= 
+\begin{tikzpicture}
+		\path (0,0) coordinate (S)
+		++ (0.5,0) node[kernel] (C) {$\mathbf{C}_\theta$}
+		++ (.8,0) node[kernel] (B) {$\mathbf{B}$}
+		++ (0.5,0) coordinate (copy1)
+		++  (1,0.5) node[kernel] (Y) {$[\RV{Y}|\RV{B}]_\theta$}
+		++ (1.3,-0.5) node (Bout) {$\RV{B}$}
+		+  (0,0.5) node (Yout) {$\RV{Y}$};
+		\draw (S) -- (C) -- (B) -- (Bout);
+		\draw (copy1) to [bend left] ($(Y.west)+(0,-0.15)$) (Y) -- (Yout);
+	\end{tikzpicture}\label{eq:joint_equality}\\
+	\begin{tikzpicture}
+		\path (0,0) coordinate (S)
+		++ (0.5,0) node[kernel] (C) {$\mathbf{C}_\theta$}
+		+  (0.8,0) node (Yout) {$\RV{Y}$};
+		\draw (S) -- (C) -- (Yout);
+	\end{tikzpicture} &= 
+\begin{tikzpicture}
+		\path (0,0) coordinate (S)
+		++ (0.5,0) node[kernel] (C) {$\mathbf{C}_\theta$}
+		++(0.8,0) node[kernel] (B) {$\mathbf{B}$}
+		++  (1,0) node[kernel] (Y) {$[\RV{Y}|\RV{B}]_\theta$}
+		+  (1,0) node (Yout) {$\RV{Y}$};
+		\draw (S) -- (C) -- (B) -- (Y) -- (Yout);
+	\end{tikzpicture}\label{eq:consequence_equality}\\
+	&= \begin{tikzpicture}
+		\path (0,0) coordinate (S)
+		++ (0.5,0) node[kernel] (C) {$\mathbf{C}_0$}
+		++(0.8,0) node[kernel] (B) {$\mathbf{B}$}
+		++  (1,0) node[kernel] (Y) {$[\RV{Y}|\RV{B}]_\theta$}
+		+  (1,0) node (Yout) {$\RV{Y}$};
+		\draw (S) -- (C) -- (B) -- (Y) -- (Yout);
+	\end{tikzpicture}
+\end{align}
+
+Where \ref{eq:consequence_equality} follows from marginalisation of \ref{eq:joint_equality}.
+
+\end{proof}
+
+A non-invertible $\mathbf{A}_\theta$ means \ref{eq:mult_by_inverse} doesn't hold. Given that $\mathbf{A}_\theta$ is arbitrary apart from the fact that it is invertible, I wonder if a channel capacity lower boundon $\mathbf{A}_\theta$ could give an upper bound on the ``distance'' between the kernels on the left and right of \ref{eq:mult_by_inverse} using an appropriate replacement for $\mathbf{A}_\theta^{-1}$.
+
+
+\begin{lemma}\label{lem:eq_disints}
+Given strictly positive probability measure $\gamma\in \Delta(\mathcal{D})$ and Markov kernels $\mathbf{X}:D\to \Delta(\mathcal{E})$ and $\mathbf{Y}:D\to \Delta(\mathcal{E})$ if
+\begin{align}
+\begin{tikzpicture}
+ \path (0,0) node[dist] (G) {$\gamma$}
+ ++(0.5,0) coordinate (copy0)
+ ++(0.5,0) node[kernel] (X) {$\mathbf{X}$}
+ ++(0.7,0) node (Xout) {$\RV{E}$}
+ +(0,0.5) node (Gout) {$\RV{D}$};
+ \draw (G) -- (X) --(Xout);
+ \draw (copy0) to [bend left] (Gout);
+\end{tikzpicture}= 
+\begin{tikzpicture}
+ \path (0,0) node[dist] (G) {$\gamma$}
+ ++(0.5,0) coordinate (copy0)
+ ++(0.5,0) node[kernel] (X) {$\mathbf{Y}$}
+ ++(0.7,0) node (Xout) {$\RV{E}$}
+ +(0,0.5) node (Gout) {$\RV{D}$};
+ \draw (G) -- (X) --(Xout);
+ \draw (copy0) to [bend left] (Gout);
+\end{tikzpicture}\label{eq:disints}
+\end{align}
+
+Then $\mathbf{X}=\mathbf{Y}$.
+
+\end{lemma}
+
+\begin{proof}
+We note that both $\RV{X}$ and $\RV{Y}$ are $\RV{D}\dashrightarrow \RV{E}$ disintegrations of \ref{eq:disints}, and so they must be $\gamma$-almost surely equal. Strict positivity means they must in fact be equal.
+\end{proof}
 

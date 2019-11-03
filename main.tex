@@ -1,6 +1,6 @@
-\documentclass[twoside]{article}
+\documentclass{article}
 
-\usepackage{aistats2020}
+% \usepackage{aistats2020}
 % If your paper is accepted, change the options for the package
 % aistats2020 as follows:
 %
@@ -77,6 +77,8 @@
 \newcommand{\CH}[2]{\ensuremath{\text{Ch}_{#1}(#2)}}
 \newcommand{\DE}[2]{\ensuremath{\text{De}_{#1}(#2)}}
 \newcommand{\ID}[1]{\ensuremath{\text{Id}_{#1}}}
+\newcommand{\utimes}{\ensuremath{\underline{\otimes}}}
+
 
 \makeatletter
 \newcommand*\bigcdot{\mathpalette\bigcdot@{.5}}
@@ -121,22 +123,11 @@
 
 \newcommand{\cheng}[1]{ {\color{purple}[{\bf Cheng:~{#1}}]} }
 
+\title{CSDT}
+
 \begin{document}
 
-
-\twocolumn[
-
-\aistatstitle{Understanding Causal Inference with Causal Statistical Decision Theory}
-
-% \aistatsauthor{ David Johnston \And Cheng Soon Ong \And  Bob Williamson }
-
-% \aistatsaddress{ ANU and Data61 \And  ANU and Data61  \And ANU and Data61  } 
-]
-
-\begin{abstract}
-We develop \emph{causal statistical decison theory} (CSDT) a novel theory of causal inference which we derive by introducing the idea that ``decisions have consequences'' to statistical decision theory. CSDT features \emph{causal theories} as the central object of study. We show that causal Bayesian networks have a natural representation as a causal theory and that potential outcomes models may arguably be represented as causal theories as well. In both cases the resulting theories feature unreasonably rich sets of decisions, which we suggest is because both approaches aim to produce reusable causal models. Using causal theories, we investigate reusability -- when can knowledge gained using one causal theory be applied to another -- and show that this is possible when the theories are related by a \emph{coarsening}.
-\end{abstract}
-
+\maketitle
 
 % \input{story}
 % \input{markov_kernels}
