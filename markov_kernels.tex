@@ -1,10 +1,78 @@
 %!TEX root = main.tex
 
-\section{Definitions \& Notation}\label{sec:dfin}
+\section{Definitions and key notation}\label{sec:dfin}
 
-We use the following standard notation: $[n]$ refers to the set of natural numbers $\{1,...,n\}$. Sets are ordinary capital letters $X$, $\sigma$-algebras are script letters $\mathcal{X}$ while random variables are sans serif capitals $\RV{X}:\_\to X$. All sets mentioned are understood to be equipped with measures. The calligraphic $\mathcal{G}$ refers to a directed acyclic graph rather than a $\sigma$-algebra. Probability measures are greek letters $\mu,\xi,\gamma$ and stochastic maps are bold capitals $\mathbf{C},\mathbf{H}$. Sets of probability measures or stochastic maps are script capitals: $\mathscr{H}$, $\mathscr{T}$, $\mathscr{J}$. We write the set of all probability measures on $(X,\mathcal{X})$ as $\Delta(\mathcal{X})$. $\delta_x:\mathcal(X)\to [0,1]$ is the probability measure such that $\delta_x(A)=1$ if $x\in A$ and $0$ otherwise.
+We use three notations for working with probability theory. The ``elementary'' notation makes use of regular symbolic conventions (functions, products, sums, integrals, unions etc.) along with the expectation operator $\mathbb{E}$. This is the most flexible notation which comes at the cost of being verbose and difficult to read. Secondly, we use a semi-formal string diagram notation extending the formal diagram notation for symmetric monoidal categories \cite{selinger_survey_2010}. Objects in this diagram refer to stochastic maps, and by interpreting diagrams as symbols we can, in theory, be just as flexible as the purely symbolic approach. However, we avoid complex mixtures of symbols and diagrams elements, and fall back to symbolic representations if it is called for. Finally, we use a matrix-vector product convention that isn't particularly expressive but can compactly express some common operations.
 
-A stochastic map or Markov kernel is a map $\mathbf{A}:X\to \Delta(\mathcal{Y})$. We write the first argument of a Markov kernel as a subscript; for $x\in X$, $G\in\mathcal{Y}$, $\mathbf{A}_x$ is a probability measure on $X$ and $A_x(G)\in[0,1]$ is the measure of $G$. For $\mathbf{A}$ to be a Markov kernel we also require that the function $x\mapsto A_x(G)$ must be measurable for all $G\in\mathcal{Y}$. For $\mathbf{C}:X\times Y\to \Delta(\mathcal{Z})$  and $x\in X$ we will write $\mathbf{C}_x$ for the ``curried'' map $y\mapsto \mathbf{C}_{x,y}$.
+\subsection{Standard Symbols}
+
+\begin{center}
+\begin{tabular}{ |c|c|c| } 
+ \hline
+ Symbol & Meaning \\ 
+ $[n]$& The natural numbers $\{1,...,n\}$ \\ 
+ $f:a\mapsto b$ & Function definition, equivalent to $f(a):=b$\\
+ Dots appearing in function arguments: $f(\cdot,\cdot,z)$ & The ``curried'' function $(x, y )\mapsto f(x,y,z)$\\
+ Capital letters: $A,B, X$ & sets \\ 
+ Script letters: $\mathcal{A},\mathcal{B},\mathcal{X}$ & $\sigma$-algebras on the sets $A, B, X$ respectively\\
+ Script $\mathcal{G}$ & A directed acyclic graph made up of nodes $V$ and edges $E$\\
+ Greek letters $\mu, \xi, \gamma$ & Probability measures\\
+ $\delta_x$ & The Dirac delta measure: $\delta_x(A) = 1$ if $x\in A$ and $0$ otherwise\\
+ Capital delta: $\Delta(\mathcal{E})$ & The set of all probability measures on $\mathcal{E}$\\
+ Bold capitals: $\mathbf{A}$ & Markov kernel $\mathbf{A}:X\times\mathcal{Y}\to [0,1]$ (stochastic maps)\\
+ Subscripted bold capitals: $\mathbf{A}_x$ & The probability measure given by the curried Markov kernel $\mathbf{A}(x,\cdot)$\\
+ $A\to\Delta(\mathcal{B})$ & Markov kernel signature, treated as equivalent to $A\times \mathcal{B}\to [0,1]$\\
+ $\mathbf{A}:x\mapsto \nu$ & Markov kernel definition, equivalent to $\mathbf{A}(x,B) = \nu(B)$ for all $B$\\
+ Sans serif capitals: $\RV{A},\RV{X}$ & Measurable functions; we will also call them random variables\\
+ $\Pi_{\RV{X}}$ & The Markov kernel associated with the function $\RV{X}$: $\Pi_{\RV{X}} \equiv a\mapsto \delta_{\RV{X}(a)}$\\
+ $[\RV{A}|\RV{B}]_\nu$ & The conditional probability (disintegration) of $\RV{A}$ given $\RV{B}$ under $\nu$\\
+ $\nu \Pi_{\RV{X}}$ & The marginal distribution of $\RV{X}$ under $\nu$\\
+ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Probability Theory}
+
+Given a set $A$, a $\sigma$-algebra $\mathcal{A}$ is a collection of subsets of $A$ where
+\begin{itemize}
+	\item $A\in \mathcal{A}$ and $\emptyset\in \mathcal{A}$
+	\item $B\in \mathcal{A}\implies B^C\in\mathcal{A}$
+	\item $\mathcal{A}$ is closed under countable unions: For any countable collection $\{B_i|i\in Z\subset \mathbb{N}\}$ of elements of $\mathcal{A}$, $\cup_{i\in Z}B_i\in \mathcal{A}$ 
+\end{itemize}
+
+A measurable space $(A,\mathcal{A})$ is a set $A$ along with a $\sigma$-algebra $\mathcal{A}$. Sometimes the sigma algebra will be left implicit, in which case $A$ will just be introduced as a measurable space.
+
+\paragraph{Common $\sigma$ algebras}
+
+For any $A$, $\{\emptyset,A\}$ is a $\sigma$-algebra. In particular, it is the only sigma algebra for any one element set $\{*\}$.
+
+For countable $A$, the power set $\mathscr{P}(A)$ is known as the discrete $\sigma$-algebra.
+
+Given $A$ and a collection of subsets of $B\subset\mathscr{P}(A)$, $\sigma(B)$ is the smallest $\sigma$-algebra containing all the elements of $B$. 
+
+Let $T$ be all the open subsets of $\mathbb{R}$. Then $\mathcal{B}(\mathbb{R}):=\sigma(T)$ is the \emph{Borel $\sigma$-algebra} on the reals. This definition extends to an arbitrary topological space $A$ with topology $T$.
+
+A \emph{standard measurable set} is a measurable set $A$ that is isomorphic either to a discrete measurable space $A$ or $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$. For any $A$ that is a complete separable metric space, $(A,\mathcal{B}(A))$ is standard measurable. 
+
+Given a measurable space $(E,\mathcal{E})$, a map $\mu:\mathcal{E}\to [0,1]$ is a \emph{probability measure} if
+\begin{itemize}
+	\item $\mu(E)=1$, $\mu(\emptyset)=0$
+	\item Given countable collection $\{A_i\}\subset\mathscr{E}$, $\mu(\cup_{i} A_i) = \sum_i \mu(A_i)$
+\end{itemize}
+
+Write by $\Delta(\mathcal{E})$ the set of all probability measures on $\mathcal{E}$.
+
+Given a second measurable space $(F,\mathcal{F})$, a \emph{stochastic map} or \emph{Markov kernel} is a map $\mathbf{M}:E\times\mathcal{F}\to [0,1]$ such that
+\begin{itemize}
+	\item The map $\mathbf{M}(\cdot;A):x\mapsto \mathbf{M}(x;A)$ is $\mathcal{E}$-measurable for all $A\in \mathcal{F}$
+	\item The map $\mathbf{M}_x:A\mapsto \mathbf{M}(x;A)$ is a probability measure on $F$ for all $x\in E$
+\end{itemize}
+
+Extending the subscript notation above, for $\mathbf{C}:X\times Y\to \Delta(\mathcal{Z})$  and $x\in X$ we will write $\mathbf{C}_x$ for the ``curried'' map $y\mapsto \mathbf{C}_{x,y}$.
+
+The map $x\mapsto \mathbf{M}_x$ is of type $E\to \Delta(\mathcal{F})$. We will abuse notation somewhat to write $\mathbf{M}:E\to \Delta(\mathcal{F})$, which captures the intuition that a Markov kernel maps from elements of $E$ to probability measures on $\mathcal{F}$. Note that by similar reasoning we could consider Markov kernels to map from elements of $\mathcal{F}$ to measurable functions $E\to[0,1]$, though we don't make use of this interpretation here.
+
+Given an indiscrete measurable space $(\{*\},\{\{*\},\emptyset\})$, we identify Markov kernels $\mathbf{N}:\{*\}\to \Delta(\mathcal{E})$ with the probability measure $\mathbf{N}_*$ and there is a unique Markov kernel $\mathbf{L}:E\to \Delta(\{\{*\},\emptyset\})$ given by $x\mapsto \delta_*$ for all $x\in E$.
 
 We can use a notation similar to matrix-vector products to represent relationships with Markov kernels. Probability measures $\mu\in \Delta(\mathcal{X})$ can be read as row vectors, Markov kernels as matrices and measurable functions $\RV{T}:Y\to T$ as column vectors. Defining $\mathbf{B}:Y\to \Delta(\mathcal{Z})$ we have $\mu \mathbf{A} (G) = \int \mathbf{A}_x (G) d\mu(x)$, $\mathbf{A}\mathbf{B}_x(H)=\int \mathbf{B}_y(H)d\mathbf{A}_x(y)$ and $\mathbf{A}\RV{T}(x)=\int \RV{T}(y) d\mathbf{A}_x(y)$. The tensor product is $(mathbf{A}\otimes \mathbf{B})_{x,y}(G,H) = \mathbf{A}_x(G)\mathbf{B}_y(H)$ where the product on the left is scalar multiplication. Kernel products are associative and the product of kernels is always a kernel itself \citep{cinlar_probability_2011}. 
 
