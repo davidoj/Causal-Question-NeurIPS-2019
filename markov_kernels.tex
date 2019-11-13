@@ -74,9 +74,20 @@ The map $x\mapsto \mathbf{M}_x$ is of type $E\to \Delta(\mathcal{F})$. We will a
 
 Given an indiscrete measurable space $(\{*\},\{\{*\},\emptyset\})$, we identify Markov kernels $\mathbf{N}:\{*\}\to \Delta(\mathcal{E})$ with the probability measure $\mathbf{N}_*$ and there is a unique Markov kernel $\mathbf{L}:E\to \Delta(\{\{*\},\emptyset\})$ given by $x\mapsto \delta_*$ for all $x\in E$.
 
-We can use a notation similar to matrix-vector products to represent relationships with Markov kernels. Probability measures $\mu\in \Delta(\mathcal{X})$ can be read as row vectors, Markov kernels as matrices and measurable functions $\RV{T}:Y\to T$ as column vectors. Defining $\mathbf{B}:Y\to \Delta(\mathcal{Z})$ we have $\mu \mathbf{A} (G) = \int \mathbf{A}_x (G) d\mu(x)$, $\mathbf{A}\mathbf{B}_x(H)=\int \mathbf{B}_y(H)d\mathbf{A}_x(y)$ and $\mathbf{A}\RV{T}(x)=\int \RV{T}(y) d\mathbf{A}_x(y)$. The tensor product is $(mathbf{A}\otimes \mathbf{B})_{x,y}(G,H) = \mathbf{A}_x(G)\mathbf{B}_y(H)$ where the product on the left is scalar multiplication. Kernel products are associative and the product of kernels is always a kernel itself \citep{cinlar_probability_2011}. 
+\subsection{Product Notation}
 
-Some elaborate constructions are unwieldly in inline product notation. Here we use string diagrams. String diagrams can always be interpreted as a mixture of kernel products and tensor products of Markov kernels, but we introduce kernels with special notation that helps with interpreting the resulting objects. String diagrams are the subject of a coherence theorem: taking a string diagram and applying a planar deformation or any of a number of graphical rules not used here yields a string diagram that represents the same kernel \citep{selinger_survey_2010}. For a thorough definition of version of string diagrams used here, see \citet{cho_disintegration_2019}.
+We can use a notation similar to matrix-vector products to represent operations with Markov kernels. Probability measures $\mu\in \Delta(\mathcal{X})$ can be read as row vectors, Markov kernels as matrices and measurable functions $\RV{T}:Y\to T$ as column vectors. Defining $\mathbf{M}:X\to \Delta(\mathcal{Y})$ and $\mathbf{N}:Y\to \Delta(\mathcal{Z})$, the measure-kernel product $\mu \mathbf{A} (G) := \int \mathbf{A}_x (G) d\mu(x)$ yields a probability measure $\mu\mathbf{A}$ on $\mathcal{Z}$, the kernel-kernel product $\mathbf{M}\mathbf{N}(x;H)=\int_Y \mathbf{B}(y;H)d\mathbf{A}_x$ yields a kernel $\mathbf{M}\mathbf{N}:X\to \Delta(\mathcal{Z})$ and the kernel-function product $\mathbf{A}\RV{T}(x):=\int_Y \RV{T}(y) d\mathbf{A}_x$ yields a measurable function $X\to T$. The tensor product $(mathbf{M}\otimes \mathbf{N})(x,y;G,H) := \mathbf{M}(x;G)\mathbf{N}(y;H)$ yields a kernel $(mathbf{M}\otimes \mathbf{N}):X\times Y\to \Delta(\mathcal{Y}\otimes\mathcal{Z})$. Kernel products are associative \citep{cinlar_probability_2011}. 
+
+\subsection{String Diagrams}
+
+Some constructions are unwieldly in product notation; for example, given $\mu\in \Delta(\mathcal{E})$ and $\mathbf{M}:E\to (\mathcal{F})$, it is not straightforward to construct a measure $\nu\in\Delta(\mathcal{E}\otimes\mathcal{F})$ that captures the ``joint distribution'' given by $A\times B\mapsto \int_A \mathbf{M}(x;B)d\mu$. 
+
+Such constructions can, however, be straightforwardly captured with string diagrams, a notation developed in category theoretic probability. We begin with some introductory notes. For a thorough definition of version of string diagrams used here, see \citet{cho_disintegration_2019}.
+\begin{itemize}
+	\item Basic string diagrams can always be interpreted as a mixture of kernel-kernel products and tensor products of Markov kernels
+	\item We can augment basic string diagrams to include measure-kernel and kernel-function products
+	\item String diagrams are the subject of a coherence theorem: taking a string diagram and applying a planar deformation yields a string diagram that represents the same kernel \citep{selinger_survey_2010}. This also holds for a number of additional transformations detailed below
+\end{itemize}
 
 A kernel $\mathbf{A}:X\to \Delta(\mathcal{Y})$ is written as a box with input and output wires, probability measures $\mu\in \Delta(\mathcal{X})$ are written as triangles ``closed on the left'' and measurable functions $\RV{T}:Y\to T$ as triangles ``closed on the right''.
 
@@ -130,3 +141,5 @@ We will apply these notions to a couple of example constructions. Given $\mu\in\
 \draw (MU) -- (X);
 \end{tikzpicture}\label{eq:jdist}
 \end{align}
+
+

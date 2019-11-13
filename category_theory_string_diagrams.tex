@@ -1,6 +1,8 @@
 %!TEX root = main.tex
 
-\section{Notes on category theoretic probability and string diagrams}
+\subsection{Category theoretic probability and string diagrams}
+
+We now turn to the category theoretic underpinnings of string diagrams and introduce a number of additional axioms useful in proofs using the notation.
 
 Category theoretic treatments of probability theory often start with \emph{probability monads} (for a good overview, see \citep{jacobs_probability_2018}). A monad on some category $C$ is a functor $T:C\to C$ along with natural transformations called the unit $\eta:1_C\to T$ and multiplication $\mu:T^2\to T$. Roughly, functors are maps between categories that preserve identity and composition structure and natural transformations are "maps" between functors that also preserve composition structure. The monad unit is similar to the identity element of a monoid in that application of the identity followed by multiplication yields the identity transformation. The multiplication transformation is also (roughly speaking) associative.
 
