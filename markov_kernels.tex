@@ -70,22 +70,28 @@ Given a second measurable space $(F,\mathcal{F})$, a \emph{stochastic map} or \e
 
 Extending the subscript notation above, for $\mathbf{C}:X\times Y\to \Delta(\mathcal{Z})$  and $x\in X$ we will write $\mathbf{C}_x$ for the ``curried'' map $y\mapsto \mathbf{C}_{x,y}$.
 
-The map $x\mapsto \mathbf{M}_x$ is of type $E\to \Delta(\mathcal{F})$. We will abuse notation somewhat to write $\mathbf{M}:E\to \Delta(\mathcal{F})$, which captures the intuition that a Markov kernel maps from elements of $E$ to probability measures on $\mathcal{F}$. Note that by similar reasoning we could consider Markov kernels to map from elements of $\mathcal{F}$ to measurable functions $E\to[0,1]$, though we don't make use of this interpretation here.
+The map $x\mapsto \mathbf{M}_x$ is of type $E\to \Delta(\mathcal{F})$. We will abuse notation somewhat to write $\mathbf{M}:E\to \Delta(\mathcal{F})$, which captures the intuition that a Markov kernel maps from elements of $E$ to probability measures on $\mathcal{F}$. Note that we ``reverse'' this idea and consider Markov kernels to map from elements of $\mathcal{F}$ to measurable functions $E\to[0,1]$, an interpretation found in \citet{clerc_pointless_2017}, but (at this stage) we don't make use of this interpretation here.
 
-Given an indiscrete measurable space $(\{*\},\{\{*\},\emptyset\})$, we identify Markov kernels $\mathbf{N}:\{*\}\to \Delta(\mathcal{E})$ with the probability measure $\mathbf{N}_*$ and there is a unique Markov kernel $\mathbf{L}:E\to \Delta(\{\{*\},\emptyset\})$ given by $x\mapsto \delta_*$ for all $x\in E$.
+Given an indiscrete measurable space $(\{*\},\{\{*\},\emptyset\})$, we identify Markov kernels $\mathbf{N}:\{*\}\to \Delta(\mathcal{E})$ with the probability measure $\mathbf{N}_*$. In addition, there is a unique Markov kernel $\stopper{0.2}:E\to \Delta(\{\{*\},\emptyset\})$ given by $x\mapsto \delta_*$ for all $x\in E$ which we will call the ``discard'' map
 
 \subsection{Product Notation}
 
-We can use a notation similar to matrix-vector products to represent operations with Markov kernels. Probability measures $\mu\in \Delta(\mathcal{X})$ can be read as row vectors, Markov kernels as matrices and measurable functions $\RV{T}:Y\to T$ as column vectors. Defining $\mathbf{M}:X\to \Delta(\mathcal{Y})$ and $\mathbf{N}:Y\to \Delta(\mathcal{Z})$, the measure-kernel product $\mu \mathbf{A} (G) := \int \mathbf{A}_x (G) d\mu(x)$ yields a probability measure $\mu\mathbf{A}$ on $\mathcal{Z}$, the kernel-kernel product $\mathbf{M}\mathbf{N}(x;H)=\int_Y \mathbf{B}(y;H)d\mathbf{A}_x$ yields a kernel $\mathbf{M}\mathbf{N}:X\to \Delta(\mathcal{Z})$ and the kernel-function product $\mathbf{A}\RV{T}(x):=\int_Y \RV{T}(y) d\mathbf{A}_x$ yields a measurable function $X\to T$. The tensor product $(mathbf{M}\otimes \mathbf{N})(x,y;G,H) := \mathbf{M}(x;G)\mathbf{N}(y;H)$ yields a kernel $(mathbf{M}\otimes \mathbf{N}):X\times Y\to \Delta(\mathcal{Y}\otimes\mathcal{Z})$. Kernel products are associative \citep{cinlar_probability_2011}. 
+We can use a notation similar to matrix-vector products to represent operations with Markov kernels. Probability measures $\mu\in \Delta(\mathcal{X})$ can be read as row vectors, Markov kernels as matrices and measurable functions $\RV{T}:Y\to T$ as column vectors. Defining $\mathbf{M}:X\to \Delta(\mathcal{Y})$ and $\mathbf{N}:Y\to \Delta(\mathcal{Z})$, the measure-kernel product $\mu \mathbf{A} (G) := \int \mathbf{A}_x (G) d\mu(x)$ yields a probability measure $\mu\mathbf{A}$ on $\mathcal{Z}$, the kernel-kernel product $\mathbf{M}\mathbf{N}(x;H)=\int_Y \mathbf{B}(y;H)d\mathbf{A}_x$ yields a kernel $\mathbf{M}\mathbf{N}:X\to \Delta(\mathcal{Z})$ and the kernel-function product $\mathbf{A}\RV{T}(x):=\int_Y \RV{T}(y) d\mathbf{A}_x$ yields a measurable function $X\to T$. Kernel products are associative \citep{cinlar_probability_2011}.
+
+The tensor product $(\mathbf{M}\otimes \mathbf{N})(x,y;G,H) := \mathbf{M}(x;G)\mathbf{N}(y;H)$ yields a kernel $(\mathbf{M}\otimes \mathbf{N}):X\times Y\to \Delta(\mathcal{Y}\otimes\mathcal{Z})$.
 
 \subsection{String Diagrams}
 
 Some constructions are unwieldly in product notation; for example, given $\mu\in \Delta(\mathcal{E})$ and $\mathbf{M}:E\to (\mathcal{F})$, it is not straightforward to construct a measure $\nu\in\Delta(\mathcal{E}\otimes\mathcal{F})$ that captures the ``joint distribution'' given by $A\times B\mapsto \int_A \mathbf{M}(x;B)d\mu$. 
 
-Such constructions can, however, be straightforwardly captured with string diagrams, a notation developed in category theoretic probability. We begin with some introductory notes. For a thorough definition of version of string diagrams used here, see \citet{cho_disintegration_2019}.
+Such constructions can, however, be straightforwardly captured with string diagrams, a notation developed for category theoretic probability. \citet{cho_disintegration_2019} also provides an extensive introduction to the notation discussed here.
+
+Some key ideas of string diagrams:
 \begin{itemize}
 	\item Basic string diagrams can always be interpreted as a mixture of kernel-kernel products and tensor products of Markov kernels
-	\item We can augment basic string diagrams to include measure-kernel and kernel-function products
+	\begin{itemize}
+	\item Extended string diagrams can be interepreted as a mixture of kernel-kernel products, kernel-function products, tensor products of kernels and functions and scalar products 
+	\end{itemize}
 	\item String diagrams are the subject of a coherence theorem: taking a string diagram and applying a planar deformation yields a string diagram that represents the same kernel \citep{selinger_survey_2010}. This also holds for a number of additional transformations detailed below
 \end{itemize}
 
@@ -110,9 +116,15 @@ A kernel $\mathbf{A}:X\to \Delta(\mathcal{Y})$ is written as a box with input an
 \end{tikzpicture}
 \end{align}
 
-The identity $\mathbf{Id}:X\to \Delta(X)$ is the Markov kernel $x\mapsto \delta_x$, which we represent with a bare wire. The copy map $\splitter{0.1}:X\to \Delta(X\times X)$ is the Markov kernel $x\mapsto \delta_{(x,x)}$. For $\mathbf{A}:X\to \Delta(Y)$ and $\mathbf{B}:X\to \Delta(Z)$, $\splitter{0.1} (A\otimes B)_x  = A_x \otimes B_x$. The discard map $*$ is the Markov kernel $X\to \{\#\}$ given by $x\mapsto \delta_\#$, where $\#$ is some one element set. Placing boxes side by side with connected wires corresponds to taking kernel products as defined above.
+We canonically regard a probability measure $\mu\in \Delta(\mathcal{E})$ to be a Markov kernel $\mu:\{*\}\to \Delta(\mathcal{E})$. This allows for the definition of ``basic'' string diagrams for which Markov kernels are the only building blocks. Such a definition isn't possible for measurable functions. Suppose we try supposing a measurable function $f:E\to \mathbb{R}$ is ``really'' a Markov kernel $f:E\to \Delta(\{*\})$. The problem is, depending on the input $x\in E$, $f(x)$ is not in general equal to $1$, and so this supposition fails. This is the reason we require an ``extended'' string diagram notation if we wish to incorporate functions and expectations.
 
-We will apply these notions to a couple of example constructions. Given $\mu\in\Delta(X),\mathbf{A}:X\to \Delta(Y)$ as before, the joint distribution on $X\times Y$ given by $\nu(A\times B) = \int_A A(x;B)d\mu(x)$ is given in string diagram on the left of \ref{eq:jdist}. Marginalisation is accomplished with the discard map $*$; hence $\mu\splitter{0.1}(\mathbf{Id}\otimes \mathbf{A}*) = \mu$; this is shown on the right of \ref{eq:jdist}
+The identity $\mathbf{Id}:X\to \Delta(X)$ is the Markov kernel $x\mapsto \delta_x$, which we represent with a bare wire \begin{tikzpicture}\draw (0,0) -- (1,0); \end{tikzpicture}. 
+
+The copy map $\splitter{0.1}:X\to \Delta(X\times X)$ is the Markov kernel $x\mapsto \delta_{(x,x)}$. For $\mathbf{A}:X\to \Delta(Y)$ and $\mathbf{B}:X\to \Delta(Z)$, $\splitter{0.1} (A\otimes B)_x  = A_x \otimes B_x$ - the copy map forces two tensored Markov kernels to share the same values of inputs. 
+
+The discard map $\stopper{0.2}$ is the Markov kernel $X\to \{\#\}$ given by $x\mapsto \delta_\#$, where $\#$ is some one element set. Placing boxes side by side with connected wires corresponds to taking kernel products as defined above.
+
+We will apply these notions to a couple of example constructions. Given $\mu\in\Delta(X),\mathbf{A}:X\to \Delta(Y)$ as before, the joint distribution on $X\times Y$ given by $\nu(A\times B) = \int_A A(x;B)d\mu(x)$ is given in string diagram on the left of \ref{eq:jdist}. Marginalisation is accomplished with the discard map $\stopper{0.2}$; hence $\mu\splitter{0.1}(\mathbf{Id}\otimes \mathbf{A}\stopper{0.2}) = \mu$; this is shown on the right of \ref{eq:jdist}
 
 \begin{align}
 \begin{tikzpicture}

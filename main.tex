@@ -109,8 +109,7 @@
 
 \newcommand\stopper[1]{%
 \begin{tikzpicture}[scale=#1]
-\draw (0,-1) -- (0,0);
-\node (E) at (0,0) {$\bigcdot$};
+\draw[-{Rays [n=8]}] (0,-1) -- (0,0);
 \end{tikzpicture}
 }
 
