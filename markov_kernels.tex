@@ -25,7 +25,7 @@ We use three notations for working with probability theory. The ``elementary'' n
  $\mathbf{A}:x\mapsto \nu$ & Markov kernel definition, equivalent to $\mathbf{A}(x,B) = \nu(B)$ for all $B$\\
  Sans serif capitals: $\RV{A},\RV{X}$ & Measurable functions; we will also call them random variables\\
  $\Pi_{\RV{X}}$ & The Markov kernel associated with the function $\RV{X}$: $\Pi_{\RV{X}} \equiv a\mapsto \delta_{\RV{X}(a)}$\\
- $[\RV{A}|\RV{B}]_\nu$ & The conditional probability (disintegration) of $\RV{A}$ given $\RV{B}$ under $\nu$\\
+ $\mathbf{N}_{\RV{A}|\RV{B}}$ & The conditional probability (disintegration) of $\RV{A}$ given $\RV{B}$ under $\nu$\\
  $\nu \Pi_{\RV{X}}$ & The marginal distribution of $\RV{X}$ under $\nu$\\
  \hline
 \end{tabular}
@@ -124,21 +124,49 @@ A kernel $\mathbf{A}:X\to \Delta(\mathcal{Y})$ is written as a box with input an
 \end{tikzpicture}
 \end{align}
 
+We canonically regard a probability measure $\mu\in \Delta(\mathcal{E})$ to be a Markov kernel $\mu:\{*\}\to \Delta(\mathcal{E})$. This allows for the definition of ``basic'' string diagrams for which Markov kernels are the only building blocks. Such a definition isn't possible for measurable functions. Suppose by analogy with the example probability measures and try to identify a measurable function $f:E\to \mathbb{R}$ with a Markov kernel $f':E\times\{*\}\to \mathbb{R}$. For $x\in E$ we cannot generally have both $f'(x,*)=1$ and $f'(x,*)=f(x)$, and so this attempt fails. This lack of normalisation is the reason we require an ``extended'' string diagram notation if we wish to incorporate functions and expectations which allows for the representation of scalars.
 
+\paragraph{Markov kernels with special notation}
 
+A number of Markov kernels are given special notation distinct from the generic ``box'' representation above. These special representations facilitate intuitive graphical interpretations.
 
-We canonically regard a probability measure $\mu\in \Delta(\mathcal{E})$ to be a Markov kernel $\mu:\{*\}\to \Delta(\mathcal{E})$. This allows for the definition of ``basic'' string diagrams for which Markov kernels are the only building blocks. Such a definition isn't possible for measurable functions. Suppose we try supposing a measurable function $f:E\to \mathbb{R}$ is ``really'' a Markov kernel $f:E\to \Delta(\{*\})$. The problem is, depending on the input $x\in E$, $f(x)$ is not in general equal to $1$, and so this supposition fails. This is the reason we require an ``extended'' string diagram notation if we wish to incorporate functions and expectations.
-
-The identity $\mathbf{Id}:X\to \Delta(X)$ is the Markov kernel $x\mapsto \delta_x$, which we represent with a bare wire \begin{tikzpicture}\draw (0,0) -- (1,0); \end{tikzpicture}. 
-
-The copy map $\splitter{0.1}:X\to \Delta(X\times X)$ is the Markov kernel $x\mapsto \delta_{(x,x)}$. For $\mathbf{A}:X\to \Delta(Y)$ and $\mathbf{B}:X\to \Delta(Z)$, $\splitter{0.1} (A\otimes B)_x  = A_x \otimes B_x$ - the copy map forces two tensored Markov kernels to share the same values of inputs. 
-
-The discard map $\stopper{0.2}$ is the Markov kernel $X\to \{\#\}$ given by $x\mapsto \delta_\#$, where $\#$ is some one element set. Placing boxes side by side with connected wires corresponds to taking kernel products as defined above.
-
-We will apply these notions to a couple of example constructions. Given $\mu\in\Delta(X),\mathbf{A}:X\to \Delta(Y)$ as before, the joint distribution on $X\times Y$ given by $\nu(A\times B) = \int_A A(x;B)d\mu(x)$ is given in string diagram on the left of \ref{eq:jdist}. Marginalisation is accomplished with the discard map $\stopper{0.2}$; hence $\mu\splitter{0.1}(\mathbf{Id}\otimes \mathbf{A}\stopper{0.2}) = \mu$; this is shown on the right of \ref{eq:jdist}
+The identity kernel $\textbf{Id}:X\to \Delta(X)$ maps a point $x$ to the measure $\delta_x$ that places all mass on the same point:
 
 \begin{align}
-\begin{tikzpicture}
+\textbf{Id}_x : x\mapsto \delta_x \equiv \begin{tikzpicture}\path (0,0) node (X) {$X$} + (1,0) node (X1) {$\RV{X}$}; \draw (X)--(X1); \end{tikzpicture}
+\end{align}
+
+
+The copy map $\splitter{0.1}:X\to \Delta(X\times X)$ maps a point $x$ to two identical copies of x:
+\begin{align}
+ \splitter{0.1}: x\mapsto \delta_{(x,x)} \equiv \begin{tikzpicture}
+ \path (0,0) node (X) {$X$} ++ (0.5,0) coordinate (copy0) ++ (0.5,0.25) node (X1) {$\RV{X}_1$} ++(0,-0.5) node (X2) {$\RV{X_2}$};\draw (X)--(copy0) to [bend left] (X1) (copy0) to [bend right] (X2);
+ \end{tikzpicture}
+ \end{align} 
+
+The discard map $\stopper{0.2}:X\to \Delta(\{*\})$ maps every input to $\delta_{*}$ which is effectively mapping every input to 1
+\begin{align}
+\stopper{0.2}: x\mapsto \delta_{*} \equiv \begin{tikzpicture}
+ \draw[-{Rays [n=8]}] (0,0) -- (0.5,0);
+\end{tikzpicture}
+\end{align}
+
+The swap map $\sigma:X\times Y\to \Delta(\mathcal{Y}\otimes\mathcal{X})$ swaps its inputs:
+
+\begin{align}
+\sigma := (x,y)\to \delta_{(y,x)} \equiv \begin{tikzpicture}
+\path (0,0) node (X) {$X$}
++(1,0.3) node (X1) {$\RV{X}$}
+(0,0.3) node (Y) {$Y$}
++(1,-0.3) node (Y1) {$\RV{Y}$};
+\draw (X)--(X1) (Y) -- (Y1);
+\end{tikzpicture}
+\end{align}
+
+Before introducing key rules of manipulation permitted by string diagrams, we will illustrate the correspondence between the three notations with a few simple examples. Given $\mu\in\Delta(X),\mathbf{A}:X\to \Delta(Y)$ and $A\in \mathcal{X}$, $B\in\mathcal{Y}$, the following correspondences hold, where we express the same object in elementary notation, product notation and string notation respectively:
+
+\begin{align}
+\nu:=A\times B\mapsto \int_A A(x;B)d\mu(x) \equiv \mu \splitter{0.1}(\textbf{Id}_X\otimes \mathbf{A}) \equiv  \begin{tikzpicture}
 \path (0,0) node[dist] (mu) {$\mu$}
 ++ (1,0) coordinate (copy0)
 + (1.2,0.5) node (X) {$\RV{X}$}
@@ -147,22 +175,209 @@ We will apply these notions to a couple of example constructions. Given $\mu\in\
 \draw (mu)--(copy0);
 \draw (copy0) to [bend left] (X);
 \draw (copy0) to [bend right] (A) (A) -- (Y);
-\end{tikzpicture}\qquad
+\end{tikzpicture}\label{eq:joint_measure}
+\end{align}
+
+Where the resulting object is a probability measure $\nu\in \Delta(\mathcal{X}\otimes\mathcal{Y})$. Note that the elementary notation requires a function definition here, while the product and string notations can represent the measure without explicitly addressing its action on various inputs and outputs. \citet{cho_disintegration_2019} calls this construction ``integrating $\mathbf{A}$ with respect to $\mu$''.
+
+Define the marginal $\nu_Y\in \Delta(\mathcal{Y}):B\mapsto \nu(X\times B)$ for $B\in \mathcal{Y}$ and similarly for $\nu_X$. We can then express the result of marginalising \ref{eq:joint_measure} over $X$ in our three separate notations as follows:
+\begin{align}
+  \nu_Y (B) &= \nu(X\times B) = \int_X A(x;B) d\mu(x)\label{eq:marginalisation_elem}\\
+  \nu_Y &= \mu \mathbf{A} = \mu \splitter{0.1}(\textbf{Id}_X\otimes \mathbf{A})(\stopper{0.2}\otimes \textbf{Id}_Y)\label{eq:marginalisation_prod}\\
+  \nu_Y &= \begin{tikzpicture}
+\path (0,0) node[dist] (mu) {$\mu$} ++ (1,0) node[kernel] (A) {$\mathbf{A}$} ++ (0.7,0) node (Y) {$\RV{Y}$}; \draw (mu) -- (A) -- (Y);
+\end{tikzpicture} = \begin{tikzpicture}
+\path (0,0) node[dist] (mu) {$\mu$}
+++ (1,0) coordinate (copy0)
++ (1.2,0.5) node (X) {}
+++ (0.5,-0.5) node[kernel] (A) {$\mathbf{A}$}
+++(0.7,0) node (Y) {$\RV{Y}$};
+\draw (mu)--(copy0);
+\draw[-{Rays [n=8]}] (copy0) to [bend left] (X);
+\draw (copy0) to [bend right] (A) (A) -- (Y);
+\end{tikzpicture}\label{eq:marginalisation_graph}
+\end{align}
+
+The elementary notation \ref{eq:marginalisation_elem} makes the relationship between $\nu_Y$ and $\nu$ explicit and, again, requires the action on each event to be defined. The product notation \ref{eq:marginalisation_prod} is, in my view, the least transparent but also the most compact in the form $\mu \mathbf{A}$, and does not demand the explicit definition of how $\nu_Y$ treats every event. The graphical notation is the least compact in terms of space taken up on the page, but unlike the product notation it shows a clear relationship to the graphical construction in\ref{eq:joint_measure}, and displays a clear graphical logic whereby marginalisation corresponds to ``cutting off branches''. Like product notation, it also allows for the definition of derived measures such as $\nu_Y$ without explicit definition of the handling of all events. It also features a much smaller collection of symbols than does elementary notation.
+
+String diagrams often achieve a good balance between interpretational transparency, expressive power and symbol economy.
+
+\subsubsection{Rules for String Diagrams}
+
+todo:
+\begin{itemize}
+\item Disintegration, Bayesian inversion
+\item Functional generalisation
+\item Conditioning
+\item Infinite copy map
+\item De Finetti's representation theorem
+\end{itemize}
+
+There are a relatively small number of manipulation rules and a number of special constructions that are useful for string diagrams.
+
+\paragraph{Axioms of Symmetric Monoidal Categories}
+
+Recalling the unique Markov kernels defined above, the following equivalences, known as the \emph{commutative comonoid axioms}, hold among string diagrams:
+
+\begin{align}
+	\begin{tikzpicture}[scale=0.8]
+	\path (0,0) node (X) {$X$} 
+	++ (0.5,0) coordinate (copy0)
+	+ (1.5,0.5) node (X1) {$\RV{X}_1$}
+	++ (0.5,-0.5) coordinate (copy1)
+	+(1,0.5) node (X2) {$\RV{X}_2$}
+	+(1,-0.5) node (X3) {$\RV{X}_3$};
+	\draw (X) -- (copy0) to [bend left] (X1) (copy0) to [bend right] (copy1) to [bend left] (X2) (copy1) to [bend right] (X3);
+	\end{tikzpicture}
+	=
+	\begin{tikzpicture}[scale=0.8]
+	\path (0,0) node (X) {$X$} 
+	++ (0.5,0) coordinate (copy0)
+	+ (1.5,-0.5) node (X1) {$\RV{X}_3$}
+	++ (0.5,0.5) coordinate (copy1)
+	+(1,0.5) node (X2) {$\RV{X}_1$}
+	+(1,-0.5) node (X3) {$\RV{X}_2$};
+	\draw (X) -- (copy0) to [bend right] (X1) (copy0) to [bend left] (copy1) to [bend left] (X2) (copy1) to [bend right] (X3);
+	\end{tikzpicture}
+	:=
+	\begin{tikzpicture}[scale=0.8]
+	\path (0,0) node (X) {$X$} 
+	++ (0.5,0) coordinate (copy0)
+	+ (1,0.5) node (X1) {$\RV{X}_1$}
+	+(1,0) node (X2) {$\RV{X}_2$}
+	+(1,-0.5) node (X3) {$\RV{X}_3$};
+	\draw (X) -- (copy0) to [bend left] (X1) (copy0) to (X2) (copy0) to [bend right] (X3);
+	\end{tikzpicture}\label{eq:ccom1}
+\end{align}
+
+\begin{align}
+	\begin{tikzpicture}[scale=0.8]
+	\path (0,0) node (X) {$X$}
+	++(0.5,0) coordinate (copy0)
+	+ (1,0.5) node (S) {}
+	+(1,-0.5) node (X1) {$\RV{X}$};
+	\draw (X) -- (copy0) to [bend right] (X1);
+	\draw[-{Rays [n=8]}] (copy0) to [bend left] (S);
+	\end{tikzpicture}
+	= 
+	\begin{tikzpicture}[scale=0.8]
+	\path (0,0) node (X) {$X$}
+	++(0.5,0) coordinate (copy0)
+	+ (1,-0.5) node (S) {}
+	+(1,0.5) node (X1) {$\RV{X}$};
+	\draw (X) -- (copy0) to [bend left] (X1);
+	\draw[-{Rays [n=8]}] (copy0) to [bend right] (S);
+	\end{tikzpicture}
+	=
+	\begin{tikzpicture}[scale=0.8]
+	\path (0,0) node (X) {$X$}
+	++ (1,0) node (X1) {$\RV{X}$};
+	\draw (X) -- (X1);
+	\end{tikzpicture}\label{eq:ccom2}
+\end{align}
+
+\begin{align}
+	\begin{tikzpicture}[scale=0.8]
+	\path (0,0) node (X) {$X$}
+	++(0.5,0) coordinate (copy0)
+	+ (1.2,0.5) node (X2) {$\RV{X}_1$}
+	+(1.2,-0.5) node (X1) {$\RV{X}_2$};
+	\draw (X) -- (copy0) .. controls (0.75,0.4) .. (X1.west);
+	\draw (copy0) .. controls (0.75,-0.4) .. (X2.west);
+	\end{tikzpicture}
+=
+	\begin{tikzpicture}[scale=0.8]
+	\path (0,0) node (X) {$X$}
+	++(0.5,0) coordinate (copy0)
+	+ (1,0.5) node (X2) {$\RV{X}_1$}
+	+(1,-0.5) node (X1) {$\RV{X}_2$};
+	\draw (X) -- (copy0) to [bend right] (X1);
+	\draw (copy0) to [bend left] (X2);
+	\end{tikzpicture}\label{eq:ccom3}
+\end{align}
+
+The discard map $\stopper{0.2}$ can ``fall through'' any Markov kernel:
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (X) {$X$}
+++(0.7,0) node[kernel] (A) {$\mathbf{A}$}
+++(0.7,0) node (S) {};
+\draw (X) -- (A);
+\draw[-{Rays [n=8]}] (A) -- (S);
+\end{tikzpicture}
+= 
+\begin{tikzpicture}
+\path (0,0) node (X) {$X$}
+++(0.7,0) node (S) {};
+\draw[-{Rays [n=8]}] (X) -- (S);
+\end{tikzpicture}\label{eq:termobj1}
+\end{align}
+
+Combining \ref{eq:ccom2} and \ref{eq:termobj1} we can derive the following: integrating $\mathbf{A}:X\to \Delta(\mathcal{Y})$ with respect to $\mu\in\Delta(\mathcal{X})$ and then discarding the output of $\mathbf{A}$ leaves us with $\mu$:
+
+\begin{align}
 \begin{tikzpicture}
 \path (0,0) node[dist] (mu) {$\mu$}
 ++ (1,0) coordinate (copy0)
-+ (1.2,0.5) node (X) {$\RV{X}$}
-++ (0.5,-0.5) node[kernel] (A) {$\mathbf{A}$}
++ (1.4,0.5) node (X) {$\RV{X}$}
+++ (0.7,-0.5) node[kernel] (A) {$\mathbf{A}$}
 ++(0.7,0) node (Y) {};
 \draw (mu)--(copy0);
 \draw (copy0) to [bend left] (X);
 \draw[-{Rays [n=8]}] (copy0) to [bend right] (A) (A) -- (Y);
-\end{tikzpicture}=
+\end{tikzpicture}
+= 
 \begin{tikzpicture}
-\path (0,0) node[dist] (MU) {$\mu$}
-+ (0.5,0) node (X) {$\RV{X}$};
-\draw (MU) -- (X);
-\end{tikzpicture}\label{eq:jdist}
+\path (0,0) node[dist] (mu) {$\mu$}
+++ (1,0) coordinate (copy0)
++ (1.2,0.5) node (X) {$\RV{X}$}
+++ (0.4,-0.3) coordinate (A)
+++(0.1,0) node (Y) {};
+\draw (mu)--(copy0);
+\draw (copy0) to [bend left] (X);
+\draw[-{Rays [n=8]}] (copy0) to [bend right] (A) (A) -- (Y);
+\end{tikzpicture}
+=
+\begin{tikzpicture}
+\path (0,0) node[dist] (mu) {$\mu$}
+++ (1,0) node (X) {$\RV{X}$};
+\draw (mu)--(X);
+\end{tikzpicture}
 \end{align}
+
+In elementary notation, this is equivalent to the fact that, for all $B\in \mathcal{X}$, $\int_B \mathbf{A}(x;B)d\mu(x) = \mu(B)$.
+
+\paragraph{Disintegraion and Bayesian Inversion}
+
+A key reason for introducing the 
+
+% \begin{align}
+% \begin{tikzpicture}
+% \path (0,0) node[dist] (mu) {$\mu$}
+% ++ (1,0) coordinate (copy0)
+% + (1.2,0.5) node (X) {$\RV{X}$}
+% ++ (0.5,-0.5) node[kernel] (A) {$\mathbf{A}$}
+% ++(0.7,0) node (Y) {$\RV{Y}$};
+% \draw (mu)--(copy0);
+% \draw (copy0) to [bend left] (X);
+% \draw (copy0) to [bend right] (A) (A) -- (Y);
+% \end{tikzpicture}\qquad
+% \begin{tikzpicture}
+% \path (0,0) node[dist] (mu) {$\mu$}
+% ++ (1,0) coordinate (copy0)
+% + (1.2,0.5) node (X) {$\RV{X}$}
+% ++ (0.5,-0.5) node[kernel] (A) {$\mathbf{A}$}
+% ++(0.7,0) node (Y) {};
+% \draw (mu)--(copy0);
+% \draw (copy0) to [bend left] (X);
+% \draw[-{Rays [n=8]}] (copy0) to [bend right] (A) (A) -- (Y);
+% \end{tikzpicture}=
+% \begin{tikzpicture}
+% \path (0,0) node[dist] (MU) {$\mu$}
+% + (0.5,0) node (X) {$\RV{X}$};
+% \draw (MU) -- (X);
+% \end{tikzpicture}\label{eq:jdist}
+% \end{align}
 
 
