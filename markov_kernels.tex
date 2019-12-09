@@ -24,9 +24,9 @@ We use three notations for working with probability theory. The ``elementary'' n
  $A\to\Delta(\mathcal{B})$ & Markov kernel signature, treated as equivalent to $A\times \mathcal{B}\to [0,1]$\\
  $\mathbf{A}:x\mapsto \nu$ & Markov kernel definition, equivalent to $\mathbf{A}(x,B) = \nu(B)$ for all $B$\\
  Sans serif capitals: $\RV{A},\RV{X}$ & Measurable functions; we will also call them random variables\\
- $\Pi_{\RV{X}}$ & The Markov kernel associated with the function $\RV{X}$: $\Pi_{\RV{X}} \equiv a\mapsto \delta_{\RV{X}(a)}$\\
+ $\mathbf{F}_{\RV{X}}$ & The Markov kernel associated with the function $\RV{X}$: $\mathbf{F}_{\RV{X}} \equiv a\mapsto \delta_{\RV{X}(a)}$\\
  $\mathbf{N}_{\RV{A}|\RV{B}}$ & The conditional probability (disintegration) of $\RV{A}$ given $\RV{B}$ under $\nu$\\
- $\nu \Pi_{\RV{X}}$ & The marginal distribution of $\RV{X}$ under $\nu$\\
+ $\nu \mathbf{F}_{\RV{X}}$ & The marginal distribution of $\RV{X}$ under $\nu$\\
  \hline
 \end{tabular}
 \end{center}
@@ -96,7 +96,7 @@ Some key ideas of string diagrams:
 	\item String diagrams are the subject of a coherence theorem: taking a string diagram and applying a planar deformation yields a string diagram that represents the same kernel \citep{selinger_survey_2010}. This also holds for a number of additional transformations detailed below
 \end{itemize}
 
-A kernel $\mathbf{A}:X\to \Delta(\mathcal{Y})$ is written as a box with input and output wires, probability measures $\mu\in \Delta(\mathcal{X})$ are written as triangles ``closed on the left'' and measurable functions (which are only elements of the ``extended'' notation) $\RV{T}:Y\to T$ as triangles ``closed on the right''. 
+A kernel $\mathbf{A}:X\to \Delta(\mathcal{Y})$ is written as a box with input and output wires, probability measures $\mu\in \Delta(\mathcal{X})$ are written as triangles ``closed on the left'' and measurable functions (which are only elements of the ``extended'' notation) $\RV{T}:Y\to T$ as triangles ``closed on the right''. We label all output wires with unique sans serif letters $\RV{X},\RV{Y}$ which can be understood as defining a random variable on some canonical space which corresponds to the labeled wire. We also adopt the convention that a random variable $\RV{X}_\alpha$ (with optional index) takes values in the space $X$. Input wires are labeled only with the spaces $X,Y,Z$, and we don't associate random variables with input wires. See Paragraph \ref{par:random_variables} for a more detailed explanation of random variables in Causal Statistical Decision Theory.
 
 For $\mathbf{A}:X\to \Delta(\mathcal{Y})$, $\mu\in \Delta(\mathcal{X})$ and $f:X\to W$:
 
@@ -119,45 +119,97 @@ For $\mathbf{A}:X\to \Delta(\mathcal{Y})$, $\mu\in \Delta(\mathcal{X})$ and $f:X
 \end{tikzpicture}
 \end{align}
 
-
-\paragraph{Random Variables}
-
-We take a slightly nonstandard view of random variables. Random variables are typically defined to be measurable functions on a probability space $\langle \Omega, \mathcal{F}, \mu\rangle$ \citep{cinlar_probability_2011}. With this definition, a random variable $\RV{X}:\Omega\to E$ has a canonical probability measure given by the pushforward of $\mu$: for all $A\in\mathscr{E}$ $\RV{X}_\# \mu(A) = \mu(\RV{X}^{-1}(A))$.
-
-We take a random variable to be a measurable function on a \emph{kernel space} $\langle F,\mathcal{F},\mathbf{M}, G\rangle$ where $\mathbf{M}:G\to \Delta(\mathcal{F})$ is a Markov kernel. A random variable $\RV{X}:F\to E$ has a probability distribution only relative to some argument measure $\nu\in\Delta(\mathcal{G})$. Because of this, we cannot in general unambiguously talk about ``the'' distribution of a given random variable. We avoid $P(\RV{X})$ type notation to avoid ambiguity in this regard. 
-
-The reason for this choice is that random variables in this work model quantities with distributions that depend on the decision maker's choices. 
-
-We adhere to the convention that each kernel endows its output wires with a unique name, which, like random variables, we write with sans serif fonts $\RV{A},\RV{T}, \RV{X}$ etc. These labels serve two purposes: 
-\begin{itemize}
-\item Given a diagram with a number of output wires labeled $\RV{X}_1$, $\RV{X}_2$ etc., the wire labels correspond to random variables $\RV{X}_1$ and $\RV{X}_2$ in the sense introduced above -- we can define canonical measurable functions on the output space of the kernel that take an element of the full space and return just the value of the labeled wire
-\item Using wire names to identify internal wires can sometimes help with diagram understanding
-\end{itemize}
-
-We label input wires with the relevant spaces, using regular math capitals $X,Y$ etc.
-
-Wire names are ommitted where they are not deemed necessary for clarity.
-
-\begin{example}[Wire names to random variables]
-Suppose we have a Markov kernel $\mathbf{A}:X\to \Delta(\mathcal{Y}\otimes\mathcal{Y})$:
-\begin{align}
-\begin{tikzpicture}
-\path (0,0) node (A) {$X$}
-++(0.75,0) node[kernel] (B) {$\mathbf{A}$}
-++(0.75,0.15) node (C) {$\RV{Y}_1$}
-+(0,-0.3) node (D) {$\RV{Y}_2$};
-\draw (A) -- (B) ($(B.east) + (0,0.15)$) -- (C) ($(B.east)+(0,-0.15)$) -- (D);
-\end{tikzpicture}
-\end{align}
-
-Define $\RV{Y}_1:Y\times Y\to Y$ by the projection map $\RV{Y}_1:(y_1,y_2)\mapsto y_1$ and $\RV{Y}_2:Y\times Y\to Y$ by the projection $\RV{Y}_2:(y_1,y_2)\mapsto y_2$. $\RV{Y}_1$ and $\RV{Y}_2$ are random variables that project the values of the correspondingly labeled wires.
-
-\end{example}
-
-
 \paragraph{Basic and extended notation}
 
 We canonically regard a probability measure $\mu\in \Delta(\mathcal{E})$ to be a Markov kernel $\mu:\{*\}\to \Delta(\mathcal{E})$. This allows for the definition of ``basic'' string diagrams for which Markov kernels are the only building blocks. Such a definition isn't possible for measurable functions. Suppose by analogy with the example probability measures and try to identify a measurable function $f:E\to \mathbb{R}$ with a Markov kernel $f':E\times\{*\}\to \mathbb{R}$. For $x\in E$ we cannot generally have both $f'(x,*)=1$ and $f'(x,*)=f(x)$, and so this attempt fails. This lack of normalisation is the reason we require an ``extended'' string diagram notation if we wish to incorporate functions and expectations which allows for the representation of scalars.
+
+
+\paragraph{Elementary operations}
+
+We can compose Markov kernels with appropriate spaces - the equivalent operation of the ``matrix products'' of product notation. Given $\mathbf{M}:E\to\Delta(\mathcal{F})$ and $\mathbf{N}:F\to \Delta(\mathcal{G})$, we have 
+
+\begin{align}
+\mathbf{M}\mathbf{N} := \begin{tikzpicture}
+ \path (0,0) node (E) {$E$}
+ ++ (1,0) node[kernel] (M) {$\mathbf{M}$}
+ ++ (1,0) node[kernel] (N) {$\mathbf{N}$}
+ ++(1,0) node (G) {$\RV{G}$};
+ \draw (E) -- (M) -- (N) -- (G);
+\end{tikzpicture}\label{eq:sd_composition}
+\end{align}
+
+Probability measures are distinguished in that that they only admit ``right composition'' while functions only admit ``left composition''. For $\mu\in \Delta(\mathcal{E})$, $h:F\to X$:
+
+\begin{align}
+\mu\mathbf{M} &:= \begin{tikzpicture}
+ \path (0,0) node[dist] (M) {$\mu$}
+ ++ (1,0) node[kernel] (N) {$\mathbf{M}$}
+ ++(1,0) node (G) {$\RV{G}$};
+ \draw (M) -- (N) -- (G);
+\end{tikzpicture}\\
+\mathbf{M}f&:= \begin{tikzpicture}
+ \path (0,0) node (E) {$E$}
+ ++ (1,0) node[kernel] (M) {$\mathbf{M}$}
+ ++ (1,0) node[expectation] (N) {$f$};
+ \draw (E) -- (M) -- (N);
+ \end{tikzpicture}
+\end{align}
+
+
+We can also combine Markov kernels using tensor products, which we represent with vertical juxtaposition. For $\mathbf{O}:G\to \Delta(\mathcal{H})$:
+
+
+\begin{align}
+\mathbf{M}\otimes\mathbf{N}&:= \begin{tikzpicture}
+\path (0,0) node (E) {$E$}
+++(1,0) node[kernel] (M) {$\mathbf{M}$}
+++(1,0) node (F) {$\RV{F}$}
+(0,-0.5) node (F1) {$G$}
+++(1,0) node[kernel] (N) {$\mathbf{O}$}
++(1,0) node (G) {$\RV{H}$};
+\draw (E) -- (M) -- (F);
+\draw (F1) -- (N) -- (G);
+\end{tikzpicture}
+\end{align}
+
+Product spaces can be represented either by two parallel wires or a single wire that ``carries'' the entire space:
+\begin{align}
+X\times Y \cong \mathrm{Id}_X\otimes \mathrm{Id}_Y &:= \begin{tikzpicture}
+\path (0,0) node (E) {$X$}
+++(1,0) node (F) {$\RV{X}$}
+(0,-0.5) node (F1) {$Y$}
++(1,0) node (G) {$\RV{Y}$};
+\draw (E) -- (F);
+\draw (F1) -- (G);
+\end{tikzpicture}\\
+&= \begin{tikzpicture}
+\path (0,0) node (X) {$X\times Y$}
+++(2,0) node (Y) {$\RV{X}\otimes \RV{Y}$};
+\draw (X) -- (Y);
+\end{tikzpicture}
+\end{align}
+
+Because a product space can be represented by parallel wires, a kernel $\mathbf{L}:E\to \Delta(\mathcal{F}\otimes\mathcal{G})$ can be written using either two parallel output wires or a single output wire:
+
+\begin{align}
+&\begin{tikzpicture}
+\path (0,0) node (E) {$E$}
+++ (1,0) node[kernel] (L) {$\mathbf{L}$}
+++ (1,0.15) node (F) {$\RV{F}$}
++(0,-0.3) node (G) {$\RV{G}$};
+\draw (E) -- (L);
+\draw ($(L.east) + (0,0.15)$) -- (F);
+\draw ($(L.east)+ (0,-0.15)$) -- (G);
+\end{tikzpicture}\\
+&\equiv\\
+&\begin{tikzpicture}
+\path (0,0) node (E) {$E$}
+++ (1,0) node[kernel] (L) {$\mathbf{L}$}
+++ (1.5,0) node (F) {$\RV{F}\otimes \RV{G}$};
+\draw (E) -- (L) -- (F);
+\end{tikzpicture}
+\end{align}
+
 
 \paragraph{Markov kernels with special notation}
 
@@ -176,6 +228,8 @@ The copy map $\splitter{0.1}:X\to \Delta(X\times X)$ maps a point $x$ to two ide
  \path (0,0) node (X) {$X$} ++ (0.5,0) coordinate (copy0) ++ (0.5,0.25) node (X1) {$\RV{X}_1$} ++(0,-0.5) node (X2) {$\RV{X_2}$};\draw (X)--(copy0) to [bend left] (X1) (copy0) to [bend right] (X2);
  \end{tikzpicture}
  \end{align} 
+
+Note that we give output wires unique labels when they share a space.
 
 The discard map $\stopper{0.2}:X\to \Delta(\{*\})$ maps every input to $\delta_{*}$ which is effectively mapping every input to 1
 \begin{align}
@@ -234,6 +288,79 @@ Define the marginal $\nu_Y\in \Delta(\mathcal{Y}):B\mapsto \nu(X\times B)$ for $
 The elementary notation \ref{eq:marginalisation_elem} makes the relationship between $\nu_Y$ and $\nu$ explicit and, again, requires the action on each event to be defined. The product notation \ref{eq:marginalisation_prod} is, in my view, the least transparent but also the most compact in the form $\mu \mathbf{A}$, and does not demand the explicit definition of how $\nu_Y$ treats every event. The graphical notation is the least compact in terms of space taken up on the page, but unlike the product notation it shows a clear relationship to the graphical construction in\ref{eq:joint_measure}, and displays a clear graphical logic whereby marginalisation corresponds to ``cutting off branches''. Like product notation, it also allows for the definition of derived measures such as $\nu_Y$ without explicit definition of the handling of all events. It also features a much smaller collection of symbols than does elementary notation.
 
 String diagrams often achieve a good balance between interpretational transparency, expressive power and symbol economy.
+
+
+\paragraph{Random Variables}\label{par:random_variables}
+
+We take a slightly nonstandard view of random variables. Random variables are typically defined to be measurable functions on a probability space $\langle \Omega, \mathcal{F}, \mu\rangle$ \citep{cinlar_probability_2011}. With this definition, a random variable $\RV{X}:\Omega\to E$ has a canonical probability measure given by the pushforward of $\mu$: for all $A\in\mathscr{E}$ $\RV{X}_\# \mu(A) = \mu(\RV{X}^{-1}(A))$.
+
+We take a random variable to be a measurable function on a \emph{kernel space} $\langle F,\mathcal{F},\mathbf{M}, G\rangle$ where $\mathbf{M}:G\to \Delta(\mathcal{F})$ is a Markov kernel. A random variable $\RV{X}:F\to X$ has a probability distribution only relative to some argument measure $\nu\in\Delta(\mathcal{G})$. Because of this, we cannot in general unambiguously talk about ``the'' distribution of a given random variable. We avoid $P(\RV{X})$ type notation to avoid ambiguity in this regard. 
+
+The reason for this choice is that we use random variables to model quantities with distributions that depend on the decision maker's choices. On the other hand, we don't regard the choices themselves to be modeled by random variables - a commitement to the notion that ``choosing'' is somehow different to ``stochasticity''. \emph{Evidential decision theory}, as defended by \citet{jeffrey_logic_1981}, holds that is is proper to consider choices to be random variables, though doing so rigorously may necessitate a theory that allows for the assignment of probabilities to the outcomes of mathematical deliberations such as the theory of \emph{logical induction} introduced in \citet{garrabrant_logical_2017}. Understanding the relationship between choices and stochastic processes is a deep, interesting and difficut question, and one we sidestep by presuming that we can address nearly all common decision problems while disregarding modelling whatever process gives rise to choices. The resulting decision theory is structurally similar to \emph{causal decision theory} \citep{lewis_causal_1981}.
+
+This definition of random variables permits the convention of identifying every output wire of a string diagram with a random variable. 
+
+\begin{definition}[Functional kernel]
+Given a measurable function $\RV{X}:F\to X$, define the functional kernel $\mathbf{F}_{\RV{X}}:F\to \Delta(\mathcal{X})$ to the the Markov kernel $a\mapsto \delta_{\RV{X}(a)}$ for all $a\in X$.
+\end{definition}
+
+\begin{lemma}[Pushforward measures and functional kernels]
+Given a kernel space $\langle F,\mathcal{F},\mathbf{M}, G\rangle$ and a random variable $\RV{X}:F\to X$, for any prior $\mu\in \Delta(\mathcal{G})$ the pushforward $\RV{X}_\# \mu \mathbf{A} = \mu\mathbf{A} \mathbf{F}_{\RV{X}}$.
+\end{lemma}
+
+\begin{proof}
+For all $B\in \mathcal{F}$:
+\begin{align}
+  (\RV{X})_\# \mu \mathbf{A} (B) &= \mu \mathbf{A} (\RV{X}^{-1}(B))\\
+  								   &= \int_{F} \delta_{\RV{X}(a)} (B) d\mu\mathbf{A} (a)\\
+  								   &= \mu\mathbf{A}\mathbf{F}_{\RV{X}}(B)
+\end{align}
+\end{proof}
+
+\begin{example}[Wire names to random variables]
+Suppose we have a Markov kernel $\mathbf{A}:X\to \Delta(\mathcal{Y}\otimes\mathcal{Y})$:
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (A) {$X$}
+++(0.75,0) node[kernel] (B) {$\mathbf{A}$}
+++(0.75,0.15) node (C) {$\RV{Y}_1$}
++(0,-0.3) node (D) {$\RV{Y}_2$};
+\draw (A) -- (B) ($(B.east) + (0,0.15)$) -- (C) ($(B.east)+(0,-0.15)$) -- (D);
+\end{tikzpicture}
+\end{align}
+
+Define $\RV{Y}'_1:Y\times Y\to Y$ by the projection map $\RV{Y}'_1:(y_1,y_2)\mapsto y_1$ and $\RV{Y}'_2:Y\times Y\to Y$ by the projection $\RV{Y}'_2:(y_1,y_2)\mapsto y_2$. Given any prior $\mu\in \Delta(\mathcal{X})$, let $(\RV{Y}'_1)_\# \mu \mathbf{A}$ be the pushforward of $\RV{Y}'_1$ by $\mu\mathbf{A}$. Then $\mathbf{F}_{\RV{Y}'_1}:Y\times Y\to Y$ will be given by $a\mapsto \delta_{\RV{Y}'_1(a)}$.
+
+Define $\Pi_{\RV{Y}_1}:Y\times Y\to \Delta(\mathcal{Y})$ by $\Pi_{\RV{Y}_1}=\mathrm{Id}_Y\otimes \stopper{0.2}$. $\Pi_{\RV{Y}_1}$ is the Markov kernel that marginalises over the second argument; i.e. it marginalises over the wire named $\RV{Y}_2$. Graphically:
+
+\begin{align}
+\mathbf{A}\Pi_{\RV{Y}_1} = 
+\begin{tikzpicture}
+\path (0,0) node (A) {$X$}
+++(0.75,0) node[kernel] (B) {$\mathbf{A}$}
+++(1,0.15) node (C) {$\RV{Y}_1$}
++(-0.25,-0.3) node (D) {};
+\draw (A) -- (B) ($(B.east) + (0,0.15)$) -- (C);
+\draw[-{Rays[ n=8]}] ($(B.east)+(0,-0.15)$) -- (D);
+\end{tikzpicture}
+\end{align}
+
+Note that for all $(y_1,y_2)\in Y\times Y$, $(\Pi_1)_{y_1,y_2} = \delta_{y_1} = \delta_{\RV{Y}'_1(y_1,y_2)}$. That is, $\Pi_{\RV{Y}_1}=F_{\RV{Y}'_1}$ and so $(\RV{Y}'_1)_\# \mu\mathbf{A} = \mu\mathbf{A}\Pi_{\RV{Y}_1}$. 
+
+Furthermore, define the joint distribution of $\RV{Y}'_1$ and $\RV{Y}'_2$ by $(\RV{Y}'_{1}\utimes\RV{Y}'_{2})_\# \mu\mathbf{A}(B\times C) = \mu\mathbf{A}(\RV{Y}_1^{\prime-1}(B)\cap \RV{Y}_2^{\prime-1}(C))$ for all $B,C\in \mathcal{Y}$. Then, defining $\Pi_{\RV{Y}_1\otimes\RV{Y}_2} = \mathrm{Id}_Y\otimes \mathrm{Id}_Y = \mathrm{Id}_{Y\times Y}$:
+
+\begin{align}
+ (\RV{Y}'_1\utimes\RV{Y}'_2)_\# \mu\mathbf{A}(B\times C) &= \mu\mathbf{A}(\RV{Y}_1^{\prime-1}(B)\cap \RV{Y}_2^{\prime-1}(C))\\
+ 													   &= \int_{Y\times Y} \delta_{\RV{Y}'_1(y_1,y_2)}(B) \delta_{\RV{Y}'_2(y_1,y_2)}(C) d\mu\mathbf{A}(y_1,y_2)\\
+ 													   &= \int_{B\times C} d\mu\mathbf{A}(y_1,y_2)\\
+ 													   &= \mu\mathbf{A}(B\times C)\\
+ 													   &= \mu\mathbf{A}\Pi_{\RV{Y}_1\otimes\RV{Y}_2} (B\times C) \label{eq:identity}
+\end{align}
+
+That is, for any prior $\mu$, the joint distribution of $\RV{Y}'_1$ and $\RV{Y}'_2$ under $\mu\mathbf{A}$ is ``carried'' by the wires labeled $\RV{Y}_1$ and $\RV{Y}_2$, and the marginal distribution of $\RV{Y}_1$ is ``carried'' by the wire labeled $\RV{Y}_1$ alone. It's in this sense that we identify the random variable $\RV{Y}'_1$ with $\RV{Y}_1$. In general, given a Markov kernel with output space $\prod_{i\in [n]} X_i$, we can identify the $j$-th output wire with the random variable given by the projection map $\pi_j:(x_1,...x_j,...x_n)\mapsto x_j$.
+
+Because of this identification, we treat wire names as random variables.
+\end{example}
 
 \subsubsection{Rules for String Diagrams}
 
@@ -381,6 +508,73 @@ Combining \ref{eq:ccom2} and \ref{eq:termobj1} we can derive the following: inte
 
 In elementary notation, this is equivalent to the fact that, for all $B\in \mathcal{X}$, $\int_B \mathbf{A}(x;B)d\mu(x) = \mu(B)$.
 
+The following additional properties hold for $\stopper{0.2}$ and $\splitter{0.1}$:
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (XY) {$E\times F$}
+++ (1.5,0) node (Z) {};
+\draw[-{Rays [n=8]}] (XY) -- (Z);
+\end{tikzpicture} &=
+\begin{tikzpicture}
+\path (0,0) node (X) {$E$} 
+++ (1,0) node (X1) {}
+(0,-0.3) node (Y) {$F$}
+++ (1,0) node (Y1) {};
+\draw[-{Rays [n=8]}] (X) -- (X1);
+\draw[-{Rays [n=8]}] (Y) -- (Y1);
+\end{tikzpicture}
+\end{align}
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (XY) {$E\times F$}
+++ (1.2,0) coordinate (copy0)
+++(1.2,0.3) node (XY1) {$\RV{E}_1\otimes\RV{F}_1$}
+++(0,-0.6) node (XY2) {$\RV{E}_2\otimes \RV{F}_2$};
+\draw (XY) -- (copy0) to [bend left] (XY1);
+\draw (XY) -- (copy0) to [bend right] (XY2);
+\end{tikzpicture} &=
+\begin{tikzpicture}
+\path (0,0) node (XY) {$E$}
+++ (1.,0) coordinate (copy0)
+++(1.,0.5) node (XY1) {$\RV{E}_1$}
+++(0,-1) node (XY2) {$\RV{E}_2$}
+(0,-0.3) node (F) {$F$}
+++(1.,0) coordinate (copy1)
+++(1.,0.5) node (F1) {$\RV{F}_1$}
+++(0,-1) node (F2) {$\RV{F}_2$};
+\draw (XY) -- (copy0) to [bend left] (XY1);
+\draw (copy0) to [bend right] (XY2);
+\draw (F) -- (copy1) to [bend left] (F1);
+\draw (copy1) to [bend right] (F2);
+\end{tikzpicture}
+\end{align}
+
+A key fact that \emph{does not} hold in general is
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (E) {$E$}
+++(0.5,0) coordinate (copy0)
+++(0.7,0.3) node[kernel] (A1) {$\mathbf{A}$}
++(0,-0.6) node[kernel] (A2) {$\mathbf{A}$}
+++(0.75,0) node (F1) {$\RV{F}_1$}
++(0,-0.6) node (F2) {$\RV{F}_2$};
+\draw (E) -- (copy0) to [bend left] (A1) (A1) -- (F1);
+\draw (copy0) to [bend right] (A2) (A2) -- (F2);
+\end{tikzpicture} = \begin{tikzpicture}
+\path (0,0) node (E) {$E$}
+++ (0.7,0) node[kernel] (A) {$\mathbf{A}$}
+++(0.7,0) coordinate (copy0)
+++(0.5,0.3) node (F1) {$\RV{F}_1$}
++(0,-0.6) node (F2) {$\RV{F}_2$};
+\draw (E) -- (A) -- (copy0) to [bend left] (F1);
+\draw (copy0) to [bend right] (F2);
+\end{tikzpicture} 
+\end{align}
+
+In fact, it holds only when $\mathbf{A}$ is a \emph{deterministic} kernel.
+
 \paragraph{Disintegraion and Bayesian Inversion}
 
 We use \emph{disintegration} to define a notion of conditional probability. It is not identical to the standard definition of conditional probability one can find in, for example, \citet{cinlar_probability_2011}, but each can be recovered from the other.
@@ -390,7 +584,7 @@ We use \emph{disintegration} to define a notion of conditional probability. It i
 
 
 \begin{definition}[Disintegration]
-Given a Markov kernel $\mathbf{A}:E\to \Delta(\mathcal{F})$ with output wire names $\URV{X}:=\{\RV{X}_\alpha\}$ with $\URV{V},\URV{W}\subset\URV{X}$, let $R_{\URV{W}}:= \mathrm{Range}(\otimes_{\RV{X}_\alpha\in\URV{W} \RV{X}_\alpha})$ and similarly for $\R_{\URV{V}}$. A $\URV{W}$ to $\URV{V}$ disintegration of $\mathbf{A}$ is any Markov kernel $R_{\URV{W}} \to \Delta(R_{\URV{V}})$ such that
+Given a Markov kernel $\mathbf{A}:E\to \Delta(\mathcal{F})$ with output wire names $\URV{X}:=\{\RV{X}_\alpha\}$ with $\URV{V},\URV{W}\subset\URV{X}$, let $R_{\URV{W}}:= \mathrm{Range}(\otimes_{\RV{X}_\alpha\in\URV{W} \RV{X}_\alpha})$ and similarly for $R_{\URV{V}}$. A $\URV{W}$ to $\URV{V}$ disintegration of $\mathbf{A}$ is any Markov kernel $R_{\URV{W}} \to \Delta(R_{\URV{V}})$ such that
 \begin{align}
 \begin{tikzpicture}
 	\path (0,0) node (E) {$E$}
@@ -409,7 +603,7 @@ Given a Markov kernel $\mathbf{A}:E\to \Delta(\mathcal{F})$ and a set of random 
 \end{definition}
 
 \begin{lemma}[Induced Kernel Wire Identification]
-Given $\mathbf{A}$ and $\URV{X}$, we can label each wire of $\mathbf{A}\URV{X}$ with some $\RV{X}_i\in\URV{X}$ such that for all $i\in\[N]$, $\mathbf{A}\URV{X}\Pi_{\RV{X}_i} = \mathbf{A}\mathbf{F}_{\RV{X}_i}$.
+Given $\mathbf{A}$ and $\URV{X}$, we can label each wire of $\mathbf{A}\URV{X}$ with some $\RV{X}_i\in\URV{X}$ such that for all $i\in\[N]$, $\mathbf{A}\URV{X}\mathbf{F}_{\RV{X}_i} = \mathbf{A}\mathbf{F}_{\RV{X}_i}$.
 \end{lemma}
 
 \begin{proof}
