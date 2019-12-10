@@ -184,10 +184,12 @@ X\times Y \cong \mathrm{Id}_X\otimes \mathrm{Id}_Y &:= \begin{tikzpicture}
 \end{tikzpicture}\\
 &= \begin{tikzpicture}
 \path (0,0) node (X) {$X\times Y$}
-++(2,0) node (Y) {$\RV{X}\otimes \RV{Y}$};
+++(2,0) node (Y) {$\RV{X}\utimes \RV{Y}$};
 \draw (X) -- (Y);
 \end{tikzpicture}
 \end{align}
+
+The notation $\RV{X}\utimes \RV{Y}$ will be explained in paragraph \ref{pgph:disint}.
 
 Because a product space can be represented by parallel wires, a kernel $\mathbf{L}:E\to \Delta(\mathcal{F}\otimes\mathcal{G})$ can be written using either two parallel output wires or a single output wire:
 
@@ -205,7 +207,7 @@ Because a product space can be represented by parallel wires, a kernel $\mathbf{
 &\begin{tikzpicture}
 \path (0,0) node (E) {$E$}
 ++ (1,0) node[kernel] (L) {$\mathbf{L}$}
-++ (1.5,0) node (F) {$\RV{F}\otimes \RV{G}$};
+++ (1.5,0) node (F) {$\RV{F}\utimes \RV{G}$};
 \draw (E) -- (L) -- (F);
 \end{tikzpicture}
 \end{align}
@@ -570,45 +572,144 @@ A key fact that \emph{does not} hold in general is
 +(0,-0.6) node (F2) {$\RV{F}_2$};
 \draw (E) -- (A) -- (copy0) to [bend left] (F1);
 \draw (copy0) to [bend right] (F2);
-\end{tikzpicture} 
+\end{tikzpicture} \label{eq:copy_commutes}
 \end{align}
 
 In fact, it holds only when $\mathbf{A}$ is a \emph{deterministic} kernel.
 
-\paragraph{Disintegraion and Bayesian Inversion}
+\begin{definition}[Deterministic Markov kernel]
+A \emph{deterministic} Markov kernel $\mathbf{A}:E\to \Delta(\mathcal{F})$ is a kernel such that $\mathbf{A}_x(B)\in\{0,1\}$ for all $x\in E$, $B\in\mathcal{F}$.
+\end{definition}
+
+\begin{theorem}[Copy map commutes for deterministic kernels \citep{fong_causal_2013}]
+Equation \ref{eq:copy_commutes} holds iff $\mathbf{A}$ is deterministic.
+\end{theorem}
+
+\paragraph{Disintegraion and Bayesian Inversion}\label{pgph:disint}
 
 We use \emph{disintegration} to define a notion of conditional probability. It is not identical to the standard definition of conditional probability one can find in, for example, \citet{cinlar_probability_2011}, but each can be recovered from the other.
 
+We'll proceed from an example to a general definition. 
 
-
-
-
-\begin{definition}[Disintegration]
-Given a Markov kernel $\mathbf{A}:E\to \Delta(\mathcal{F})$ with output wire names $\URV{X}:=\{\RV{X}_\alpha\}$ with $\URV{V},\URV{W}\subset\URV{X}$, let $R_{\URV{W}}:= \mathrm{Range}(\otimes_{\RV{X}_\alpha\in\URV{W} \RV{X}_\alpha})$ and similarly for $R_{\URV{V}}$. A $\URV{W}$ to $\URV{V}$ disintegration of $\mathbf{A}$ is any Markov kernel $R_{\URV{W}} \to \Delta(R_{\URV{V}})$ such that
+\begin{example}[Disintegration]\label{ex:disintegration}
+Given a probability measure $\mu\in \Delta(\mathcal{E}\otimes\mathcal{F}\otimes \mathcal{G})$:
 \begin{align}
 \begin{tikzpicture}
-	\path (0,0) node (E) {$E$}
-	++(1,0) node[kernel] (A) {$\mathbf{A}$}
-	++(1,0.15) node (W) {$\URV{W}$}
-	+(0,-0.3) node (V) {$\URV{V}$};
-	
+\path (0,0) node[dist] (m) {$\mu\;$}
+++ (0.7,0.3) node (E) {$\RV{E}$}
+++ (0,-0.3) node (F) {$\RV{F}$}
+++(0,-0.3) node (G) {$\RV{G}$};
+\draw ($(m.east) + (0,0.3)$) -- (E);
+\draw ($(m.east) + (0,0)$) -- (F);
+\draw ($(m.east) + (0,-0.3)$) -- (G);
 \end{tikzpicture}
 \end{align}
 
+A Markov kernel $\mathbf{D}_{\RV{F}|\RV{E}}$ is a $\RV{F}|\RV{E}$ (``$\RV{F}$ on $\RV{E}$'')-disintegration of $\mu$ if
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node[dist] (m) {$\mu\;$}
+++ (0.7,0.3) node (E) {$\RV{E}$}
+++ (0,-0.3) node (F) {$\RV{F}$}
+++(0,-0.3) node (G) {};
+\draw ($(m.east) + (0,0.3)$) -- (E);
+\draw ($(m.east) + (0,0)$) -- (F);
+\draw[-{Rays [n=8]}] ($(m.east) + (0,-0.3)$) -- (G);
+\end{tikzpicture}=
+\begin{tikzpicture}
+\path (0,0) node[dist] (m) {$\mu\;$}
+++ (0.7,0.3) coordinate (E) 
++ (0,-0.3) node (F) {}
++ (0,-0.6) node (G) {}
+++ (0.5,0.15) coordinate (E1) 
++ (1.5,0) node (E2) {$\RV{E}$}
+++ (0,-0.4) coordinate (F1)
+++ (0.5,0) node[kernel] (D) {$\mathbf{D}_{\RV{F}|\RV{E}}$}
+++ (1,0) node (F2) {$\RV{F}$};
+\draw ($(m.east) + (0,0.3)$) -- (E);
+\draw[-{Rays [n=8]}] ($(m.east) + (0,-0)$) -- (F);
+\draw[-{Rays [n=8]}] ($(m.east) + (0,-0.3)$) -- (G);
+\draw (E) to [out=45,in=180] (E1) -- (E2);
+\draw (E) to [bend right] (F1) -- (D) -- (F2);
+\end{tikzpicture}\label{eq:integrating_disintegration}
+\end{align}
+
+Equation \ref{eq:integrating_disintegration} echoes the familiar property of conditional probability $P(A\cap B) = P(A|B)P(B)$; in elementary notation it states that for and disintegration $\mathbf{D}_{\RV{F}|\RV{E}}$ and all $A\in\mathcal{E}$, $B\in \mathcal{F}$, $\mu(A\times B)= \int_A \mathbf{D}_{\RV{F}|\RV{E}}(x;B) d\mu_{\RV{E}} (x)$ where $\mu_{\RV{E}}:=\mu \mathbf{F}_{\RV{E}}$ is the marginal distribution of $\RV{E}$ under $\mu$.
+\end{example}
+
+Example \ref{ex:disintegration} defines disintegration given a probability measure $\mu$ and a pair of random variables $\RV{E}$ and $\RV{F}$ that are adapted to the product structure of the output space of $\mu$, a product structure that allows us to draw a diagram for $\mu$ featuring two wires as outputs. There are three extensions to this definition that are desirable:
+
+\begin{enumerate}
+\item We would like to replace individual wires $\RV{E}$ and $\RV{F}$ with arbitrary sets of wires
+\item We would like to be able to disintegrate a probability mesure with respect to arbitrary random variables, not just sets that are adapted to the product structure of the output space
+\item We would like to define disintegration for arbitrary Markov kernels rather than probability measures only
+\end{enumerate}
+
+As we show, we can associate any set of wires with a random variable, so the first item is solved by a solution to the second. 
+
+\begin{definition}[Random Variable Groups]
+Given a measurable space $(E,\mathcal{E})$ and two random variables $\RV{X},\RV{Y}$ with shared domain $E$, the \emph{random variable group} of $\RV{X}$ and $\RV{Y}$ is defined as the function $\splitter{0.1}(\RV{X}\otimes\RV{Y})$, for which we use the shorthand $\RV{X}\utimes\RV{Y}$. 
+
+For $n$ random variables $\RV{X}_1,...\RV{X}_n$, the random variable group $\utimes_{i\in[n]} \RV{X}_i$ is given by $(\RV{X}_1\utimes\RV{X}_2)\utimes\RV{X}_3$ 
 \end{definition}
 
-Note that given an arbitrary set of random variables, we can induce a kernel featuring just these random variables as its wire labels.
-\begin{definition}[Induced Kernel]
-Given a Markov kernel $\mathbf{A}:E\to \Delta(\mathcal{F})$ and a set of random variables $\URV{\RV{X}}=\{\RV{X}_i:F\to X_i|i\in [N]\}$, define the induced Markov kernel $\mathbf{A}\URV{X}:=\mathbf{A}\splitter_N(\otimes_{i\in [N]} \mathbf{F}_{\RV{X}_i})$. 
-\end{definition}
+\begin{lemma}[$\utimes$ is associative]
 
-\begin{lemma}[Induced Kernel Wire Identification]
-Given $\mathbf{A}$ and $\URV{X}$, we can label each wire of $\mathbf{A}\URV{X}$ with some $\RV{X}_i\in\URV{X}$ such that for all $i\in\[N]$, $\mathbf{A}\URV{X}\mathbf{F}_{\RV{X}_i} = \mathbf{A}\mathbf{F}_{\RV{X}_i}$.
 \end{lemma}
 
-\begin{proof}
 
-\end{proof}
+\begin{example}[Disintegration - groups of variables]
+Given a probability measure $\mu\in \Delta(\mathcal{E}\otimes\mathcal{F}\otimes \mathcal{G})$ as before:
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node[dist] (m) {$\mu\;$}
+++ (0.7,0.3) node (E) {$\RV{E}$}
+++ (0,-0.3) node (F) {$\RV{F}$}
+++(0,-0.3) node (G) {$\RV{G}$};
+\draw ($(m.east) + (0,0.3)$) -- (E);
+\draw ($(m.east) + (0,0)$) -- (F);
+\draw ($(m.east) + (0,-0.3)$) -- (G);
+\end{tikzpicture}
+\end{align}
+
+Write 
+
+A Markov kernel $\mathbf{D}_{\RV{F}|\RV{E}\utimes\RV{G}}$ is a $\RV{F}\utimes \RV{G}|\RV{E}$-disintegration of $\mu$ if
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node[dist] (m) {$\mu\;$}
+++ (0.7,0.3) node (E) {$\RV{E}$}
+++ (0,-0.3) node (F) {$\RV{F}\utimes \RV{G}$}
+++(0,-0.3) node (G) {$\RV{G}$};
+\draw ($(m.east) + (0,0.3)$) -- (E);
+\draw ($(m.east) + (0,0)$) -- (F);
+\draw ($(m.east) + (0,-0.3)$) -- (G);
+\end{tikzpicture}=
+\begin{tikzpicture}
+\path (0,0) node[dist] (m) {$\mu\;$}
+++ (0.7,0.3) coordinate (E) 
++ (0,-0.3) node (F) {}
++ (0,-0.6) node (G) {}
+++ (0.5,0.3) coordinate (E1) 
++ (1.5,0) node (E2) {$\RV{E}$}
+++ (0,-0.3) coordinate (F1)
+++ (0.5,0) node[kernel] (D) {$\mathbf{D}_{\RV{F}|\RV{E}}$}
+++ (1.5,0.15) node (F2) {$\RV{F}$}
+++ (0,-0.15) node (G) {$\RV{G}$};
+\draw ($(m.east) + (0,0.3)$) -- (E);
+\draw[-{Rays [n=8]}] ($(m.east) + (0,-0)$) -- (F);
+\draw[-{Rays [n=8]}] ($(m.east) + (0,-0.3)$) -- (G);
+\draw (E) to [out=45,in=180] (E1) -- (E2);
+\draw (E) to [bend right] (F1) -- (D) -- (F2);
+\end{tikzpicture}\label{eq:integrating_disintegration}
+\end{align}
+
+
+\end{example}
+
+
 
 % \begin{align}
 % \begin{tikzpicture}
