@@ -306,7 +306,7 @@ This definition of random variables permits the convention of identifying every 
 Given a measurable function $\RV{X}:F\to X$, define the functional kernel $\mathbf{F}_{\RV{X}}:F\to \Delta(\mathcal{X})$ to the the Markov kernel $a\mapsto \delta_{\RV{X}(a)}$ for all $a\in X$.
 \end{definition}
 
-\begin{lemma}[Pushforward measures and functional kernels]
+\begin{lemma}[Pushforward measures and functional kernels]\label{lem:pushf_funk}
 Given a kernel space $\langle F,\mathcal{F},\mathbf{M}, G\rangle$ and a random variable $\RV{X}:F\to X$, for any prior $\mu\in \Delta(\mathcal{G})$ the pushforward $\RV{X}_\# \mu \mathbf{A} = \mu\mathbf{A} \mathbf{F}_{\RV{X}}$.
 \end{lemma}
 
@@ -648,19 +648,85 @@ Example \ref{ex:disintegration} defines disintegration given a probability measu
 
 As we show, we can associate any set of wires with a random variable, so the first item is solved by a solution to the second. 
 
-\begin{definition}[Random Variable Groups]
-Given a measurable space $(E,\mathcal{E})$ and two random variables $\RV{X},\RV{Y}$ with shared domain $E$, the \emph{random variable group} of $\RV{X}$ and $\RV{Y}$ is defined as the function $\splitter{0.1}(\RV{X}\otimes\RV{Y})$, for which we use the shorthand $\RV{X}\utimes\RV{Y}$. 
+\begin{definition}[Coupled tensor product $\utimes$]
+Given two Markov kernels $\mathbf{M}$ and $\mathbf{N}$ or functions $f$ and $g$ with shared domain $E$, let $\mathbf{M}\utimes\mathbf{N}:=\splitter{0.1}(\mathbf{M}\otimes\mathbf{N})$ and $f\utimes g:=\splitter{0.1}(f\otimes g)$ where these expressions are interpreted using standard product notation. Graphically:
 
-For $n$ random variables $\RV{X}_1,...\RV{X}_n$, the random variable group $\utimes_{i\in[n]} \RV{X}_i$ is given by $(\RV{X}_1\utimes\RV{X}_2)\utimes\RV{X}_3$ 
+\begin{align}
+\mathbf{M}\utimes\mathbf{N}&:=\begin{tikzpicture}
+\path (0,0) node (E) {$E$}
+++(0.5,0) coordinate (copy0)
++ (0.5,0.3) node[kernel] (M) {$\mathbf{M}$}
++(1.2,0.3) node (X) {$\RV{X}$}
++ (0.5,-0.3) node[kernel] (N) {$\mathbf{N}$}
++(1.2,-0.3) node (Y) {$\RV{Y}$};
+\draw (E) -- (copy0) to [bend left] (M) (copy0) to [bend right] (N);
+\draw (M) -- (X) (N) -- (Y);
+\end{tikzpicture}\\
+f\utimes g&:= \begin{tikzpicture}[scale=1.2]\path (0,0) node (E) {$E$}
+++(0.5,0) coordinate (copy0)
++ (0.5,0.3) node[expectation] (M) {$f$}
++ (0.5,-0.3) node[expectation] (N) {$g$};
+\draw (E) -- (copy0) to [bend left] (M) (copy0) to [bend right] (N);
+\end{tikzpicture}
+\end{align}
+
+The operation denoted by $\utimes$ is associative (Lemma \ref{lem:utimes_assoc}), so we can without ambiguity write $f\utimes g\utimes ...\utimes h$ for finite groups of functions or Markov kernels sharing a domain. 
 \end{definition}
 
-\begin{lemma}[$\utimes$ is associative]
-
+\begin{lemma}[$\utimes$ is associative]\label{lem:utimes_assoc}
+For Markov kernels $\mathbf{L}$, $\mathbf{M}$ and $\mathbf{N}$ sharing a domain $E$, $(\mathbf{L}\utimes\mathbf{M})\utimes\mathbf{N}=\mathbf{L}\utimes(\mathbf{M}\utimes\mathbf{N})$.
 \end{lemma}
 
+\begin{proof}
+This follows from the commutativity of the swap map (Equation \ref{eq:ccom1}):
 
-\begin{example}[Disintegration - groups of variables]
-Given a probability measure $\mu\in \Delta(\mathcal{E}\otimes\mathcal{F}\otimes \mathcal{G})$ as before:
+\begin{align}
+	(\mathbf{L}\utimes\mathbf{M})\utimes\mathbf{N} &= \splitter{0.1}(\splitter{0.1}(\mathbf{L}\otimes\mathbf{M})\otimes\mathbf{N})\\
+									   &= \begin{tikzpicture}[yscale=2,xscale=1.5]
+									   \path (0,0) node (E) {$E$}
+									   ++(0.5,0) coordinate (copy0)
+									   +(0.5,0.25) coordinate (copy1)
+									   +(0.5,-0.25) coordinate (Z0)
+									   (copy1) ++(0.5,0.15) node[kernel] (X) {$\mathbf{L}$}
+									   ++ (0,-0.3) node[kernel] (Y) {$\mathbf{M}$}
+									   (Z0) ++ (0.5,0) node[kernel] (Z) {$\mathbf{N}$};
+									   \draw (E) -- (copy0) to [bend left] (copy1) (copy0) to [bend right] (Z0) -- (Z);
+									   \draw (copy1) to [bend left] (X) (copy1) to [bend right] (Y);
+									   \draw (X) -- +(0.5,0) (Y) -- +(0.5,0) (Z) -- +(0.5,0);
+									   \end{tikzpicture}\\
+									   &= \begin{tikzpicture}[yscale=2,xscale=1.5]
+   									   \path (0,0) node (E) {$E$}
+									   ++(0.5,0) coordinate (copy0)
+									   +(0.5,-0.25) coordinate (copy1)
+									   +(0.5,0.25) coordinate (X0)
+									   (X0) ++(0.5,0) node[kernel] (X) {$\mathbf{L}$}
+									   ++ (0,-0.3) node[kernel] (Y) {$\mathbf{M}$}
+									   (copy1) ++ (0.5,-0.25) node[kernel] (Z) {$\mathbf{N}$};
+									   \draw (E) -- (copy0) to [bend right] (copy1) (copy0) to [bend left] (X0) -- (X);
+									   \draw (copy1) to [bend right] (Z) (copy1) to [bend left] (Y);
+   									   \draw (X) -- +(0.5,0) (Y) -- +(0.5,0) (Z) -- +(0.5,0);
+									   \end{tikzpicture}\\
+									   &= \mathbf{L}\utimes(\mathbf{M}\utimes\mathbf{N})
+\end{align}
+\end{proof}
+
+
+\begin{definition}[Joint distribution]\label{def:joint_distribution}
+Given $\mu\in \Delta(\mathcal{E})$ and $\RV{X}:E\to X$ and $\RV{Y}:E\to Y$, the \emph{joint distribution} of $\RV{X}$ and $\RV{Y}$ is the pushforward measure of $\mu$ by the random variable $\RV{X}\utimes\RV{Y}$.
+
+This is identical to the definition in, for example, \citet{cinlar_probability_2011}, if we note that the random variable $(\RV{X},\RV{Y}):\omega\mapsto (\RV{X}(\omega),\RV{Y}(\omega))$ (\c{C}inlar's definition) is equivalent to $\RV{X}\utimes\RV{Y}$.
+\end{definition}
+
+\begin{lemma}[Joint distributions from coupled tensor products]\label{lem:rvg_jd}
+Given a probability space $\langle E,\mathcal{E},\mu \rangle$ and a finite set of random variables $R = \{\RV{X}_i|i\in [n]\}$, the joint distribution of $R$ is given by $\mu (\utimes_{i\in [n]} \mathbf{F}_{\RV{X}_i})$.
+\end{lemma}
+
+\begin{proof}
+This follows directly from Definition \ref{def:joint_distribution} and Lemma \ref{lem:pushf_funk}.
+\end{proof}
+
+\begin{example}[Disintegration - arbitrary groups of variables]
+Given a probability measure $\mu\in \Delta(\mathcal{E})$ as before:
 \begin{align}
 \begin{tikzpicture}
 \path (0,0) node[dist] (m) {$\mu\;$}
