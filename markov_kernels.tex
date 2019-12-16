@@ -294,7 +294,7 @@ Define the marginal $\nu_Y\in \Delta(\mathcal{Y}):B\mapsto \nu(X\times B)$ for $
 
 The elementary notation \ref{eq:marginalisation_elem} makes the relationship between $\nu_Y$ and $\nu$ explicit and, again, requires the action on each event to be defined. The product notation \ref{eq:marginalisation_prod} is, in my view, the least transparent but also the most compact in the form $\mu \mathbf{A}$, and does not demand the explicit definition of how $\nu_Y$ treats every event. The graphical notation is the least compact in terms of space taken up on the page, but unlike the product notation it shows a clear relationship to the graphical construction in\ref{eq:joint_measure}, and displays a clear graphical logic whereby marginalisation corresponds to ``cutting off branches''. Like product notation, it also allows for the definition of derived measures such as $\nu_Y$ without explicit definition of the handling of all events. It also features a much smaller collection of symbols than does elementary notation.
 
-String diagrams often achieve a good balance between interpretational transparency, expressive power and symbol economy.
+String diagrams often achieve a good balance between interpretational transparency, expressive power and symbol economy. Downsides of string diagrams are that they can be time consuming to typeset, and formal reasoning with them takes some practice.
 
 
 \subsubsection{Meta Variables}\label{par:random_variables}
@@ -309,14 +309,14 @@ In particular, when we define a
 
 We take a slightly nonstandard view of random variables. Random variables are typically defined to be measurable functions on a probability space $\langle \Omega, \mathcal{F}, \mu\rangle$ \citep{cinlar_probability_2011}. With this definition, a random variable $\RV{X}:\Omega\to E$ has a canonical probability measure given by the pushforward of $\mu$: for all $A\in\mathscr{E}$ $\RV{X}_\# \mu(A) = \mu(\RV{X}^{-1}(A))$.
 
-We take a random variable to be a measurable function on a \emph{kernel space} $\langle F,\mathcal{F},\mathbf{M}, G\rangle$ where $\mathbf{M}:G\to \Delta(\mathcal{F})$ is a Markov kernel. A random variable $\RV{X}:F\to X$ has a probability distribution only relative to some argument measure $\nu\in\Delta(\mathcal{G})$. Because of this, we cannot in general unambiguously talk about ``the'' distribution of a given random variable. We avoid $P(\RV{X})$ type notation to avoid ambiguity in this regard. 
+We take a random variable to be a measurable function on a \emph{kernel space} $\langle F, G, \mathcal{F}\otimes\mathcal{G},\mathbf{M}\rangle$ where $\mathbf{M}:G\to \Delta(\mathcal{F})$ is a Markov kernel. A random variable $\RV{X}:F\to X$ has a probability distribution only relative to some argument measure $\nu\in\Delta(\mathcal{G})$. Because of this, we cannot in general unambiguously talk about ``the'' distribution of a given random variable; in general we have only conditional probabilities (which we define in Paragraph \ref{pgph:disint}). This approach mirrors to some extent the approach suggested by \citet{hajek_what_2003}, which also takes conditional probability to be fundamental.
 
-The reason for this choice is that we use random variables to model quantities with distributions that depend on the decision maker's choices. On the other hand, we don't regard the choices themselves to be modeled by random variables - a commitement to the notion that ``choosing'' is somehow different to ``stochasticity''. \emph{Evidential decision theory}, as defended by \citet{jeffrey_logic_1981}, holds that is is proper to consider choices to be random variables, though doing so rigorously may necessitate a theory that allows for the assignment of probabilities to the outcomes of mathematical deliberations such as the theory of \emph{logical induction} introduced in \citet{garrabrant_logical_2017}. Understanding the relationship between choices and stochastic processes is a deep, interesting and difficut question, and one we sidestep by presuming that we can address nearly all common decision problems while disregarding modelling whatever process gives rise to choices. The resulting decision theory is structurally similar to \emph{causal decision theory} \citep{lewis_causal_1981}.
+This choice is largely pragmatic - it is helpful to make statements about the properties of random variables on a kernel space without quantifying over prior distributions. However, there is a connection between this choice and the philosophical field of decision theory. In particular, we use random variables to model both stochastic quantities and quantities that depend on the decision maker's choices. We treat the uncertainty associated with choosing and that associated with stochasticity as different -- we do \emph{not} suppose that uncertainty over which choice will be made should itself be modeled using probability. \emph{Evidential decision theory}, as defended by \citet{jeffrey_logic_1981}, holds that is is proper to consider choices to be random variables, though doing so rigorously may necessitate a theory that allows for the assignment of probabilities to the outcomes of mathematical deliberations such as the theory of \emph{logical induction} introduced in \citet{garrabrant_logical_2017}. Understanding the relationship between choices and stochastic processes is a deep, interesting and difficut question, and one we sidestep by presuming that we can address nearly all common decision problems while disregarding modelling whatever process gives rise to choices. The resulting decision theory is structurally similar to \emph{causal decision theory} \citep{lewis_causal_1981}.
 
 This definition of random variables permits the convention of identifying every output wire of a string diagram with a random variable. 
 
-\begin{definition}[Functional kernel]
-Given a measurable function $\RV{X}:F\to X$, define the functional kernel $\mathbf{F}_{\RV{X}}:F\to \Delta(\mathcal{X})$ to the the Markov kernel $a\mapsto \delta_{\RV{X}(a)}$ for all $a\in X$.
+\begin{definition}[Function induced kernel]
+Given a measurable function $\RV{X}:F\to X$, define the function induced kernel $\mathbf{F}_{\RV{X}}:F\to \Delta(\mathcal{X})$ to the the Markov kernel $a\mapsto \delta_{\RV{X}(a)}$ for all $a\in X$.
 \end{definition}
 
 \begin{lemma}[Pushforward measures and functional kernels]\label{lem:pushf_funk}
@@ -372,23 +372,22 @@ Furthermore, define the joint distribution of $\RV{Y}'_1$ and $\RV{Y}'_2$ by $(\
  													   &= \mu\mathbf{A}\Pi_{\RV{Y}_1\otimes\RV{Y}_2} (B\times C) \label{eq:identity}
 \end{align}
 
-That is, for any prior $\mu$, the joint distribution of $\RV{Y}'_1$ and $\RV{Y}'_2$ under $\mu\mathbf{A}$ is ``carried'' by the wires labeled $\RV{Y}_1$ and $\RV{Y}_2$, and the marginal distribution of $\RV{Y}_1$ is ``carried'' by the wire labeled $\RV{Y}_1$ alone. It's in this sense that we identify the random variable $\RV{Y}'_1$ with $\RV{Y}_1$. In general, given a Markov kernel with output space $\prod_{i\in [n]} X_i$, we can identify the $j$-th output wire with the random variable given by the projection map $\pi_j:(x_1,...x_j,...x_n)\mapsto x_j$.
+That is, for any prior $\mu$, the joint distribution of $\RV{Y}'_1$ and $\RV{Y}'_2$ under $\mu\mathbf{A}$ is ``carried'' by the wires labeled $\RV{Y}_1$ and $\RV{Y}_2$, and the marginal distribution of $\RV{Y}_1$ is ``carried'' by the wire labeled $\RV{Y}_1$ alone. It's in this sense that we identify the random variable $\RV{Y}'_1$ with $\RV{Y}_1$. We will henceforth drop the distinction between a wire name and its associated random variable, letting $\RV{Y}_1$ denote both the wire and the random variable previously named $\RV{Y}'_1$.
 
-Because of this identification, we treat wire names as random variables.
+In general, given a Markov kernel with output space $\prod_{i\in [n]} X_i$, we can identify the $j$-th output wire with the random variable given by the projection map $\pi_j:(x_1,...x_j,...x_n)\mapsto x_j$. 
 \end{example}
 
-\subsubsection{Rules for String Diagrams}
+\subsubsection{Working With String Diagrams}
 
 todo:
 \begin{itemize}
-\item Disintegration, Bayesian inversion
 \item Functional generalisation
 \item Conditioning
 \item Infinite copy map
 \item De Finetti's representation theorem
 \end{itemize}
 
-There are a relatively small number of manipulation rules and a number of special constructions that are useful for string diagrams.
+There are a relatively small number of manipulation rules that are useful for string diagrams. In addition, we will define graphically analogues of the standard notions of \emph{conditional probability}, \emph{conditioning}, and infinite sequences of exchangeable random variables.
 
 \paragraph{Axioms of Symmetric Monoidal Categories}
 
@@ -604,7 +603,7 @@ We use \emph{disintegration} to define a notion of conditional probability. It i
 
 We'll proceed from an example to a general definition. 
 
-\begin{example}[Disintegration]\label{ex:disintegration}
+\begin{example}[Disintegration with respect to ``convenient'' random variables]\label{ex:disintegration}
 Given a probability measure $\mu\in \Delta(\mathcal{E}\otimes\mathcal{F}\otimes \mathcal{G})$:
 \begin{align}
 \begin{tikzpicture}
@@ -725,70 +724,210 @@ This follows from the commutativity of the swap map (Equation \ref{eq:ccom1}):
 
 
 \begin{definition}[Joint distribution]\label{def:joint_distribution}
-Given $\mu\in \Delta(\mathcal{E})$ and $\RV{X}:E\to X$ and $\RV{Y}:E\to Y$, the \emph{joint distribution} of $\RV{X}$ and $\RV{Y}$ is the pushforward measure of $\mu$ by the random variable $\RV{X}\utimes\RV{Y}$.
+Given $\mu\in \Delta(\mathcal{E})$ and $\RV{X}:E\to X$ and $\RV{Y}:E\to Y$, the \emph{joint distribution} of $\RV{X}$ and $\RV{Y}$ is the pushforward measure of $\mu$ by the random variable $\RV{X}\utimes\RV{Y}$ on $\mathcal{X}\otimes\mathcal{Y}$.
 
-This is identical to the definition in, for example, \citet{cinlar_probability_2011}, if we note that the random variable $(\RV{X},\RV{Y}):\omega\mapsto (\RV{X}(\omega),\RV{Y}(\omega))$ (\c{C}inlar's definition) is equivalent to $\RV{X}\utimes\RV{Y}$.
+This is identical to the definition in, for example, \citet{cinlar_probability_2011} if we note that the random variable $(\RV{X},\RV{Y}):\omega\mapsto (\RV{X}(\omega),\RV{Y}(\omega))$ (\c{C}inlar's definition) is equivalent to $\RV{X}\utimes\RV{Y}$.
 \end{definition}
 
 \begin{lemma}[Joint distributions from coupled tensor products]\label{lem:rvg_jd}
-Given a probability space $\langle E,\mathcal{E},\mu \rangle$ and a finite set of random variables $R = \{\RV{X}_i|i\in [n]\}$, the joint distribution of $R$ is given by $\mu (\utimes_{i\in [n]} \mathbf{F}_{\RV{X}_i})$.
+Given a probability space $\langle E,\mathcal{E},\mu \rangle$ and a finite set of random variables $G = \{\RV{X}_i|i\in [n]\}$, the joint distribution of $G$ is given by $\mu (\utimes_{i\in [n]} \mathbf{F}_{\RV{X}_i})$.
 \end{lemma}
 
 \begin{proof}
 This follows directly from Definition \ref{def:joint_distribution} and Lemma \ref{lem:pushf_funk}.
 \end{proof}
 
-\begin{example}[Disintegration - arbitrary groups of variables]
-Given a probability measure $\mu\in \Delta(\mathcal{E})$ as before:
+\begin{lemma}\label{lem:thing_commutes}
+For measurable functions $\RV{X}:E\to X$ and $\RV{Y}:E\to Y$, $\mathbf{F}_{\RV{X}\utimes\RV{Y}}=\mathbf{F}_{\RV{X}}\utimes\mathbf{F}_{\RV{Y}}$.
+\end{lemma}
+
+\begin{proof}
+$\mathcal{X}\otimes\mathcal{Y}$ is by definition generated by the rectangles $A\times B$ for $A\in\mathcal{X}$, $B\in \mathcal{Y}$. To show equivalence of kernels $E\to \Delta(\mathcal{X}\otimes\mathcal{Y})$ it is sufficient to show agreement on all $s\in E$ and rectangles $A\times B$, $A\in \mathcal{X}$, $B\in \mathcal{Y}$.
+
+For all $q\in X$, $r\in Y$, $A\in\mathcal{X}$ and $B\in \mathcal{Y}$, we have
+\begin{align}
+	\delta_{(q,r)}(A\times B) = \delta_q (A) \delta_r (B)
+\end{align}
+
+This can be verified by checking the four combinations of $q$ in or not in A and $r$ in or not in $B$.
+
+For all $s\in E$, $A\in\mathcal{X},B\in\mathcal{Y}$,
+\begin{align}
+	\mathbf{F}_{\RV{X}\utimes\RV{Y}}(s;A\times B) &= \delta_{\RV{X}(s),\RV{Y}(s)}(A\times B)\\
+												  &= \delta_{\RV{X}(s)}(A)\delta_{\RV{Y}(s)}(B)\\
+												  &= (\mathbf{F}_{\RV{X}}\utimes \mathbf{F}_{\RV{Y}})(s;A\times B)
+\end{align}
+\end{proof}
+
+\begin{definition}[Disintegration and Conditional Probability]
+Given a probability measure $\mu\in \Delta(\mathcal{E})$:
 \begin{align}
 \begin{tikzpicture}
 \path (0,0) node[dist] (m) {$\mu\;$}
-++ (0.7,0.3) node (E) {$\RV{E}$}
-++ (0,-0.3) node (F) {$\RV{F}$}
-++(0,-0.3) node (G) {$\RV{G}$};
-\draw ($(m.east) + (0,0.3)$) -- (E);
-\draw ($(m.east) + (0,0)$) -- (F);
-\draw ($(m.east) + (0,-0.3)$) -- (G);
+++ (0.7,0) node (E) {$\RV{E}$};
+\draw (m) -- (E);
 \end{tikzpicture}
 \end{align}
 
-Write 
+and two groups of random variables $G_X = \{\RV{X}_i|i\in[n]\}$ and $G_Y = \{\RV{Y}_i|i\in[m]\}$, define $\RV{X}=\utimes_{i\in[n]} \RV{X}_i$, $\RV{Y}:=\utimes_{i\in [m]} \RV{Y}_i$ and $\RV{W}=\RV{X}\utimes\RV{Y}$. Define the $\RV{X}|\RV{Y}$ disintegration of $\mu$ to be the $\RV{X}'|\RV{Y}'$ disintegration of $\mu \mathbf{F}_{\RV{W}}$, where $\RV{X}':\prod_{i\in [n]}X_i\times\prod_{j\in[m]}Y_j\to \prod_{i\in[n]}X_i$ and $\RV{Y}':\prod_{i\in [n]}X_i\times\prod_{j\in[m]}Y_j\to \prod_{i\in[n]}Y_i$ are the respective projection maps $\RV{X}':(x_0,...,x_[n],y_0,...,y_[m])\mapsto (x_0,...,x_m)$ and $\RV{Y}':(x_0,...,x_[n],y_0,...,y_[m])\mapsto (y_0,...,y_[m])$.
 
-A Markov kernel $\mathbf{D}_{\RV{F}|\RV{E}\utimes\RV{G}}$ is a $\RV{F}\utimes \RV{G}|\RV{E}$-disintegration of $\mu$ if
+By construction, $\RV{X}'$ and $\RV{Y}'$ are such that $\RV{X}'\circ\RV{W}=\RV{X}$ and $\RV{Y}'\circ\RV{W} = \RV{Y}$.
+
+By Lemma \ref{lem:thing_commutes}, $\mathbf{D}_{\RV{X}|\RV{Y}}$ is a $\RV{X}|\RV{Y}$ disintegration of $\mu$ if and only if
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node[dist] (M) {$\mu$}
+++ (0.5,0) coordinate (copy0)
+++ (0.5,0.3) node[kernel] (FX) {$\mathbf{F}_{\RV{X}}$}
++  (0.7,0) node (XP) {$\RV{X}'$}
+++ (0,-0.6) node[kernel] (FY) {$\mathbf{F}_{\RV{Y}}$}
++ (0.7,0) node (YP) {$\RV{Y}'$};
+\draw (M) -- (copy0) to [bend left] (FX) (FX) -- (XP);
+\draw (copy0) to [bend right] (FY) (FY) -- (YP);
+\end{tikzpicture} &= 
+\begin{tikzpicture}
+\path (0,0) node[dist] (M) {$\mu$}
+++ (0.7,0) node[kernel] (FY) {$\mathbf{F}_{\RV{Y}}$}
+++(0.7,0) coordinate (copy0)
+++ (0.7,0.3) node[kernel] (FX) {$\mathbf{D}_{\RV{X}|\RV{Y}}$}
++(0.8,0) node (XP) {$\RV{X}'$}
+++(0,-0.6) coordinate (YY)
++ (0.8,0) node (YP) {$\RV{Y}'$};
+\draw (M) -- (FY) -- (copy0) to [bend left] (FX) (FX) -- (XP);
+\draw (copy0) to [bend right] (YY) (YY) -- (YP);
+\end{tikzpicture}\label{eq:proper_disintegration}
+\end{align}
+
+Equation \ref{eq:proper_disintegration} generalises \ref{eq:integrating_disintegration} beyond disintegrations by ``convenience'' wire labels to disintegrations by arbitrary sets of random variables. Note that where we \emph{can} construct a diagram for $\mu$ with convenient labels for $\RV{X}$ and $\RV{Y}$, due to the identification between random variables and wires, $\ref{eq:proper_disintegration}$ reduces to $\ref{eq:integrating_disintegration}$, and we will use the simpler definition where possible as it yields less cluttered diagrams.
+
+
+From the fact that $\mathbf{F}_{\RV{Y}}$ is a deterministic kernel, we also have:
 
 \begin{align}
 \begin{tikzpicture}
-\path (0,0) node[dist] (m) {$\mu\;$}
-++ (0.7,0.3) node (E) {$\RV{E}$}
-++ (0,-0.3) node (F) {$\RV{F}\utimes \RV{G}$}
-++(0,-0.3) node (G) {$\RV{G}$};
-\draw ($(m.east) + (0,0.3)$) -- (E);
-\draw ($(m.east) + (0,0)$) -- (F);
-\draw ($(m.east) + (0,-0.3)$) -- (G);
-\end{tikzpicture}=
-\begin{tikzpicture}
-\path (0,0) node[dist] (m) {$\mu\;$}
-++ (0.7,0.3) coordinate (E) 
-+ (0,-0.3) node (F) {}
-+ (0,-0.6) node (G) {}
-++ (0.5,0.3) coordinate (E1) 
-+ (1.5,0) node (E2) {$\RV{E}$}
-++ (0,-0.3) coordinate (F1)
-++ (0.5,0) node[kernel] (D) {$\mathbf{D}_{\RV{F}|\RV{E}}$}
-++ (1.5,0.15) node (F2) {$\RV{F}$}
-++ (0,-0.15) node (G1) {$\RV{G}$};
-\draw ($(m.east) + (0,0.3)$) -- (E);
-\draw[-{Rays [n=8]}] ($(m.east) + (0,-0)$) -- (F);
-\draw[-{Rays [n=8]}] ($(m.east) + (0,-0.3)$) -- (G);
-\draw (E) to [out=45,in=180] (E1) -- (E2);
-\draw (E) to [bend right] (F1) -- (D) -- (F2);
-\end{tikzpicture}\label{eq:integrating_disintegration}
+\path (0,0) node[dist] (M) {$\mu$}
+++ (0.7,0) node[kernel] (FY) {$\mathbf{F}_{\RV{Y}}$}
+++(0.7,0) coordinate (copy0)
+++ (0.7,0.3) node[kernel] (FX) {$\mathbf{D}_{\RV{X}|\RV{Y}}$}
++(0.8,0) node (XP) {$\RV{X}'$}
+++(0,-0.6) coordinate (YY)
++ (0.8,0) node (YP) {$\RV{Y}'$};
+\draw (M) -- (FY) -- (copy0) to [bend left] (FX) (FX) -- (XP);
+\draw (copy0) to [bend right] (YY) (YY) -- (YP);
+\end{tikzpicture}\\
+&= \begin{tikzpicture}
+\path (0,0) node[dist] (M) {$\mu$}
+++(0.7,0) coordinate (copy0)
+++ (0.7,0.3) node[kernel] (FY1) {$\mathbf{F}_{\RV{Y}}$}
++ (0,-0.6) node[kernel] (FY) {$\mathbf{F}_{\RV{Y}}$}
+++ (0.8,0) node[kernel] (FX) {$\mathbf{D}_{\RV{X}|\RV{Y}}$}
++(0.8,0) node (XP) {$\RV{X}'$}
++ (0.8,-0.6) node (YP) {$\RV{Y}'$};
+\draw (M) -- (copy0) to [bend left] (FY1) (FY1) -- (FX) -- (XP);
+\draw (copy0) to [bend right] (FY) (FY) -- (YP);
+\end{tikzpicture}
 \end{align}
 
+We note, without proof, that: $\mathbf{F}_{\RV{Y}} \mathbf{D}_{\RV{X}|\RV{Y}}$ is an ordinary conditional probability $\mu(\RV{X}|\otimes_{i\in[m]}\mathcal{Y}_i)$, and where such an ordinary conditional probability exists we can find a disintegration $\mathbf{D}_{\RV{X}|\RV{Y}}$ \citep{cinlar_probability_2011}.
 
+In addition, it is well known that disintegrations of $\mu$ are non-unique, and different disintegrations are equal only up to sets of $\mu$-measure 0. This ambiguity turns out to be more problematic in our causal work as sets of $\mu$-measure 0 may meaningfully impact the consequences of decisions in fairly ordinary circumstances.
+\end{definition}
+
+We are also interested in an analogue of disintegration that applies to an arbitrary Markov kernel $\mathbf{M}:E\to \Delta(\mathcal{F})$ rather than only to probability measures. A generalised notion of disintegraion will allow for a formal definition of \citet{dawid_beware_2010}'s definition of ``extended conditional independence''. 
+
+There are a number of choices we could make here, and we have made a particular choice that leads to generalised disintegrations usually failing to exist. This choices allows for a much cleaner treatment of conditional independence, as we will explain below.
+
+\begin{definition}[Generalised Disintegration]
+Given a Markov kernel $\mathbf{M}:E\to \Delta(\mathcal{F})$ and random variables $\RV{X}:F\to X$, $\RV{Y}:F\to Y$, a $\RV{X}|\RV{Y}$ disintegration of $\mathbf{M}$ is any kernel $\mathbf{D}_{\RV{X}|\RV{Y}}$ such that
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (E) {$E$}
+++(0.7,0) node[kernel] (M) {$\mathbf{M}$}
+++ (0.5,0) coordinate (copy0)
+++ (0.5,0.3) node[kernel] (FX) {$\mathbf{F}_{\RV{X}}$}
++  (0.7,0) node (XP) {$\RV{X}'$}
+++ (0,-0.6) node[kernel] (FY) {$\mathbf{F}_{\RV{Y}}$}
++ (0.7,0) node (YP) {$\RV{Y}'$};
+\draw (E)-- (M) -- (copy0) to [bend left] (FX) (FX) -- (XP);
+\draw (copy0) to [bend right] (FY) (FY) -- (YP);
+\end{tikzpicture} &= 
+\begin{tikzpicture}
+\path (0,0) node (E) {$E$}
+++(0.7,0) node[kernel] (M) {$\mathbf{M}$}
+++ (0.7,0) node[kernel] (FY) {$\mathbf{F}_{\RV{Y}}$}
+++(0.7,0) coordinate (copy0)
+++ (0.7,0.3) node[kernel] (FX) {$\mathbf{D}_{\RV{X}|\RV{Y}}$}
++(0.8,0) node (XP) {$\RV{X}'$}
+++(0,-0.6) coordinate (YY)
++ (0.8,0) node (YP) {$\RV{Y}'$};
+\draw (E)--(M) -- (FY) -- (copy0) to [bend left] (FX) (FX) -- (XP);
+\draw (copy0) to [bend right] (YY) (YY) -- (YP);
+\end{tikzpicture}
+\end{align}
+
+Similarly to the standard definition, this reduces in the case that $\mathbf{M}$ can be drawn with $\RV{X}$ and $\RV{Y}$ labelling output wires.
+\end{definition}
+
+
+\begin{example}[Generalised disintegrations usually do not exist]
+Let $\mathbf{M}:\{0,1\}\to \Delta(\{0,1\}^2)$ be defined by $\mathbf{M}:q\mapsto \delta_q\otimes\delta_1$ and let $\RV{X}_0,\RV{X}_1:\{0,1\}^2\to\{0,1\}$ be defined by $\RV{X}_0:(r,s)\mapsto r$ and $\RV{X}_1:(r,s)\mapsto s$. Note that we can write:
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (E) {$\{0,1\}$}
+++(1,0) node[kernel] (M) {$\mathbf{M}$}
++(0.8,0.15) node (X0) {$\RV{X}_0$}
++(0.8,-0.15) node (X1) {$\RV{X}_1$};
+\draw (E) -- (M) ($(M.east)+(0,0.15)$) -- (X0);
+\draw ($(M.east)+(0,-0.15)$) -- (X1);
+\end{tikzpicture}
+\end{align}
+
+Suppose we have some $\mathbf{D}_{\RV{X}_0|\RV{X}_1}$. Then we must have 
+
+\begin{align}
+\delta_0 &= \begin{tikzpicture}
+\path (0,0) node[dist] (E) {$\delta_0$}
+++(1,0) node[kernel] (M) {$\mathbf{M}$}
++(0.8,0.15) node (X0) {}
+++(1,-0.22) node[kernel] (D) {$\mathbf{D}_{\RV{X}_0|\RV{X}_1}$}
+++(1,0) node (X1) {$\RV{X}_0$};
+\draw[-{Rays [n=8]}] (E) -- (M) ($(M.east)+(0,0.15)$) -- (X0);
+\draw ($(M.east)+(0,-0.15)$) -- (D) -- (X1);
+\end{tikzpicture}\\
+\delta_1 &= \begin{tikzpicture}
+\path (0,0) node[dist] (E) {$\delta_1$}
+++(1,0) node[kernel] (M) {$\mathbf{M}$}
++(0.8,0.15) node (X0) {}
+++(1,-0.22) node[kernel] (D) {$\mathbf{D}_{\RV{X}_0|\RV{X}_1}$}
+++(1,0) node (X1) {$\RV{X}_0$};
+\draw[-{Rays [n=8]}] (E) -- (M) ($(M.east)+(0,0.15)$) -- (X0);
+\draw ($(M.east)+(0,-0.15)$) -- (D) -- (X1);
+\end{tikzpicture}
+\end{align}
+
+but by assumption
+
+\begin{align}
+\delta_1 = \begin{tikzpicture}
+\path (0,0) node[dist] (E) {$\delta_0$}
+++(1,0) node[kernel] (M) {$\mathbf{M}$}
++(0.8,0.15) node (X0) {}
+++(1,-0.15) node (X1) {$\RV{X}_1$};
+\draw[-{Rays [n=8]}] (E) -- (M) ($(M.east)+(0,0.15)$) -- (X0);
+\draw ($(M.east)+(0,-0.15)$) -- (X1);
+\end{tikzpicture} = \begin{tikzpicture}
+\path (0,0) node[dist] (E) {$\delta_1$}
+++(1,0) node[kernel] (M) {$\mathbf{M}$}
++(0.8,0.15) node (X0) {}
+++(1,-0.15) node (X1) {$\RV{X}_1$};
+\draw[-{Rays [n=8]}] (E) -- (M) ($(M.east)+(0,0.15)$) -- (X0);
+\draw ($(M.east)+(0,-0.15)$) -- (X1);
+\end{tikzpicture}
+\end{align}
+
+Thus no such $\mathbf{D}_{\RV{X}_0|\RV{X}_1}$ can exist.
+ 
 \end{example}
-
-
 
 % \begin{align}
 % \begin{tikzpicture}
