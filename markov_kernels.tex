@@ -72,12 +72,12 @@ Extending the subscript notation above, for $\mathbf{C}:X\times Y\to \Delta(\mat
 
 The map $x\mapsto \mathbf{M}_x$ is of type $E\to \Delta(\mathcal{F})$. We will abuse notation somewhat to write $\mathbf{M}:E\to \Delta(\mathcal{F})$, which captures the intuition that a Markov kernel maps from elements of $E$ to probability measures on $\mathcal{F}$. Note that we ``reverse'' this idea and consider Markov kernels to map from elements of $\mathcal{F}$ to measurable functions $E\to[0,1]$, an interpretation found in \citet{clerc_pointless_2017}, but (at this stage) we don't make use of this interpretation here.
 
-Given an indiscrete measurable space $(\{*\},\{\{*\},\emptyset\})$, we identify Markov kernels $\mathbf{N}:\{*\}\to \Delta(\mathcal{E})$ with the probability measure $\mathbf{N}_*$. In addition, there is a unique Markov kernel $\stopper{0.2}:E\to \Delta(\{\{*\},\emptyset\})$ given by $x\mapsto \delta_*$ for all $x\in E$ which we will call the ``discard'' map
+Given an indiscrete measurable space $(\{*\},\{\{*\},\emptyset\})$, we identify Markov kernels $\mathbf{N}:\{*\}\to \Delta(\mathcal{E})$ with the probability measure $\mathbf{N}_*$. In addition, there is a unique Markov kernel $\stopper{0.2}:E\to \Delta(\{\{*\},\emptyset\})$ given by $x\mapsto \delta_*$ for all $x\in E$ which we will call the ``discard'' map.
 
 
 \subsection{Product Notation}
 
-We can use a notation similar to matrix-vector products to represent operations with Markov kernels. Probability measures $\mu\in \Delta(\mathcal{X})$ can be read as row vectors, Markov kernels as matrices and measurable functions $\RV{T}:Y\to T$ as column vectors. Defining $\mathbf{M}:X\to \Delta(\mathcal{Y})$ and $\mathbf{N}:Y\to \Delta(\mathcal{Z})$, the measure-kernel product $\mu \mathbf{A} (G) := \int \mathbf{A}_x (G) d\mu(x)$ yields a probability measure $\mu\mathbf{A}$ on $\mathcal{Z}$, the kernel-kernel product $\mathbf{M}\mathbf{N}(x;H)=\int_Y \mathbf{B}(y;H)d\mathbf{A}_x$ yields a kernel $\mathbf{M}\mathbf{N}:X\to \Delta(\mathcal{Z})$ and the kernel-function product $\mathbf{A}\RV{T}(x):=\int_Y \RV{T}(y) d\mathbf{A}_x$ yields a measurable function $X\to T$. Kernel products are associative \citep{cinlar_probability_2011}.
+We can use a notation similar to the standard notation for matrix-vector products to represent operations with Markov kernels. Probability measures $\mu\in \Delta(\mathcal{X})$ can be read as row vectors, Markov kernels as matrices and measurable functions $\RV{T}:Y\to T$ as column vectors. Defining $\mathbf{M}:X\to \Delta(\mathcal{Y})$ and $\mathbf{N}:Y\to \Delta(\mathcal{Z})$, the measure-kernel product $\mu \mathbf{A} (G) := \int \mathbf{A}_x (G) d\mu(x)$ yields a probability measure $\mu\mathbf{A}$ on $\mathcal{Z}$, the kernel-kernel product $\mathbf{M}\mathbf{N}(x;H)=\int_Y \mathbf{B}(y;H)d\mathbf{A}_x$ yields a kernel $\mathbf{M}\mathbf{N}:X\to \Delta(\mathcal{Z})$ and the kernel-function product $\mathbf{A}\RV{T}(x):=\int_Y \RV{T}(y) d\mathbf{A}_x$ yields a measurable function $X\to T$. Kernel products are associative \citep{cinlar_probability_2011}.
 
 The tensor product $(\mathbf{M}\otimes \mathbf{N})(x,y;G,H) := \mathbf{M}(x;G)\mathbf{N}(y;H)$ yields a kernel $(\mathbf{M}\otimes \mathbf{N}):X\times Y\to \Delta(\mathcal{Y}\otimes\mathcal{Z})$.
 
@@ -96,14 +96,14 @@ Some key ideas of string diagrams:
 	\item String diagrams are the subject of a coherence theorem: taking a string diagram and applying a planar deformation yields a string diagram that represents the same kernel \citep{selinger_survey_2010}. This also holds for a number of additional transformations detailed below
 \end{itemize}
 
-A kernel $\mathbf{A}:X\to \Delta(\mathcal{Y})$ is written as a box with input and output wires, probability measures $\mu\in \Delta(\mathcal{X})$ are written as triangles ``closed on the left'' and measurable functions (which are only elements of the ``extended'' notation) $\RV{T}:Y\to T$ as triangles ``closed on the right''. We label all output wires with unique sans serif letters $\RV{X},\RV{Y}$ which can be understood as defining a random variable on some canonical space which corresponds to the labeled wire. We also adopt the convention that a random variable $\RV{X}_\alpha$ (with optional index) takes values in the space $X$. Input wires are labeled only with the spaces $X,Y,Z$, and we don't associate random variables with input wires. See Paragraph \ref{par:random_variables} for a more detailed explanation of random variables in Causal Statistical Decision Theory.
+A kernel $\mathbf{M}:X\to \Delta(\mathcal{Y})$ is written as a box with input and output wires, probability measures $\mu\in \Delta(\mathcal{X})$ are written as triangles ``closed on the left'' and measurable functions (which are only elements of the ``extended'' notation) $\RV{T}:Y\to T$ as triangles ``closed on the right''. We additionally name every wire represented in a string diagram, which we call (following \cite{cho_disintegration_2019}) \emph{meta-variables} and use the same sans-serif font as for random variabels ($\RV{X},\RV{Y}$ etc.) to emphasise their connection. See Paragraph \ref{par:random_variables} for a more detailed explanation of meta variables.
 
-For $\mathbf{A}:X\to \Delta(\mathcal{Y})$, $\mu\in \Delta(\mathcal{X})$ and $f:X\to W$:
+For $\mathbf{M}:X\to \Delta(\mathcal{Y})$, $\mu\in \Delta(\mathcal{X})$ and $f:X\to W$:
 
 \begin{align}
 \begin{tikzpicture}
-\path (0,0) node (A) {$X$}
-++(0.75,0) node[kernel] (B) {$\mathbf{A}$}
+\path (0,0) node (A) {$\RV{X}$}
+++(0.75,0) node[kernel] (B) {$\mathbf{M}$}
 ++(0.75,0) node (C) {$\RV{Y}$};
 \draw (A) -- (B) -- (C);
 \end{tikzpicture}\qquad
@@ -113,7 +113,7 @@ For $\mathbf{A}:X\to \Delta(\mathcal{Y})$, $\mu\in \Delta(\mathcal{X})$ and $f:X
 \draw (B) -- (C);
 \end{tikzpicture}\qquad
 \begin{tikzpicture}
-\path (0,0) node (A) {$X$}
+\path (0,0) node (A) {$\RV{X}$}
 ++(0.75,0) node[expectation] (B) {$f$};
 \draw (A) -- (B);
 \end{tikzpicture}
@@ -126,14 +126,14 @@ We canonically regard a probability measure $\mu\in \Delta(\mathcal{E})$ to be a
 
 \paragraph{Elementary operations}
 
-We can compose Markov kernels with appropriate spaces - the equivalent operation of the ``matrix products'' of product notation. Given $\mathbf{M}:E\to\Delta(\mathcal{F})$ and $\mathbf{N}:F\to \Delta(\mathcal{G})$, we have 
+We can compose Markov kernels with appropriate spaces - the equivalent operation of the ``matrix products'' of product notation. Given $\mathbf{M}:X\to\Delta(\mathcal{Y})$ and $\mathbf{N}:Y\to \Delta(\mathcal{Z})$, we have 
 
 \begin{align}
 \mathbf{M}\mathbf{N} := \begin{tikzpicture}
- \path (0,0) node (E) {$E$}
+ \path (0,0) node (E) {$\RV{X}$}
  ++ (1,0) node[kernel] (M) {$\mathbf{M}$}
  ++ (1,0) node[kernel] (N) {$\mathbf{N}$}
- ++(1,0) node (G) {$\RV{G}$};
+ ++(1,0) node (G) {$\RV{Z}$};
  \draw (E) -- (M) -- (N) -- (G);
 \end{tikzpicture}\label{eq:sd_composition}
 \end{align}
@@ -144,11 +144,11 @@ Probability measures are distinguished in that that they only admit ``right comp
 \mu\mathbf{M} &:= \begin{tikzpicture}
  \path (0,0) node[dist] (M) {$\mu$}
  ++ (1,0) node[kernel] (N) {$\mathbf{M}$}
- ++(1,0) node (G) {$\RV{G}$};
+ ++(1,0) node (G) {$\RV{Z}$};
  \draw (M) -- (N) -- (G);
 \end{tikzpicture}\\
 \mathbf{M}f&:= \begin{tikzpicture}
- \path (0,0) node (E) {$E$}
+ \path (0,0) node (E) {$\RV{X}$}
  ++ (1,0) node[kernel] (M) {$\mathbf{M}$}
  ++ (1,0) node[expectation] (N) {$f$};
  \draw (E) -- (M) -- (N);
@@ -156,58 +156,58 @@ Probability measures are distinguished in that that they only admit ``right comp
 \end{align}
 
 
-We can also combine Markov kernels using tensor products, which we represent with vertical juxtaposition. For $\mathbf{O}:G\to \Delta(\mathcal{H})$:
+We can also combine Markov kernels using tensor products, which we represent with vertical juxtaposition. For $\mathbf{O}:Z\to \Delta(\mathcal{W})$:
 
 
 \begin{align}
 \mathbf{M}\otimes\mathbf{N}&:= \begin{tikzpicture}
-\path (0,0) node (E) {$E$}
+\path (0,0) node (E) {$\RV{X}$}
 ++(1,0) node[kernel] (M) {$\mathbf{M}$}
-++(1,0) node (F) {$\RV{F}$}
-(0,-0.5) node (F1) {$G$}
+++(1,0) node (F) {$\RV{Y}$}
+(0,-0.5) node (F1) {$\RV{Z}$}
 ++(1,0) node[kernel] (N) {$\mathbf{O}$}
-+(1,0) node (G) {$\RV{H}$};
++(1,0) node (G) {$\RV{W}$};
 \draw (E) -- (M) -- (F);
 \draw (F1) -- (N) -- (G);
 \end{tikzpicture}
 \end{align}
 
-Product spaces can be represented either by two parallel wires or a single wire that ``carries'' the entire space:
+Product spaces can be represented either by two parallel wires or a single wire:
 \begin{align}
 X\times Y \cong \mathrm{Id}_X\otimes \mathrm{Id}_Y &:= \begin{tikzpicture}
-\path (0,0) node (E) {$X$}
+\path (0,0) node (E) {$\RV{X}$}
 ++(1,0) node (F) {$\RV{X}$}
-(0,-0.5) node (F1) {$Y$}
+(0,-0.5) node (F1) {$\RV{Y}$}
 +(1,0) node (G) {$\RV{Y}$};
 \draw (E) -- (F);
 \draw (F1) -- (G);
 \end{tikzpicture}\\
 &= \begin{tikzpicture}
-\path (0,0) node (X) {$X\times Y$}
+\path (0,0) node (X) {$\RV{X}\utimes \RV{Y}$}
 ++(2,0) node (Y) {$\RV{X}\utimes \RV{Y}$};
 \draw (X) -- (Y);
 \end{tikzpicture}
 \end{align}
 
-The notation $\RV{X}\utimes \RV{Y}$ will be explained in paragraph \ref{pgph:disint}.
+The notation $\RV{X}\utimes \RV{Y}$ will be explained in paragraph \ref{pgph:disint} - $\RV{X}\utimes\RV{Y}$ is a meta variable taking values in in the product space $X\times Y$.
 
-Because a product space can be represented by parallel wires, a kernel $\mathbf{L}:E\to \Delta(\mathcal{F}\otimes\mathcal{G})$ can be written using either two parallel output wires or a single output wire:
+Because a product space can be represented by parallel wires, a kernel $\mathbf{L}:X\to \Delta(\mathcal{Y}\otimes\mathcal{Z})$ can be written using either two parallel output wires or a single output wire:
 
 \begin{align}
 &\begin{tikzpicture}
-\path (0,0) node (E) {$E$}
+\path (0,0) node (E) {$\RV{X}$}
 ++ (1,0) node[kernel] (L) {$\mathbf{L}$}
-++ (1,0.15) node (F) {$\RV{F}$}
-+(0,-0.3) node (G) {$\RV{G}$};
+++ (1,0.15) node (F) {$\RV{Y}$}
++(0,-0.3) node (G) {$\RV{Z}$};
 \draw (E) -- (L);
 \draw ($(L.east) + (0,0.15)$) -- (F);
 \draw ($(L.east)+ (0,-0.15)$) -- (G);
 \end{tikzpicture}\\
 &\equiv\\
 &\begin{tikzpicture}
-\path (0,0) node (E) {$E$}
+\path (0,0) node (E) {$\RV{X}$}
 ++ (1,0) node[kernel] (L) {$\mathbf{L}$}
-++ (1.5,0) node (F) {$\RV{F}\utimes \RV{G}$};
+++ (1.5,0) node (F) {$\RV{Y}\utimes \RV{Z}$};
 \draw (E) -- (L) -- (F);
 \end{tikzpicture}
 \end{align}
@@ -220,35 +220,40 @@ A number of Markov kernels are given special notation distinct from the generic 
 The identity kernel $\textbf{Id}:X\to \Delta(X)$ maps a point $x$ to the measure $\delta_x$ that places all mass on the same point:
 
 \begin{align}
-\textbf{Id}_x : x\mapsto \delta_x \equiv \begin{tikzpicture}\path (0,0) node (X) {$X$} + (1,0) node (X1) {$\RV{X}$}; \draw (X)--(X1); \end{tikzpicture}
+\textbf{Id}_x : x\mapsto \delta_x \equiv \begin{tikzpicture}\path (0,0) node (X) {$\RV{X}$} + (1,0) node (X1) {$\RV{X}$}; \draw (X)--(X1); \end{tikzpicture}
 \end{align}
 
+The identity map preserves the name of a wire.
 
-The copy map $\splitter{0.1}:X\to \Delta(X\times X)$ maps a point $x$ to two identical copies of x:
+The copy map $\splitter{0.1}:X\to \Delta(\mathcal{X}\times \mathcal{X})$ maps a point $x$ to two identical copies of x:
 \begin{align}
  \splitter{0.1}: x\mapsto \delta_{(x,x)} \equiv \begin{tikzpicture}
- \path (0,0) node (X) {$X$} ++ (0.5,0) coordinate (copy0) ++ (0.5,0.25) node (X1) {$\RV{X}_1$} ++(0,-0.5) node (X2) {$\RV{X_2}$};\draw (X)--(copy0) to [bend left] (X1) (copy0) to [bend right] (X2);
+ \path (0,0) node (X) {$X$} ++ (0.5,0) coordinate (copy0) ++ (0.5,0.25) node (X1) {$\RV{X}$} ++(0,-0.5) node (X2) {$\RV{X}$};\draw (X)--(copy0) to [bend left] (X1) (copy0) to [bend right] (X2);
  \end{tikzpicture}
  \end{align} 
 
-Note that we give output wires unique labels when they share a space.
-
-The discard map $\stopper{0.2}:X\to \Delta(\{*\})$ maps every input to $\delta_{*}$ which is effectively mapping every input to 1
-\begin{align}
-\stopper{0.2}: x\mapsto \delta_{*} \equiv \begin{tikzpicture}
- \draw[-{Rays [n=8]}] (0,0) -- (0.5,0);
-\end{tikzpicture}
-\end{align}
+Copy maps \emph{copy} the name of a wire. 
 
 The swap map $\sigma:X\times Y\to \Delta(\mathcal{Y}\otimes\mathcal{X})$ swaps its inputs:
 
 \begin{align}
 \sigma := (x,y)\to \delta_{(y,x)} \equiv \begin{tikzpicture}
-\path (0,0) node (X) {$X$}
+\path (0,0) node (X) {$\RV{X}$}
 +(1,0.3) node (X1) {$\RV{X}$}
-(0,0.3) node (Y) {$Y$}
+(0,0.3) node (Y) {$\RV{Y}$}
 +(1,-0.3) node (Y1) {$\RV{Y}$};
 \draw (X)--(X1) (Y) -- (Y1);
+\end{tikzpicture}
+\end{align}
+
+The swap map preserves the names of visually connected wires.
+
+Apart from identity, copy and swap maps, we assign different names to the input and output wires of Markov kernels.
+
+The discard map $\stopper{0.2}:X\to \Delta(\{*\})$ maps every input to $\delta_{*}$ which is effectively mapping every input to 1
+\begin{align}
+\stopper{0.2}: x\mapsto \delta_{*} \equiv \begin{tikzpicture}
+ \draw[-{Rays [n=8]}] (0,0) node (X) {$\RV{X}$} (X) -- (1,0);
 \end{tikzpicture}
 \end{align}
 
@@ -292,7 +297,15 @@ The elementary notation \ref{eq:marginalisation_elem} makes the relationship bet
 String diagrams often achieve a good balance between interpretational transparency, expressive power and symbol economy.
 
 
-\paragraph{Random Variables}\label{par:random_variables}
+\subsubsection{Meta Variables}\label{par:random_variables}
+
+We use \emph{meta variables} or wire names to do what is normally done with random variables. In particular, in a diagram representing a probability measure (rather than a general Markov kernel), we can take the marginal distribution of a given meta variable or find the conditional distribution of one set of meta variables given another. In addition, we can perform analogous operations to marginalisation and finding the conditional distribution of meta variables for general Markov kernels.
+
+\paragraph{Meta variables and probability measures}
+
+Given a probability measure $\mu\in \Delta(\mathcal{E}\otimes\mathcal{F})$, 
+
+In particular, when we define a 
 
 We take a slightly nonstandard view of random variables. Random variables are typically defined to be measurable functions on a probability space $\langle \Omega, \mathcal{F}, \mu\rangle$ \citep{cinlar_probability_2011}. With this definition, a random variable $\RV{X}:\Omega\to E$ has a canonical probability measure given by the pushforward of $\mu$: for all $A\in\mathscr{E}$ $\RV{X}_\# \mu(A) = \mu(\RV{X}^{-1}(A))$.
 
