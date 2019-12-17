@@ -299,13 +299,29 @@ String diagrams often achieve a good balance between interpretational transparen
 
 \subsubsection{Meta Variables}\label{par:random_variables}
 
-We use \emph{meta variables} or wire names to do what is normally done with random variables. In particular, in a diagram representing a probability measure (rather than a general Markov kernel), we can take the marginal distribution of a given meta variable or find the conditional distribution of one set of meta variables given another. In addition, we can perform analogous operations to marginalisation and finding the conditional distribution of meta variables for general Markov kernels.
+
+If all our reasoning were done using diagrams wire identities would be clear from those diagrams. However, because we reason using a combination of diagrams, product notation, elementary notation and English words, it is necessary to be able to refer to particular wires in a diagram. We call wire labels \emph{meta variables}, which are closely connected to the more standard \emph{random variables}. Given a diagram representing a probability measure (rather than a general Markov kernel) that defines a number of meta variables, we can take the marginal distribution of a given meta variable or find the conditional distribution of one set of meta variables given another. In addition, we can perform analogous operations to marginalisation and finding the conditional distribution of meta variables for general Markov kernels.
 
 \paragraph{Meta variables and probability measures}
 
-Given a probability measure $\mu\in \Delta(\mathcal{E}\otimes\mathcal{F})$, 
 
-In particular, when we define a 
+Given a probability measure $\mu\in \Delta(\mathcal{X}\otimes\mathcal{Y})$, a \emph{meta variable} is a label attached to an output wire of the diagram in some valid representation. By convention, we name meta variables with sans-serif letters matching the name of the underlying space, though this is only a convention. For example, the following two diagrams define meta variables $\RV{X}$, $\RV{Y}$ and $\RV{W}$:
+\begin{align}
+&\begin{tikzpicture}
+\path (0,0) node[dist] (M) {$\mu$}
+++ (0.7,0.15) node (X) {$\RV{X}$}
+++ (0,-0.3) node (Y) {$\RV{Y}$};
+\draw ($(M.east)+(0,0.15)$) -- (X);
+\draw ($(M.east)+(0,-0.15)$) -- (Y);
+\end{tikzpicture} &
+\begin{tikzpicture}
+\path (0,0) node[dist] (M) {$\mu$}
+++ (0.7,0) node (W) {$\RV{W}$};
+\draw (M) -- (W);
+\end{tikzpicture}
+\end{align}
+
+We insist that meta variables obey a number of consistency properties which ensure that wires that are intuitively the same between diagrams receive the same label.
 
 We take a slightly nonstandard view of random variables. Random variables are typically defined to be measurable functions on a probability space $\langle \Omega, \mathcal{F}, \mu\rangle$ \citep{cinlar_probability_2011}. With this definition, a random variable $\RV{X}:\Omega\to E$ has a canonical probability measure given by the pushforward of $\mu$: for all $A\in\mathscr{E}$ $\RV{X}_\# \mu(A) = \mu(\RV{X}^{-1}(A))$.
 
