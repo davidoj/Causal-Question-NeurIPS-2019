@@ -220,7 +220,7 @@ A number of Markov kernels are given special notation distinct from the generic 
 The identity kernel $\textbf{Id}:X\to \Delta(X)$ maps a point $x$ to the measure $\delta_x$ that places all mass on the same point:
 
 \begin{align}
-\textbf{Id}_x : x\mapsto \delta_x \equiv \begin{tikzpicture}\path (0,0) node (X) {$\RV{X}$} + (1,0) node (X1) {$\RV{X}$}; \draw (X)--(X1); \end{tikzpicture}
+\textbf{Id}_x : x\mapsto \delta_x \equiv \begin{tikzpicture}\path (0,0) node (X) {$\RV{X}$} + (1,0) node (X1) {$\RV{X}$}; \draw (X)--(X1); \end{tikzpicture}\label{eq:identity}
 \end{align}
 
 The identity map preserves the name of a wire.
@@ -229,7 +229,7 @@ The copy map $\splitter{0.1}:X\to \Delta(\mathcal{X}\times \mathcal{X})$ maps a 
 \begin{align}
  \splitter{0.1}: x\mapsto \delta_{(x,x)} \equiv \begin{tikzpicture}
  \path (0,0) node (X) {$X$} ++ (0.5,0) coordinate (copy0) ++ (0.5,0.25) node (X1) {$\RV{X}$} ++(0,-0.5) node (X2) {$\RV{X}$};\draw (X)--(copy0) to [bend left] (X1) (copy0) to [bend right] (X2);
- \end{tikzpicture}
+ \end{tikzpicture}\label{eq:copy}
  \end{align} 
 
 Copy maps \emph{copy} the name of a wire. 
@@ -243,7 +243,7 @@ The swap map $\sigma:X\times Y\to \Delta(\mathcal{Y}\otimes\mathcal{X})$ swaps i
 (0,0.3) node (Y) {$\RV{Y}$}
 +(1,-0.3) node (Y1) {$\RV{Y}$};
 \draw (X)--(X1) (Y) -- (Y1);
-\end{tikzpicture}
+\end{tikzpicture}\label{eq:swap}
 \end{align}
 
 The swap map preserves the names of visually connected wires.
@@ -297,42 +297,199 @@ The elementary notation \ref{eq:marginalisation_elem} makes the relationship bet
 String diagrams often achieve a good balance between interpretational transparency, expressive power and symbol economy. Downsides of string diagrams are that they can be time consuming to typeset, and formal reasoning with them takes some practice.
 
 
-\subsubsection{Meta Variables}\label{par:random_variables}
+\subsubsection{Wire Names, Random Variables and Free Random Variables}\label{par:random_variables}
 
+The first purpose of wire names is to unambiguously refer to particular wires in a given diagram. For example, suppose we have some $\mu\in \Delta(\mathcal{X}\times\mathcal{X})$, and we label wires with \emph{spaces} rather than names:
 
-If all our reasoning were done using diagrams wire identities would be clear from those diagrams. However, because we reason using a combination of diagrams, product notation, elementary notation and English words, it is necessary to be able to refer to particular wires in a diagram. We call wire labels \emph{meta variables}, which are closely connected to the more standard \emph{random variables}. Given a diagram representing a probability measure (rather than a general Markov kernel) that defines a number of meta variables, we can take the marginal distribution of a given meta variable or find the conditional distribution of one set of meta variables given another. In addition, we can perform analogous operations to marginalisation and finding the conditional distribution of meta variables for general Markov kernels.
-
-\paragraph{Meta variables and probability measures}
-
-
-Given a probability measure $\mu\in \Delta(\mathcal{X}\otimes\mathcal{Y})$, a \emph{meta variable} is a label attached to an output wire of the diagram in some valid representation. By convention, we name meta variables with sans-serif letters matching the name of the underlying space, though this is only a convention. For example, the following two diagrams define meta variables $\RV{X}$, $\RV{Y}$ and $\RV{W}$:
 \begin{align}
-&\begin{tikzpicture}
+\begin{tikzpicture}
+\path (0,0) node[dist] (M) {$\mu$}
+++ (0.7,0.15) node (X) {$X$}
+++ (0,-0.3) node (Y) {$X$};
+\draw ($(M.east)+(0,0.15)$) -- (X);
+\draw ($(M.east)+(0,-0.15)$) -- (Y);
+\end{tikzpicture}\label{eq:space_names}
+\end{align}
+
+Given just only the diagram \ref{eq:space_names}, we cannot easily refer to ``the top wire'' or ``the bottom wire''. Trying to say something like ``the probability of the bottom wire conditional on the top wire'' is very confusing, and we really do need to be able to talk about such conditional probabilities (see \ref{pgph:disint}). Giving wires unique names solves this, but (as suggested by this example), there is another desirable property of wire names: they should function as de-facto random variables, so that ``the probability of the bottom wire conditional on the top wire'' actually refers to a conditional probability defined in terms of random variables. Suppose we have a probability space $\langle E,\mathcal{E}, \mu\rangle$, and for arbitrary random variables $\RV{X}:E\to X$ and $\RV{Y}:E\to Y$ write the joint distribution $\mu_{\RV{X}\RV{Y}}$. We want wire labels to correspond to random variables in the sense that
+
+\begin{align}
+\mu_{\RV{X}\RV{Y}}:=\begin{tikzpicture}
+\path (0,0) node[smalldist,inner sep=-2.5pt] (M) {$\mu_{\RV{X}\RV{Y}}$}
+++ (0.7,0.15) node (X) {$\RV{X}$}
+++ (0,-0.3) node (Y) {$\RV{Y}$};
+\draw ($(M.east)+(0,0.15)$) -- (X);
+\draw ($(M.east)+(0,-0.15)$) -- (Y);
+\end{tikzpicture}\label{eq:wire_labels_des}
+\end{align}
+
+That is, the correspondence between the product space $X\times Y$ and the values taken by the random variables $\RV{X}$ and $\RV{Y}$ implicit in the definition of $\mu_{\RV{X}\RV{Y}}$ is reflected by the wire names on the right hand side of \ref{eq:wire_labels_des}. Given this definition, if we have some finite set of random variables $S=\{\RV{X},\RV{Y},...,\RV{Z}\}$ such that $\mu_{\RV{X}\RV{Y}...\RV{Z}}=\mu$, then we must be able to represent $\mu$ in a diagram with $|S|$ output wires (as the joint distribution is by definition on an appropriate product space), and we should label the wires of this diagram with $\RV{X},\RV{Y},...\RV{Z}$. Note that $\{\mathrm{Id}_E\}$ always satisfies this criterion, thus we can always draw $\mu$ with a single output wire labeled $\mathrm {Id}_E$.
+
+\begin{align}
+\mu = \begin{tikzpicture}
+\path (0,0) node[dist] (M) {$\mu$}
+++ (0.7,0) node (X) {$\mathrm{Id}_E$};
+\draw (M) -- (X);
+\end{tikzpicture}\label{eq:space_names}
+\end{align}
+
+In general, if we have $E=X\times Y$, we can define $\RV{X}:X\times Y\to X$ and $\RV{Y}:X\times Y\to Y$ by the projection maps $\RV{X}:(x,y)\mapsto x$, $\RV{Y}:(x,y)\mapsto y$ and $\mu_{\RV{X}\RV{Y}}=\mu$ and we can write (see Lemma \ref{lem:cpm_ident}):
+
+\begin{align}
+\mu = \begin{tikzpicture}
 \path (0,0) node[dist] (M) {$\mu$}
 ++ (0.7,0.15) node (X) {$\RV{X}$}
 ++ (0,-0.3) node (Y) {$\RV{Y}$};
 \draw ($(M.east)+(0,0.15)$) -- (X);
 \draw ($(M.east)+(0,-0.15)$) -- (Y);
-\end{tikzpicture} &
-\begin{tikzpicture}
+\end{tikzpicture}\label{eq:wire_names}
+\end{align}
+
+If we take \ref{eq:space_names} to \emph{define} $\RV{X}$ and $\RV{Y}$, then Equation \ref{eq:wire_labels_des} compels the following labels for products involving $\mu$:
+
+\begin{align}
+\mu_{\RV{X}} &= \begin{tikzpicture}
 \path (0,0) node[dist] (M) {$\mu$}
-++ (0.7,0) node (W) {$\RV{W}$};
-\draw (M) -- (W);
+++ (0.7,0.15) node (X) {$\RV{X}$}
+++ (0,-0.3) node (Y) {};
+\draw ($(M.east)+(0,0.15)$) -- (X);
+\draw[-{Rays [n=8]}] ($(M.east)+(0,-0.15)$) -- (Y);
+\end{tikzpicture}\label{eq:labels_under_tensor}\\
+\mu_{\RV{Y}\RV{X}} &= \begin{tikzpicture}
+\path (0,0) node[dist] (M) {$\mu$}
+++ (1.2,0.25) node (X) {$\RV{Y}$}
+++ (0,-0.5) node (Y) {$\RV{X}$};
+\draw ($(M.east)+(0,0.15)$) -- (Y);
+\draw ($(M.east)+(0,-0.15)$) -- (X);
+\end{tikzpicture}\label{eq:labels_under_swap}\\
+\mu_{\RV{X}\RV{Y}\RV{X}\RV{Y}} &= \begin{tikzpicture}
+\path (0,0) node[dist] (M) {$\mu$}
+++ (0.7,0.15) coordinate (copy0)
++ (0,-0.3) coordinate (copy1)
+++ (0.7,0.15) node (X) {$\RV{X}$}
+++ (0,-0.3) node (Y) {$\RV{Y}$}
+++(0,-0.3) node (X1) {$\RV{X}$}
+++(0,-0.3) node (Y1) {$\RV{Y}$};
+\draw ($(M.east)+(0,0.15)$) -- (copy0) to [bend left] (X);
+\draw (copy0) to [bend right] (X1);
+\draw ($(M.east)+(0,-0.15)$) -- (copy1) to [bend left] (Y);
+\draw (copy1) to [bend right] (Y1);
+\end{tikzpicture}\label{eq:copy_labels}
+\end{align}
+
+This illustrates the logic of the representations of the identity \ref{eq:identity}, the swap \ref{eq:swap} and the copy maps \ref{eq:copy}: their representations visually preserve the identities of wires that should be identified according to Equation \ref{eq:wire_labels_des}. Note that the presence of a copy map as in \ref{eq:copy_labels} is the \emph{only} time when a diagram will feature identical labels on wires.
+
+\paragraph{Free Random Variables}\label{par:frvs}
+
+We are interested in working with general Markov kernels, not just probability measures, and we will thus not always have an ambient probability space as in \ref{eq:wire_labels_des} to ground our wire labels.
+
+\begin{definition}[Free Random Variables]
+Given an ambient Markov kernel $\mathbf{M}:E\to \Delta(\mathcal{F})$, a free random variable $\RV{X}$ is a measurable function on $\mathcal{E}\otimes\mathcal{F}$.
+\end{definition}
+
+The equivalent of marginal and joint distributions for free random variables are marginal and joint \emph{maps}.
+
+\begin{definition}[Marginal, joint maps]
+Given a Markov kernel $\mathbf{M}:E\to \Delta(\mathcal{F})$, note that given $\gamma\in \Delta(\mathcal{E})$, by our definitions, $\gamma \prec \mathbf{M}:=\gamma\splitter{0.1}(\mathrm{Id}_E\otimes\mathbf{M})$ is a probability measure on $\Delta(\mathcal{E}\otimes\mathcal{F})$ and
+
+\begin{align}
+\gamma\prec\mathbf{M} = \begin{tikzpicture}
+\path (0,0) node[dist] (E) {$\gamma$}
+++(0.5,0) coordinate (copy0)
++ (0.5,0.3) node[kernel] (M) {$\mathbf{M}$}
++(1.2,0.3) node (X) {$\RV{E}$}
++ (0.5,-0.3) coordinate (N)
++(1.2,-0.3) node (Y) {$\RV{F}$};
+\draw (E) -- (copy0) to [bend left] (M) (copy0) to [bend right] (N);
+\draw (M) -- (X) (N) -- (Y);
 \end{tikzpicture}
 \end{align}
 
-We insist that meta variables obey a number of consistency properties which ensure that wires that are intuitively the same between diagrams receive the same label.
+Given $\mathbf{M}:E\to \Delta(\mathcal{F})$ and a free random variable $\RV{X}$, the marginal map $\mathbf{M}_{\RV{X}}:E\to \Delta(\mathcal{X})$ is the unique Markov kernel such that for all $\gamma\in \Delta(\mathcal{E})$, $\gamma(\mathbf{M}_{\RV{X}})=(\gamma \prec \mathbf{M})_{\RV{X}}$ where the right hand side is an ordinary marginal distribution. Similarly, given free random variables $\RV{X}$, $\RV{Y}$, the joint map $\mathbf{M}_{\RV{X}\RV{Y}}:E\to \Delta(\mathcal{X}\otimes\mathcal{Y})$ is the unique Markov kernel such that $\gamma\in \Delta(\mathcal{E})$, $\gamma(\mathbf{M}_{\RV{X}\RV{Y}})=(\gamma \prec \mathbf{M})_{\RV{X}\RV{Y}}$.
+\end{definition}
 
-We take a slightly nonstandard view of random variables. Random variables are typically defined to be measurable functions on a probability space $\langle \Omega, \mathcal{F}, \mu\rangle$ \citep{cinlar_probability_2011}. With this definition, a random variable $\RV{X}:\Omega\to E$ has a canonical probability measure given by the pushforward of $\mu$: for all $A\in\mathscr{E}$ $\RV{X}_\# \mu(A) = \mu(\RV{X}^{-1}(A))$.
+We are now placed to impose a criterion on wire labels equivalent to \ref{eq:wire_labels_des}: given the ambient Markov kernel $\mathbf{M}:E\to \Delta(\mathcal{F})$, wire labels in diagrams representing joint distributions must correspond in the sense of \ref{eq:wire_labels_des}:
 
-We take a random variable to be a measurable function on a \emph{kernel space} $\langle F, G, \mathcal{F}\otimes\mathcal{G},\mathbf{M}\rangle$ where $\mathbf{M}:G\to \Delta(\mathcal{F})$ is a Markov kernel. A random variable $\RV{X}:F\to X$ has a probability distribution only relative to some argument measure $\nu\in\Delta(\mathcal{G})$. Because of this, we cannot in general unambiguously talk about ``the'' distribution of a given random variable; in general we have only conditional probabilities (which we define in Paragraph \ref{pgph:disint}). This approach mirrors to some extent the approach suggested by \citet{hajek_what_2003}, which also takes conditional probability to be fundamental.
+\begin{align}
+\mathbf{M}_{\RV{X}\RV{Y}}:=\begin{tikzpicture}
+\path (0,0) node (E) {}
+++(0.7,0) node[kernel] (M) {$\mathbf{M}_{\RV{X}\RV{Y}}$}
+++ (1,0.15) node (X) {$\RV{X}$}
+++ (0,-0.3) node (Y) {$\RV{Y}$};
+\draw (E) -- (M);
+\draw ($(M.east)+(0,0.15)$) -- (X);
+\draw ($(M.east)+(0,-0.15)$) -- (Y);
+\end{tikzpicture}
+\end{align}
 
-This choice is largely pragmatic - it is helpful to make statements about the properties of random variables on a kernel space without quantifying over prior distributions. However, there is a connection between this choice and the philosophical field of decision theory. In particular, we use random variables to model both stochastic quantities and quantities that depend on the decision maker's choices. We treat the uncertainty associated with choosing and that associated with stochasticity as different -- we do \emph{not} suppose that uncertainty over which choice will be made should itself be modeled using probability. \emph{Evidential decision theory}, as defended by \citet{jeffrey_logic_1981}, proposes that is is proper to consider choices to be random variables, though it  doing so rigorously may necessitate a theory that allows for the assignment of probabilities to the outcomes of mathematical deliberations such as the theory of \emph{logical induction} introduced in \citet{garrabrant_logical_2017}. Understanding the relationship between choices and stochastic processes is a deep, interesting and difficut question, and one we sidestep by presuming that we can address nearly all common decision problems while disregarding modelling whatever process gives rise to choices. The resulting decision theory is structurally similar to \emph{causal decision theory} \citep{lewis_causal_1981}.
+In addition, we impose the requirement of identity \ref{eq:identity}, swap \ref{eq:swap} and copy maps \ref{eq:copy} - ``output'' wires that are connected to ``input'' wires with no boxes in between share names.
 
-This definition of random variables permits the convention of identifying every output wire of a string diagram with a random variable. 
+Wire labels for general kernels behave similarly to those for probability measures. Suppose $E=X\times Y$ and $F=W\times Z$ and define $\RV{X},\RV{Y},\RV{W},\RV{Z}$ as projection maps from $X\times Y\times W\times Z$ to their respective spaces with $\mathbf{M}$ as before. Then the following labels are compelled:
+
+\begin{align}
+\mathrm{Id}_E \prec \mathbf{M} &= \begin{tikzpicture}[baseline={([yshift=-0.6cm]current bounding box.north)}]
+\path (0,0.15) node (W) {$\RV{W}$}
++(0,-0.3) node (Z) {$\RV{Z}$}
+++ (0.5,0) coordinate (copy0)
+++ (0,-0.3) coordinate (copy1)
+++ (0.7,0.15) node[kernel] (M) {$\mathbf{M}$}
+++ (0.7,0.15) node (X) {$\RV{X}$}
+++ (0,-0.3) node (Y) {$\RV{Y}$}
+++(0,-0.3) node (W1) {$\RV{W}$}
+++(0,-0.3) node (Z1) {$\RV{Z}$};
+\draw ($(M.east)+(0,0.15)$) -- (X);
+\draw ($(M.east)+(0,-0.15)$) -- (Y);
+\draw (W) -- ($(M.west)+(0,0.15)$);
+\draw (Z) -- ($(M.west)+(0,-0.15)$);
+\draw (copy0) to [bend right] (W1) (copy1) to [bend right] (Z1);
+\end{tikzpicture}\\
+\mathbf{M} &= \begin{tikzpicture}[baseline={([yshift=-0.6cm]current bounding box.north)}]
+\path (0,0.15) node (W) {$\RV{W}$}
++(0,-0.3) node (Z) {$\RV{Z}$}
+++ (0.7,-0.15) node[kernel] (M) {$\mathbf{M}$}
+++ (0.7,0.15) node (X) {$\RV{X}$}
+++ (0,-0.3) node (Y) {$\RV{Y}$};
+\draw ($(M.east)+(0,0.15)$) -- (X);
+\draw ($(M.east)+(0,-0.15)$) -- (Y);
+\draw (W) -- ($(M.west)+(0,0.15)$);
+\draw (Z) -- ($(M.west)+(0,-0.15)$);
+\end{tikzpicture}\\
+\mathbf{M}_{\RV{X}} &= \begin{tikzpicture}[baseline={([yshift=-0.6cm]current bounding box.north)}]
+\path (0,0.15) node (W) {$\RV{W}$}
++(0,-0.3) node (Z) {$\RV{Z}$}
+++ (0.5,0) coordinate (copy0)
+++ (0,-0.3) coordinate (copy1)
+++ (0.7,0.15) node[kernel] (M) {$\mathbf{M}$}
+++ (0.7,0.15) node (X) {$\RV{X}$}
+++ (0,-0.3) node (Y) {}
+++(0,-0.3) node (W1) {}
+++(0,-0.3) node (Z1) {};
+\draw ($(M.east)+(0,0.15)$) -- (X);
+\draw[-{Rays [n=8]}] ($(M.east)+(0,-0.15)$) -- (Y);
+\draw (W) -- ($(M.west)+(0,0.15)$);
+\draw (Z) -- ($(M.west)+(0,-0.15)$);
+\draw[-{Rays [n=8]}] (copy0) to [bend right] (W1);
+\draw[-{Rays [n=8]}] (copy1) to [bend right] (Z1);
+\end{tikzpicture}\\
+&=\begin{tikzpicture}[baseline={([yshift=-0.6cm]current bounding box.north)}]
+\path (0,0.15) node (W) {$\RV{W}$}
++(0,-0.3) node (Z) {$\RV{Z}$}
+++(0.7,-0.15) node[kernel] (M) {$\mathbf{M}$}
+++ (1,0.15) node (X) {$\RV{X}$}
+++ (0,-0.3) node (Y) {};
+\draw (W) -- ($(M.west)+(0,0.15)$);
+\draw (Z) -- ($(M.west)+(0,-0.15)$);
+\draw ($(M.east)+(0,0.15)$) -- (X);
+\draw[-{Rays [n=8]}] ($(M.east)+(0,-0.15)$) -- (Y);
+\end{tikzpicture}
+\end{align}
+
+As well as properties analogous to Equations \ref{eq:copy_labels} and \ref{eq:labels_under_swap}.
+
+\paragraph{Derivations of label properties}
 
 \begin{definition}[Function induced kernel]
-Given a measurable function $\RV{X}:F\to X$, define the function induced kernel $\mathbf{F}_{\RV{X}}:F\to \Delta(\mathcal{X})$ to the the Markov kernel $a\mapsto \delta_{\RV{X}(a)}$ for all $a\in X$.
+Given a measurable function $\RV{X}:F\to X$, define the function induced kernel $\mathbf{F}_{\RV{X}}:F\to \Delta(\mathcal{X})$ to be the the Markov kernel $a\mapsto \delta_{\RV{X}(a)}$ for all $a\in X$.
 \end{definition}
 
 \begin{lemma}[Pushforward measures and functional kernels]\label{lem:pushf_funk}
@@ -348,50 +505,202 @@ For all $B\in \mathcal{F}$:
 \end{align}
 \end{proof}
 
-\begin{example}[Wire names to random variables]
-Suppose we have a Markov kernel $\mathbf{A}:X\to \Delta(\mathcal{Y}\otimes\mathcal{Y})$:
+\begin{definition}[Coupled tensor product $\utimes$]
+Given two Markov kernels $\mathbf{M}$ and $\mathbf{N}$ or functions $f$ and $g$ with shared domain $E$, let $\mathbf{M}\utimes\mathbf{N}:=\splitter{0.1}(\mathbf{M}\otimes\mathbf{N})$ and $f\utimes g:=\splitter{0.1}(f\otimes g)$ where these expressions are interpreted using standard product notation. Graphically:
+
 \begin{align}
-\begin{tikzpicture}
-\path (0,0) node (A) {$X$}
-++(0.75,0) node[kernel] (B) {$\mathbf{A}$}
-++(0.75,0.15) node (C) {$\RV{Y}_1$}
-+(0,-0.3) node (D) {$\RV{Y}_2$};
-\draw (A) -- (B) ($(B.east) + (0,0.15)$) -- (C) ($(B.east)+(0,-0.15)$) -- (D);
+\mathbf{M}\utimes\mathbf{N}&:=\begin{tikzpicture}
+\path (0,0) node (E) {$E$}
+++(0.5,0) coordinate (copy0)
++ (0.5,0.3) node[kernel] (M) {$\mathbf{M}$}
++(1.2,0.3) node (X) {$\RV{X}$}
++ (0.5,-0.3) node[kernel] (N) {$\mathbf{N}$}
++(1.2,-0.3) node (Y) {$\RV{Y}$};
+\draw (E) -- (copy0) to [bend left] (M) (copy0) to [bend right] (N);
+\draw (M) -- (X) (N) -- (Y);
+\end{tikzpicture}\\
+f\utimes g&:= \begin{tikzpicture}[scale=1.2]\path (0,0) node (E) {$E$}
+++(0.5,0) coordinate (copy0)
++ (0.5,0.3) node[expectation] (M) {$f$}
++ (0.5,-0.3) node[expectation] (N) {$g$};
+\draw (E) -- (copy0) to [bend left] (M) (copy0) to [bend right] (N);
 \end{tikzpicture}
 \end{align}
+The operation denoted by $\utimes$ is associative (Lemma \ref{lem:utimes_assoc}), so we can without ambiguity write $f\utimes g\utimes ...\utimes h$ for finite groups of functions or Markov kernels sharing a domain. 
+\end{definition}
 
-Define $\RV{Y}'_1:Y\times Y\to Y$ by the projection map $\RV{Y}'_1:(y_1,y_2)\mapsto y_1$ and $\RV{Y}'_2:Y\times Y\to Y$ by the projection $\RV{Y}'_2:(y_1,y_2)\mapsto y_2$. Given any prior $\mu\in \Delta(\mathcal{X})$, let $(\RV{Y}'_1)_\# \mu \mathbf{A}$ be the pushforward of $\RV{Y}'_1$ by $\mu\mathbf{A}$. Then $\mathbf{F}_{\RV{Y}'_1}:Y\times Y\to Y$ will be given by $a\mapsto \delta_{\RV{Y}'_1(a)}$.
+\begin{lemma}[$\utimes$ is associative]\label{lem:utimes_assoc}
+For Markov kernels $\mathbf{L}$, $\mathbf{M}$ and $\mathbf{N}$ sharing a domain $E$, $(\mathbf{L}\utimes\mathbf{M})\utimes\mathbf{N}=\mathbf{L}\utimes(\mathbf{M}\utimes\mathbf{N})$.
+\end{lemma}
 
-Define $\Pi_{\RV{Y}_1}:Y\times Y\to \Delta(\mathcal{Y})$ by $\Pi_{\RV{Y}_1}=\mathrm{Id}_Y\otimes \stopper{0.2}$. $\Pi_{\RV{Y}_1}$ is the Markov kernel that marginalises over the second argument; i.e. it marginalises over the wire named $\RV{Y}_2$. Graphically:
+\begin{definition}[Joint distribution]\label{def:joint_distribution}
+Given $\mu\in \Delta(\mathcal{E})$ and $\RV{X}:E\to X$ and $\RV{Y}:E\to Y$, the \emph{joint distribution} of $\RV{X}$ and $\RV{Y}$ is the pushforward measure of $\mu$ by the random variable $\RV{X}\utimes\RV{Y}$ on $\mathcal{X}\otimes\mathcal{Y}$.
+
+This is identical to the definition in, for example, \citet{cinlar_probability_2011} if we note that the random variable $(\RV{X},\RV{Y}):\omega\mapsto (\RV{X}(\omega),\RV{Y}(\omega))$ (\c{C}inlar's definition) is equivalent to $\RV{X}\utimes\RV{Y}$.
+\end{definition}
+
+\begin{lemma}[Joint distributions from coupled tensor products]\label{lem:rvg_jd}
+Given a probability space $\langle E,\mathcal{E},\mu \rangle$ and a finite set of random variables $G = \{\RV{X}_i|i\in [n]\}$, the joint distribution of $G$ is given by $\mu (\utimes_{i\in [n]} \mathbf{F}_{\RV{X}_i})$.
+\end{lemma}
+
+\begin{proof}
+This follows directly from Definition \ref{def:joint_distribution} and Lemma \ref{lem:pushf_funk}.
+\end{proof}
+
+\begin{lemma}[Coupled projection maps are equal to the identity]\label{lem:cpm_ident}
+Suppose $E$ is a finite Cartesian product: $E=\prod_{i\in[n]} A_i$. Let $\pi_i:E\to A_i$ be the projection map $(a_1,..,a_i,..,a_n)\mapsto a_i$. Then $\utimes_{i\in [n]} \pi_i = \mathrm{Id}_E$ where $\mathrm{Id}_E$ is the identity function on $E$.
+\end{lemma}
+
+\begin{proof}
+Define $\pi_{[m]}:E\to \prod_{i\in [m]} A_i$ by $(a_1,...,a_{m},...,a_n)\mapsto (a_1,...,a_{m})$. Suppose $\utimes_{i\in [n-1]}\pi_i = \pi_{[n-1]}$. Then by associativity of $\utimes$, $\utimes_{i\in [n]}\pi_i = \pi_{[n-1]}\utimes \pi_{n}$ and for all $(a_1,...,a_n)\in E$, $\pi_{[n-1]}\utimes \pi_{n}(a_1,...,a_n) = (\pi_{[n-1]}(a_1,...,a_n),\pi_{n}(a_1,...,a_n))=(a_1,...,a_{n-1},a_n)=\pi_{[n]}(a_1,...,a_n)$.
+
+Also, $\utimes_{i\in [1]} \pi_i = \pi_1$, thus $\utimes_{i\in [n]}\pi_i = \pi_{[n]}$. But $\pi_{[n]}=\mathrm{Id}_E$.
+\end{proof}
+
+
+\begin{corollary}
+If we have a probability space $\langle E,\mathcal{E},\mu\rangle$ where $E=\prod_{i\in[n]} A_i$ and $\RV{X}_i:=\pi_i$, then $\mu_{\utimes_{i\in [n]} \RV{X}_i} = \mu$.
+\end{corollary}
+
+\begin{lemma}[A projection is the identity tensored with the erase map]
+Let $\pi_X:X\times Y\to X$ be the projection $\pi_X:(x,y)\mapsto x$. Then $\mathbf{F}_{\pi_x} = \mathbf{F}_{\mathrm{Id}_X} \otimes \stopper{0.2}$
+\end{lemma}
+
+\begin{proof}
+$\mathbf{F}_{\pi_X}$ is, by definition, the Markov kernel $(x,y)\mapsto \delta_x$, which is equivalent to $\mathbf{F}_{\mathrm{Id}_X} \otimes \stopper{0.2}$.
+\end{proof}
+
+\begin{corollary}
+For any $\mathbf{M}:E\to \Delta(\mathcal{X}\otimes\mathcal{Y})$,
 
 \begin{align}
-\mathbf{A}\Pi_{\RV{Y}_1} = 
 \begin{tikzpicture}
-\path (0,0) node (A) {$X$}
-++(0.75,0) node[kernel] (B) {$\mathbf{A}$}
-++(1,0.15) node (C) {$\RV{Y}_1$}
-+(-0.25,-0.3) node (D) {};
-\draw (A) -- (B) ($(B.east) + (0,0.15)$) -- (C);
-\draw[-{Rays[ n=8]}] ($(B.east)+(0,-0.15)$) -- (D);
+\path (0,0) node (E) {$\RV{E}$}
+++ (0.7,0) node[kernel] (M) {$\mathbf{M}$}
+++ (1,0) node[kernel] (FX) {$\mathbf{F}_{\pi_X}$}
+++ (1,0) node (X) {$\RV{X}$};
+\draw (E) -- (M) (FX) -- (X);
+\draw ($(M.east)+(0,0.15)$) -- ($(FX.west)+(0,0.15)$);
+\draw ($(M.east)+(0,-0.15)$) -- ($(FX.west)+(0,-0.15)$);
+\end{tikzpicture} &=
+\begin{tikzpicture}
+\path (0,0) node (E) {$\RV{E}$}
+++ (0.7,0) node[kernel] (M) {$\mathbf{M}$}
+++ (0.7,0.15) node (X) {$\RV{X}$}
++(0,-0.3) node (Y) {};
+\draw (E) -- (M);
+\draw ($(M.east)+(0,0.15)$) -- (X);
+\draw[-{Rays [n=8]}] ($(M.east)+(0,-0.15)$) -- (Y);
 \end{tikzpicture}
 \end{align}
+\end{corollary}
+% If all our reasoning were done using diagrams, wire identities would be clear from the diagrams. However, because we reason using a combination of diagrams, product notation, elementary notation and English words, it is necessary to be able to refer to particular wires in a diagram. We label wires with what we call \emph{meta variables}. Given a diagram representing a probability measure (rather than a general Markov kernel) that defines a number of meta variables, we can take the marginal distribution of a given meta variable or find the conditional distribution of one set of meta variables given another. In addition, we can perform analogous operations to marginalisation and finding the conditional distribution of meta variables for general Markov kernels.
 
-Note that for all $(y_1,y_2)\in Y\times Y$, $(\Pi_1)_{y_1,y_2} = \delta_{y_1} = \delta_{\RV{Y}'_1(y_1,y_2)}$. That is, $\Pi_{\RV{Y}_1}=F_{\RV{Y}'_1}$ and so $(\RV{Y}'_1)_\# \mu\mathbf{A} = \mu\mathbf{A}\Pi_{\RV{Y}_1}$. 
+% \paragraph{Meta variables and probability measures}
 
-Furthermore, define the joint distribution of $\RV{Y}'_1$ and $\RV{Y}'_2$ by $(\RV{Y}'_{1}\utimes\RV{Y}'_{2})_\# \mu\mathbf{A}(B\times C) = \mu\mathbf{A}(\RV{Y}_1^{\prime-1}(B)\cap \RV{Y}_2^{\prime-1}(C))$ for all $B,C\in \mathcal{Y}$. Then, defining $\Pi_{\RV{Y}_1\otimes\RV{Y}_2} = \mathrm{Id}_Y\otimes \mathrm{Id}_Y = \mathrm{Id}_{Y\times Y}$:
 
-\begin{align}
- (\RV{Y}'_1\utimes\RV{Y}'_2)_\# \mu\mathbf{A}(B\times C) &= \mu\mathbf{A}(\RV{Y}_1^{\prime-1}(B)\cap \RV{Y}_2^{\prime-1}(C))\\
- 													   &= \int_{Y\times Y} \delta_{\RV{Y}'_1(y_1,y_2)}(B) \delta_{\RV{Y}'_2(y_1,y_2)}(C) d\mu\mathbf{A}(y_1,y_2)\\
- 													   &= \int_{B\times C} d\mu\mathbf{A}(y_1,y_2)\\
- 													   &= \mu\mathbf{A}(B\times C)\\
- 													   &= \mu\mathbf{A}\Pi_{\RV{Y}_1\otimes\RV{Y}_2} (B\times C) \label{eq:identity}
-\end{align}
+% Given a probability measure $\mu\in \Delta(\mathcal{X}\otimes\mathcal{Y})$, a \emph{meta variable} is a label attached to an output wire of the diagram in some valid representation. By convention, we name meta variables with sans-serif letters matching the name of the underlying space, though this is only a convention. For example, the following two diagrams define meta variables $\RV{X}$, $\RV{Y}$ and $\RV{W}$:
+% \begin{align}
+% &\begin{tikzpicture}
+% \path (0,0) node[dist] (M) {$\mu$}
+% ++ (0.7,0.15) node (X) {$\RV{X}$}
+% ++ (0,-0.3) node (Y) {$\RV{Y}$};
+% \draw ($(M.east)+(0,0.15)$) -- (X);
+% \draw ($(M.east)+(0,-0.15)$) -- (Y);
+% \end{tikzpicture} &
+% \begin{tikzpicture}
+% \path (0,0) node[dist] (M) {$\mu$}
+% ++ (0.7,0) node (W) {$\RV{W}$};
+% \draw (M) -- (W);
+% \end{tikzpicture}
+% \end{align}
 
-That is, for any prior $\mu$, the joint distribution of $\RV{Y}'_1$ and $\RV{Y}'_2$ under $\mu\mathbf{A}$ is ``carried'' by the wires labeled $\RV{Y}_1$ and $\RV{Y}_2$, and the marginal distribution of $\RV{Y}_1$ is ``carried'' by the wire labeled $\RV{Y}_1$ alone. It's in this sense that we identify the random variable $\RV{Y}'_1$ with $\RV{Y}_1$. We will henceforth drop the distinction between a wire name and its associated random variable, letting $\RV{Y}_1$ denote both the wire and the random variable previously named $\RV{Y}'_1$.
+% Define random variables $\RV{X}':X\times Y\to X$ and $\RV{Y}':X\times Y\to Y$ by the projections $\RV{X}':(x,y)\mapsto x$ and $\RV{Y}':(x,y)\mapsto y$. We can identify the meta variable $\RV{X}$ with the concrete random variable $\RV{X}'$ and likewise identify $\RV{Y}$ with the random variable $\RV{Y}'$. If we denote the marginal of $\RV{X}'$ by $\mu(\RV{X}')$ and the joint distribution of $(\RV{X}',\RV{Z}')$ by $\mu(\RV{X}',\RV{Z}')$ for any $\RV{Z}':X\times Y\to Z$, then what we mean by identifying $\RV{X}'$ with $\RV{X}$ is that
 
-In general, given a Markov kernel with output space $\prod_{i\in [n]} X_i$, we can identify the $j$-th output wire with the random variable given by the projection map $\pi_j:(x_1,...x_j,...x_n)\mapsto x_j$. 
-\end{example}
+% \begin{align}
+%  \mu(\RV{X}') &= \begin{tikzpicture}
+% \path (0,0) node[dist] (M) {$\mu$}
+% ++ (0.7,0.15) node (X) {$\RV{X}$}
+% ++ (0,-0.3) node (Y) {};
+% \draw ($(M.east)+(0,0.15)$) -- (X);
+% \draw[-{Rays [n=8]}] ($(M.east)+(0,-0.15)$) -- (Y);
+% \end{tikzpicture}\label{eq:x_marginal}\\
+%  \mu(\RV{X}',\RV{Z}') &= \begin{tikzpicture}
+% \path (0,0) node[dist] (M) {$\mu$}
+% ++ (0.6,0.15) coordinate (copy0)
+% + (1.2,0.3) node (X) {$\RV{X}$}
+% +(0.5,-0.3) node[kernel] (FZ) {$\mathbf{F}_{\RV{Z}'}$}
+% +(1.2,-0.3) node (Z) {$\RV{Z}$};
+% \draw ($(M.east)+(0,0.15)$) -- (copy0) to [bend left] (X);
+% \draw ($(M.east)+(0,-0.15)$) -- (FZ);
+% \draw (copy0) to [bend right] ($(FZ.west)+(0,0.15)$) (FZ) -- (Z);
+% \end{tikzpicture}\label{eq:xz_joint}
+% \end{align}
+
+% Strictly, given a proability measure with labeled output wires, we can define corresponding random variables via projection maps and we can find the arbitrary marginal and joint distributions of these corresponding random variables by performing appropriate operations on the diagrams as in \ref{eq:x_marginal} and \ref{eq:xz_joint}.
+
+% Note that in order to construct the diagrams of \ref{eq:x_marginal} and \ref{eq:xz_joint} we exploit two of the wire naming conditions described above: identity maps preserve wire names and copy maps make two copies of a wire with the same name. We can visualise these rules 
+
+% - for details, see Example \ref{ex:wires_to_RVs}. 
+
+% What makes $\RV{X}$ and $\RV{Y}$ ``meta'' variables is that we define rules that allow them to refer to the ``same'' wire given certain transformations of $\mu$.
+
+
+
+% We insist that meta variables obey a number of consistency properties which ensure that wires that are intuitively the same between diagrams receive the same label.
+
+% We take a slightly nonstandard view of random variables. Random variables are typically defined to be measurable functions on a probability space $\langle \Omega, \mathcal{F}, \mu\rangle$ \citep{cinlar_probability_2011}. With this definition, a random variable $\RV{X}:\Omega\to E$ has a canonical probability measure given by the pushforward of $\mu$: for all $A\in\mathscr{E}$ $\RV{X}_\# \mu(A) = \mu(\RV{X}^{-1}(A))$.
+
+We take a random variable to be a measurable function on a \emph{kernel space} $\langle F, G, \mathcal{F}\otimes\mathcal{G},\mathbf{M}\rangle$ where $\mathbf{M}:G\to \Delta(\mathcal{F})$ is a Markov kernel. A random variable $\RV{X}:F\to X$ has a probability distribution only relative to some argument measure $\nu\in\Delta(\mathcal{G})$. Because of this, we cannot in general unambiguously talk about ``the'' distribution of a given random variable; in general we have only conditional probabilities (which we define in Paragraph \ref{pgph:disint}). This approach mirrors to some extent the approach suggested by \citet{hajek_what_2003}, which also takes conditional probability to be fundamental.
+
+This choice is largely pragmatic - it is helpful to make statements about the properties of random variables on a kernel space without quantifying over prior distributions. However, there is a connection between this choice and the philosophical field of decision theory. In particular, we use random variables to model both stochastic quantities and quantities that depend on the decision maker's choices. We treat the uncertainty associated with choosing and that associated with stochasticity as different -- we do \emph{not} suppose that uncertainty over which choice will be made should itself be modeled using probability. \emph{Evidential decision theory}, as defended by \citet{jeffrey_logic_1981}, proposes that is is proper to consider choices to be random variables, though it  doing so rigorously may necessitate a theory that allows for the assignment of probabilities to the outcomes of mathematical deliberations such as the theory of \emph{logical induction} introduced in \citet{garrabrant_logical_2017}. Understanding the relationship between choices and stochastic processes is a deep, interesting and difficut question, and one we sidestep by presuming that we can address nearly all common decision problems while disregarding modelling whatever process gives rise to choices. The resulting decision theory is structurally similar to \emph{causal decision theory} \citep{lewis_causal_1981}.
+
+This definition of random variables permits the convention of identifying every output wire of a string diagram with a random variable. 
+
+% \begin{example}[Wire names to random variables]\label{ex:wires_to_RVs}
+% Suppose we have a Markov kernel $\mathbf{A}:X\to \Delta(\mathcal{Y}\otimes\mathcal{Y})$:
+% \begin{align}
+% \begin{tikzpicture}
+% \path (0,0) node (A) {$X$}
+% ++(0.75,0) node[kernel] (B) {$\mathbf{A}$}
+% ++(0.75,0.15) node (C) {$\RV{Y}_1$}
+% +(0,-0.3) node (D) {$\RV{Y}_2$};
+% \draw (A) -- (B) ($(B.east) + (0,0.15)$) -- (C) ($(B.east)+(0,-0.15)$) -- (D);
+% \end{tikzpicture}
+% \end{align}
+
+% Define $\RV{Y}'_1:Y\times Y\to Y$ by the projection map $\RV{Y}'_1:(y_1,y_2)\mapsto y_1$ and $\RV{Y}'_2:Y\times Y\to Y$ by the projection $\RV{Y}'_2:(y_1,y_2)\mapsto y_2$. Given any prior $\mu\in \Delta(\mathcal{X})$, let $(\RV{Y}'_1)_\# \mu \mathbf{A}$ be the pushforward of $\RV{Y}'_1$ by $\mu\mathbf{A}$. Then $\mathbf{F}_{\RV{Y}'_1}:Y\times Y\to Y$ will be given by $a\mapsto \delta_{\RV{Y}'_1(a)}$.
+
+% Define $\Pi_{\RV{Y}_1}:Y\times Y\to \Delta(\mathcal{Y})$ by $\Pi_{\RV{Y}_1}=\mathrm{Id}_Y\otimes \stopper{0.2}$. $\Pi_{\RV{Y}_1}$ is the Markov kernel that marginalises over the second argument; i.e. it marginalises over the wire named $\RV{Y}_2$. Graphically:
+
+% \begin{align}
+% \mathbf{A}\Pi_{\RV{Y}_1} = 
+% \begin{tikzpicture}
+% \path (0,0) node (A) {$X$}
+% ++(0.75,0) node[kernel] (B) {$\mathbf{A}$}
+% ++(1,0.15) node (C) {$\RV{Y}_1$}
+% +(-0.25,-0.3) node (D) {};
+% \draw (A) -- (B) ($(B.east) + (0,0.15)$) -- (C);
+% \draw[-{Rays[ n=8]}] ($(B.east)+(0,-0.15)$) -- (D);
+% \end{tikzpicture}
+% \end{align}
+
+% Note that for all $(y_1,y_2)\in Y\times Y$, $(\Pi_1)_{y_1,y_2} = \delta_{y_1} = \delta_{\RV{Y}'_1(y_1,y_2)}$. That is, $\Pi_{\RV{Y}_1}=F_{\RV{Y}'_1}$ and so $(\RV{Y}'_1)_\# \mu\mathbf{A} = \mu\mathbf{A}\Pi_{\RV{Y}_1}$. 
+
+% Furthermore, define the joint distribution of $\RV{Y}'_1$ and $\RV{Y}'_2$ by $(\RV{Y}'_{1}\utimes\RV{Y}'_{2})_\# \mu\mathbf{A}(B\times C) = \mu\mathbf{A}(\RV{Y}_1^{\prime-1}(B)\cap \RV{Y}_2^{\prime-1}(C))$ for all $B,C\in \mathcal{Y}$. Then, defining $\Pi_{\RV{Y}_1\otimes\RV{Y}_2} = \mathrm{Id}_Y\otimes \mathrm{Id}_Y = \mathrm{Id}_{Y\times Y}$:
+
+% \begin{align}
+%  (\RV{Y}'_1\utimes\RV{Y}'_2)_\# \mu\mathbf{A}(B\times C) &= \mu\mathbf{A}(\RV{Y}_1^{\prime-1}(B)\cap \RV{Y}_2^{\prime-1}(C))\\
+%  													   &= \int_{Y\times Y} \delta_{\RV{Y}'_1(y_1,y_2)}(B) \delta_{\RV{Y}'_2(y_1,y_2)}(C) d\mu\mathbf{A}(y_1,y_2)\\
+%  													   &= \int_{B\times C} d\mu\mathbf{A}(y_1,y_2)\\
+%  													   &= \mu\mathbf{A}(B\times C)\\
+%  													   &= \mu\mathbf{A}\Pi_{\RV{Y}_1\otimes\RV{Y}_2} (B\times C) \label{eq:identity}
+% \end{align}
+
+% That is, for any prior $\mu$, the joint distribution of $\RV{Y}'_1$ and $\RV{Y}'_2$ under $\mu\mathbf{A}$ is ``carried'' by the wires labeled $\RV{Y}_1$ and $\RV{Y}_2$, and the marginal distribution of $\RV{Y}_1$ is ``carried'' by the wire named $\RV{Y}_1$ alone. It's in this sense that we identify the random variable $\RV{Y}'_1$ with $\RV{Y}_1$. We will henceforth drop the distinction between a wire name and its associated random variable, letting $\RV{Y}_1$ denote both the wire and the random variable previously named $\RV{Y}'_1$.
+
+% In general, given a Markov kernel with output space $\prod_{i\in [n]} X_i$, we can identify the $j$-th output wire with the random variable given by the projection map $\pi_j:(x_1,...x_j,...x_n)\mapsto x_j$. 
+% \end{example}
 
 \subsubsection{Working With String Diagrams}
 
@@ -615,6 +924,8 @@ Equation \ref{eq:copy_commutes} holds iff $\mathbf{A}$ is deterministic.
 
 \paragraph{Disintegraion and Bayesian Inversion}\label{pgph:disint}
 
+\todo[inline]{This needs updating in light of the more thorough treatment of random variables and wire labels}
+
 We use \emph{disintegration} to define a notion of conditional probability. It is not identical to the standard definition of conditional probability one can find in, for example, \citet{cinlar_probability_2011}, but each can be recovered from the other.
 
 We'll proceed from an example to a general definition. 
@@ -676,82 +987,77 @@ Example \ref{ex:disintegration} defines disintegration given a probability measu
 
 As we show, we can associate any set of wires with a random variable, so the first item is solved by a solution to the second. 
 
-\begin{definition}[Coupled tensor product $\utimes$]
-Given two Markov kernels $\mathbf{M}$ and $\mathbf{N}$ or functions $f$ and $g$ with shared domain $E$, let $\mathbf{M}\utimes\mathbf{N}:=\splitter{0.1}(\mathbf{M}\otimes\mathbf{N})$ and $f\utimes g:=\splitter{0.1}(f\otimes g)$ where these expressions are interpreted using standard product notation. Graphically:
+% \begin{definition}[Coupled tensor product $\utimes$]
+% Given two Markov kernels $\mathbf{M}$ and $\mathbf{N}$ or functions $f$ and $g$ with shared domain $E$, let $\mathbf{M}\utimes\mathbf{N}:=\splitter{0.1}(\mathbf{M}\otimes\mathbf{N})$ and $f\utimes g:=\splitter{0.1}(f\otimes g)$ where these expressions are interpreted using standard product notation. Graphically:
 
-\begin{align}
-\mathbf{M}\utimes\mathbf{N}&:=\begin{tikzpicture}
-\path (0,0) node (E) {$E$}
-++(0.5,0) coordinate (copy0)
-+ (0.5,0.3) node[kernel] (M) {$\mathbf{M}$}
-+(1.2,0.3) node (X) {$\RV{X}$}
-+ (0.5,-0.3) node[kernel] (N) {$\mathbf{N}$}
-+(1.2,-0.3) node (Y) {$\RV{Y}$};
-\draw (E) -- (copy0) to [bend left] (M) (copy0) to [bend right] (N);
-\draw (M) -- (X) (N) -- (Y);
-\end{tikzpicture}\\
-f\utimes g&:= \begin{tikzpicture}[scale=1.2]\path (0,0) node (E) {$E$}
-++(0.5,0) coordinate (copy0)
-+ (0.5,0.3) node[expectation] (M) {$f$}
-+ (0.5,-0.3) node[expectation] (N) {$g$};
-\draw (E) -- (copy0) to [bend left] (M) (copy0) to [bend right] (N);
-\end{tikzpicture}
-\end{align}
+% \begin{align}
+% \mathbf{M}\utimes\mathbf{N}&:=\begin{tikzpicture}
+% \path (0,0) node (E) {$E$}
+% ++(0.5,0) coordinate (copy0)
+% + (0.5,0.3) node[kernel] (M) {$\mathbf{M}$}
+% +(1.2,0.3) node (X) {$\RV{X}$}
+% + (0.5,-0.3) node[kernel] (N) {$\mathbf{N}$}
+% +(1.2,-0.3) node (Y) {$\RV{Y}$};
+% \draw (E) -- (copy0) to [bend left] (M) (copy0) to [bend right] (N);
+% \draw (M) -- (X) (N) -- (Y);
+% \end{tikzpicture}\\
+% f\utimes g&:= \begin{tikzpicture}[scale=1.2]\path (0,0) node (E) {$E$}
+% ++(0.5,0) coordinate (copy0)
+% + (0.5,0.3) node[expectation] (M) {$f$}
+% + (0.5,-0.3) node[expectation] (N) {$g$};
+% \draw (E) -- (copy0) to [bend left] (M) (copy0) to [bend right] (N);
+% \end{tikzpicture}
+% \end{align}
 
-The operation denoted by $\utimes$ is associative (Lemma \ref{lem:utimes_assoc}), so we can without ambiguity write $f\utimes g\utimes ...\utimes h$ for finite groups of functions or Markov kernels sharing a domain. 
-\end{definition}
+% \end{definition}
 
-\begin{lemma}[$\utimes$ is associative]\label{lem:utimes_assoc}
-For Markov kernels $\mathbf{L}$, $\mathbf{M}$ and $\mathbf{N}$ sharing a domain $E$, $(\mathbf{L}\utimes\mathbf{M})\utimes\mathbf{N}=\mathbf{L}\utimes(\mathbf{M}\utimes\mathbf{N})$.
-\end{lemma}
+% \begin{proof}
+% This follows from the commutativity of the swap map (Equation \ref{eq:ccom1}):
 
-\begin{proof}
-This follows from the commutativity of the swap map (Equation \ref{eq:ccom1}):
-
-\begin{align}
-	(\mathbf{L}\utimes\mathbf{M})\utimes\mathbf{N} &= \splitter{0.1}(\splitter{0.1}(\mathbf{L}\otimes\mathbf{M})\otimes\mathbf{N})\\
-									   &= \begin{tikzpicture}[yscale=2,xscale=1.5]
-									   \path (0,0) node (E) {$E$}
-									   ++(0.5,0) coordinate (copy0)
-									   +(0.5,0.25) coordinate (copy1)
-									   +(0.5,-0.25) coordinate (Z0)
-									   (copy1) ++(0.5,0.15) node[kernel] (X) {$\mathbf{L}$}
-									   ++ (0,-0.3) node[kernel] (Y) {$\mathbf{M}$}
-									   (Z0) ++ (0.5,0) node[kernel] (Z) {$\mathbf{N}$};
-									   \draw (E) -- (copy0) to [bend left] (copy1) (copy0) to [bend right] (Z0) -- (Z);
-									   \draw (copy1) to [bend left] (X) (copy1) to [bend right] (Y);
-									   \draw (X) -- +(0.5,0) (Y) -- +(0.5,0) (Z) -- +(0.5,0);
-									   \end{tikzpicture}\\
-									   &= \begin{tikzpicture}[yscale=2,xscale=1.5]
-   									   \path (0,0) node (E) {$E$}
-									   ++(0.5,0) coordinate (copy0)
-									   +(0.5,-0.25) coordinate (copy1)
-									   +(0.5,0.25) coordinate (X0)
-									   (X0) ++(0.5,0) node[kernel] (X) {$\mathbf{L}$}
-									   ++ (0,-0.3) node[kernel] (Y) {$\mathbf{M}$}
-									   (copy1) ++ (0.5,-0.25) node[kernel] (Z) {$\mathbf{N}$};
-									   \draw (E) -- (copy0) to [bend right] (copy1) (copy0) to [bend left] (X0) -- (X);
-									   \draw (copy1) to [bend right] (Z) (copy1) to [bend left] (Y);
-   									   \draw (X) -- +(0.5,0) (Y) -- +(0.5,0) (Z) -- +(0.5,0);
-									   \end{tikzpicture}\\
-									   &= \mathbf{L}\utimes(\mathbf{M}\utimes\mathbf{N})
-\end{align}
-\end{proof}
+% \begin{align}
+% 	(\mathbf{L}\utimes\mathbf{M})\utimes\mathbf{N} &= \splitter{0.1}(\splitter{0.1}(\mathbf{L}\otimes\mathbf{M})\otimes\mathbf{N})\\
+% 									   &= \begin{tikzpicture}[yscale=2,xscale=1.5]
+% 									   \path (0,0) node (E) {$E$}
+% 									   ++(0.5,0) coordinate (copy0)
+% 									   +(0.5,0.25) coordinate (copy1)
+% 									   +(0.5,-0.25) coordinate (Z0)
+% 									   (copy1) ++(0.5,0.15) node[kernel] (X) {$\mathbf{L}$}
+% 									   ++ (0,-0.3) node[kernel] (Y) {$\mathbf{M}$}
+% 									   (Z0) ++ (0.5,0) node[kernel] (Z) {$\mathbf{N}$};
+% 									   \draw (E) -- (copy0) to [bend left] (copy1) (copy0) to [bend right] (Z0) -- (Z);
+% 									   \draw (copy1) to [bend left] (X) (copy1) to [bend right] (Y);
+% 									   \draw (X) -- +(0.5,0) (Y) -- +(0.5,0) (Z) -- +(0.5,0);
+% 									   \end{tikzpicture}\\
+% 									   &= \begin{tikzpicture}[yscale=2,xscale=1.5]
+%    									   \path (0,0) node (E) {$E$}
+% 									   ++(0.5,0) coordinate (copy0)
+% 									   +(0.5,-0.25) coordinate (copy1)
+% 									   +(0.5,0.25) coordinate (X0)
+% 									   (X0) ++(0.5,0) node[kernel] (X) {$\mathbf{L}$}
+% 									   ++ (0,-0.3) node[kernel] (Y) {$\mathbf{M}$}
+% 									   (copy1) ++ (0.5,-0.25) node[kernel] (Z) {$\mathbf{N}$};
+% 									   \draw (E) -- (copy0) to [bend right] (copy1) (copy0) to [bend left] (X0) -- (X);
+% 									   \draw (copy1) to [bend right] (Z) (copy1) to [bend left] (Y);
+%    									   \draw (X) -- +(0.5,0) (Y) -- +(0.5,0) (Z) -- +(0.5,0);
+% 									   \end{tikzpicture}\\
+% 									   &= \mathbf{L}\utimes(\mathbf{M}\utimes\mathbf{N})
+% \end{align}
+% \end{proof}
 
 
-\begin{definition}[Joint distribution]\label{def:joint_distribution}
-Given $\mu\in \Delta(\mathcal{E})$ and $\RV{X}:E\to X$ and $\RV{Y}:E\to Y$, the \emph{joint distribution} of $\RV{X}$ and $\RV{Y}$ is the pushforward measure of $\mu$ by the random variable $\RV{X}\utimes\RV{Y}$ on $\mathcal{X}\otimes\mathcal{Y}$.
+% \begin{definition}[Joint distribution]\label{def:joint_distribution}
+% Given $\mu\in \Delta(\mathcal{E})$ and $\RV{X}:E\to X$ and $\RV{Y}:E\to Y$, the \emph{joint distribution} of $\RV{X}$ and $\RV{Y}$ is the pushforward measure of $\mu$ by the random variable $\RV{X}\utimes\RV{Y}$ on $\mathcal{X}\otimes\mathcal{Y}$.
 
-This is identical to the definition in, for example, \citet{cinlar_probability_2011} if we note that the random variable $(\RV{X},\RV{Y}):\omega\mapsto (\RV{X}(\omega),\RV{Y}(\omega))$ (\c{C}inlar's definition) is equivalent to $\RV{X}\utimes\RV{Y}$.
-\end{definition}
+% This is identical to the definition in, for example, \citet{cinlar_probability_2011} if we note that the random variable $(\RV{X},\RV{Y}):\omega\mapsto (\RV{X}(\omega),\RV{Y}(\omega))$ (\c{C}inlar's definition) is equivalent to $\RV{X}\utimes\RV{Y}$.
+% \end{definition}
 
-\begin{lemma}[Joint distributions from coupled tensor products]\label{lem:rvg_jd}
-Given a probability space $\langle E,\mathcal{E},\mu \rangle$ and a finite set of random variables $G = \{\RV{X}_i|i\in [n]\}$, the joint distribution of $G$ is given by $\mu (\utimes_{i\in [n]} \mathbf{F}_{\RV{X}_i})$.
-\end{lemma}
+% \begin{lemma}[Joint distributions from coupled tensor products]\label{lem:rvg_jd}
+% Given a probability space $\langle E,\mathcal{E},\mu \rangle$ and a finite set of random variables $G = \{\RV{X}_i|i\in [n]\}$, the joint distribution of $G$ is given by $\mu (\utimes_{i\in [n]} \mathbf{F}_{\RV{X}_i})$.
+% \end{lemma}
 
-\begin{proof}
-This follows directly from Definition \ref{def:joint_distribution} and Lemma \ref{lem:pushf_funk}.
-\end{proof}
+% \begin{proof}
+% This follows directly from Definition \ref{def:joint_distribution} and Lemma \ref{lem:pushf_funk}.
+% \end{proof}
 
 \begin{lemma}\label{lem:thing_commutes}
 For measurable functions $\RV{X}:E\to X$ and $\RV{Y}:E\to Y$, $\mathbf{F}_{\RV{X}\utimes\RV{Y}}=\mathbf{F}_{\RV{X}}\utimes\mathbf{F}_{\RV{Y}}$.
@@ -814,7 +1120,7 @@ By Lemma \ref{lem:thing_commutes}, $\mathbf{D}_{\RV{X}|\RV{Y}}$ is a $\RV{X}|\RV
 \end{tikzpicture}\label{eq:proper_disintegration}
 \end{align}
 
-Equation \ref{eq:proper_disintegration} generalises \ref{eq:integrating_disintegration} beyond disintegrations by ``convenience'' wire labels to disintegrations by arbitrary sets of random variables. Note that where we \emph{can} construct a diagram for $\mu$ with convenient labels for $\RV{X}$ and $\RV{Y}$, due to the identification between random variables and wires, $\ref{eq:proper_disintegration}$ reduces to $\ref{eq:integrating_disintegration}$, and we will use the simpler definition where possible as it yields less cluttered diagrams.
+Equation \ref{eq:proper_disintegration} generalises \ref{eq:integrating_disintegration} beyond disintegrations by ``convenience'' wire names to disintegrations by arbitrary sets of random variables. Note that where we \emph{can} construct a diagram for $\mu$ with convenient labels for $\RV{X}$ and $\RV{Y}$, due to the identification between random variables and wires, $\ref{eq:proper_disintegration}$ reduces to $\ref{eq:integrating_disintegration}$, and we will use the simpler definition where possible as it yields less cluttered diagrams.
 
 
 From the fact that $\mathbf{F}_{\RV{Y}}$ is a deterministic kernel, we also have:
