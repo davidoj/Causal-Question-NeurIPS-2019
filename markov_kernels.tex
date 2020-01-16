@@ -257,6 +257,17 @@ The discard map $\stopper{0.2}:X\to \Delta(\{*\})$ maps every input to $\delta_{
 \end{tikzpicture}
 \end{align}
 
+We can associate a Markov kernel $F\to \Delta(\mathcal{X})$ with any measurable function $F\to X$. A useful property of functional kernels is that products with functional kernels induce push-forward measures.
+
+\begin{definition}[Function induced kernel]
+Given a measurable function $\RV{X}:F\to X$, define the function induced kernel $\mathbf{F}_{\RV{X}}:F\to \Delta(\mathcal{X})$ to be the the Markov kernel $a\mapsto \delta_{\RV{X}(a)}$ for all $a\in X$.
+\end{definition}
+
+\begin{lemma}[Pushforward measures and functional kernels]\label{lem:pushf_funk}
+Given a kernel space $\langle F,\mathcal{F},\mathbf{M}, G\rangle$ and a random variable $\RV{X}:F\to X$, for any prior $\mu\in \Delta(\mathcal{G})$ the pushforward $\RV{X}_\# \mu \mathbf{A} = \mu\mathbf{A} \mathbf{F}_{\RV{X}}$.
+\end{lemma}
+
+
 Before introducing key rules of manipulation permitted by string diagrams, we will illustrate the correspondence between the three notations with a few simple examples. Given $\mu\in\Delta(X),\mathbf{A}:X\to \Delta(Y)$ and $A\in \mathcal{X}$, $B\in\mathcal{Y}$, the following correspondences hold, where we express the same object in elementary notation, product notation and string notation respectively:
 
 \begin{align}
@@ -297,7 +308,27 @@ The elementary notation \ref{eq:marginalisation_elem} makes the relationship bet
 String diagrams often achieve a good balance between interpretational transparency, expressive power and symbol economy. Downsides of string diagrams are that they can be time consuming to typeset, and formal reasoning with them takes some practice.
 
 
-\subsubsection{Wire Names, Random Variables and Free Random Variables}\label{par:random_variables}
+\subsubsection{Joint distributions, random variables and wire names}\label{par:random_variables}
+
+We introduce \emph{wire names} in order to refer to particular wires in a diagram. It is not sufficient to label wires with spaces, as wires that share a space may not be interchangeable. It is not hard to imagine a probability distribution $\mu\in \Delta(\{0,1\}^2)$ where in general $\mu(A\times B)\neq \mu(B\times A)$ for $A,B\in \Delta(\{0,1\})$.
+
+We will begin by defining wire names in the context of \emph{joint probability distributions}, which will then yield an unambiguous meaning for wire names in the context of string diagrams representing probability measaures. We then add a number of coherence rules to derive wire names for general Markov kernels.
+
+\begin{definition}[Joint distribution]\label{def:joint_distribution}
+Given $\mu\in \Delta(\mathcal{E})$ and $\RV{X}:E\to F$ and $\RV{Y}:E\to G$, the \emph{joint distribution} $\mu_{\RV{X}\RV{Y}}\in \Delta(\mathcal{F}\otimes\mathcal{G})$ of $\RV{X}$ and $\RV{Y}$ is the pushforward measure of $\mu$ by the random variable $\RV{X}\utimes\RV{Y}$.
+
+This is identical to the definition in, for example, \citet{cinlar_probability_2011} if we note that the random variable $(\RV{X},\RV{Y}):\omega\mapsto (\RV{X}(\omega),\RV{Y}(\omega))$ (\c{C}inlar's definition) is equivalent to $\RV{X}\utimes\RV{Y}$.
+\end{definition}
+
+\begin{lemma}[Joint distributions from coupled tensor products]\label{lem:rvg_jd}
+Given a probability space $\langle E,\mathcal{E},\mu \rangle$ and a finite set of random variables $G = \{\RV{X}_i|i\in [n]\}$, the joint distribution of $G$ is given by $\mu (\utimes_{i\in [n]} \mathbf{F}_{\RV{X}_i})$.
+\end{lemma}
+
+\begin{proof}
+This follows directly from Definition \ref{def:joint_distribution} and Lemma \ref{lem:pushf_funk}.
+\end{proof}
+
+When we define a joint probability distribution $\mu_{\RV{X}\RV{Y}}$ on some produce space $F\times G$, we implicitly define an association between the random variable $\RV{X}$ and the first factor of the product space $F\times G$, and similarly for $\RV{Y}$ and the second factor. Consider two random variables $\RV{X}_1:E\to X$ and $\RV{X}_2:E\to X$ and a ``unusually named'' joint distribution $\mu_{??}$ over $X\times X$. I cannot uniquely associate the elements of a tuple $(a,b)\in X\times X$ with values of $\RV{X}_1$ or $\RV{X}_2$ - to define this association, I need to either specify it separately to $\mu$ or use a standard joint probability notation such as $\mu_{\RV{X}_1\RV{X}_2}$ or $\mu(\RV{X}_1,\RV{X}_2)$.
 
 The first purpose of wire names is to unambiguously refer to particular wires in a given diagram. For example, suppose we have some $\mu\in \Delta(\mathcal{X}\times\mathcal{X})$, and we label wires with \emph{spaces} rather than names:
 
@@ -488,13 +519,6 @@ As well as properties analogous to Equations \ref{eq:copy_labels} and \ref{eq:la
 
 \paragraph{Derivations of label properties}
 
-\begin{definition}[Function induced kernel]
-Given a measurable function $\RV{X}:F\to X$, define the function induced kernel $\mathbf{F}_{\RV{X}}:F\to \Delta(\mathcal{X})$ to be the the Markov kernel $a\mapsto \delta_{\RV{X}(a)}$ for all $a\in X$.
-\end{definition}
-
-\begin{lemma}[Pushforward measures and functional kernels]\label{lem:pushf_funk}
-Given a kernel space $\langle F,\mathcal{F},\mathbf{M}, G\rangle$ and a random variable $\RV{X}:F\to X$, for any prior $\mu\in \Delta(\mathcal{G})$ the pushforward $\RV{X}_\# \mu \mathbf{A} = \mu\mathbf{A} \mathbf{F}_{\RV{X}}$.
-\end{lemma}
 
 \begin{proof}
 For all $B\in \mathcal{F}$:
@@ -533,19 +557,7 @@ The operation denoted by $\utimes$ is associative (Lemma \ref{lem:utimes_assoc})
 For Markov kernels $\mathbf{L}$, $\mathbf{M}$ and $\mathbf{N}$ sharing a domain $E$, $(\mathbf{L}\utimes\mathbf{M})\utimes\mathbf{N}=\mathbf{L}\utimes(\mathbf{M}\utimes\mathbf{N})$.
 \end{lemma}
 
-\begin{definition}[Joint distribution]\label{def:joint_distribution}
-Given $\mu\in \Delta(\mathcal{E})$ and $\RV{X}:E\to X$ and $\RV{Y}:E\to Y$, the \emph{joint distribution} of $\RV{X}$ and $\RV{Y}$ is the pushforward measure of $\mu$ by the random variable $\RV{X}\utimes\RV{Y}$ on $\mathcal{X}\otimes\mathcal{Y}$.
 
-This is identical to the definition in, for example, \citet{cinlar_probability_2011} if we note that the random variable $(\RV{X},\RV{Y}):\omega\mapsto (\RV{X}(\omega),\RV{Y}(\omega))$ (\c{C}inlar's definition) is equivalent to $\RV{X}\utimes\RV{Y}$.
-\end{definition}
-
-\begin{lemma}[Joint distributions from coupled tensor products]\label{lem:rvg_jd}
-Given a probability space $\langle E,\mathcal{E},\mu \rangle$ and a finite set of random variables $G = \{\RV{X}_i|i\in [n]\}$, the joint distribution of $G$ is given by $\mu (\utimes_{i\in [n]} \mathbf{F}_{\RV{X}_i})$.
-\end{lemma}
-
-\begin{proof}
-This follows directly from Definition \ref{def:joint_distribution} and Lemma \ref{lem:pushf_funk}.
-\end{proof}
 
 \begin{lemma}[Coupled projection maps are equal to the identity]\label{lem:cpm_ident}
 Suppose $E$ is a finite Cartesian product: $E=\prod_{i\in[n]} A_i$. Let $\pi_i:E\to A_i$ be the projection map $(a_1,..,a_i,..,a_n)\mapsto a_i$. Then $\utimes_{i\in [n]} \pi_i = \mathrm{Id}_E$ where $\mathrm{Id}_E$ is the identity function on $E$.
