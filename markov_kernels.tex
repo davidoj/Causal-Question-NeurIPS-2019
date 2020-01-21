@@ -310,7 +310,93 @@ String diagrams often achieve a good balance between interpretational transparen
 
 \subsubsection{Joint distributions, random variables and wire names}\label{par:random_variables}
 
-We introduce \emph{wire names} in order to refer to particular wires in a diagram. It is not sufficient to label wires with spaces, as wires that share a space may not be interchangeable. It is not hard to imagine a probability distribution $\mu\in \Delta(\{0,1\}^2)$ where in general $\mu(A\times B)\neq \mu(B\times A)$ for $A,B\in \Delta(\{0,1\})$.
+We introduce \emph{wire names} in order to refer to particular wires in a diagram. Wire names represent random variables in a suitably defined probability space. 
+
+As a general motivating problem, consider the following two diagrams:
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node[dist] (M) {$\mu$}
+++ (0.7,0.15) node (X) {$\RV{X}$}
+++(0,-0.3) node (Y) {$\RV{Y}$};
+\draw ($(M.east) + (0,0.15)$) -- (X);
+\draw ($(M.east) + (0,-0.15)$) -- (Y);
+\end{tikzpicture}\qquad
+\begin{tikzpicture}
+\path (0,0) node[dist] (M) {$\mu$}
+++ (0.7,0.15) node[kernel] (A) {$\mathbf{A}$}
+++(0.7,0) node (Z) {$\RV{Z}$}
+++(0,-0.3) node (Y) {$\RV{Y}$};
+\draw ($(M.east) + (0,0.15)$) -- (A) -- (Z);
+\draw ($(M.east) + (0,-0.15)$) -- (Y);
+\end{tikzpicture}\label{eq:joint_distributions}
+\end{align}
+
+There is a clear graphical intuition in which the wire labeled $\RV{Y}$ represents the ``same thing'' in the left and the right diagram, and a clear sense in which, for arbitrary $\mathbf{A}$, $\RV{Z}$ does \emph{not} represent the ``same thing'' as $\RV{X}$. It would be handy to refer to the upper wire just with $\RV{Y}$ without referencing it to a specific diagram. While this may not be the only way of accomplishing this, we are able to accomplish what we want here by introducing an ambient \emph{probabilty space} which grounds wire names as fundamentally referring to random variables on the space.
+
+\begin{definition}[Probability space]
+A probability space $(\mathbb{P},\Omega,\mathcal{F})$ is a probability measure $\mathbb{P}$, which we call the \emph{ambient measure}, along with the \emph{sample space} $\Omega$ and the \emph{events} $\mathcal{F}$.
+\end{definition}
+
+\begin{definition}[Random variable]
+Given a sample space $\Omega$, a random variable $\RV{X}$ is a measurable function $\Omega\to A$ for arbitrary measurable $A$.
+\end{definition}
+
+\begin{definition}[Wire names]\label{def:wire_names_as_RVs}
+Given a probability space $(\mathbb{P},\Omega,\mathcal{F})$ and an ordered collection of $n$ random variables $A=[\RV{X}_1,...,\RV{X}_n]$ taking values in $X_1,...,X_n$ respectively, and some $\nu\in \Delta(\otimes_{i\in[n]} \RV{X}_i)$, a diagram of $\nu$ with $n$ output wires can accept the names $[\RV{X}_0,...,\RV{X}_n]$ iff $\nu = \mathbb{P}_{\RV{X}_1,...,\RV{X}_n}$. 
+\end{definition}
+
+That is, the two measures recommended by the diagrams in \ref{eq:joint_distributions} are equal to the joint distributions $\mathbb{P}_{\RV{X}\RV{Y}}$ and $\mathbb{P}_{\RV{Z}\RV{Y}}$ on some probability space $(\mathbb{P},\Omega,\mathcal{F})$.
+
+This definition respects much of the visual logic of string diagrams, with the caveat that it only places constraints on the names of outgoing wires of probability measures.
+
+\begin{lemma}[Diagrammatic properties of wire labels]
+Suppose we have a probability space $(\mathbb{P},\Omega,\mathcal{F})$ and write $\mathrm{Sat}:$ to indicate that a diagram satisfies Definition \ref{def:wire_names_as_RVs} with respect to $(\mathbb{P},\Omega,\mathcal{F})$.
+
+\begin{align}
+\mathrm{Sat:}\;\begin{tikzpicture}
+\path (0,0) node[dist] (M) {$\mu$}
+++ (0.7,0.15) node (X) {$\RV{X}$}
+++(0,-0.3) node (Y) {$\RV{Y}$};
+\draw ($(M.east) + (0,0.15)$) -- (X);
+\draw ($(M.east) + (0,-0.15)$) -- (Y);
+\end{tikzpicture} &\implies \mathrm{Sat:}\; \begin{tikzpicture}
+\path (0,0) node[dist] (M) {$\mu$}
+++ (0.7,0.15) node (X) {$\RV{X}$}
+++(0,-0.3) node (Y) {};
+\draw ($(M.east) + (0,0.15)$) -- (X);
+\draw[-{Rays [n=8]}] ($(M.east) + (0,-0.15)$) -- (Y);
+\end{tikzpicture}\\
+&\And \mathrm{Sat:}\; \begin{tikzpicture}
+\path (0,0) node[dist] (M) {$\mu$}
+++ (0.7,0.15) node (X) {$\RV{Y}$}
+++(0,-0.3) node (Y) {$\RV{X}$};
+\draw ($(M.east) + (0,0.15)$) to [out = 0, in = 180] (Y);
+\draw ($(M.east) + (0,-0.15)$) to [out = 0, in = 180] (X);
+\end{tikzpicture}\\
+\mathrm{Sat:}\begin{tikzpicture}
+\path (0,0) node[dist] (M) {$\nu$}
+++(0.6,0) node (X1) {$\RV{X}$};
+\draw (M)--(X1);
+\end{tikzpicture}
+\implies \mathrm{Sat:}\begin{tikzpicture}
+\path (0,0) node[dist] (M) {$\nu$}
+++ (0.7,0) coordinate (copy0)
+++(0.5,0.2) node (X1) {$\RV{X}$}
+++(0,-0.4) node (X2) {$\RV{X}$};
+\draw (M) -- (copy0) to [bend left] (X1);
+\draw (copy0) to [bend right] (X2);
+\end{tikzpicture}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+(i) $\mu(\mathrm{Id}\otimes \stopper{0.2})(A) = \int_{X\times Y} \delta_x(A) \mathds{1}_Y(y) d\mu(x,y) = \mu(A\times Y) = \mathbb{P}_{\RV{X}}(A)$
+(ii) $\int_{X\times Y} \delta_{\mathrm{swap(x,y)}}(A\times B)d\mu(x,y)=\int_{A\times B} d\mu(y,x) = \mathbb{P}_{\RV{Y}\RV{X}}(A\times B)$
+(iii) $\nu\splitter{0.1} (A\times B) = \int_{X} \delta_{x,x}(A\times B) d\nu(x) = \mathbb{P}_{\RV{X}\RV{X}} (A\times B)$
+\end{proof}
+
+
 
 We will begin by defining wire names in the context of \emph{joint probability distributions}, which will then yield an unambiguous meaning for wire names in the context of string diagrams representing probability measaures. We then add a number of coherence rules to derive wire names for general Markov kernels.
 
