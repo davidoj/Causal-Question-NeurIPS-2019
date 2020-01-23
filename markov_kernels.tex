@@ -96,24 +96,24 @@ Some key ideas of string diagrams:
 	\item String diagrams are the subject of a coherence theorem: taking a string diagram and applying a planar deformation yields a string diagram that represents the same kernel \citep{selinger_survey_2010}. This also holds for a number of additional transformations detailed below
 \end{itemize}
 
-A kernel $\mathbf{M}:X\to \Delta(\mathcal{Y})$ is written as a box with input and output wires, probability measures $\mu\in \Delta(\mathcal{X})$ are written as triangles ``closed on the left'' and measurable functions (which are only elements of the ``extended'' notation) $\RV{T}:Y\to T$ as triangles ``closed on the right''. We additionally name every wire represented in a string diagram, which we call (following \cite{cho_disintegration_2019}) \emph{meta-variables} and use the same sans-serif font as for random variabels ($\RV{X},\RV{Y}$ etc.) to emphasise their connection. See Paragraph \ref{par:random_variables} for a more detailed explanation of meta variables.
+A kernel $\mathbf{M}:X\to \Delta(\mathcal{Y})$ is written as a box with input and output wires, probability measures $\mu\in \Delta(\mathcal{X})$ are written as triangles ``closed on the left'' and measurable functions (which are only elements of the ``extended'' notation) $\RV{T}:Y\to T$ as triangles ``closed on the right''. For this introduction we will label wires with the names of their corresponding spaces, but in practice we will usually name them with corresponding \emph{random variables}, though additional care is required when using random variables as labels (see paragraph \ref{par:random_variables}).
 
 For $\mathbf{M}:X\to \Delta(\mathcal{Y})$, $\mu\in \Delta(\mathcal{X})$ and $f:X\to W$:
 
 \begin{align}
 \begin{tikzpicture}
-\path (0,0) node (A) {$\RV{X}$}
+\path (0,0) node (A) {$X$}
 ++(0.75,0) node[kernel] (B) {$\mathbf{M}$}
-++(0.75,0) node (C) {$\RV{Y}$};
+++(0.75,0) node (C) {$Y$};
 \draw (A) -- (B) -- (C);
 \end{tikzpicture}\qquad
 \begin{tikzpicture}
 \path (0,0) node[dist] (B) {$\mu$}
-++(0.75,0) node (C) {$\RV{X}$};
+++(0.75,0) node (C) {$X$};
 \draw (B) -- (C);
 \end{tikzpicture}\qquad
 \begin{tikzpicture}
-\path (0,0) node (A) {$\RV{X}$}
+\path (0,0) node (A) {$X$}
 ++(0.75,0) node[expectation] (B) {$f$};
 \draw (A) -- (B);
 \end{tikzpicture}
@@ -130,10 +130,10 @@ We can compose Markov kernels with appropriate spaces - the equivalent operation
 
 \begin{align}
 \mathbf{M}\mathbf{N} := \begin{tikzpicture}
- \path (0,0) node (E) {$\RV{X}$}
+ \path (0,0) node (E) {$X$}
  ++ (1,0) node[kernel] (M) {$\mathbf{M}$}
  ++ (1,0) node[kernel] (N) {$\mathbf{N}$}
- ++(1,0) node (G) {$\RV{Z}$};
+ ++(1,0) node (G) {$Z$};
  \draw (E) -- (M) -- (N) -- (G);
 \end{tikzpicture}\label{eq:sd_composition}
 \end{align}
@@ -144,11 +144,11 @@ Probability measures are distinguished in that that they only admit ``right comp
 \mu\mathbf{M} &:= \begin{tikzpicture}
  \path (0,0) node[dist] (M) {$\mu$}
  ++ (1,0) node[kernel] (N) {$\mathbf{M}$}
- ++(1,0) node (G) {$\RV{Z}$};
+ ++(1,0) node (G) {$Z$};
  \draw (M) -- (N) -- (G);
 \end{tikzpicture}\\
 \mathbf{M}f&:= \begin{tikzpicture}
- \path (0,0) node (E) {$\RV{X}$}
+ \path (0,0) node (E) {$X$}
  ++ (1,0) node[kernel] (M) {$\mathbf{M}$}
  ++ (1,0) node[expectation] (N) {$f$};
  \draw (E) -- (M) -- (N);
@@ -161,12 +161,12 @@ We can also combine Markov kernels using tensor products, which we represent wit
 
 \begin{align}
 \mathbf{M}\otimes\mathbf{N}&:= \begin{tikzpicture}
-\path (0,0) node (E) {$\RV{X}$}
+\path (0,0) node (E) {$X$}
 ++(1,0) node[kernel] (M) {$\mathbf{M}$}
-++(1,0) node (F) {$\RV{Y}$}
-(0,-0.5) node (F1) {$\RV{Z}$}
+++(1,0) node (F) {$Y$}
+(0,-0.5) node (F1) {$Z$}
 ++(1,0) node[kernel] (N) {$\mathbf{O}$}
-+(1,0) node (G) {$\RV{W}$};
++(1,0) node (G) {$W$};
 \draw (E) -- (M) -- (F);
 \draw (F1) -- (N) -- (G);
 \end{tikzpicture}
@@ -175,10 +175,10 @@ We can also combine Markov kernels using tensor products, which we represent wit
 Product spaces can be represented either by two parallel wires or a single wire:
 \begin{align}
 X\times Y \cong \mathrm{Id}_X\otimes \mathrm{Id}_Y &:= \begin{tikzpicture}
-\path (0,0) node (E) {$\RV{X}$}
-++(1,0) node (F) {$\RV{X}$}
-(0,-0.5) node (F1) {$\RV{Y}$}
-+(1,0) node (G) {$\RV{Y}$};
+\path (0,0) node (E) {$X$}
+++(1,0) node (F) {$X$}
+(0,-0.5) node (F1) {$Y$}
++(1,0) node (G) {$Y$};
 \draw (E) -- (F);
 \draw (F1) -- (G);
 \end{tikzpicture}\\
@@ -332,66 +332,10 @@ As a general motivating problem, consider the following two diagrams:
 \end{tikzpicture}\label{eq:joint_distributions}
 \end{align}
 
-There is a clear graphical intuition in which the wire labeled $\RV{Y}$ represents the ``same thing'' in the left and the right diagram, and a clear sense in which, for arbitrary $\mathbf{A}$, $\RV{Z}$ usually does \emph{not} represent the ``same thing'' as $\RV{X}$. This intuition is supported by the fact that the marginal distribution on the wire labeled $\RV{Y}$ is the same in both diagrams while the wires $\RV{X}$ and $\RV{Z}$ will usually not have the same marginal distributions. Just as we can refer to a random variable without referring to a particular joint distribution, it would be handy to refer to the wire named $\RV{Y}$ without also referring to a specific diagram. 
-
-\todo[inline]{I really feel like the category theorists have probably worked out what I'm trying to do here, if I only knew where to look}
-
-\begin{definition}[Labelled diagram]
-Given a measurable space $E$, suppose it has some factorisation $E=A\times B$. An assignment of \emph{labels} is a map from a countable label set $L$ to an enumeration the chosen factorisation of $E$, $F:=[|\{A,B\}|]$. 
-
-Given a Markov kernel $\mathbf{K}:E\to \Delta(\mathcal{F})$, an abstract labelled diagram $\mathfrak{D}$ is the kernel $\mathbf{K}$ along with ``input label assignments'' $\mathrm{In}(\mathfrak{D})$ and ``output label assignments'' $\mathrm{Out}(\mathfrak{D})$. We represent $\mathfrak{D}$ with a diagram for $\mathbf{K}$ featuring $|\mathrm{In}(\mathfrak{D})|$ input wires and $|\mathrm{Out}(\mathfrak{D})|$ output wires, with each input and output wire labelled with a label from $L$.
-
-Given two diagrams $\mathfrak{D}_1$ and $\mathfrak{D}_2$ with $|\mathrm{In}(\mathfrak{D}_2)|=|\mathrm{Out}(\mathfrak{D}_1)|$ (i.e. the number of of output wires of $\mathfrak{D}_1$ is the same as the number of input wires of $\mathfrak{D}_2$) then write $\mathfrak{D}_1 \text{--} \mathfrak{D}_2$ for the diagram formed by connecting corresponding wires of $\mathfrak{D}_1$ and $\mathfrak{D}_2$ preserving the relevant labels.
-\end{definition}
-
-\begin{example}[Labelled diagrams]
-If we have
-\begin{align}
-\mathfrak{D}_1 &:= \begin{tikzpicture}
-\path (0,0) node (A) {$\RV{X}$}
-++(0.6,0) node[kernel] (K) {$\RV{K}$}
-++(0.6,0.15) node (B) {$\RV{Y}$}
-++(0,-0.3) node (C) {$\RV{Z}$};
-\draw (A) -- (K) ($(K.east) + (0,0.15)$) -- (B) ($(K.east) + (0,-0.15)$) -- (C);
-\end{tikzpicture}\\
-\mathfrak{D}_2 &:= \begin{tikzpicture}
-\path (0,0.15) node (A) {$\RV{V}$}
-+ (0,-0.3) node (B) {$\RV{W}$}
-++(0.7,-0.15) node[kernel] (K) {$\RV{M}$}
-++(0.6,0) node (C) {$\RV{T}$};
-\draw (A) -- ($(K.west)+(0,0.15)$) (B) -- ($(K.west) + (0,-0.15)$) (K) -- (C);
-\end{tikzpicture}
-\end{align}
-
-then 
-\begin{align}
-\mathrm{In}(\mathfrak{D}_2) = \begin{cases}
-\RV{V}\mapsto \text{``input wire 1''}\\
-\RV{W}\mapsto \text{``input wire 2''}
-\end{cases}
-\end{align}
-and $\mathfrak{D}_1 \text{--} \mathfrak{D}_2$ is the diagram
-\begin{align}
-\begin{tikzpicture}
-\path (0,0) node (A) {$\RV{X}$}
-++(0.6,0) node[kernel] (K) {$\RV{K}$}
-++(0.6,0.15) node (B) {}
-++(0,-0.3) node (C) {}
-++(0.7,0.15) node[kernel] (K1) {$\RV{M}$}
-++(0.6,0) node (C1) {$\RV{T}$};
-\draw (A) -- (K);
-\draw ($(K.east) + (0,0.15)$) -- ($(K1.west)+(0,0.15)$) ($(K.east) + (0,-0.15)$) -- ($(K1.west) + (0,-0.15)$) (K1) -- (C1);
-\end{tikzpicture}
-\end{align}
+There is a clear graphical intuition in which the wire labeled $\RV{Y}$ represents the ``same thing'' in the left and the right diagram, and similarly, for arbitrary $\mathbf{A}$, $\RV{Z}$ usually does \emph{not} represent the ``same thing'' as $\RV{X}$. This intuition is supported by the fact that the marginal distribution on the wire labeled $\RV{Y}$ is the same in both diagrams while the wires $\RV{X}$ and $\RV{Z}$ will usually not have the same marginal distributions. Just as we can refer to a random variable without referring to a particular joint distribution, it would be handy to refer to the wire named $\RV{Y}$ without also referring to a specific diagram. 
 
 
-\end{example}
 
-
-\begin{definition}[Namespace]
-A \emph{labelled kernel space} $N$ is a collection of labelled string diagrams $\{\mathfrak{A,B,C,...}\}$ such that the following consistency rules hold:
-
-\end{definition}
 
 
 \begin{definition}[Probability space]
@@ -547,7 +491,7 @@ Furthermore, if and only if $\mathbf{K}$ is a version of the conditional probabi
 ++ (0.7,0) node[kernel] (K) {$\mathbf{K}$}
 ++(0.7,0) node (Y) {$\RV{Y}$};
 \draw (X) -- (K) -- (Y);
-\end{tikzpicture}
+\end{tikzpicture}\label{eq:identity_labels}
 \end{align}
 \end{definition}
 
@@ -635,11 +579,13 @@ Of these, only \ref{eq:splitter_preserves_name} is new to input wire labels.
 
 
 \begin{proof}
-(i) $\mathrm{Id}_X$ is a version of $\mathbb{P}_{\RV{X}|\RV{X}}$ for all $\mathbb{P}$; $\mathbb{P}_{\RV{X}}\mathrm{Id}_X = \mathbb{P}_{\RV{X}}$
-(ii) $\mathbf{K}\mathrm{Id}\otimes \stopper{0.2})(w;A) = \int_{X\times Y} \delta_x(A) \mathds{1}_Y(y) d\mathbf{K}_w(x,y) = \mathbf{K}_w(A\times Y) = \mathbb{P}_{\RV{X}|\RV{Z}}(w;A)$
-(iii) $\int_{X\times Y} \delta_{\mathrm{swap(x,y)}}(A\times B)d\mathbf{K}_w(x,y) = \mathbb{P}_{\RV{Y}\RV{X}|\RV{Z}}(w;A\times B)$
-(iv) $\mathbf{K}\splitter{0.1} (w;A\times B) = \int_{X} \delta_{x,x}(A\times B) d\mathbf{K}_w(x) = \mathbb{P}_{\RV{X}\RV{X}|\RV{Z}} (w;A\times B)$
-(v) Suppose $\mathbf{K}$ is a version of $\mathbb{P}_{\RV{Y}|\RV{Z}}$. Then
+\begin{itemize}
+	\item $\mathrm{Id}_X$ is a version of $\mathbb{P}_{\RV{X}|\RV{X}}$ for all $\mathbb{P}$; $\mathbb{P}_{\RV{X}}\mathrm{Id}_X = \mathbb{P}_{\RV{X}}$
+	\item $\mathbf{K}\mathrm{Id}\otimes \stopper{0.2})(w;A) = \int_{X\times Y} \delta_x(A) \mathds{1}_Y(y) d\mathbf{K}_w(x,y) = \mathbf{K}_w(A\times Y) = \mathbb{P}_{\RV{X}|\RV{Z}}(w;A)$
+	\item $\int_{X\times Y} \delta_{\mathrm{swap(x,y)}}(A\times B)d\mathbf{K}_w(x,y) = \mathbb{P}_{\RV{Y}\RV{X}|\RV{Z}}(w;A\times B)$
+	\item $\mathbf{K}\splitter{0.1} (w;A\times B) = \int_{X} \delta_{x,x}(A\times B) d\mathbf{K}_w(x) = \mathbb{P}_{\RV{X}\RV{X}|\RV{Z}} (w;A\times B)$
+\end{itemize}
+\ref{eq:splitter_preserves_name}: Suppose $\mathbf{K}$ is a version of $\mathbb{P}_{\RV{Y}|\RV{Z}}$. Then
 \begin{align}
 \mathbb{P}_{\RV{Z}\RV{Y}} &= \begin{tikzpicture}
 \path (0,0) node[dist] (m) {$\mathbb{P}_{\RV{Z}}$}
@@ -675,13 +621,107 @@ Of these, only \ref{eq:splitter_preserves_name} is new to input wire labels.
 \draw (copy1) to [bend left] (Xm);
 \end{tikzpicture}
 \end{align}
-Therefore $\splitter{0.1}(\mathrm{Id}_X\otimes\mathbf{K})$ is a version of $\mathbb{P}_{\RV{Z}\RV{Y}|\RV{Z}}$ by \ref{def:labeled_disint}. 
+Therefore $\splitter{0.1}(\mathrm{Id}_X\otimes\mathbf{K})$ is a version of $\mathbb{P}_{\RV{Z}\RV{Y}|\RV{Z}}$ by \ref{def:labeled_disint} 
 \end{proof}
 
-Finally, we have the challenge that our causal theories take \emph{Markov kernels} as basic, rather than probability measures. That is, we suppose we have some set of decisions $D$ and a map $\mathbf{C}:D\to \Delta(\mathcal{E})$ encoding the consequences of taking available decisions, and the decision maker my select a strategy $\gamma\in \Delta(\mathcal{D})$. 
+It is notable that in a probability space, the following property does \emph{not} generally hold:
+\begin{align}
+\mathrm{Sat:}\begin{tikzpicture}
+\path (0,0) node (X) {$\RV{Z}$}
+++ (0.7,0) node[kernel] (K) {$\mathbf{K}$}
+++(0.7,0) node (Y) {$\RV{Y}$};
+\draw (X) -- (K) -- (Y);
+\end{tikzpicture},
+\begin{tikzpicture}
+\path (0,0) node (X) {$\RV{Y}$}
+++ (0.7,0) node[kernel] (K) {$\mathbf{L}$}
+++(0.7,0) node (Y) {$\RV{X}$};
+\draw (X) -- (K) -- (Y);
+\end{tikzpicture}
+ &\implies \mathrm{Sat:}
+\begin{tikzpicture}
+\path (0,0) node (X) {$\RV{Z}$}
+++ (0.7,0) node[kernel] (K) {$\mathbf{K}$}
+++(0.7,0) node[kernel] (L) {$\mathbf{L}$}
+++(0.7,0) node (X1) {$\RV{X}$};
+\draw (X) -- (K) -- (Y) -- (L) -- (X1);
+\end{tikzpicture}\label{eq:composition}
+\end{align}
 
-Therfore, we now break with tradition to define labels in terms of a \emph{kernel space} $(\mathbf{K},\Omega,E,\mathcal{F},\mathcal{A})$ with an ambient kernel $\mathbf{K}:E\to \Delta(\mathcal{F})$.
+Consider $\RV{Z}=\RV{X}$ and $\mathbf{K}=z\mapsto \mathrm{Bernouli}(0.5)$ for all $z$. Then $\mathbf{L}=x\mapsto \mathbb{P}_{\RV{X}}$ and $\mathbf{KL}=z\mapsto \mathbb{P}_{\RV{X}}$ but $\mathbb{P}_{\RV{X}|\RV{Z}} = z\mapsto \delta_z\neq \mathbf{KL}$.
 
+Finally, we have the challenge that our causal theories take \emph{Markov kernels} as basic, rather than probability measures. That is, we suppose we have some set of decisions $D$ and a map $\mathbf{C}:D\to \Delta(\mathcal{E})$ encoding the consequences of taking available decisions, and the decision maker my select a strategy $\gamma\in \Delta(\mathcal{D})$. We solve this problem in the following somewhat inelegant manner: we supppose that the set of decisions $D$ available is always at most countable, and so there is always some $\gamma^*\in \Delta(\mathcal{D})$ that dominates all available strategies. We then take $\gamma^*(\mathrm{Id}_D\utimes \mathbf{C})$ to be the joint distribution of $\RV{D}$ and $\RV{E}$ (being $D$ and $E$ valued random variables respectively, defined in the obvious way) on some probability space $(\mathbb{P},\Omega,\mathcal{F})$, and $\mathbf{C}$ is thus the unique conditional $\mathbb{P}_{\RV{E}|\RV{D}}$. Note that joint distributions of $\RV{D}$ and anything with respect to $\mathbb{P}$ are not ``physically meaningful'', they just exist to allow us to embed $\mathbf{C}$ in a probability space.
+
+\subsubsection{Alternative approach}
+
+It seems like there should be a more direct way of giving meaning to wire labels than going via a probability space as above, particularly as for our purposes it necessitates the limitation of $D$ to a countable set and the introduction of $\gamma^*$ to support embedding consequence mappings in probability spaces. 
+
+An alternative approach could be to begin by defining coherence rules for diagram labels similar to \ref{eq:identity_labels} -- \ref{eq:splitter_preserves_name}. We could then 
+
+\todo[inline]{This should probably be a category somehow, but I don't think categories of random variables have actually been worked out}
+
+
+\begin{definition}[Labelled diagram]
+Given a measurable space $E$, suppose it has some factorisation $E=A\times B$. An assignment of \emph{labels} is a map from a countable label set $L$ to an enumeration the chosen factorisation of $E$, $F:=[|\{A,B\}|]$. 
+
+Given a Markov kernel $\mathbf{K}:E\to \Delta(\mathcal{F})$, an abstract labelled diagram $\mathfrak{D}$ is the triple $(\mathrm{Dia}(\mathfrak{D}),\mathrm{In}(\mathfrak{D}),\mathrm{Out}(\mathfrak{D})$ where $\mathrm{Dia}(\mathfrak{D})$ is a string diagram encoding $\mathbf{K}$, along with ``input label assignments'' $\mathrm{In}(\mathfrak{D})$ and ``output label assignments'' $\mathrm{Out}(\mathfrak{D})$. We represent $\mathfrak{D}$ with a diagram for $\mathbf{K}$ featuring $|\mathrm{In}(\mathfrak{D})|$ input wires and $|\mathrm{Out}(\mathfrak{D})|$ output wires, with each input and output wire labelled with a label from $L$. Define $\mathrm{Ker}(\mathfrak{D}):=\mathbf{K}$ to be the .
+
+Given two diagrams $\mathfrak{D}_1$ and $\mathfrak{D}_2$ with $|\mathrm{In}(\mathfrak{D}_2)|=|\mathrm{Out}(\mathfrak{D}_1)|$ (i.e. the number of of output wires of $\mathfrak{D}_1$ is the same as the number of input wires of $\mathfrak{D}_2$) then write $\mathfrak{D}_1 \text{--} \mathfrak{D}_2$ for the diagram formed by connecting corresponding wires of $\mathfrak{D}_1$ and $\mathfrak{D}_2$ preserving the relevant labels.
+\end{definition}
+
+\begin{example}[Labelled diagrams]
+If we have
+\begin{align}
+\mathfrak{D}_1 &:= \begin{tikzpicture}
+\path (0,0) node (A) {$\RV{X}$}
+++(0.6,0) node[kernel] (K) {$\RV{K}$}
+++(0.6,0.15) node (B) {$\RV{Y}$}
+++(0,-0.3) node (C) {$\RV{Z}$};
+\draw (A) -- (K) ($(K.east) + (0,0.15)$) -- (B) ($(K.east) + (0,-0.15)$) -- (C);
+\end{tikzpicture}\\
+\mathfrak{D}_2 &:= \begin{tikzpicture}
+\path (0,0.15) node (A) {$\RV{Y}$}
++ (0,-0.3) node (B) {$\RV{Z}$}
+++(0.7,-0.15) node[kernel] (K) {$\RV{M}$}
+++(0.6,0) node (C) {$\RV{W}$};
+\draw (A) -- ($(K.west)+(0,0.15)$) (B) -- ($(K.west) + (0,-0.15)$) (K) -- (C);
+\end{tikzpicture}
+\end{align}
+
+then 
+\begin{align}
+\mathrm{In}(\mathfrak{D}_2) = \begin{cases}
+\RV{V}\mapsto \text{``input wire 1''}\\
+\RV{W}\mapsto \text{``input wire 2''}
+\end{cases}
+\end{align}
+and $\mathfrak{D}_1 \text{--} \mathfrak{D}_2$ is the diagram
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (A) {$\RV{X}$}
+++(0.6,0) node[kernel] (K) {$\RV{K}$}
+++(0.6,0.15) node (B) {}
+++(0,-0.3) node (C) {}
+++(0.7,0.15) node[kernel] (K1) {$\RV{M}$}
+++(0.6,0) node (C1) {$\RV{W}$};
+\draw (A) -- (K);
+\draw ($(K.east) + (0,0.15)$) -- ($(K1.west)+(0,0.15)$) ($(K.east) + (0,-0.15)$) -- ($(K1.west) + (0,-0.15)$) (K1) -- (C1);
+\end{tikzpicture}
+\end{align}
+Note that we 
+\end{example}
+
+\begin{definition}[Namespace]
+A \emph{labelled kernel space} $N$ is a collection of labelled string diagrams $\{\mathfrak{A,B,C,...}\}$ such that the following rules hold:
+\begin{enumerate}
+	\item \textbf{Composition:} $\mathfrak{A}\text{--}\mathfrak{B}\in N$ iff $\mathfrak{A}\in N$ and $\mathfrak{B}\in N$ and $\mathrm{Out}(\mathfrak{A})=\mathrm{In}(\mathfrak{B})$
+	\item \textbf{Unison:} for $\mathfrak{A},\mathfrak{B}\in N$, if $\mathrm{In}(\mathfrak{A})=\mathrm{In}(\mathfrak{B})$ and $\mathrm{Out}(\mathfrak{A})=\mathrm{Out}(\mathfrak{B})$ then $\mathrm{Ker}(\mathfrak{A}) = \mathrm{Ker}(\mathfrak{B})$
+\end{enumerate}
+In addition, 
+
+	\item \textbf{Copied inputs:} if $\mathfrak{A}\in N$ then we also have $\mathfrak{B}\in N$ such that $\mathrm{Ker}(\mathfrak{B}) = \mathrm{Id}_{\mathrm{In}(\mathfrak{A})} \utimes \mathrm{Ker}(\mathfrak{A})$
+
+\end{definition}
 
 have to deal with the case where we want to work with some Markov kernel $\mathbf{M}:D\to \Delta(\mathcal{E})$ but are uncommitted as to whether this is a
 
