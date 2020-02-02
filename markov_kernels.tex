@@ -183,8 +183,8 @@ X\times Y \cong \mathrm{Id}_X\otimes \mathrm{Id}_Y &:= \begin{tikzpicture}
 \draw (F1) -- (G);
 \end{tikzpicture}\\
 &= \begin{tikzpicture}
-\path (0,0) node (X) {$\RV{X}\utimes \RV{Y}$}
-++(2,0) node (Y) {$\RV{X}\utimes \RV{Y}$};
+\path (0,0) node (X) {$X\utimes Y$}
+++(2,0) node (Y) {$X\utimes Y$};
 \draw (X) -- (Y);
 \end{tikzpicture}
 \end{align}
@@ -195,19 +195,19 @@ Because a product space can be represented by parallel wires, a kernel $\mathbf{
 
 \begin{align}
 &\begin{tikzpicture}
-\path (0,0) node (E) {$\RV{X}$}
+\path (0,0) node (E) {$X$}
 ++ (1,0) node[kernel] (L) {$\mathbf{L}$}
-++ (1,0.15) node (F) {$\RV{Y}$}
-+(0,-0.3) node (G) {$\RV{Z}$};
+++ (1,0.15) node (F) {$Y$}
++(0,-0.3) node (G) {$Z$};
 \draw (E) -- (L);
 \draw ($(L.east) + (0,0.15)$) -- (F);
 \draw ($(L.east)+ (0,-0.15)$) -- (G);
 \end{tikzpicture}\\
 &\equiv\\
 &\begin{tikzpicture}
-\path (0,0) node (E) {$\RV{X}$}
+\path (0,0) node (E) {$X$}
 ++ (1,0) node[kernel] (L) {$\mathbf{L}$}
-++ (1.5,0) node (F) {$\RV{Y}\utimes \RV{Z}$};
+++ (1.5,0) node (F) {$Y\utimes Z$};
 \draw (E) -- (L) -- (F);
 \end{tikzpicture}
 \end{align}
@@ -220,7 +220,7 @@ A number of Markov kernels are given special notation distinct from the generic 
 The identity kernel $\textbf{Id}:X\to \Delta(X)$ maps a point $x$ to the measure $\delta_x$ that places all mass on the same point:
 
 \begin{align}
-\textbf{Id}_x : x\mapsto \delta_x \equiv \begin{tikzpicture}\path (0,0) node (X) {$\RV{X}$} + (1,0) node (X1) {$\RV{X}$}; \draw (X)--(X1); \end{tikzpicture}\label{eq:identity}
+\textbf{Id}_x : x\mapsto \delta_x \equiv \begin{tikzpicture}\path (0,0) node (X) {$X$} + (1,0) node (X1) {$X$}; \draw (X)--(X1); \end{tikzpicture}\label{eq:identity}
 \end{align}
 
 The identity map preserves the name of a wire.
@@ -228,7 +228,7 @@ The identity map preserves the name of a wire.
 The copy map $\splitter{0.1}:X\to \Delta(\mathcal{X}\times \mathcal{X})$ maps a point $x$ to two identical copies of x:
 \begin{align}
  \splitter{0.1}: x\mapsto \delta_{(x,x)} \equiv \begin{tikzpicture}
- \path (0,0) node (X) {$X$} ++ (0.5,0) coordinate (copy0) ++ (0.5,0.25) node (X1) {$\RV{X}$} ++(0,-0.5) node (X2) {$\RV{X}$};\draw (X)--(copy0) to [bend left] (X1) (copy0) to [bend right] (X2);
+ \path (0,0) node (X) {$X$} ++ (0.5,0) coordinate (copy0) ++ (0.5,0.25) node (X1) {$X$} ++(0,-0.5) node (X2) {$X$};\draw (X)--(copy0) to [bend left] (X1) (copy0) to [bend right] (X2);
  \end{tikzpicture}\label{eq:copy}
  \end{align} 
 
@@ -238,10 +238,10 @@ The swap map $\sigma:X\times Y\to \Delta(\mathcal{Y}\otimes\mathcal{X})$ swaps i
 
 \begin{align}
 \sigma := (x,y)\to \delta_{(y,x)} \equiv \begin{tikzpicture}
-\path (0,0) node (X) {$\RV{X}$}
-+(1,0.3) node (X1) {$\RV{X}$}
-(0,0.3) node (Y) {$\RV{Y}$}
-+(1,-0.3) node (Y1) {$\RV{Y}$};
+\path (0,0) node (X) {$X$}
++(1,0.3) node (X1) {$X$}
+(0,0.3) node (Y) {$Y$}
++(1,-0.3) node (Y1) {$Y$};
 \draw (X)--(X1) (Y) -- (Y1);
 \end{tikzpicture}\label{eq:swap}
 \end{align}
@@ -250,33 +250,50 @@ The swap map preserves the names of visually connected wires.
 
 Apart from identity, copy and swap maps, we assign different names to the input and output wires of Markov kernels.
 
-The discard map $\stopper{0.2}:X\to \Delta(\{*\})$ maps every input to $\delta_{*}$ which is effectively mapping every input to 1
+The discard map $\stopper{0.2}:X\to \Delta(\{*\})$ maps every input to $\delta_{*}$. Note that the only non-empty event in $\{\emptyset,\{*\}\}$ must have probability 1.
 \begin{align}
 \stopper{0.2}: x\mapsto \delta_{*} \equiv \begin{tikzpicture}
- \draw[-{Rays [n=8]}] (0,0) node (X) {$\RV{X}$} (X) -- (1,0);
+ \draw[-{Rays [n=8]}] (0,0) node (X) {$X$} (X) -- (1,0);
 \end{tikzpicture}
 \end{align}
 
 We can associate a Markov kernel $F\to \Delta(\mathcal{X})$ with any measurable function $F\to X$. A useful property of functional kernels is that products with functional kernels induce push-forward measures.
 
 \begin{definition}[Function induced kernel]
-Given a measurable function $\RV{X}:F\to X$, define the function induced kernel $\mathbf{F}_{\RV{X}}:F\to \Delta(\mathcal{X})$ to be the the Markov kernel $a\mapsto \delta_{\RV{X}(a)}$ for all $a\in X$.
+Given a measurable function $g:F\to X$, define the function induced kernel $\mathbf{F}_{g}:F\to \Delta(\mathcal{X})$ to be the the Markov kernel $a\mapsto \delta_{g(a)}$ for all $a\in X$.
 \end{definition}
 
-\begin{lemma}[Pushforward measures and functional kernels]\label{lem:pushf_funk}
-Given a kernel space $\langle F,\mathcal{F},\mathbf{M}, G\rangle$ and a random variable $\RV{X}:F\to X$, for any prior $\mu\in \Delta(\mathcal{G})$ the pushforward $\RV{X}_\# \mu \mathbf{A} = \mu\mathbf{A} \mathbf{F}_{\RV{X}}$.
+\begin{definition}[Pushforward kernel]
+Given a kernel $\mathbf{M}:E\to \Delta(\mathcal{F})$ and a measurable function $g:F\to X$, the \emph{pushforward kernel} $g_\# \mathbf{M}:E\to \Delta(\mathcal{X})$ is the kernel such that $g_\# \mathbf{M} (a;B) = \mathbf{M}(a;g^{-1}(B))$.
+
+If $E$ is the indiscrete space $\{*\}$, then $\mathbf{M}$ can be identified with the probability measure $\mu:=\mathbf{M}_*$ and the pushforwark kernel $g_{\#}\mathbf{M}$ identified with the pushforward measure $g_{\#} \mu$, so pushforward kernels reduce to pushforward measures.
+\end{definition}
+
+\begin{lemma}[Pushforward kernels are functional kernel products]\label{lem:pushf_funk}
+Given a kernel $\mathbf{M}:E\to \Delta(\mathcal{F})$ and a measurable function $g:F\to X$,the pushforward $g_\# \mathbf{M} = \mathbf{M} \mathbf{F}_{g}$.
 \end{lemma}
 
+\begin{proof}
+\begin{align}
+	\mathbf{M}\mathbf{F}_g(a;B) &= \int_F \delta_{g(y)}(B) d\mathbf{M}_a(y)\\
+								&= \int_F \delta_{y}(g^{-1}(B)) d\mathbf{M}_a(y)\\
+								&= \int_{g^{-1}(B)} d\mathbf{M}_a(y)\\
+								&= g_{\#} \mathbf{M} (a;B)
+\end{align}
+\end{proof}
 
-Before introducing key rules of manipulation permitted by string diagrams, we will illustrate the correspondence between the three notations with a few simple examples. Given $\mu\in\Delta(X),\mathbf{A}:X\to \Delta(Y)$ and $A\in \mathcal{X}$, $B\in\mathcal{Y}$, the following correspondences hold, where we express the same object in elementary notation, product notation and string notation respectively:
+
+\subsubsection{Comparison of notations}
+
+We are in a position to compare the three introduced notations using a few examples. Given $\mu\in\Delta(X),\mathbf{A}:X\to \Delta(Y)$ and $A\in \mathcal{X}$, $B\in\mathcal{Y}$, the following correspondences hold, where we express the same object in elementary notation, product notation and string notation respectively:
 
 \begin{align}
 \nu:=A\times B\mapsto \int_A A(x;B)d\mu(x) \equiv \mu \splitter{0.1}(\textbf{Id}_X\otimes \mathbf{A}) \equiv  \begin{tikzpicture}
 \path (0,0) node[dist] (mu) {$\mu$}
 ++ (1,0) coordinate (copy0)
-+ (1.2,0.5) node (X) {$\RV{X}$}
++ (1.2,0.5) node (X) {$X$}
 ++ (0.5,-0.5) node[kernel] (A) {$\mathbf{A}$}
-++(0.7,0) node (Y) {$\RV{Y}$};
+++(0.7,0) node (Y) {$Y$};
 \draw (mu)--(copy0);
 \draw (copy0) to [bend left] (X);
 \draw (copy0) to [bend right] (A) (A) -- (Y);
@@ -290,13 +307,13 @@ Define the marginal $\nu_Y\in \Delta(\mathcal{Y}):B\mapsto \nu(X\times B)$ for $
   \nu_Y (B) &= \nu(X\times B) = \int_X A(x;B) d\mu(x)\label{eq:marginalisation_elem}\\
   \nu_Y &= \mu \mathbf{A} = \mu \splitter{0.1}(\textbf{Id}_X\otimes \mathbf{A})(\stopper{0.2}\otimes \textbf{Id}_Y)\label{eq:marginalisation_prod}\\
   \nu_Y &= \begin{tikzpicture}
-\path (0,0) node[dist] (mu) {$\mu$} ++ (1,0) node[kernel] (A) {$\mathbf{A}$} ++ (0.7,0) node (Y) {$\RV{Y}$}; \draw (mu) -- (A) -- (Y);
+\path (0,0) node[dist] (mu) {$\mu$} ++ (1,0) node[kernel] (A) {$\mathbf{A}$} ++ (0.7,0) node (Y) {$Y$}; \draw (mu) -- (A) -- (Y);
 \end{tikzpicture} = \begin{tikzpicture}
 \path (0,0) node[dist] (mu) {$\mu$}
 ++ (1,0) coordinate (copy0)
 + (1.2,0.5) node (X) {}
 ++ (0.5,-0.5) node[kernel] (A) {$\mathbf{A}$}
-++(0.7,0) node (Y) {$\RV{Y}$};
+++(0.7,0) node (Y) {$Y$};
 \draw (mu)--(copy0);
 \draw[-{Rays [n=8]}] (copy0) to [bend left] (X);
 \draw (copy0) to [bend right] (A) (A) -- (Y);
@@ -308,42 +325,89 @@ The elementary notation \ref{eq:marginalisation_elem} makes the relationship bet
 String diagrams often achieve a good balance between interpretational transparency, expressive power and symbol economy. Downsides of string diagrams are that they can be time consuming to typeset, and formal reasoning with them takes some practice.
 
 
-\subsubsection{Wire names}\label{par:random_variables}
+\subsubsection{Random Variables}\label{par:random_variables}
 
-We introduce \emph{wire names} in order to refer to particular wires in a collection of diagrams.
+The summary of this section is:
+\begin{itemize}
+\item We label wires with the names of random variables
+\item Diagrams with random variable labeled wires correspond to conditional/marginal distributions of those random variables in the obvious way
+\item We work with \emph{conditional probability spaces} which are like probability spaces except some random variables don't have marginal distributions
+\end{itemize}
 
-As a general motivating problem, consider the following two diagrams:
+Probability theory is primarily concerned with the behaviour of \emph{random variables}. This behaviour can be analysed via a collection of probability measures and Markov kernels representing joint, marginal and conditional distributions of random variables of interest. In the framework developed by Kolmogorov, this collection of joint, marginal and conditional distributions is modeled by a single underlying \emph{probability space}, and random variables by measurable functions on the probability space. 
+
+We use the same approach here, with a couple of additions. 
+
+\begin{enumerate}
+	\item First, we are interested in variables whose outcomes depend both on random processes and decisions. These variables are better modelled by a Markov kernels than probability measure - \emph{given} a particular decision, they inherit a particular probability distribution. Thus, variables in our work are modeled by an underlying Markov kernel rather than a probability measure; we call this a \emph{conditional probability space}
+	\item Secondly, we show how Markov kernel diagrams representing joint, marginal and conditional distributions within a conditional probability space can be identified by labels on the wires, analogously to the argument labels in $\mathbb{P}(\RV{X},\RV{Y})$ identifying the joint distribution of $\RV{X}$ and $\RV{Y}$ 
+\end{enumerate}
+
+With regard to the first point, \citet{hajek_what_2003} notes that there are many Markov kernels that cannot be uniquely specified by conditionals of probability measures. Thus, in general, conditional probability spaces cannot be identified with probability spaces. However, rather than dealing with the issues raised by this possibility, we limit ourselves to conditional probability spaces that can be identified with probability spaces.
+
+As a general motivation, suppose the following identity holding for some $\mu$, $\mathbf{K}$:
 
 \begin{align}
 \begin{tikzpicture}
-\path (0,0) node[dist] (M) {$\mu$}
-++ (0.7,0.15) node (X) {$\RV{X}$}
-++(0,-0.3) node (Y) {$\RV{Y}$};
-\draw ($(M.east) + (0,0.15)$) -- (X);
-\draw ($(M.east) + (0,-0.15)$) -- (Y);
-\end{tikzpicture}\qquad
-\begin{tikzpicture}
-\path (0,0) node[dist] (M) {$\mu$}
-++ (0.7,0.15) node[kernel] (A) {$\mathbf{A}$}
-++(0.7,0) node (Z) {$\RV{Z}$}
-++(0,-0.3) node (Y) {$\RV{Y}$};
-\draw ($(M.east) + (0,0.15)$) -- (A) -- (Z);
-\draw ($(M.east) + (0,-0.15)$) -- (Y);
-\end{tikzpicture}\label{eq:joint_distributions}
+\path (0,0) node[dist] (m) {$\mathbb{P}$}
+++ (0.7,0.15) node (E) {}
+++ (0,-0.3) node (F) {};
+\draw ($(m.east) + (0,0.15)$) -- (E);
+\draw ($(m.east) + (0,-0.15)$) -- (F);
+\end{tikzpicture} = \begin{tikzpicture}
+\path (0,0) node[dist] (m) {$\mathbb{P}$}
+++ (0.7,0.15) coordinate (copy0)
++(0,-0.3) node (Fs) {}
+++ (1.2,0) node (E) {}
+++(-0.7,-0.3) node[kernel] (K) {$\mathbf{K}$}
+++(0.7,0) node (F) {};
+\draw ($(m.east) + (0,0.15)$) -- (E);
+\draw (copy0) to [bend right] (K) (K) -- (F);
+\draw[-{Rays [n=8]}] ($(m.east) + (0,-0.15)$) -- (Fs);
+\end{tikzpicture}\label{eq:disint_example}
 \end{align}
 
-There is a clear graphical intuition in which the wire labeled $\RV{Y}$ represents the ``same thing'' in the left and the right diagram, and similarly, for arbitrary $\mathbf{A}$, $\RV{Z}$ usually does \emph{not} represent the ``same thing'' as $\RV{X}$. This intuition is supported by the fact that the marginal distribution on the wire labeled $\RV{Y}$ is the same in both diagrams while the wires $\RV{X}$ and $\RV{Z}$ will usually not have the same marginal distributions. Just as we can refer to a random variable without referring to a particular joint distribution, it would be handy to refer to the wire named $\RV{Y}$ without also referring to a specific diagram. 
+This implies, roughly, that $\mathbf{K}$ is the probability of the lower wire of $\mu$ conditional on the upper (it is a \emph{disintegration} of $\mu$, defined later). We will want to deal with conditional probabilities such as $\mathbf{K}$ regularly; presently, we need to explicitly introduce $\mathbf{K}$ in a diagram such as \ref{eq:disint_example} to define it as such. Doing this every time we want a conditional probability makes the text much longer, and introduces mental overhead to the reader. Instead, we will adopt a system whereby the wires of a distinguished probability measure (or general Markov kernel) have names:
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node[dist] (m) {$\mathbb{P}$}
+++ (0.7,0.15) node (E) {$\RV{X}$}
+++ (0,-0.3) node (F) {$\RV{Y}$};
+\draw ($(m.east) + (0,0.15)$) -- (E);
+\draw ($(m.east) + (0,-0.15)$) -- (F);
+\end{tikzpicture}
+\end{align}
+
+And then we adopt the convention that any kernel labelled as
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (X) {$\RV{X}$}
+++ (0.75,0) node[kernel] (E) {$\mathbb{P}_{\RV{Y}|\RV{X}}$}
+++ (0.75,0) node (F) {$\RV{Y}$};
+\draw (X) -- (E);
+\draw (E) -- (F);
+\end{tikzpicture}
+\end{align}
+
+satisfies Equation \ref{eq:disint_example} when substituted for $\mathbf{K}$.
 
 
 
 
+\begin{definition}[Probability space, conditional probability space]
+A \emph{probability space} $(\mathbb{P},\Omega,\mathcal{F})$ is a probability measure $\mathbb{P}$, which we call the \emph{ambient measure}, along with the \emph{sample space} $\Omega$ and the \emph{events} $\mathcal{F}$.
 
-\begin{definition}[Probability space]
-A probability space $(\mathbb{P},\Omega,\mathcal{F})$ is a probability measure $\mathbb{P}$, which we call the \emph{ambient measure}, along with the \emph{sample space} $\Omega$ and the \emph{events} $\mathcal{F}$.
+A \emph{conditional probability space} $(\mathscr{K},\Omega,\mathcal{F},D,\mathcal{D})$ is a Markov kernel $\mathscr{K}$, called the \emph{ambient kernel}, along with the sample space $\Omega$ and the \emph{input space} $D$.
 \end{definition}
 
+Note that we use the blackboard and script fonts to distinguish ambient measures and kernels. They are formally the same thing as ordinary probability measures and kernels, but it is useful to distinguish them to clarify the conventions we introduce in this section.
+
 \begin{definition}[Random variable]
-Given a sample space $\Omega$, a random variable $\RV{X}$ is a measurable function $\Omega\to A$ for arbitrary measurable $A$.
+Given a sample space $\Omega$ and an input space $D$, a random variable $\RV{X}$ is a measurable function $\Omega\times D\to E$ for arbitrary measurable $E$. If there is no decision space, it is simply a measurable function $\Omega\to X$.
+
+We call the random variable $\RV{D}:\Omega\times D\to D$ given by $(w,d)\mapsto d$ to be the \emph{global conditioning variable}. $\RV{D}$ does not have a marginal distribution on a nontrivial conditional probability space (i.e. we don't have $D$ isomorphic to the indiscrete set $\{*\}$).
 \end{definition}
 
 \begin{definition}[Coupled tensor product $\utimes$]
@@ -374,14 +438,261 @@ The operation denoted by $\utimes$ is associative (Lemma \ref{lem:utimes_assoc})
 For Markov kernels $\mathbf{L}$, $\mathbf{M}$ and $\mathbf{N}$ sharing a domain $E$, $(\mathbf{L}\utimes\mathbf{M})\utimes\mathbf{N}=\mathbf{L}\utimes(\mathbf{M}\utimes\mathbf{N})$.
 \end{lemma}
 
-\begin{definition}[Joint distribution]\label{def:joint_distribution}
-Given $\mathbb{P}\in \Delta(\mathcal{F})$, $\RV{X}:F\to G$ and $\RV{Y}:F\to H$, the \emph{joint distribution} $\mathbb{P}_{\RV{X}\RV{Y}}\in \Delta(\mathcal{G}\otimes\mathcal{H})$ of $\RV{X}$ and $\RV{Y}$ is the pushforward measure $\mathbb{P}\mathbf{F}_{\RV{X}\utimes\RV{Y}}$ by the random variable $\RV{X}\utimes\RV{Y}$.
+\begin{definition}[Marginal distribution, marginal kernel]\label{def:marginal_distribution}
+Given $\mathbb{P}\in \Delta(\mathcal{F})$, random variable $\RV{X}:\Omega\to G$ the \emph{marginal distribution} of $\RV{X}$ $\mathbb{P}_{\RV{X}}\in \Delta(\mathcal{G})$ of $\RV{X}$ is the product measure $\mathbb{P}\mathbf{F}_{\RV{X}}$.
 
-This is identical to the definition in, for example, \citet{cinlar_probability_2011} if we note that the random variable $(\RV{X},\RV{Y}):\omega\mapsto (\RV{X}(\omega),\RV{Y}(\omega))$ (\c{C}inlar's definition) is equivalent to $\RV{X}\utimes\RV{Y}$.
+See Lemma \ref{lem:pushf_funk} for the proof that this matches the usual definition of marginal distribution.
+
+Following this, given $\mathscr{K}:D\to \Delta(\mathcal{F})$ and random variable $\RV{X}:\Omega\to G$, the \emph{marginal kernel} is $\mathscr{K}\mathbf{F}_{\RV{X}}$.
 \end{definition}
 
+\begin{definition}[Joint distribution, joint kernel]\label{def:joint_distribution}
+Given $\mathbb{P}\in \Delta(\mathcal{F})$, $\RV{X}:\Omega\to G$ and $\RV{Y}:\Omega\to H$, the \emph{joint distribution} $\mathbb{P}_{\RV{X}\RV{Y}}\in \Delta(\mathcal{G}\otimes\mathcal{H})$ of $\RV{X}$ and $\RV{Y}$ is the marginal distribution of $\RV{X}\utimes\RV{Y}$.
+
+This is identical to the definition in, for example, \citet{cinlar_probability_2011} if we note that the random variable $(\RV{X},\RV{Y}):\omega\mapsto (\RV{X}(\omega),\RV{Y}(\omega))$ (\c{C}inlar's definition) is the same thing as $\RV{X}\utimes\RV{Y}$.
+
+Analogously, the joint kernel $\mathscr{K}_{\RV{Y}|\RV{X}}$ is the product $\mathscr{K}\mathbb{F}_{\RV{X}\utimes\RV{Y}}$.
+\end{definition}
+
+Joint distributions have a nice visual representation, as a result of Lemma \ref{lem:jdist_cprod} which follows.
+
+\begin{lemma}[Joint distributions and coupled products]\label{lem:jdist_cprod}
+Given $\RV{X}:\Omega\to G$ and $\RV{Y}:\Omega\to H$, $\mathbf{F}_{\RV{X}\utimes\RV{Y}}=\mathbf{F}_\RV{X}\utimes\mathbf{F}_\RV{Y}$
+\end{lemma}
+
+\begin{proof}
+For $a\in \Omega$, $B\in \mathcal{G}$, $C\in \mathcal{H}$,
+\begin{align}
+\mathbf{F}_{\RV{X}\utimes\RV{Y}} (a;B\times C) &= \delta_{\RV{X}(a),\RV{Y}(a)}(B\times C)\\
+									   &= \delta_{\RV{X}(a)}(B)\delta_{\RV{Y}(a)}(C)\\
+									   &= (\delta_{\RV{X}(a)}\otimes\delta_{\RV{Y}(a)})(B\times C)\\
+									   &= \mathbf{F}_{\RV{X}}\utimes\mathbf{F}_{\RV{Y}}
+\end{align}
+Equality follows from the monotone class theorem.
+\end{proof}
+
+Therefore the following holds:
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (O) {}
+++(0.7,0) node[kernel] (K) {$\mathscr{K}_{\RV{X}\RV{Y}}$}
+++ (0.7,0.15) node (X) {}
++(0,-0.3) node (Y) {};
+\draw (O) -- (K);
+\draw ($(K.east) + (0,0.15)$) -- (X);
+\draw ($(K.east) + (0,-0.15)$) -- (Y);
+\end{tikzpicture}=
+\begin{tikzpicture}
+\path (0,0) node (O) {}
+++ (0.7, 0) node[kernel] (K) {$\mathscr{K}$}
+++ (0.6,0) coordinate (copy0)
+++ (0.4,0.25) node[kernel] (X) {$\mathbf{F}_{\RV{X}}$}
++(0,-0.5) node[kernel] (Y) {$\mathbf{F}_{\RV{Y}}$}
+++(0.6,0) node (Xo) {}
++(0,-0.5) node (Yo) {};
+\draw (O) -- (K) -- (copy0);
+\draw (copy0) to [bend left] (X) (X) -- (Xo);
+\draw (copy0) to [bend right] (Y) (Y) -- (Yo);
+\end{tikzpicture}
+\end{align}
+
+
+We are now in a position to define wire labels for ``output'' wires.
+
+\begin{definition}[Wire labels - joint probabilities]\label{def:wl_jprob}
+Given a conditional probability space with ambient kernel $\mathscr{K}:D\to \Delta(\mathcal{F})$ (or a probability space with measure $\mathbb{P}$) and some collection of random variables $\RV{X}$, $\RV{Y}$, ... on $\Omega\times D$, any diagram representing a kernel $\mathbf{L}:D\to \Delta(\mathcal{E})$ with \emph{output} wires labeled $\RV{X}$, $\RV{Y}$,...  represents the corresponding marginal of $\mathscr{K}$ (we assume that the space $E$ factorises appropriately). For example
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (A) {}
+++ (0.7,0) node[kernel] (m) {$\mathbf{L}$}
+++ (0.7,0.15) node (E) {$\RV{X}$}
+++ (0,-0.3) node (F) {$\RV{Y}$};
+\draw (A) -- (m) ($(m.east) + (0,0.15)$) -- (E);
+\draw ($(m.east) + (0,-0.15)$) -- (F);
+\end{tikzpicture}
+\end{align}
+
+asserts that $\mathbf{L}= \mathbf{K}_{\RV{X}\RV{Y}}$, the joint kernel of $\RV{X}$ and $\RV{Y}$.
+
+If we have an ambient measure $\mathbb{P}$, then $D=\{*\}$ and the diagram
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node[dist] (m) {$\mu$}
+++ (0.7,0.15) node (E) {$\RV{X}$}
+++ (0,-0.3) node (F) {$\RV{Y}$};
+\draw ($(m.east) + (0,0.15)$) -- (E);
+\draw ($(m.east) + (0,-0.15)$) -- (F);
+\end{tikzpicture}
+\end{align}
+
+asserts that $\mu = \mathbb{P}_{\RV{X}\RV{Y}}$.
+
+\end{definition}
+
+
+\begin{definition}[Disintegration]\label{def:disintegration}
+Given a probability space $(\mathbb{P},\Omega,\mathcal{F})$, random variables $\RV{X}$ and $\RV{Y}$ and joint probability measure $\mu:=\mathbb{P}_{\RV{X}\RV{Y}}\in \Delta(\mathcal{E}\otimes\mathcal{F})$, we say that $\mathbf{M}:E\to \Delta(\mathcal{F})$ is a disintegration of $\mu$ if
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node[dist] (m) {$\mu$}
+++ (0.7,0.15) node (E) {$\RV{X}$}
+++ (0,-0.3) node (F) {$\RV{Y}$};
+\draw ($(m.east) + (0,0.15)$) -- (E);
+\draw ($(m.east) + (0,-0.15)$) -- (F);
+\end{tikzpicture} = \begin{tikzpicture}
+\path (0,0) node[dist] (m) {$\mu$}
+++ (0.7,0.15) coordinate (copy0)
++(0.2,-0.3) node (T) {}
+++ (1.2,0) node (E) {$\RV{X}$}
+++(-0.7,-0.3) node[kernel] (K) {$\mathbf{M}$}
+++(0.7,0) node (F) {$\RV{Y}$};
+\draw ($(m.east) + (0,0.15)$) -- (E);
+\draw (copy0) to [bend right] (K) (K) -- (F);
+\draw[-{Rays [n=8]}] ($(m.east) + (0,-0.15)$) -- (T);
+\end{tikzpicture}
+\end{align}
+Notationally, $\mathbf{N}$ is a version of $\mathbb{P}_{\RV{Y}|\RV{X}}$, ``the probability of $\RV{Y}$ given $\RV{X}$'', or $\mathbf{M}\in \mathbb{P}_{\RV{Y}|\RV{X}}$.
+
+Given a conditional probability space $(\mathscr{K},\Omega,D)$, random variables $\RV{X}$ and $\RV{Y}$ and kernel $\mathscr{K}_{\RV{X},\RV{Y}}=:\mathbf{L}:D\to \Delta(\mathcal{E}\otimes\mathcal{F})$, we say that $\mathbf{M}:E\to \Delta(\mathcal{F})$ is a disintegration of $\mathbf{L}$ if
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (O) {}
+++ (0.7,0) node[kernel] (m) {$\mathbf{L}$}
+++ (0.7,0.15) node (E) {$\RV{X}$}
+++ (0,-0.3) node (F) {$\RV{Y}$};
+\draw (O) -- (m) ($(m.east) + (0,0.15)$) -- (E);
+\draw ($(m.east) + (0,-0.15)$) -- (F);
+\end{tikzpicture} = \begin{tikzpicture}
+\path (0,0) node (O) {}
+++ (0.7,0) node[kernel] (m) {$\mathbf{L}$}
+++ (0.7,0.15) coordinate (copy0)
++(0.2,-0.3) node (T) {}
+++ (1.2,0) node (E) {$\RV{X}$}
+++(-0.7,-0.3) node[kernel] (K) {$\mathbf{M}$}
+++(0.7,0) node (F) {$\RV{Y}$};
+\draw (O) -- (m) ($(m.east) + (0,0.15)$) -- (E);
+\draw (copy0) to [bend right] (K) (K) -- (F);
+\draw[-{Rays [n=8]}] ($(m.east) + (0,-0.15)$) -- (T);
+\end{tikzpicture}
+\end{align}
+
+Similarly, we say $\mathbf{M}\in \mathscr{K}_{\RV{Y}|\RV{X}}$. Note that unlike disintegrations of probability measures, we can't assume that disintegrations of kernels exist.
+
+\end{definition}
+
+\begin{definition}[Wire labels - disintegrations]
+Given a conditional probability space with ambient kernel $\mathscr{K}:D\to \Delta(\mathcal{F})$ (or a probability space with measure $\mathbb{P}$), define $\mathscr{K}^*$ to be the kernel
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (O) {}
+++(0.5,0) coordinate (copy0)
+++ (0.5,0) node[kernel] (m) {$\mathscr{K}$}
+++ (0.7,0.15) node (E) {}
+++ (0,-0.3) node (F) {}
+++(0,-0.3) node (G) {};
+\draw (O) -- (m) ($(m.east) + (0,0.15)$) -- (E);
+\draw ($(m.east) + (0,-0.15)$) -- (F);
+\draw (copy0) to [bend right] (G);
+\end{tikzpicture}
+\end{align}
+
+Note that $\mathbb{P}^*$ is simply $\mathbb{P}$ for a probability space
+
+Recall that $\RV{D}$ is the global conditioning variable. Given two collections of random variables $c_1 = [\RV{X}_1,\RV{X}_2,...]$ and $c_2 = [\RV{Y}_1,\RV{Y}_2]$, we adopt the convention that any diagram with the input wires labeled with $c_1$ and the output wires labeled with $c_2$ is an element of $\mathscr{K}^*_{\RV{Y_1Y_2...}|\RV{X}_1\RV{X}_2...}$. 
+
+That is, by this convention, the diagram
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (O) {$\RV{X}$}
+++(0,-0.3) node (D) {$\RV{D}$}
+++ (0.7,0.15) node[kernel] (m) {$\mathbf{M}$}
+++ (0.7,0) node (E) {$\RV{Y}$};
+\draw (O) -- ($(m.west)+(0,0.15)$) (m) -- (E);
+\draw (D) -- ($(m.west)+(0,-0.15)$);
+\end{tikzpicture}
+\end{align}
+
+implies that $\mathbf{M}\in\mathscr{K}_{\RV{Y}|\RV{X}\RV{D}}$. Note further that by Theorem \ref{th:disintegration_exist_ker}, we can rely on the existence of disintegrations such as $\mathbf{M}$ that are conditional on the global conditioning variable $\RV{D}$ provided we have countable $D$ and standard measurable $(Y,\mathcal{Y})$.
+
+On the other hand, we can't in general rely on the existence of 
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (O) {$\RV{X}$}
+++ (0.7,0) node[kernel] (m) {$\mathbf{N}$}
+++ (0.7,0) node (E) {$\RV{Y}$};
+\draw (O) -- (m) -- (E);
+\end{tikzpicture}
+\end{align}
+
+\end{definition}
+
+\begin{theorem}[Disintegration existence - probability space]\label{th:disintegration_exist}
+Given a probability measure $\mu\in \Delta(\mathcal{E}\otimes \mathcal{F})$, if $(F,\mathcal{F})$ is standard then a disintegration $\mathbf{K}:E\to \Delta(\mathcal{F})$ exists \citep{cinlar_probability_2011}.
+\end{theorem}
+
+Disintegrations of general Markov kernels, in contrast, usually \emph{do not} exist. Take $\mathbf{L}:\{0,1\}\to \Delta(\{0,1\}^2)$ where $\mathbf{L}(1;[x,y])=\delta_y(x)$ and $\mathbf{L}(0;[x,y])=\delta_{(1-y)}(x)$. Clearly there is no disintegration of $\mathbf{L}$. We can guarantee their existence under a number of strong assumptions (probably stronger than necessary).
+
+\begin{theorem}[Disintegration existence - conditional probability space]\label{th:disintegration_exist_ker}
+Given a kernel $\mathbf{L}:D\to \Delta(\mathcal{E}\otimes\mathcal{F})$, define $\mathbf{L}^*$:
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (O) {}
+++(0.5,0) coordinate (copy0)
+++ (0.5,0) node[kernel] (m) {$\mathbf{L}$}
+++ (0.7,0.15) node (E) {}
+++ (0,-0.3) node (F) {}
+++(0,-0.3) node (G) {};
+\draw (O) -- (m) ($(m.east) + (0,0.15)$) -- (E);
+\draw ($(m.east) + (0,-0.15)$) -- (F);
+\draw (copy0) to [bend right] (G);
+\end{tikzpicture}
+\end{align}
+
+If $D$ is countable and $(F,\mathcal{F})$ is standard, then there is a disintegration $\mathbf{M}:D\times E\to \Delta(\mathcal{F})$ of $\mathbf{L}^*$.
+\end{theorem}
+
+\begin{proof}
+By Theorem \ref{th:disintegration_exist}, for each $d\in D$ we have a disintegration $\mathbf{K}^{(d)}:E\to \Delta(\mathcal{F})$ of $\mathbf{L}_d$. Define $\mathbf{M}:D\times E\to \Delta(\mathcal{F})$ by $\mathbf{M} (d,e;A) = \mathbf{K}^{(d)} (e;A)$ for $d\in D$, $e\in E$, $A\in\mathcal{F}$. Clearly $\mathbf{M}_{(d,e)}$ is a probability measure. Furthermore, for $B\in \mathcal{B}(\mathbb{R})$, $\mathbf{M}^{-1}(\cdot;A)(B) = \cup_{d\in D} \{d\}\times \mathbf{K}^{(d)-1}(\cdot;A)(B)$, which is a countable union of measurable sets and therefore measurable. 
+\end{proof}
+
+In general, we can only be confident that a disintegration of a Markov kernel exists if said disintegration is conditioned on the input to the original kernel. Nonetheless, it is helpful to have a notion of more general disintegrations - we might, for example, want to define a conditional probability space such that certain other disintegrations do in fact exist.
+
+With these definitions in place, we can move on to our definition of wire labels.
+
+
+
+
+
+\begin{definition}[Implicit conditional probability space]
+
+\end{definition}
+
+\begin{definition}[Labeled disintegration]\label{def:labeled_disint}
+Given a probability measure $\mu$ with labels $\RV{X}$ and $\RV{Y}$, we say that $\mathbf{K}$ is a version of the conditional probability of $\RV{Y}$ given $\RV{X}$ if
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node[dist] (m) {$\mu$}
+++ (0.7,0.15) node (E) {$\RV{X}$}
+++ (0,-0.3) node (F) {$\RV{Y}$};
+\draw ($(m.east) + (0,0.15)$) -- (E);
+\draw ($(m.east) + (0,-0.15)$) -- (F);
+\end{tikzpicture} = \begin{tikzpicture}
+\path (0,0) node[dist] (m) {$\mu$}
+++ (0.7,0.15) coordinate (copy0)
+++ (1.2,0) node (E) {$\RV{X}$}
+++(-0.7,-0.3) node[kernel] (K) {$\mathbf{K}$}
+++(0.7,0) node (F) {$\RV{Y}$};
+\draw ($(m.east) + (0,0.15)$) -- (E);
+\draw (copy0) to [bend right] (K) (K) -- (F);
+\end{tikzpicture}
+\end{align}
+
 \begin{definition}[Wire names]\label{def:wire_names_as_RVs}
-Given a probability space $(\mathbb{P},\Omega,\mathcal{F})$ and an ordered collection of $n$ random variables $A=[\RV{X}_1,...,\RV{X}_n]$ taking values in $X_1,...,X_n$ respectively, and some $\nu\in \Delta(\otimes_{i\in[n]} \RV{X}_i)$, a diagram of $\nu$ with $n$ output wires can accept the names $[\RV{X}_0,...,\RV{X}_n]$ iff $\nu = \mathbb{P}_{\RV{X}_1,...,\RV{X}_n}$. 
+Given a conditional probability space $(\mathscr{K},\Omega,\mathcal{F},D,\mathcal{D})$ and an ordered collection of $n$ random variables $A=[\RV{X}_1,...,\RV{X}_n]$ taking values in $E_1,...,E_n$ respectively, and some $\nu\in \Delta(\otimes_{i\in[n]} \RV{X}_i)$, we define the following as shorthand for the diagram representing a diagram of $\nu$ with $n$ output wires can accept the names $[\RV{X}_0,...,\RV{X}_n]$ iff $\nu = \mathbb{P}_{\RV{X}_1,...,\RV{X}_n}$. 
 \end{definition}
 
 That is, the two measures recommended by the diagrams in \ref{eq:joint_distributions} are equal to the joint distributions $\mathbb{P}_{\RV{X}\RV{Y}}$ and $\mathbb{P}_{\RV{Z}\RV{Y}}$ on some probability space $(\mathbb{P},\Omega,\mathcal{F})$.
@@ -442,46 +753,8 @@ Suppose we have a probability space $(\mathbb{P},\Omega,\mathcal{F})$ and write 
 
 Definition \ref{def:wire_names_as_RVs} provides a means of understanding \emph{outgoing} wire labels as random variables in some ambient probability space. We also need some means for understanding \emph{incoming} wire labels. Again following existing practice, if a markov kernel $\mathbf{K}$ represents the conditional distribution of $\RV{Y}$ givien $\RV{X}$ (relative to some ambient probability measure), then the input wire of $\mathbf{K}$ may be labeled with $\RV{X}$.
 
-\begin{definition}[Disintegration]\label{def:disintegration}
-Given a probability measure $\mu$, we say that $\mathbf{K}$ is a disintegration of $\mu$ if
-\begin{align}
-\begin{tikzpicture}
-\path (0,0) node[dist] (m) {$\mu$}
-++ (0.7,0.15) node (E) {}
-++ (0,-0.3) node (F) {};
-\draw ($(m.east) + (0,0.15)$) -- (E);
-\draw ($(m.east) + (0,-0.15)$) -- (F);
-\end{tikzpicture} = \begin{tikzpicture}
-\path (0,0) node[dist] (m) {$\mu$}
-++ (0.7,0.15) coordinate (copy0)
-++ (1.2,0) node (E) {}
-++(-0.7,-0.3) node[kernel] (K) {$\mathbf{K}$}
-++(0.7,0) node (F) {};
-\draw ($(m.east) + (0,0.15)$) -- (E);
-\draw (copy0) to [bend right] (K) (K) -- (F);
-\end{tikzpicture}
-\end{align}
-\end{definition}
 
-\begin{definition}[Labeled disintegration]\label{def:labeled_disint}
-Given a probability measure $\mu$ with labels $\RV{X}$ and $\RV{Y}$ with respect to an ambient probability space $(\mathbb{P},\Omega,\mathcal{F})$, we say that $\mathbf{K}$ is a version of the conditional probability of $\RV{Y}$ given $\RV{X}$ if
-\begin{align}
-\begin{tikzpicture}
-\path (0,0) node[dist] (m) {$\mu$}
-++ (0.7,0.15) node (E) {$\RV{X}$}
-++ (0,-0.3) node (F) {$\RV{Y}$};
-\draw ($(m.east) + (0,0.15)$) -- (E);
-\draw ($(m.east) + (0,-0.15)$) -- (F);
-\end{tikzpicture} = \begin{tikzpicture}
-\path (0,0) node[dist] (m) {$\mu$}
-++ (0.7,0.15) coordinate (copy0)
-++ (1.2,0) node (E) {$\RV{X}$}
-++(-0.7,-0.3) node[kernel] (K) {$\mathbf{K}$}
-++(0.7,0) node (F) {$\RV{Y}$};
-\draw ($(m.east) + (0,0.15)$) -- (E);
-\draw (copy0) to [bend right] (K) (K) -- (F);
-\end{tikzpicture}
-\end{align}
+
 
 Furthermore, if and only if $\mathbf{K}$ is a version of the conditional probability of $\RV{Y}$ given $\RV{X}$ then we may write $\mathbf{K}$ with the ``input'' label
 
