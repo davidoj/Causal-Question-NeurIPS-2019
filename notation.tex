@@ -1,0 +1,15 @@
+
+\section{Notation}
+
+Proposed notation:
+
+\begin{itemize}
+	\item Script $\mathscr{C}$, $\mathscr{H}$ for kernels underwriting (conditional) probability spaces (alternative: blackboard?)
+	\begin{itemize}
+	 	\item Also, conditional probability space is technically underwritten by $\mathscr{T}$, but will talk about $\mathscr{H}:= \mathscr{T}_{\RV{X}|\RV{D}}$ and $\mathscr{C}:=\mathscr{T}_{\RV{Y}|\RV{D}}$ as if they are ambient measures to reduce indices
+	\end{itemize}
+	\item Arbitrary Markov kernel that in the set of appropriate conditional distributions, ambient kernel $\mathscr{T}$: $\mathscr{T}_{\RV{X}|\RV{Y}\RV{D}}$ (always include universal conditioning variable)
+	\item $\mathscr{T}_{\RV{X}|\RV{Y}\RV{D}}$ evaluated at $\RV{Y}=a$, $\RV{D}=b$: $\mathscr{T}_{\RV{X}|\RV{Y}\RV{D}}^{(a,b)}$
+	\item Can take productes of conditionals, usual kernel product rule: $\mathscr{T}_{\RV{X}\RV{D}|\RV{Y}\RV{D}}\mathscr{T}_{\RV{Z}|\RV{X}\RV{D}}$
+	\item What CBN people write as $P(\RV{X}|do(\RV{Y}=a))$ could be written $P^a_{\RV{X}|do(\RV{Y})}$
+\end{itemize}
