@@ -4,6 +4,7 @@
 
 We use three notations for working with probability theory. The ``elementary'' notation makes use of regular symbolic conventions (functions, products, sums, integrals, unions etc.) along with the expectation operator $\mathbb{E}$. This is the most flexible notation which comes at the cost of being verbose and difficult to read. Secondly, we use a semi-formal string diagram notation extending the formal diagram notation for symmetric monoidal categories \cite{selinger_survey_2010}. Objects in this diagram refer to stochastic maps, and by interpreting diagrams as symbols we can, in theory, be just as flexible as the purely symbolic approach. However, we avoid complex mixtures of symbols and diagrams elements, and fall back to symbolic representations if it is called for. Finally, we use a matrix-vector product convention that isn't particularly expressive but can compactly express some common operations.
 
+
 \subsection{Standard Symbols}
 
 \begin{center}
@@ -210,7 +211,6 @@ Because a product space can be represented by parallel wires, a kernel $\mathbf{
 \end{tikzpicture}
 \end{align}
 
-
 \paragraph{Markov kernels with special notation}
 
 A number of Markov kernels are given special notation distinct from the generic ``box'' representation above. These special representations facilitate intuitive graphical interpretations.
@@ -387,6 +387,8 @@ And then we adopt the convention that any kernel labelled as
 \end{align}
 
 satisfies Equation \ref{eq:disint_example} when substituted for $\mathbf{K}$. These names stand for random variables on an appropriately defined \emph{conditional probability space}.
+
+Probability spaces are a standard object in probability theory. In probabilistic analysis, we are interested in some aspects of the behaviour of some set of \emph{random variables}. To analyse these, 
 
 \begin{definition}[Probability space, conditional probability space]
 A \emph{probability space} $(\mathbb{P},\Omega,\mathcal{F})$ is a probability measure $\mathbb{P}$, which we call the \emph{ambient measure}, along with the \emph{sample space} $\Omega$ and the \emph{events} $\mathcal{F}$.
@@ -1224,6 +1226,10 @@ A \emph{deterministic} Markov kernel $\mathbf{A}:E\to \Delta(\mathcal{F})$ is a 
 \begin{theorem}[Copy map commutes for deterministic kernels \citep{fong_causal_2013}]
 Equation \ref{eq:copy_commutes} holds iff $\mathbf{A}$ is deterministic.
 \end{theorem}
+
+
+% ***************************************************************************************************
+
 
 % \subsubsection{Alternative approach}
 

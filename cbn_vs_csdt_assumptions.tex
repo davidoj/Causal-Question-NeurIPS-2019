@@ -187,7 +187,7 @@ This account is entirely harmonious with our work on causal theories - if conseq
 Many more outlandish actions are also possible that will not allow the consequence map to factorise as desired. The fact that for some sets of decisions it does factorise (or does so approximately) is certainly helpful, but it is not a justification for a blanket assumption that such factorisations can always be found. Whether or not we can conclude that the switch controls the lightbulb (i.e. the difference between $|D|=2$ and $|D|>=3$) depends precisely on this distinction - when $|D|=2$, we can conclude that $\mathscr{C}_{\RV{L}_c|\RV{D}} = \mathscr{C}_{\RV{L}_c|\RV{S}_c}\mathscr{C}_{\RV{S}_c|\RV{D}}$ because the state of the switch tells us all there is to know about $\RV{D}$, while if $|D|>=3$ we cannot conclude this as the state of the switch does not tell us all there is to know about $\RV{D}$.
 
 
-\subsubsections{Aliased decisions and identification}
+\subsubsection{Aliased decisions and identification}
 
 We usually don't want to deal with the full complexity of the decision set $D$, which in realistic situations is often unmanageably large - in our example of the switch and the light, we could come up with an essentially infinite list of possible actions, some of which turn the switch on, some of which don't and some of which we don't know if they will turn the switch on or not. One way of dealing with this complexity is if we can \emph{alias} the set of decisions - if we can show that any two decisions sharing some minimal set of properties have consequences that we don't care to distinguish, then we can proceed as if possible values of this minimal set of properties is our entire set of actions.
 
@@ -220,7 +220,7 @@ Take some $d\in D$, and let $A\in D'$ be such that for all $d'\in A$, $\theta\in
 
 
 \begin{theorem}[Partial consequence aliased decisions and conditional independence]\label{th:aliased_decisions}
- 
+ For arbitrary $\RV{X}$, define $\mathbf{M}:=\mathscr{T}_{\RV{X}|\RV{D}\RV{F}}$
 \end{theorem}
 
 \begin{theorem}[Identification with aliased decisions]\label{th:aliased_identification}

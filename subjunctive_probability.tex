@@ -1,0 +1,34 @@
+
+%!TEX root = main.tex
+
+\todo[inline]{I have too many adjectives here. I think I should either go with \emph{consequence maps} and \emph{stochastic consequence spaces} or \emph{subjunctive probabilities} and \emph{subjunctive probability spaces}. The latter is more precise, but also harder to parse before you read the definition.}
+
+\section{Probability spaces and subjunctive probability spaces}
+
+For our causal analysis we work with \emph{subjunctive probability spaces}, a generalisation of the more familiar probability spaces. The subjunctive mood is used to describe hypothetical or supposed states of the world\todo{Does this definition need to be here? I didn't know what this word meant before I looked it up}, and subjunctive probability spaces are models that ask for some hypothetical state and give us back a probability space. Subjunctive probability spaces are also different to \emph{conditional probability spaces} \citet{renyi_conditional_1956} as \emph{hypothesising} or \emph{supposing} (that is, those things described by the subjunctive mood) are different to \emph{conditioning}, which is more closely analogous to \emph{focussing your attention}.
+
+We use subjunctive probability spaces because \emph{supposition} is a core part of decision problems, one we cannot get away from. In contrast, modelling supposition with conditional probability (which would be necessary if we were to insist on using probability spaces) adds additional structure to our models which isn't clearly warranted and is potentially confusing.
+
+Any decision problem must involve the comparison of different decisions. This comparison takes the form
+\begin{itemize}
+	\item \emph{Suppose} I choose the first decision - then the consequence would be $X$
+	\item \emph{Suppose} I choose the second decision - then the consequence would be $Y$
+	\item Etc.
+\end{itemize}
+
+If we prefer $X$ to $Y$, then perhaps we should choose the first decision. We may be ambivalent as to what type of thing $X$ and $Y$ represent, how we ought to determine what values $X$ and $Y$ take or how we ought to determine what is preferable, but it is hard to do away with supposing that different decisions were taken and that these decisions come with their own consequences and still have what could reasonably be considered a decision problem. This process of supposition implicitly invokes a ``subjunctive function'' - we provide a hypothetical decision, and we are given a consequence of that hypothetical. Of particular interest are models that, for each hypothetical choice, return a probability distribution over space $\Omega$. Such models are called \emph{supposition functions} by \citet{joyce_why_2000}, but we will call them \emph{consequence maps} in this work. We consider this particular type of subjunctive function - from possible decisions to probability distributions - to be attractive because we consider probability to be a sound choice for modelling uncertainty and stochasticity.
+
+Formally, a consequence map $\mathscr{C}$ is a stochastic function or \emph{Markov kernel} from $D\to \Delta(\Omega)$, where $\Delta(\Omega)$ represents the set of all probability distributions on $\Omega$. One might recall that, given two random variables $\RV{Y}:\Omega\to Y$ and $\RV{X}:\Omega \to X$ on some probability space $(\mathbb{P},\Omega,\mathcal{F})$, the probability of $\RV{Y}$ conditional on $\RV{X}$ is a Markov kernel $X\to \Delta(\mathcal{Y})$. It is possible, in general, to define a probability distribution on the expanded space $\Omega\times D$ such that $\mathscr{C}$ is a conditional probability. However, there are good reasons to keep the concepts of consequence maps and conditional probability separate. Firstly, there are technical issues such as the fact that it is not always possible to find a distribution on $\Omega\times D$ that yields $\mathscr{C}$ as a \emph{unique} conditional probability \citep{hajek_what_2003} (though this requires an uncountable set of possible decisions, which is not a problem we consider in this work). Secondly, it is not clear that that the way we ought to handle consequence maps is identical to the way we handle conditional probabilities. Consider an expanded set of options:
+
+\begin{enumerate}
+	\item Suppose I choose the first decision $d_1$ - then the consequence would be $P_1$
+	\item Suppose I choose the second decision $d_2$ - then the consequence would be $P_2$
+	\item Suppose I choose either the first or second decision $d_1$ or $d_2$ - then the consequence would be ???
+	\item Suppose I choose $d_1$ with probability $0\leq q\leq 1$ and $d_2$ otherwise - then the consequence would be ???
+\end{enumerate}
+
+If we regard the consequence map as a conditional probability then it would be natural to consider the result of the third option to be a unique probability distribution obtained by conditioning on $\{d_1,d_2\}$, equal to  $\alpha P_1 + (1-\alpha)P_2$ for some fixed $0\leq \alpha\leq 1$. However, there is no obvious reason that these should be mixed in some fixed proportion $\alpha$ - it seems more appropriate to me to say that if $d_1$ or $d_2$ is chosen then the result will be $P_1$ or $P_2$.
+
+On the other hand, the result of the fourth option seems like it should be given by $q P_1 + (1-q) P_2$, at least for most ordinary problems. If we were confronted with a mind reader who could tell the difference between us having chosen $d_1$ and us having randomised between $d_1$ and $d_2$ but come up with $d_1$ anyway then we might have reason to revise this assumption, but we will generally proceed under the assumption that such mind readers are absent. For any ambient probability measure, we can choose $q$ not to be equal to $\alpha$ (as defined in the previous paragraph), and so the result will not be equal to the ambient measure conditioned on $\{d_1,d_2\}$. 
+
+In general, choosing the consequence map to be a conditional probability requires there to exist some joint distribution over the decision $\RV{D}$ and all other random variables in the problem. However, when we adopt hypotheses about what decisions we might make, we throw away key parts of this joint distribution (for example, we throw away the marginal distribution of $\RV{D}$) and replace it with whatever we want to suppose instead. Instead of adopting a full joint distribution and then throwing away some parts to get hold of the consequence map, as we would if we were working with a probability space, a subjunctive probability space only supplies those parts which we intend to keep - i.e. in only supplies the consequence map.
