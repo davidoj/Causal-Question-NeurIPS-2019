@@ -21,18 +21,64 @@ So far we have not made any structural assumptions about the set $D$. One such a
 \begin{align}
 	f_a(d_{(\alpha,1,2)}) = \alpha f_a(d_1) + (1-\alpha) f_a(d_2) \label{eq:convexity_or_something}
 \end{align}
-This need not be true of all expected utility maximising decision makers - for example, suppose our decision maker is faced with a mind reader that can perceive whether she decided on $d_1$ or decided on $d_{(\alpha,1,2)}$ and subsequently obtained $d_1$ after performing a randomisation step, and this mind reader is for whatever reason inclined to respond differently in each case. Then our decision maker would not be able to assume Equation \ref{eq:convexity_or_something} holds. However, we will proceed on the assumption that mind readers are absent and that choosing $d_1$ is the same as chooosing to randomise and then obtaining $d_1$.
-
-\todo[inline]{Actually, I'm not completely sure why this assumption is needed, but it seems important.}
 
 To strengthen this notion, suppose $(D,\mathcal{D})$ is measurable. Recall that for all $d\in D$, $f_a(d)$ is a probability measure on $E$. For $G\in \mathcal{E}$, write $f_a(d;G)$ for the probability measure $f_a(d)$ evaluated at $G$, and $f_a(\cdot;G)$ for the map $d\mapsto f_a(d;G)$. Then we will call a result map $f$ regular if for all $a\in A$, $G\in \mathcal{E}$ and all $\gamma\in \Delta(\mathcal{D})$ $f_a$, $f_a(\cdot;G)$ is measurable and there exists some $d_\gamma$ such that
 \begin{align}
-	f_a(d_\gamma;G) = \int_D f_a(d';G) d\gamma(d')
+	f_a(d_\gamma;G) = \int_D f_a(d';G) d\gamma(d') \label{eq:strong_convexit_or_something}
 \end{align}
 
-\todo[inline]{I want to introduce a vector space structure on $D$, then show $D$ is closed convex and hence it is isomorphic to the set of probability measures on some $D'$ constructed from the extreme points of $D$.}
+We can define $f'_a:\Delta(\mathcal{D})\to \Delta(\mathcal{E})$ by $f^*_a(\gamma;G) = f_a(d_\gamma;G)$. Note that for every $d\in D$ we have $\delta_d\in \Delta(\mathcal{D})$ such that $f_a(d;G) = f^*_a(\delta_d;G)$. Thus we can model the problem as one of selection of a probability measure from $\Delta(\mathcal{D})$ instead of a decision from $d$, and probability measures are related to consequences by the map $f'$. The actual decision chosen can be found by the map $h:\gamma\mapsto d_\gamma$.
 
-Note that by the assumption of measurability, we have that $f_a$ is a Markov kernel for all $a\in A$.
+Note that by the assumption of measurability, we have that $f_a$ is a Markov kernel for all $a\in A$. If our basic decision set $D$ is a polish space (a separable, completely metrizable topological space) and it's Borel sets form the $\sigma$-algebra $\mathcal{D}$, then the set $\Delta(\mathcal{D})$ is convex closed and can therefore be described as the closure of the convex hull of its extreme points. Denote by $D'$ the extreme points of $\Delta(\mathcal{D})$, and suppose $D'$ is countable. Then $\Delta(\mathcal{D}')$ is equivalent to $\Delta(\mathcal{D})$. Under these assumptions, which we will hold to, we can describe the set of decisions as the set of probability distributions over an underlying discrete set $D'$. Furthermore, for an element $d\in D'$, we can define $f':A\times D\to \Delta(\mathcal{E})$ such that
+
+\begin{align}
+	f'_a(d;G) = f_a(d';G)
+\end{align}
+
+Then for all $\gamma\in \Delta(\mathcal{D}')$ we have
+
+\begin{align}
+	f_a(d_\gamma;G) = \int_D f'_a(d';G) d\gamma(d') \label{eq:basic_decisions}
+\end{align}
+
+\todo[inline]{I don't know that $D'$ has to be countable, the assumption that $D$ is standard Borel and hence $D'$ exists may be enough. I also don't really understand what the assumption of standard Borelness means, only that it can be satisfied by letting the set of decisions be the set of probability distributions over a countable set}
+
+
+As we are chiefly interested in the set of elementary decisions $D'$, we will henceforth simply use $(D,\mathcal{D})$ for this set. Similarly, we will simply use $f$ to refer to the map given by $f'$ in Equation \ref{eq:basic_decisions}. Note that at this point $f_a$ is a Markov kernel $D\to \Delta(\mathcal{E})$, hence we can use product notation.
+
+Assumption \ref{eq:strong_convexit_or_something} still permits some unexpected behaviour with respect to randomised decisions. Consider the following variations of a problem:
+
+\begin{example}[Fighting children problem]
+A decision maker is mediating a dispute over a toy between two children. If he chooses to give the toy to the first child, the second child will cry, and if he chooses to give the toy to the second child, the first child will cry (the underlying decision set $D'=\{\text{give to first child}, \text{give to second child}\}$. If he chooses a random procedure:
+
+\paragraph{Version 1} These children strongly object to randomness, and both will cry no matter the outcome
+\paragraph{Version 2} These are children with a strong insistence on a version of procedural fairness which no doubt make a great deal of sense to them. In particular, if a procedure is used which gives the first child a chance $p$ of receiving the toy, the first child will cry with probability $p$ irrespective of the outcome. The second child, meanwhile, will cry iff the first child does not
+\paragraph{Version 3} Whether or not the children cry depends only on whether or not they receive the toy
+\end{example}
+
+In version 1, assumption \ref{eq:strong_convexit_or_something} is violated - the outcome when choosing a random procedure is not simply a mixture of the outcomes of each deterministic decision. In version 3, assumption \ref{eq:strong_convexit_or_something} holds, and the results depend only on the outcome of randomisation, as is desired. In version 2, assumption \ref{eq:strong_convexit_or_something} \emph{also} holds - one child cries iff the other does not, and each child cries with the same probability as the probability that they receive the toy. However, randomising and then giving the first child the toy is not the same as simply giving the first child the toy. To discount the possibility of this kind of behaviour, we need a stronger version of \ref{eq:strong_convexit_or_something}. 
+
+First, we add the assumption that one consequence of choosing $d\in D$ is that $d$ was chosen. That is, we assume the sample space can be written as $E\times D$ and, defining the random variable $\RV{D}:E\times D\to D$, $\RV{D}:(e,d)\mapsto d$. Suppose
+
+\begin{align}
+	(f_{(a,d)})_{\RV{D}} = \delta_d \label{eq:assumption_decision_forsure}
+\end{align}
+
+We find in \cite{joyce_why_2000} the assumption of a ``supposition function'' $\mathrm{prob}(\cdot\|\cdot)$ that $\mathrm{prob}(C\|C)=1$ where $C$ is ``some distinguished condition''. Assumption \ref{eq:assumption_decision_forsure} expresses a similar idea - if we take a decision $d$, then that decision will have been taken for sure.
+
+In addition, suppose for all $\gamma\in \Delta(\mathcal{D})$
+\begin{align}
+	(\gamma f_{a})_{|\RV{D}} = f_a \label{eq:consequence_is_conditional}
+\end{align}
+
+That is, for any stochastic decision $\gamma$, the consequence conditional on $\RV{D}$ is the consequence map $f_a$ itself. This assumption rules out both versions 1 and 2 of the fighting children problem above.
+
+
+Note that this strengthening depends on the structural assumptions on $D$; in particular, it depends on the possibility of finding an ``elementary'' set of decisions $D'$. This is why it is introduced after assumption \ref{eq:strong_convexit_or_something}.
+
+
+
+
 
 For our causal analysis we work with \emph{subjunctive probability spaces}, a generalisation of the more familiar probability spaces. The subjunctive mood is used to describe hypothetical or supposed states of the world\todo{Does this definition need to be here? I didn't know what this word meant before I looked it up}, and subjunctive probability spaces are models that ask for some hypothetical state and give us back a probability space. Subjunctive probability spaces are also different to \emph{conditional probability spaces} \citet{renyi_conditional_1956} as \emph{hypothesising} or \emph{supposing} (that is, those things described by the subjunctive mood) are different to \emph{conditioning}, which is more closely analogous to \emph{focussing your attention}.
 
