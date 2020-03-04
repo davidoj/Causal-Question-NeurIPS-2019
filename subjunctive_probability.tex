@@ -17,19 +17,26 @@ As a general principle, decision makers implement some function $h:A\to D$ which
 
 Expected utility maximisation (henceforth ``EU'') necessitates that the class of results models $f$ have a particular signature. The EU choice rule compares a set of probability distributions over states of the world $E$ and returns a decision associated with the preferred probability distribution. Thus, denoting by $\Delta(\mathcal{E})$ the set of probability distribution over $E$ (now equipped with $\sigma$-algebra $\mathcal{E}$), $f$ must have the signature $f:A\to \Delta(\mathcal{E})^D$. In particular $f$ returns stochastic functions of the type $D\to \Delta(\mathcal{E})$.
 
-So far we have not made any structural assumptions about the set $D$. One such assumption that we do want to make is that stochastic decisions are possible. That is, if we can choose $d_1\in D$ and we can choose $d_2 \in D$, then it is also possible to choose $d_1$ with probability $\alpha$ and $d_2$ with probability $(1-\alpha)$ for $0\leq \alpha \leq 1$. This is easy enough to do - we simply have to assert that there is some $d_{(\alpha,1,2)}\in D$ such that $d_{(\alpha,1,2)}$ corresponds to the choice ``$d_1$ with probability $\alpha$ and $d_2$ with probability $(1-\alpha)$''. We would additionally like our results model $f$ to have the property that, for all $a\in A$, 
+So far we have not made any structural assumptions about the set $D$. One such assumption that we do want to make is that stochastic decisions are possible. That is, if we can choose $d_1\in D$ and we can choose $d_2 \in D$, then it is also possible to choose $d_1$ with probability $\alpha$ and $d_2$ with probability $(1-\alpha)$ for $0\leq \alpha \leq 1$. We will make this assumption as follows: $D$ represents an underlying set of ``elementary'' decisions, and the true set of decisions is the set $\Delta(\mathcal{D})$ of probability measures on $D$ (equipped with some $\sigma$-algebra $\mathcal{D}$). Then, for example, if $D=\{d_1,d_2\}$ we can ``choose'' $d_1$ by selecting the measure $\delta_{d_1}$, and we can choose a mixture of $d_1$ and $d_2$ by selecting the measure $\alpha \delta_{d_1}+(1-\alpha)\delta_{d_2}$. Technically, all that we have done so far is assume that the set of decisions is isomorphic to $\Delta(\mathcal{D})$ - which, if $D$ is standard Borel, ensures that the set of decisions is convex closed. In many cases, we also want the following to hold:
 \begin{align}
-	f_a(d_{(\alpha,1,2)}) = \alpha f_a(d_1) + (1-\alpha) f_a(d_2) \label{eq:convexity_or_something}
+	f_a(\alpha\delta_{d_1} + (1-\alpha)\delta_{d_2}) = \alpha f_a(\delta_{d_1}) + (1-\alpha) f_a(\delta_{d_2}) \label{eq:additivity}
 \end{align}
 
-To strengthen this notion, suppose $(D,\mathcal{D})$ is measurable. Recall that for all $d\in D$, $f_a(d)$ is a probability measure on $E$. For $G\in \mathcal{E}$, write $f_a(d;G)$ for the probability measure $f_a(d)$ evaluated at $G$, and $f_a(\cdot;G)$ for the map $d\mapsto f_a(d;G)$. Then we will call a result map $f$ regular if for all $a\in A$, $G\in \mathcal{E}$ and all $\gamma\in \Delta(\mathcal{D})$ $f_a$, $f_a(\cdot;G)$ is measurable and there exists some $d_\gamma$ such that
+That is, we assume that the results model $f$ is \emph{additive}. Informally, choosing to do $d_1$ with probability $\alpha$ and $d_2$ with probability $1-\alpha$ will yield the result of $d_1$ with probability $\alpha$ and the result of $d_2$ with probability $1-\alpha$.
+
+For $G\in \mathcal{E}$, write $f_a(d;G)$ for the probability measure $f_a(d)$ evaluated at $G$, and $f_a(\cdot;G)$ for the map $d\mapsto f_a(d;G)$. If $f_a(\cdot; G)$ is measurable for all $G$ and additive, then it is a property of the Lebesgue integral that for all $\gamma\in \Delta(\mathcal{D})$
+
 \begin{align}
-	f_a(d_\gamma;G) = \int_D f_a(d';G) d\gamma(d') \label{eq:strong_convexit_or_something}
+	\int f_a(\int_D \delta_{d'}d\gamma(d') ;G) = \int_D f_a(\delta_{d'};G) d\gamma(d')
 \end{align}
 
-We can define $f'_a:\Delta(\mathcal{D})\to \Delta(\mathcal{E})$ by $f^*_a(\gamma;G) = f_a(d_\gamma;G)$. Note that for every $d\in D$ we have $\delta_d\in \Delta(\mathcal{D})$ such that $f_a(d;G) = f^*_a(\delta_d;G)$. Thus we can model the problem as one of selection of a probability measure from $\Delta(\mathcal{D})$ instead of a decision from $d$, and probability measures are related to consequences by the map $f'$. The actual decision chosen can be found by the map $h:\gamma\mapsto d_\gamma$.
+By the assumption of measurability of $f_a(\cdot;G)$, $f_a$ is a Markov kernel, and using the product notation introduced elsewhere we can write $\gamma f_a$ for the map $G\mapsto \int_D f_a(d';G) d\gamma(d')$. That is, the consequence of a choice $\gamma\in \Delta(\mathcal{D})$ is $\gamma f_a$.
 
-Note that by the assumption of measurability, we have that $f_a$ is a Markov kernel for all $a\in A$. If our basic decision set $D$ is a polish space (a separable, completely metrizable topological space) and it's Borel sets form the $\sigma$-algebra $\mathcal{D}$, then the set $\Delta(\mathcal{D})$ is convex closed and can therefore be described as the closure of the convex hull of its extreme points. Denote by $D'$ the extreme points of $\Delta(\mathcal{D})$, and suppose $D'$ is countable. Then $\Delta(\mathcal{D}')$ is equivalent to $\Delta(\mathcal{D})$. Under these assumptions, which we will hold to, we can describe the set of decisions as the set of probability distributions over an underlying discrete set $D'$. Furthermore, for an element $d\in D'$, we can define $f':A\times D\to \Delta(\mathcal{E})$ such that
+\todo[inline]{Have I made any assumptions here besides additivity, }
+
+To show that there are decision sets $D$ that are Polish spaces
+
+Denote by $D'$ the extreme points of $\Delta(\mathcal{D})$, and suppose $D'$ is countable. Then $\Delta(\mathcal{D}')$ is equivalent to $\Delta(\mathcal{D})$. Under these assumptions, which we will hold to, we can describe the set of decisions as the set of probability distributions over an underlying discrete set $D'$. Furthermore, for an element $d\in D'$, we can define $f':A\times D\to \Delta(\mathcal{E})$ such that
 
 \begin{align}
 	f'_a(d;G) = f_a(d';G)
@@ -41,7 +48,7 @@ Then for all $\gamma\in \Delta(\mathcal{D}')$ we have
 	f_a(d_\gamma;G) = \int_D f'_a(d';G) d\gamma(d') \label{eq:basic_decisions}
 \end{align}
 
-\todo[inline]{I don't know that $D'$ has to be countable, the assumption that $D$ is standard Borel and hence $D'$ exists may be enough. I also don't really understand what the assumption of standard Borelness means, only that it can be satisfied by letting the set of decisions be the set of probability distributions over a countable set}
+\todo[inline]{I don't know that $D'$ has to be countable, the assumption that $D$ is standard Borel may be enough. I also don't understand the implications of the assumption of standard Borelness.}
 
 
 As we are chiefly interested in the set of elementary decisions $D'$, we will henceforth simply use $(D,\mathcal{D})$ for this set. Similarly, we will simply use $f$ to refer to the map given by $f'$ in Equation \ref{eq:basic_decisions}. Note that at this point $f_a$ is a Markov kernel $D\to \Delta(\mathcal{E})$, hence we can use product notation.
@@ -56,7 +63,7 @@ A decision maker is mediating a dispute over a toy between two children. If he c
 \paragraph{Version 3} Whether or not the children cry depends only on whether or not they receive the toy
 \end{example}
 
-In version 1, assumption \ref{eq:strong_convexit_or_something} is violated - the outcome when choosing a random procedure is not simply a mixture of the outcomes of each deterministic decision. In version 3, assumption \ref{eq:strong_convexit_or_something} holds, and the results depend only on the outcome of randomisation, as is desired. In version 2, assumption \ref{eq:strong_convexit_or_something} \emph{also} holds - one child cries iff the other does not, and each child cries with the same probability as the probability that they receive the toy. However, randomising and then giving the first child the toy is not the same as simply giving the first child the toy. To discount the possibility of this kind of behaviour, we need a stronger version of \ref{eq:strong_convexit_or_something}. 
+In version 1, assumption \ref{eq:strong_convexit_or_something} is violated - the outcome when choosing a random procedure is not simply a mixture of the outcomes of each deterministic decision. In version 3, assumption \ref{eq:strong_convexit_or_something} holds, and the results depend only on the outcome of randomisation, as is desired. In version 2, assumption \ref{eq:strong_convexit_or_something} \emph{also} holds - one child cries iff the other does not, and each child cries with the same probability as the probability that they receive the toy. However, the consequences of randomising and then giving the first child the toy are not the same as simply giving the first child the toy. To discount the possibility of this kind of behaviour, we need additional assumptions. 
 
 First, we add the assumption that one consequence of choosing $d\in D$ is that $d$ was chosen. That is, we assume the sample space can be written as $E\times D$ and, defining the random variable $\RV{D}:E\times D\to D$, $\RV{D}:(e,d)\mapsto d$. Suppose
 
@@ -66,17 +73,29 @@ First, we add the assumption that one consequence of choosing $d\in D$ is that $
 
 We find in \cite{joyce_why_2000} the assumption of a ``supposition function'' $\mathrm{prob}(\cdot\|\cdot)$ that $\mathrm{prob}(C\|C)=1$ where $C$ is ``some distinguished condition''. Assumption \ref{eq:assumption_decision_forsure} expresses a similar idea - if we take a decision $d$, then that decision will have been taken for sure.
 
-In addition, suppose for all $\gamma\in \Delta(\mathcal{D})$
+In addition, suppose for all $\gamma\in \Delta(\mathcal{D})$ we have \emph{conditional agreement}:
 \begin{align}
 	(\gamma f_{a})_{|\RV{D}} = f_a \label{eq:consequence_is_conditional}
 \end{align}
 
-That is, for any stochastic decision $\gamma$, the consequence conditional on $\RV{D}$ is the consequence map $f_a$ itself. This assumption rules out both versions 1 and 2 of the fighting children problem above.
+That is, for any stochastic decision $\gamma$, the consequence conditional on $\RV{D}$ is the consequence map $f_a$ itself. This assumption rules out both versions 1 and 2 of the fighting children problem above - it assumes that if we randomise and the result of randomisation is some $d\in D$, this is the same as having chosen $d$ to begin with.
 
+\begin{lemma}[Conditional agreement implies randomised decisions]
+If we have 
+\begin{align}
+(\gamma f_{a})_{|\RV{D}} = f_a
+\end{align}
+Then for all $\gamma\in \Delta(\mathcal{D})$,
+\begin{align}
+\gamma f_a (G) = \int_D f_a(d';G) d\gamma(d')
+\end{align}
+\end{lemma}
 
-Note that this strengthening depends on the structural assumptions on $D$; in particular, it depends on the possibility of finding an ``elementary'' set of decisions $D'$. This is why it is introduced after assumption \ref{eq:strong_convexit_or_something}.
+\begin{proof}
+By definition, for $\gamma\in \Delta(\mathcal{D})$
+\end{proof}
 
-
+A consequence of assumption \ref{eq:consequence_is_conditional} is that for fixed $a\in A$, every stochastic decision $\gamma\in \Delta(\mathcal{D})$ leads to the same conditional probability $(\gamma f_{a})_{|\RV{D}}$. In fact, as a result of the assumption that the codomain of $f$ is a set of probability measures as well as assumptions \ref{eq:assumption_decision_forsure} and \ref{eq:consequence_is_conditional} we find that the tuple $\langle E\times D, \mathcal{E}\otimes\mathcal{D}, \mathcal{D}, f_a\rangle$ for each $a\in A$ forms a \emph{conditional probability space} \citep{renyi_new_1955}.
 
 
 
