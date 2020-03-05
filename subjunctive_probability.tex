@@ -22,38 +22,34 @@ So far we have not made any structural assumptions about the set $D$. One such a
 	f_a(\alpha\delta_{d_1} + (1-\alpha)\delta_{d_2}) = \alpha f_a(\delta_{d_1}) + (1-\alpha) f_a(\delta_{d_2}) \label{eq:additivity}
 \end{align}
 
-That is, we assume that the results model $f$ is \emph{additive}. Informally, choosing to do $d_1$ with probability $\alpha$ and $d_2$ with probability $1-\alpha$ will yield the result of $d_1$ with probability $\alpha$ and the result of $d_2$ with probability $1-\alpha$.
+That is, we assume that the results model $f$ is \emph{additive}. Informally, choosing to do $d_1$ with probability $\alpha$ and $d_2$ with probability $1-\alpha$ will yield the result of $d_1$ with probability $\alpha$ and the result of $d_2$ with probability $1-\alpha$. In addition, $f_a$ must be continuous with respect to the total variation norm.
 
-For $G\in \mathcal{E}$, write $f_a(d;G)$ for the probability measure $f_a(d)$ evaluated at $G$, and $f_a(\cdot;G)$ for the map $d\mapsto f_a(d;G)$. If $f_a(\cdot; G)$ is measurable for all $G$ and additive, then it is a property of the Lebesgue integral that for all $\gamma\in \Delta(\mathcal{D})$
-
-\begin{align}
-	\int f_a(\int_D \delta_{d'}d\gamma(d') ;G) = \int_D f_a(\delta_{d'};G) d\gamma(d')
-\end{align}
-
-By the assumption of measurability of $f_a(\cdot;G)$, $f_a$ is a Markov kernel, and using the product notation introduced elsewhere we can write $\gamma f_a$ for the map $G\mapsto \int_D f_a(d';G) d\gamma(d')$. That is, the consequence of a choice $\gamma\in \Delta(\mathcal{D})$ is $\gamma f_a$.
-
-\todo[inline]{Have I made any assumptions here besides additivity, }
-
-To show that there are decision sets $D$ that are Polish spaces
-
-Denote by $D'$ the extreme points of $\Delta(\mathcal{D})$, and suppose $D'$ is countable. Then $\Delta(\mathcal{D}')$ is equivalent to $\Delta(\mathcal{D})$. Under these assumptions, which we will hold to, we can describe the set of decisions as the set of probability distributions over an underlying discrete set $D'$. Furthermore, for an element $d\in D'$, we can define $f':A\times D\to \Delta(\mathcal{E})$ such that
+For arbitrary $\gamma\in \Delta(\mathcal{D})$, we can write for all $B\in \mathcal{D}$
 
 \begin{align}
-	f'_a(d;G) = f_a(d';G)
+	\gamma (B) = \int_D \delta_d(B) d\gamma(d)
 \end{align}
 
-Then for all $\gamma\in \Delta(\mathcal{D}')$ we have
+\todo[inline]{Can we also say}
 
 \begin{align}
-	f_a(d_\gamma;G) = \int_D f'_a(d';G) d\gamma(d') \label{eq:basic_decisions}
+	\gamma = \int_D \delta_d d\gamma(d)
 \end{align}
 
-\todo[inline]{I don't know that $D'$ has to be countable, the assumption that $D$ is standard Borel may be enough. I also don't understand the implications of the assumption of standard Borelness.}
+For $G\in \mathcal{E}$, write $f_a(\delta_d;C)$ for the probability measure $f_a(\delta_d)$ evaluated at $C$, and $f_a(\cdot;G)$ for the map $d\mapsto f_a(d;C)$. If $f_a(\cdot; C)$ is measurable for all $C$ and additive, then it is a property of the Lebesgue integral that for all $\gamma\in \Delta(\mathcal{D})$
 
+\begin{align}
+	\int f_a(\gamma ;C) &= \int f_a(\int_D \delta_{d'}d\gamma(d') ;C)\\
+											   &=\int_D f_a(\delta_{d'};C) d\gamma(d')
+\end{align}
 
-As we are chiefly interested in the set of elementary decisions $D'$, we will henceforth simply use $(D,\mathcal{D})$ for this set. Similarly, we will simply use $f$ to refer to the map given by $f'$ in Equation \ref{eq:basic_decisions}. Note that at this point $f_a$ is a Markov kernel $D\to \Delta(\mathcal{E})$, hence we can use product notation.
+Define $\mathscr{C}_a:D\to \Delta(\mathcal{E})$ by $\mathscr{C}_a:d\mapsto f_a(\delta_{d};\cdot)$. Then $\mathscr{C}_a(\cdot;B)$ is measurable and $\mathscr{C}_a(d;\cdot)$ is a probability measure - that is, $\mathscr{C}_a$ is a Markov kernel. We can therefore adopt the product notation defined elsewhere to write the consequences of choosing a distribution $\gamma$ as $\gamma \mathscr{C}_a$.
 
-Assumption \ref{eq:strong_convexit_or_something} still permits some unexpected behaviour with respect to randomised decisions. Consider the following variations of a problem:
+\todo[inline]{Have I made any assumptions here besides additivity, convex closedness of $D$?}
+
+As we are chiefly interested in the set of elementary decisions $D'$, we will henceforth simply use $(D,\mathcal{D})$ for this set.
+
+Assumption \ref{eq:additivity} still permits some unexpected behaviour with respect to randomised decisions. Consider the following variations of a problem:
 
 \begin{example}[Fighting children problem]
 A decision maker is mediating a dispute over a toy between two children. If he chooses to give the toy to the first child, the second child will cry, and if he chooses to give the toy to the second child, the first child will cry (the underlying decision set $D'=\{\text{give to first child}, \text{give to second child}\}$. If he chooses a random procedure:
@@ -63,20 +59,21 @@ A decision maker is mediating a dispute over a toy between two children. If he c
 \paragraph{Version 3} Whether or not the children cry depends only on whether or not they receive the toy
 \end{example}
 
-In version 1, assumption \ref{eq:strong_convexit_or_something} is violated - the outcome when choosing a random procedure is not simply a mixture of the outcomes of each deterministic decision. In version 3, assumption \ref{eq:strong_convexit_or_something} holds, and the results depend only on the outcome of randomisation, as is desired. In version 2, assumption \ref{eq:strong_convexit_or_something} \emph{also} holds - one child cries iff the other does not, and each child cries with the same probability as the probability that they receive the toy. However, the consequences of randomising and then giving the first child the toy are not the same as simply giving the first child the toy. To discount the possibility of this kind of behaviour, we need additional assumptions. 
+In version 1, assumption \ref{eq:additivity} is violated - the outcome when choosing a random procedure is not simply a mixture of the outcomes of each deterministic decision. In version 3, assumption \ref{eq:additivity} holds, and the results depend only on the outcome of randomisation, as is desired. In version 2, assumption \ref{eq:additivity} \emph{also} holds - one child cries iff the other does not, and each child cries with the same probability as the probability that they receive the toy. However, the consequences of randomising and then giving the first child the toy are not the same as simply giving the first child the toy. To discount the possibility of this kind of behaviour, we need additional assumptions. 
 
-First, we add the assumption that one consequence of choosing $d\in D$ is that $d$ was chosen. That is, we assume the sample space can be written as $E\times D$ and, defining the random variable $\RV{D}:E\times D\to D$, $\RV{D}:(e,d)\mapsto d$. Suppose
+In the text of this example, we have spoken as if our decision had multiple consequences - whether or not each kid gets a toy, whether or not each kid cries - but the compliance of version 2 with \ref{eq:additivity} depends on considering only the children crying to be a consequence of our decison. To support the intuition that only version 3 is the kind of problem we want to deal with, we introduce the additional assumption that if we choose an extreme decision $\delta_d$, then one consequence of this decision is that we will have chosen $d$ with probability 1.
+
+Formally, we assume the sample space can be written as $E\times D$ for some $E$, and, defining the random variable $\RV{D}:E\times D\to D$ by the projection $\RV{D}:(e,d)\mapsto d$, suppose
 
 \begin{align}
-	(f_{(a,d)})_{\RV{D}} = \delta_d \label{eq:assumption_decision_forsure}
+	(\mathscr{C}_{(a,d)})_{\RV{D}} = \delta_d \label{eq:assumption_decision_forsure}
 \end{align}
 
-We find in \cite{joyce_why_2000} the assumption of a ``supposition function'' $\mathrm{prob}(\cdot\|\cdot)$ that $\mathrm{prob}(C\|C)=1$ where $C$ is ``some distinguished condition''. Assumption \ref{eq:assumption_decision_forsure} expresses a similar idea - if we take a decision $d$, then that decision will have been taken for sure.
+We find in \cite{joyce_why_2000} the assumption of a ``supposition function'' $\mathrm{prob}(\cdot\|\cdot)$ that $\mathrm{prob}(C\|C)=1$ where $C$ is ``some distinguished condition''. Assumption \ref{eq:assumption_decision_forsure} along with assumption \ref{eq:additivity} implies an analogous condition.
 
-In addition, suppose for all $\gamma\in \Delta(\mathcal{D})$ we have \emph{conditional agreement}:
-\begin{align}
-	(\gamma f_{a})_{|\RV{D}} = f_a \label{eq:consequence_is_conditional}
-\end{align}
+\begin{theorem}[[Decision determinism implies decision certainty]
+		
+\end{theorem}
 
 That is, for any stochastic decision $\gamma$, the consequence conditional on $\RV{D}$ is the consequence map $f_a$ itself. This assumption rules out both versions 1 and 2 of the fighting children problem above - it assumes that if we randomise and the result of randomisation is some $d\in D$, this is the same as having chosen $d$ to begin with.
 
