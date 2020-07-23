@@ -1,0 +1,118 @@
+
+%!TEX root = main.tex
+
+\section{Interventions may fail to be well-defined}
+
+Interventional causal models run into serious difficulties when some variables are defined to be non-invertible functions of other variables. This work sharpens long-standing criticism of interventional models which held that interventions are ill-defined. \cite{hernan_does_2008} claimed that ``the causal effect of obesity on all-cause mortality'' is ill-defined, as there are multiple actions that might alter someone's BMI, such as diet changes, exercise or gastric bypass surgery, each of these may have a different impact on someone's risk of death and that the notion of an ``intervention on obesity'' must somehow depend on what can actually be done to change someone's body weight. \cite{cartwright_modularity_2001}, along similar lines, points out that for many systems it may be impossible to perturb \emph{only} the prospective cause leading her to doubt about how well defined ``the result of perturbing only the prospective cause'' actually is.
+
+These prior arguments draw heavily on our intuitive ideas of what constitutes an intervetion. While our informal causal knowledge must be a foundational part of the interventional account of causality, it could be argued that the appropriate role of informal knowledge is to specify the causal mechanisms that underwrite the definition of the interventions, and it is inappropriate to use informal knowledge directly to define interventions. For example, \citet{pearl_causality:_2009} writes that the worries over the possibility of perturbing only the prospective cause are an error caused by giving the actions an investigator can actually take undue priority:
+\begin{quote}
+Thus, for Cartwright, a set of equations that share parameters is inherently nonmodular; changing one equation means modifying at least one of its parameters, and if this parameter appears in some other equation, it must change as well, in violation of modularity. 
+
+Heckman (2005, p. 44) makes similar claims: “Putting a constraint on one equation places a restriction on the entire set of internal variables.” “Shutting down one equation might also affect the parameters of the other equations in the system and violate the requirements of parameter stability.”
+
+Such fears and warnings are illusory. Surgery, and the whole semantics and calculus built around it, does not assume that in the physical world we have the technology to incisively modify the mechanism behind each structural equation while leaving all others unaltered. Symbolic modularity does not assume physical modularity. Surgery is a symbolic operation which makes no claims about the physical means available to the experimenter, or about invisible connections that might exist between the mechanisms involved.
+\end{quote}
+
+It is not clear to me whether informal knowledge of causal mechanisms really underwrites interventions, or if in fact interventions are supposed to underwrite causal knowledge. Nonetheless, it is at least plausible that criticisms of interventions that employ informal definitions of intervention may fail if an appropriate definition of intervention were adopted. I show here that under extremely mild restrictions of the idea of ``intervention'', causal effects frequently fail to be unique. The broad outline of our argument follows:
+\begin{itemize}
+	\item For many variables $\RV{X}$, it is true by definition that $\RV{X}=f(\RV{Z})$ for some non-invertible $f:Z\to X$
+	\item Any purported ``effect of $\RV{X}$'' is therefore actually some mixture of ``effects $\RV{Z}$'' and due to the non-invertibility of $f$ it is not clear which mixture ought to be chosen
+\end{itemize}
+
+Our argument was anticipated by \citet{pearl_does_2018} himself when he responded to Hern\'{a}n's criticism of ``the causal effect of obesity as measured by body mass index'' by substituting ``the effect of BMI'' for ``the effect of the vector of many factors that describe obesity'' (note that a function from a vector to a scalar is usually non-invertible):
+
+\begin{quote}
+That BMI is merely a coarse proxy of obesity is well taken; obesity should ideally be described by a vector of many factors, some are easy to measure and others are not. But accessibility to measurement has no bearing on whether the effect of that vector of factors on morbidity is ``well defined'' or whether the condition of consistency is violated when we fail to specify the interventions used to regulate those factors.
+\end{quote}
+
+I affirm that any difficulty in measuring the ``underlying vector of factors'' does not undermine the idea that this underlying vector might have some causal effect on morbidity. However, Pearl has notably not defended the idea that \emph{BMI} has a causal effect on morbidity. Rather, he asserts that the effect of BMI is actually a composite of effects of an ``underlying vector''. I argue that \emph{many} variable are vulnerable to having their ``causal effects'' collapse in the same manner.
+
+Concretely, \citet{shahar_association_2009} argues that because BMI is defined as a person's weight divided by their height, it is appropriate to say BMI is caused by a person's height and weight and nothing else. He argues further that once these are included in a causal graph, BMI has no causal effects leftover - any possible ``effect'' of BMI is really just some combination of the joint effects of weight or height. Extending this argument, consider that a person's weight is by definition equal to the weight of the fat in their body plus the weight of everything else in their body. Therefore, any possible ``effect'' of a person's weight is really just some combination of the joint effects of the weight of fat in their body and the weight of everything else in their body. The weight of all the fat in a person's body is itself the sum of the weight of all the white fat, the weight of all the brown fat and the weight of all the beige fat in their body. Therefore, perhaps the notion that the weight of fat in a person's body has some causal effect is just an illusion, and what is actually under discussion is a combination of the joint effects of the weight of the brown fat in their body, the weight of the white fat in their body and the weight of the beige fat in their body. It's not clear that we ever arrive at something that supports a ``true'' causal effect, and if we do we clearly have a great deal of backtracking still to do. It is not at all clear how the enormous model that arises from all of this backtracking supports any approximate causal conclusion we could draw from a practical model that features variables we can feasibly measure (I expand on this below).
+
+It is possible to define causal effects in CSDT that do not fail in this manner. This is because CSDT, unlike interventional models, does not guarantee that ``the effect of $\RV{X}$ on $\RV{Y}$'' exists for arbitrary $\RV{X}$ and $\RV{Y}$.
+
+\subsection{The main argument}
+
+Assume the following:
+
+\begin{enumerate}
+ \item In order to determine the causal relationship between two variables $\RV{X}$ and $\RV{Y}$ we require a probability measure $P\in \Delta(\mathcal{E})$ and a set of background causal relationships $\mathbf{R}$ such that $\RV{X},\RV{Y}$ are random variables in $\mathcal{E}$ and $\mathbf{R}$ is sufficiently large to include all causal relationships relevant to determining the effect of $\RV{X}$ on $\RV{Y}$
+ \item The causal relationship between $\RV{X}$ and $\RV{Y}$ is a function $P(\RV{Y}|do(\RV{X})):X\to \Delta(\mathcal{Y})$
+ \item If $\RV{Z}$ is any variable that is on a backdoor path between $\RV{X}$ and $\RV{Y}$ in $\mathbf{R}$, then there exists a ``joint interventional map'' $P(\RV{X},\RV{Y},\RV{Z}|do(\RV{X})):X\to \Delta(\mathcal{Y}\otimes\mathcal{Z})$ such that the marginal on $\RV{Y}$ of $P(\RV{Y},\RV{Z}|do(\RV{X}))$ is $P(\RV{Y}|do(\RV{X}))$, the marginal on $\RV{Z}$, $P(\RV{Z}|do(\RV{X}))$, is $x\mapsto P(\RV{Z})$ for all $x\in X$ and the marginal on $\RV{X}$, $P(\RV{X}|do(\RV{X}))$, is $x\mapsto \delta_x$ for all $x\in X$
+ \item If it is a basic definition of a given problem that a variable $\RV{X}$ is some function $f:Z \to X$ of the variable $\RV{Z}$, then $\RV{Z}$ is a causal ancestor of $\RV{X}$ in $\mathbf{R}$
+ \item If it is a basic definition of a given problem that $\RV{X}=f(\RV{Z})$, then $P(\RV{Z}\in f^{-1}(x)|do(\RV{X}=x))=1$ for all $x\in X$. That is, the interventional map is such that $\RV{X}=f(\RV{Z})$ with probability one.
+\end{enumerate}
+
+
+Suppose $\RV{X}$ takes values in $\{0,1\}$, it is a basic definition of a given problem that $\RV{X}=f(\RV{Z})$, and there is a causal path in $\mathbf{R}$ from $\RV{Z}$ to $\RV{Y}$ that does not contain $\RV{X}$. By (4), $\RV{Z}$ is on a backdoor path from $\RV{X}$ to $\RV{Y}$. Then, by (3) there is a function $P(\RV{X},\RV{Y},\RV{Z}|do(\RV{X}))$ such that $P(\RV{Z}|do(\RV{X}=0))=P(\RV{Z}|do(\RV{X}=1))$. By (5), $P(\RV{Z}\in f^{-1}(0)|do(\RV{X}=0))=1$. Noting that $f^{-1}(0)$ is disjoint from $f^{-1}(1)$, we have $P(\RV{Z}\in f^{-1}(0)|do(\RV{X}=1))=0$, contradicting (3).
+
+Assumptions (1) and (2) are universally endorsed by proponents of interventional causal models \citep{spirtes_causation_1993,pearl_causality:_2009,woodward_causation_2016}. Assumption (3) is strictly weaker than \citet{pearl_causality:_2009}'s definition of the do-operator, though we also investigate a weaker verson of (3) below. Assumptions (4) and (5) is new, require further discussion.
+
+In defense of assumption (5), suppose that an intervention could change the \emph{definition of BMI}. Then the causal effect of BMI on mortality would have nothing to do with the effect of BMI \emph{as defined as weight/height} on mortality. For this reason, we think it is reasonable to disregard causal effects that contradict basic definitions.
+
+Assumption (4) is somewhat tricky, as it depends on the condition of assumption (1) that $\mathbf{R}$ is ``sufficiently large''. We cannot make this condition precise. Nonetheless, we offer two separate arguments that the notion of ``sufficient largeness'' should lead us to include a causal path from $\RV{Z}$ to $\RV{X}$ in $\mathbf{R}$ if it is a basic definition that $\RV{X}=f(\RV{Z})$:
+
+\begin{itemize}
+	\item $\RV{X}$ is determined from $\RV{Z}$ by an autonomous mechanism: $\RV{X}=f(\RV{Z})$ for all values of all other variables, which is an autonomous mechanism, and autonomous mechanisms should be included in $\mathbb{R}$ as causal relationships
+	\item Reasoning from ``possible interventions'': If $f$ is not a single valued function, then there are two of values $z_1, z_2$ of $\RV{Z}$ such that changing from $z_1$ to $z_2$ compels a change in the value of $\RV{X}$, and this restriction applies to any ``possible intervention''. Thus an intervention on $\RV{Z}$ produces a change in $\RV{X}$, and so $\RV{Z}$ is a cause of $\RV{X}$
+\end{itemize}
+
+Note that these arguments are not equivalent. The first does not compel us to accept that $\RV{X}$ is also a cause of $\RV{Z}$, while an argument analogous to the second does.
+
+At this point we seem to have: if a variable $\RV{X}$ is by definition equal to some function of another variable $\RV{Z}$ and that variable may also be a cause of some third variable $\RV{Y}$, then the ``causal effect'' of $\RV{X}$ on $\RV{Y}$ \emph{cannot exist}. This seems to be quite alarming given that it is extremely common that we require some variable to be equal to a function of other variables.
+
+There is a possible way around this contradiction: if we allow that $\RV{X}$ is also a cause of $\RV{Z}$ (which means that $\mathbf{R}$ contains a cycle), then we can allow interventions on $\RV{X}$ to alter the distribution of $\RV{Z}$; this can be accomplished by weakening assumption (3):
+\begin{enumerate}[label={$\arabic*'$.}]
+  \setcounter{enumi}{2}
+  \item If $\RV{Z}$ is any variable that is on a backdoor path between $\RV{X}$ and $\RV{Y}$ in $\mathbf{R}$, then there exists a ``joint interventional map'' $P(\RV{X},\RV{Y},\RV{Z}|do(\RV{X})):X\to \Delta(\mathcal{Y}\otimes\mathcal{Z})$ such that the marginal on $\RV{Y}$ of $P(\RV{Y},\RV{Z}|do(\RV{X}))$ is $P(\RV{Y}|do(\RV{X}))$, and the marginal on $\RV{X}$, $P(\RV{X}|do(\RV{X}))$ is $x\mapsto \delta_x$ for all $x\in X$
+\end{enumerate}
+
+This avoids the previous contradiction - there is now nothing wrong with the support of $P(\RV{Z}|do(\RV{X}=0)$ being disjoint from the support of $P(\RV{Z}|do(\RV{X}=1))$. 
+
+The assumptions made are far too weak to uniquely define the interventional map $P(\RV{X},\RV{Y},\RV{Z}|do(\RV{X}=x))$. For example, all that we require of $P(\RV{Z}|do(\RV{X}))$ is (5), and there are many functions that meet this requirement. The theory of causal Bayesian networks does provide a unique definition of an interventional map, but this rule implies (3) which we have found to be too strong for our purposes.
+
+We can propose a modified backdoor adjustment rule that substitutes $P(\RV{Z}|do(\RV{X}=x))$ for $P(\RV{Z})$, but this fails to be a satisfactory rule. If we make the additional supposition suppose that $\RV{Z}$ is the \emph{only} cause of $\RV{X}$ in $\mathbb{R}$($\RV{X}$ is, after all, uniquely determined by $\RV{Z}$) then we have no backdoor paths between $\RV{X}$ and $\RV{Z}$ and no unblocked backdoor paths between $\RV{X}$ and $\RV{Y}$ after conditioning on $\RV{Z}$. It follows that
+\begin{align}
+	P(\RV{Z}|do(\RV{X})) &= P(\RV{Z}|\RV{X})\\
+	P(\RV{Y}|do(\RV{X})=x) &= \sum_{z} P(\RV{Y}|\RV{X}=x,\RV{Z}=z) P(\RV{Z}|do(\RV{X})=x)\\
+						   &= \sum_z P(\RV{Y}|\RV{X}=x,\RV{Z}=z) P(\RV{Z}|\RV{X})\\
+						   &= P(\RV{Y}|\RV{X}) \label{eq:always_the_conditional}
+\end{align}
+
+Equation \ref{eq:always_the_conditional} holds for the causal effect of $\RV{X}$ on \emph{any} $\RV{Y}$. This is clearly unsatisfactory. We can turn instead to the theory of cyclic causal graphs presented in \cite{forre_constraint-based_2018}. In this theory, the causal arrow from $\RV{X}$ to $\RV{Z}$ must be witnessed by another function $g:X\times U\to Z$ such that $\RV{Z}=g(\RV{X},\RV{U})$where $\RV{U}$ is a ``noise'' variable with some distribution $P(\RV{U})$ that is fixed under the intervention $do(\RV{X})$. In this case, it is easy to see that $P(\RV{Z}|\RV{X}=x)=g(x,\cdot)_\# P(\RV{U})=P(\RV{Z}|do(\RV{X}=x))$ i.e. the interventional map of $\RV{Z}$ is again the same as the probability conditional on $\RV{X}$. Furthermore, we also have some $h:X\times Z\times U\to Y$ such that $\RV{Y}=h(\RV{X},\RV{Z},\RV{U})$. It is clear that $P(\RV{Y}|do(\RV{X}=x),\RV{Z}=z) = h(x,z,\cdot)_\# P(\RV{U}) = P(\RV{Y}|\RV{X}=x,\RV{Z}=z)$. These two facts again imply \ref{eq:always_the_conditional}!
+
+\citet{pearl_physical_2017} has explored an ``imaging'' operator based on the intervention operator $do(\RV{X}=x)$ that is able to evaluate disjunctive ``interventions''. We might suppose that $do(\RV{X}=x)$ is equivalent to $do(\RV{Z}\in f^{-1}(x))$, in which case we might be able to make use of the imaging operator to evaluate $do(\RV{X}=x)$. However, as Pearl shows, the derived imaging operator implies that $P(\RV{Y}|do(\RV{Z}\in f^{-1}(x)))=P(\RV{Y}|\RV{Z}\in f^{-1}(x))=P(\RV{Y}|\RV{X}=x)$.
+
+\subsection{Resolution?}
+
+The difficulties raised here require some elaboration of interventional models. Three possibile elaborations are:
+\begin{itemize}
+	\item If a variable $\RV{X}$ is defined to be equal to $f(\RV{Y})$ where $f$ is non-invertible, is it inappropriate to say $\RV{Y}$ causes $\RV{X}$? If so, why?
+	\item Are there some sets of variables that are forbidden from co-occurring in interventional models? If so, which sets are forbidden, and how can we be sure a chosen set of variables is acceptable?
+	\item Are causal effects usually non-unique? If so, how should the non-uniqueness be handled?
+\end{itemize}
+
+
+\section{Criticism of the potential outcomes system}
+
+
+Rough outline:
+
+\begin{itemize}
+ \item Overall, it's under-specified and confused
+ \item Some call consistency a definition, some an assumption. Note that consistency is "half of a similarity metric" a la Lewis, but the other half is nowhere to be found
+ \item Some talk about interventions (see above)
+ \item Some say ``what would happen if you did an ideal intervention'' - but is this a definition or an example?
+ \item 
+\end{itemize}
+
+The potential outcomes system of causal inference is under-specified. When someone judges ignorability to hold in a particular randomised experiment and judges it to fail for some other experiment, the potential outcomes system does not provide any more basic claims that constitute the assumptions. Rather, they are judged to hold or fall by direct appeals to intuition. Appeals to intuition render it difficult to direct pointed criticism at the theory, as the truth and falsehood of certain propositions depends on the intiutions of the people involved in the argument. This makes it a poor system for the collaborative pursuit of truth, as criticism plays an essential role in this.
+
+It is in principle possible to ground the potential outcomes system in more fundamental assumptions. For example, \citet{lewis_causation_1986} has proposed that the ``truth'' of counterfactual propositions should be evaluated in terms of their truth values in the ``most similar worlds'' that make these propositions true. If it were possible to define a satisfactory measure of world similarity then assumptions like ignorability \emph{would} reduce to more basic claims, and could be disproved by showing that a more similar world exists in which ignorability fails. As it stands, however, I am not aware of any suitable metrics of world similarity, and as I will show it is likely that no single metric will serve.
+
+The potential outcomes system does feature the assumption of \emph{consistency}. This is the assumption that the potential outcome $\RV{Y}^a$ ``the value of $\RV{Y}$ on the supposition that $a$ occurs'' is equal to $\RV{Y}$ if $a$ actually occurs. This precisely matches Lewis' view that if $a$ actually happens then the most similar world in which $a$ occurs is the real world. So far so good, but the whole point of the similarity measure is to say something nontrivial about $\RV{Y}^a$ if $a$ \emph{does not} occur. The potential outcomes system is silent on this, handwaving the issue away with the admonition that this must be determined by expert judgement. They do not explain how one should obtain expertise in offering true answers to unanswerable questions.
+
+\citet{hernan_does_2008}: "Suppose that, in the observational study in the neighboring country, the data analyst compared the mortality of subjects who happened to have a BMI of 30 ($A = 1$) and a BMI of 20 ($A = 0$) at baseline. Now consider a study subject who had a BMI of 20 at baseline. It is not obvious that, had he been assigned to a BMI of 20 some time before baseline, his counterfactual outcome at the end of the study would have been necessarily equal to his observed outcome because there are many possible methods to assign someone to a BMI of 20."
+
+Hern\'{a}n here invokes an informal notion of intervention to argue against the consistency of BMI.
