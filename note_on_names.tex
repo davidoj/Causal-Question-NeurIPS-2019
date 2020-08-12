@@ -1,0 +1,21 @@
+%!TEX root = main.tex
+
+Note on terminology: I am trying the name ``See-Do model'' to describe the folowing:
+
+\begin{tikzpicture}
+  \path (0,0) node(theta) {$\Theta$}
+     +(0,-1) node (P) {$D$}
+     ++(0.5,0) coordinate (copy0)
+     ++(0.5,0) node[kernel] (H) {$\mathbf{See}$}
+     +(0,-1) node[kernel] (I) {$\mathbf{Do}$}
+     ++(0.7,0.) node (N1) {$\RV{X}$}
+     +(0,-1) node (N2) {$\RV{Y}$};
+  \draw (theta) -- (copy0);
+  \draw (P) -- (I);
+  \draw (I) -- (N2);
+  \draw (copy0) to [bend right] ($(I.west)+(0,0.1)$);
+  \draw (copy0) -- (H);
+  \draw (H) -- (N1);
+  \end{tikzpicture}
+
+I was calling it a ``causal theory'' before. Reasons for the change: I think ``See-Do'' helps to understand what the model does, and the name doesn't make premature claims to explain causality. Also, it's only two syllables which I like.

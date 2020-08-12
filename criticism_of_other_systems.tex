@@ -1,118 +1,592 @@
 
 %!TEX root = main.tex
 
-\section{Interventions may fail to be well-defined}
+\section{Why you need decisions}
 
-Interventional causal models run into serious difficulties when some variables are defined to be non-invertible functions of other variables. This work sharpens long-standing criticism of interventional models which held that interventions are ill-defined. \cite{hernan_does_2008} claimed that ``the causal effect of obesity on all-cause mortality'' is ill-defined, as there are multiple actions that might alter someone's BMI, such as diet changes, exercise or gastric bypass surgery, each of these may have a different impact on someone's risk of death and that the notion of an ``intervention on obesity'' must somehow depend on what can actually be done to change someone's body weight. \cite{cartwright_modularity_2001}, along similar lines, points out that for many systems it may be impossible to perturb \emph{only} the prospective cause leading her to doubt about how well defined ``the result of perturbing only the prospective cause'' actually is.
+CSDT differs from Causal Bayesian Networks in that See-Do models require a set $D$ of decisions to be specified as part of the definition, just as a function requires a domain to be specified as part of its definition. Causal Bayesian Networks, in contrast, appear to define causal effects of variables without reference to an underlying set of decisions. We show that this distinction is only apparent, and that Causal Bayesian Networks also require the specification of ``causal atoms'' which correspond precisely to the decision set in a See-Do model.
 
-These prior arguments draw heavily on our intuitive ideas of what constitutes an intervetion. While our informal causal knowledge must be a foundational part of the interventional account of causality, it could be argued that the appropriate role of informal knowledge is to specify the causal mechanisms that underwrite the definition of the interventions, and it is inappropriate to use informal knowledge directly to define interventions. For example, \citet{pearl_causality:_2009} writes that the worries over the possibility of perturbing only the prospective cause are an error caused by giving the actions an investigator can actually take undue priority:
-\begin{quote}
-Thus, for Cartwright, a set of equations that share parameters is inherently nonmodular; changing one equation means modifying at least one of its parameters, and if this parameter appears in some other equation, it must change as well, in violation of modularity. 
+In what follows, I will call the approach of CSDT a ``decisions first'' approach, as a set $D$ of decisions must be chosen before anything can be said about causation. I will call the approach taken by Causal Bayesian Networks a ``causes first'' approach, as one could take the view that the investigation of consequences of decisions is a specialisation of the study of causal effect, and such is my understanding of the philosophy behind the Causal Bayesian Network approach.
 
-Heckman (2005, p. 44) makes similar claims: “Putting a constraint on one equation places a restriction on the entire set of internal variables.” “Shutting down one equation might also affect the parameters of the other equations in the system and violate the requirements of parameter stability.”
+``Causes first'' and ``decisions first'' approaches do not clearly necessitate one follow a particular school of \emph{modelling} causal relationships. \emph{Influence diagrams} are CBN-like graphical models that follow a decisions first paradigm \citep{peters_elements_2017,woodward_causation_2016,dawid_influence_2002}. It is unclear where the Potential Outcomes school sits on this question - like CBNs, causal effects in the Potential Outcomes school talks about causal effects of variables, an approach that avoids explicit definition of a set of decisions. On the other hand, unlike CBN models, Potential Outcomes models typically only consider a subset of variables to have causal effects, and consider causal effects to be difficult to define in general \citep{rubin_causal_2005}, so \emph{some} choices are made in terms of which variables can underwrite causal effects.
 
-Such fears and warnings are illusory. Surgery, and the whole semantics and calculus built around it, does not assume that in the physical world we have the technology to incisively modify the mechanism behind each structural equation while leaving all others unaltered. Symbolic modularity does not assume physical modularity. Surgery is a symbolic operation which makes no claims about the physical means available to the experimenter, or about invisible connections that might exist between the mechanisms involved.
-\end{quote}
+An apparent difference between causes first and decisions first paradigms is whether the question ``what is the causal effect of $\RV{X}$ on $\RV{Y}$?'' is, in general, well-defined. In the decisions first approach, it seems to be necessary to ask ``what is the causal effect of $\RV{X}$ on $\RV{Y}$ with respect to decisions $D$?'', and the question is ill-posed without this clarification. On the other hand, it seems to be well defined in the causes first approach.
 
-It is not clear to me whether informal knowledge of causal mechanisms really underwrites interventions, or if in fact interventions are supposed to underwrite causal knowledge. Nonetheless, it is at least plausible that criticisms of interventions that employ informal definitions of intervention may fail if an appropriate definition of intervention were adopted. I show here that under extremely mild restrictions of the idea of ``intervention'', causal effects frequently fail to be unique. The broad outline of our argument follows:
-\begin{itemize}
-	\item For many variables $\RV{X}$, it is true by definition that $\RV{X}=f(\RV{Z})$ for some non-invertible $f:Z\to X$
-	\item Any purported ``effect of $\RV{X}$'' is therefore actually some mixture of ``effects $\RV{Z}$'' and due to the non-invertibility of $f$ it is not clear which mixture ought to be chosen
-\end{itemize}
+However, this too is merely an \emph{apparent} difference. Because the causes first approach requires the specification of a set of causal atoms, to properly pose the question in the causes first paradigm requires the clarification ``what is the causal effect of $\RV{X}$ on $\RV{Y}$ \emph{with respect to atoms $A$}?''.
 
-Our argument was anticipated by \citet{pearl_does_2018} himself when he responded to Hern\'{a}n's criticism of ``the causal effect of obesity as measured by body mass index'' by substituting ``the effect of BMI'' for ``the effect of the vector of many factors that describe obesity'' (note that a function from a vector to a scalar is usually non-invertible):
+I propose that the actual difference here is the hypothesis of \emph{causal universality}: that there exists a unique set of causal atoms $A^*$ that is appropriate for every problem. If such a set exists then the original question ``what is the causal effect of $\RV{X}$ on $\RV{Y}$?'' can be understood as implicitly invoking $A^*$. An analogous hypothesis of \emph{decision universality} can do the same thing in the decisions first paradigm.
 
-\begin{quote}
-That BMI is merely a coarse proxy of obesity is well taken; obesity should ideally be described by a vector of many factors, some are easy to measure and others are not. But accessibility to measurement has no bearing on whether the effect of that vector of factors on morbidity is ``well defined'' or whether the condition of consistency is violated when we fail to specify the interventions used to regulate those factors.
-\end{quote}
+\todo[inline]{I think there might be a useful theorem that work well with universality, but not sure yet}
 
-I affirm that any difficulty in measuring the ``underlying vector of factors'' does not undermine the idea that this underlying vector might have some causal effect on morbidity. However, Pearl has notably not defended the idea that \emph{BMI} has a causal effect on morbidity. Rather, he asserts that the effect of BMI is actually a composite of effects of an ``underlying vector''. I argue that \emph{many} variable are vulnerable to having their ``causal effects'' collapse in the same manner.
-
-Concretely, \citet{shahar_association_2009} argues that because BMI is defined as a person's weight divided by their height, it is appropriate to say BMI is caused by a person's height and weight and nothing else. He argues further that once these are included in a causal graph, BMI has no causal effects leftover - any possible ``effect'' of BMI is really just some combination of the joint effects of weight or height. Extending this argument, consider that a person's weight is by definition equal to the weight of the fat in their body plus the weight of everything else in their body. Therefore, any possible ``effect'' of a person's weight is really just some combination of the joint effects of the weight of fat in their body and the weight of everything else in their body. The weight of all the fat in a person's body is itself the sum of the weight of all the white fat, the weight of all the brown fat and the weight of all the beige fat in their body. Therefore, perhaps the notion that the weight of fat in a person's body has some causal effect is just an illusion, and what is actually under discussion is a combination of the joint effects of the weight of the brown fat in their body, the weight of the white fat in their body and the weight of the beige fat in their body. It's not clear that we ever arrive at something that supports a ``true'' causal effect, and if we do we clearly have a great deal of backtracking still to do. It is not at all clear how the enormous model that arises from all of this backtracking supports any approximate causal conclusion we could draw from a practical model that features variables we can feasibly measure (I expand on this below).
-
-It is possible to define causal effects in CSDT that do not fail in this manner. This is because CSDT, unlike interventional models, does not guarantee that ``the effect of $\RV{X}$ on $\RV{Y}$'' exists for arbitrary $\RV{X}$ and $\RV{Y}$.
-
-\subsection{The main argument}
-
-Assume the following:
-
-\begin{enumerate}
- \item In order to determine the causal relationship between two variables $\RV{X}$ and $\RV{Y}$ we require a probability measure $P\in \Delta(\mathcal{E})$ and a set of background causal relationships $\mathbf{R}$ such that $\RV{X},\RV{Y}$ are random variables in $\mathcal{E}$ and $\mathbf{R}$ is sufficiently large to include all causal relationships relevant to determining the effect of $\RV{X}$ on $\RV{Y}$
- \item The causal relationship between $\RV{X}$ and $\RV{Y}$ is a function $P(\RV{Y}|do(\RV{X})):X\to \Delta(\mathcal{Y})$
- \item If $\RV{Z}$ is any variable that is on a backdoor path between $\RV{X}$ and $\RV{Y}$ in $\mathbf{R}$, then there exists a ``joint interventional map'' $P(\RV{X},\RV{Y},\RV{Z}|do(\RV{X})):X\to \Delta(\mathcal{Y}\otimes\mathcal{Z})$ such that the marginal on $\RV{Y}$ of $P(\RV{Y},\RV{Z}|do(\RV{X}))$ is $P(\RV{Y}|do(\RV{X}))$, the marginal on $\RV{Z}$, $P(\RV{Z}|do(\RV{X}))$, is $x\mapsto P(\RV{Z})$ for all $x\in X$ and the marginal on $\RV{X}$, $P(\RV{X}|do(\RV{X}))$, is $x\mapsto \delta_x$ for all $x\in X$
- \item If it is a basic definition of a given problem that a variable $\RV{X}$ is some function $f:Z \to X$ of the variable $\RV{Z}$, then $\RV{Z}$ is a causal ancestor of $\RV{X}$ in $\mathbf{R}$
- \item If it is a basic definition of a given problem that $\RV{X}=f(\RV{Z})$, then $P(\RV{Z}\in f^{-1}(x)|do(\RV{X}=x))=1$ for all $x\in X$. That is, the interventional map is such that $\RV{X}=f(\RV{Z})$ with probability one.
-\end{enumerate}
+\todo[inline]{And I discuss whether or not you might want to assume universality}
 
 
-Suppose $\RV{X}$ takes values in $\{0,1\}$, it is a basic definition of a given problem that $\RV{X}=f(\RV{Z})$, and there is a causal path in $\mathbf{R}$ from $\RV{Z}$ to $\RV{Y}$ that does not contain $\RV{X}$. By (4), $\RV{Z}$ is on a backdoor path from $\RV{X}$ to $\RV{Y}$. Then, by (3) there is a function $P(\RV{X},\RV{Y},\RV{Z}|do(\RV{X}))$ such that $P(\RV{Z}|do(\RV{X}=0))=P(\RV{Z}|do(\RV{X}=1))$. By (5), $P(\RV{Z}\in f^{-1}(0)|do(\RV{X}=0))=1$. Noting that $f^{-1}(0)$ is disjoint from $f^{-1}(1)$, we have $P(\RV{Z}\in f^{-1}(0)|do(\RV{X}=1))=0$, contradicting (3).
+\subsection{Structural Causal Models}
 
-Assumptions (1) and (2) are universally endorsed by proponents of interventional causal models \citep{spirtes_causation_1993,pearl_causality:_2009,woodward_causation_2016}. Assumption (3) is strictly weaker than \citet{pearl_causality:_2009}'s definition of the do-operator, though we also investigate a weaker verson of (3) below. Assumptions (4) and (5) is new, require further discussion.
+We adopt the framework of cyclic structural causal models to make our arguments, adapted from \citet{bongers_theoretical_2016}. This is somewhat non-standard, but allows us to make a stronger argument for the impossibility of modelling arbitrary sets of variables using structural interventional models.
 
-In defense of assumption (5), suppose that an intervention could change the \emph{definition of BMI}. Then the causal effect of BMI on mortality would have nothing to do with the effect of BMI \emph{as defined as weight/height} on mortality. For this reason, we think it is reasonable to disregard causal effects that contradict basic definitions.
+\begin{definition}[Structural Causal Model]\label{def:SCM}
+	A structural causal model (SCM) is a tuple 
+	\begin{align}
+		\mathcal{M}:=\langle \mathcal{I},\mathcal{J},\mathbf{X}_{\mathcal{I}},\mathbf{E}_{\mathcal{J}},\mathbf{f}_{\mathcal{I}},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle
+	\end{align}
+	where 
+	\begin{itemize}
+		\item $\mathcal{I}$ is a finite index set of \emph{endogenous variables}
+		\item $\mathcal{J}$ is a finite index set of \emph{exogenous variables}
+		\item $\mathbf{X}_{\mathcal{I}}:=\{X_i\}_{\mathcal{I}}$ where, for each $i\in \mathcal{I}$, $(X_i,\mathcal{X}_i)$ is a standard measurable space taking and the codomain of the $i$-th endogenous variable
+		\item $\mathbf{E}_{\mathcal{J}}:=\{E_j\}_{\mathcal{J}}$ where, for $j\in \mathcal{J}$, $E_j$ is a standard measurable space and the codomain of the $j$-th endogenous variable
+		\item $\mathbf{f}_{\mathcal{I}}=\utimes_{i\in\mathcal{I}} f_i$ is a measurable function, and $f_i:\mathbf{X}_{\mathcal{I}}\times\mathbf{E}_{\mathcal{J}}\to X_i$ is the causal mechanism controlling $\RV{X}_i$
+		\item $\mathbb{P}_{\mathcal{E}}\in \Delta(\mathbf{E}_{\mathcal{J}})$ is a probability measure on the space of exogenous variables
+		\item $\bm{\RV{E}}_{\mathcal{J}}=\utimes_{j\in\mathcal{J}} \RV{E}_j$ is the set of exogenous variables, with $\mathbb{P}_{\mathcal{E}}=\bm{\RV{E}}_{\mathcal{J}\#}P_{\mathcal{E}}$ and $\RV{E}_j$ is the j-th exogenous variable with marginal distribution given by $\RV{E}_{j\#}\mathbb{P}_{\mathcal{E}}$
+	\end{itemize}
+\end{definition}
 
-Assumption (4) is somewhat tricky, as it depends on the condition of assumption (1) that $\mathbf{R}$ is ``sufficiently large''. We cannot make this condition precise. Nonetheless, we offer two separate arguments that the notion of ``sufficient largeness'' should lead us to include a causal path from $\RV{Z}$ to $\RV{X}$ in $\mathbf{R}$ if it is a basic definition that $\RV{X}=f(\RV{Z})$:
-
-\begin{itemize}
-	\item $\RV{X}$ is determined from $\RV{Z}$ by an autonomous mechanism: $\RV{X}=f(\RV{Z})$ for all values of all other variables, which is an autonomous mechanism, and autonomous mechanisms should be included in $\mathbb{R}$ as causal relationships
-	\item Reasoning from ``possible interventions'': If $f$ is not a single valued function, then there are two of values $z_1, z_2$ of $\RV{Z}$ such that changing from $z_1$ to $z_2$ compels a change in the value of $\RV{X}$, and this restriction applies to any ``possible intervention''. Thus an intervention on $\RV{Z}$ produces a change in $\RV{X}$, and so $\RV{Z}$ is a cause of $\RV{X}$
-\end{itemize}
-
-Note that these arguments are not equivalent. The first does not compel us to accept that $\RV{X}$ is also a cause of $\RV{Z}$, while an argument analogous to the second does.
-
-At this point we seem to have: if a variable $\RV{X}$ is by definition equal to some function of another variable $\RV{Z}$ and that variable may also be a cause of some third variable $\RV{Y}$, then the ``causal effect'' of $\RV{X}$ on $\RV{Y}$ \emph{cannot exist}. This seems to be quite alarming given that it is extremely common that we require some variable to be equal to a function of other variables.
-
-There is a possible way around this contradiction: if we allow that $\RV{X}$ is also a cause of $\RV{Z}$ (which means that $\mathbf{R}$ contains a cycle), then we can allow interventions on $\RV{X}$ to alter the distribution of $\RV{Z}$; this can be accomplished by weakening assumption (3):
-\begin{enumerate}[label={$\arabic*'$.}]
-  \setcounter{enumi}{2}
-  \item If $\RV{Z}$ is any variable that is on a backdoor path between $\RV{X}$ and $\RV{Y}$ in $\mathbf{R}$, then there exists a ``joint interventional map'' $P(\RV{X},\RV{Y},\RV{Z}|do(\RV{X})):X\to \Delta(\mathcal{Y}\otimes\mathcal{Z})$ such that the marginal on $\RV{Y}$ of $P(\RV{Y},\RV{Z}|do(\RV{X}))$ is $P(\RV{Y}|do(\RV{X}))$, and the marginal on $\RV{X}$, $P(\RV{X}|do(\RV{X}))$ is $x\mapsto \delta_x$ for all $x\in X$
-\end{enumerate}
-
-This avoids the previous contradiction - there is now nothing wrong with the support of $P(\RV{Z}|do(\RV{X}=0)$ being disjoint from the support of $P(\RV{Z}|do(\RV{X}=1))$. 
-
-The assumptions made are far too weak to uniquely define the interventional map $P(\RV{X},\RV{Y},\RV{Z}|do(\RV{X}=x))$. For example, all that we require of $P(\RV{Z}|do(\RV{X}))$ is (5), and there are many functions that meet this requirement. The theory of causal Bayesian networks does provide a unique definition of an interventional map, but this rule implies (3) which we have found to be too strong for our purposes.
-
-We can propose a modified backdoor adjustment rule that substitutes $P(\RV{Z}|do(\RV{X}=x))$ for $P(\RV{Z})$, but this fails to be a satisfactory rule. If we make the additional supposition suppose that $\RV{Z}$ is the \emph{only} cause of $\RV{X}$ in $\mathbb{R}$($\RV{X}$ is, after all, uniquely determined by $\RV{Z}$) then we have no backdoor paths between $\RV{X}$ and $\RV{Z}$ and no unblocked backdoor paths between $\RV{X}$ and $\RV{Y}$ after conditioning on $\RV{Z}$. It follows that
+If for $\mathbb{P}_{\mathcal{E}}$-almost every $\mathbf{e}\in\mathbf{E}_{\mathcal{J}}$ there exists $\mathbf{x}\in\mathbf{X}_{\mathcal{I}}$ such that
 \begin{align}
-	P(\RV{Z}|do(\RV{X})) &= P(\RV{Z}|\RV{X})\\
-	P(\RV{Y}|do(\RV{X})=x) &= \sum_{z} P(\RV{Y}|\RV{X}=x,\RV{Z}=z) P(\RV{Z}|do(\RV{X})=x)\\
-						   &= \sum_z P(\RV{Y}|\RV{X}=x,\RV{Z}=z) P(\RV{Z}|\RV{X})\\
-						   &= P(\RV{Y}|\RV{X}) \label{eq:always_the_conditional}
+	\mathbf{x} = \mathbf{f}_{\mathcal{I}}(\mathbf{x},\mathbf{e})
 \end{align}
 
-Equation \ref{eq:always_the_conditional} holds for the causal effect of $\RV{X}$ on \emph{any} $\RV{Y}$. This is clearly unsatisfactory. We can turn instead to the theory of cyclic causal graphs presented in \cite{forre_constraint-based_2018}. In this theory, the causal arrow from $\RV{X}$ to $\RV{Z}$ must be witnessed by another function $g:X\times U\to Z$ such that $\RV{Z}=g(\RV{X},\RV{U})$where $\RV{U}$ is a ``noise'' variable with some distribution $P(\RV{U})$ that is fixed under the intervention $do(\RV{X})$. In this case, it is easy to see that $P(\RV{Z}|\RV{X}=x)=g(x,\cdot)_\# P(\RV{U})=P(\RV{Z}|do(\RV{X}=x))$ i.e. the interventional map of $\RV{Z}$ is again the same as the probability conditional on $\RV{X}$. Furthermore, we also have some $h:X\times Z\times U\to Y$ such that $\RV{Y}=h(\RV{X},\RV{Z},\RV{U})$. It is clear that $P(\RV{Y}|do(\RV{X}=x),\RV{Z}=z) = h(x,z,\cdot)_\# P(\RV{U}) = P(\RV{Y}|\RV{X}=x,\RV{Z}=z)$. These two facts again imply \ref{eq:always_the_conditional}!
+Then an SCM $\mathcal{M}$ induces a unique probability space $(\mathbf{X}_{\mathcal{I}}\times\mathbf{E}_{\mathcal{J}},\mathcal{X}_{\mathcal{I}}\otimes\mathcal{E}_{\mathcal{J}},\mathbb{P}_{\mathcal{X}\otimes\mathcal{E}})$ \citep{bongers_theoretical_2016}. If no such solution exists then we will say an SCM is invalid, as it imposes mutually incompatible constraints on the endogenous variables.
 
-\citet{pearl_physical_2017} has explored an ``imaging'' operator based on the intervention operator $do(\RV{X}=x)$ that is able to evaluate disjunctive ``interventions''. We might suppose that $do(\RV{X}=x)$ is equivalent to $do(\RV{Z}\in f^{-1}(x))$, in which case we might be able to make use of the imaging operator to evaluate $do(\RV{X}=x)$. However, as Pearl shows, the derived imaging operator implies that $P(\RV{Y}|do(\RV{Z}\in f^{-1}(x)))=P(\RV{Y}|\RV{Z}\in f^{-1}(x))=P(\RV{Y}|\RV{X}=x)$.
+If an SCM induces a unique probability space then there exist random variables $\{\RV{X}_i\}_{i\in\mathcal{I}}$ such that, almost surely \citet{bongers_theoretical_2016}:
 
-\subsection{Resolution?}
+\begin{align}
+	\RV{X}_i = f_i(\bm{\RV{X}}_{\mathcal{I}},\bm{\RV{E}}_{\mathcal{J}})
+\end{align}
 
-The difficulties raised here require some elaboration of interventional models. Three possibile elaborations are:
+Where $\bm{\RV{X}}_{\mathcal{I}} = \utimes_{i\in \mathcal{I}} \RV{X}_i$.
+
+A structural causal model can be transformed by \emph{mechanism surgery}. This is an operation that replaces a model $\mathcal{M}$ with a modified model $\mathcal{M}'$ that shares all elements except the set of causal mechanisms, which is replaced by an arbitrarily different set $\mathbf{f}'_{\mathcal{I}}$.
+
+If the mechanism surgery that transforms $\mathcal{M}$ to $\mathcal{M}'$ is such that $f'_i\neq f_i$ and $f'_j=f_j$, $j\neq i$, then we say that $\mathcal{M}'$ represents \emph{an intervention on $\RV{X}_i$}. If $f'_i$ is furthermore a constant function equal to $x$ then we say that $\mathcal{M}'$ represents a \emph{hard intervention on $i$} and use the special notation $\mathcal{M}^{do(\RV{X}_i=x)}:=\mathcal{M}'$. Similarly, $\mathcal{M}^{do(\RV{X}_i=x,\RV{X}_j=y)}$ is a model representing a hard intervention on $i$ and $j$. The \emph{causal effect} of $\RV{X}_i$ is the set of hard interventional SCMs $\{\mathcal{M}^{do(\RV{X}_i=x)}|x\in X_i\}$, which is generated by the fundamental model $\mathcal{M}$ and the operation of hard intervention on $\RV{X}_i$.
+
+We say a \emph{causal model} is any kind of model that defines causal effects. An SCM $\mathcal{M}$ in combination with hard interventions defines causal effects, so an SCM is a causal model. Call each interventional model $\mathcal{M}^{do(\RV{X}_i=x)}$ a \emph{submodel} of $\mathcal{M}$.
+
+Strictly, the random variables $\RV{X}_i$ depend on the probability space induced by a particular model $\mathcal{M}$, they are intended to refer to ``the same variable'' across different models that are related by mechanism surgery. We will abuse notation and use $\RV{X}_i$ to refer to the \emph{family} of random variables induced by a set of models related by mechanism surgery, and rely on explicitly noting the measure $\mathbb{P}_{...}(...)$ to specify exactly which random variables we are talking about. \todo{Incidentally, this messiness with random variables can be solved if we use See-Do models.}
+
+In practice, we typically specify a ``small'' SCM containing a few endogenous variables $\mathcal{I}$ (called a ``marginal SCM'' by \citet{bongers_theoretical_2016}) which is understood to summarise the relevant characteristics of a ``large'' SCM containing many variables $\mathcal{I}^*$. We will argue that without restrictions on the large set of variables $\mathcal{I}^*$, surgically transformed SCMs will usually be invalid.
+
+
+\subsection{Not all variables have well-defined interventions}
+
+A long-running controversy about causal inference concerns the question of ``the causal effect of body mass index on mortality''. On the one hand, \citet{hernan_does_2008} and others claim that there is no well-defined causal effect of a person's body mass index (BMI), defined as their weight divided by their height, and their risk of death. Pearl claims, in defence of Causal Bayesian Networks, that the causal effect of \emph{obesity} is well-defined, though it is not clear whether he defends the proposition that BMI itself has a causal effect:
+
+\begin{quote}
+That BMI is merely a coarse proxy of obesity is well taken; obesity should ideally be described by a vector of many factors, some are easy to measure and others are not. But accessibility to measurement has no bearing on whether the effect of that vector of factors on morbidity is ``well defined'' or whether the condition of consistency is violated when we fail to specify the interventions used to regulate those factors. \citep{pearl_does_2018}
+\end{quote}
+
+We argue that BMI does \emph{not} have a well-defined causal effect, and without further assumptions neither does any variable.
+
+
+\subsection{Necessary relationships}
+
+The relationship between a person's body mass index, their weight and their height defines what body mass index is. A fundamental claim of ours is that any causal model that defines ``the causal effect of body mass index'' should do so without reference to any submodel that violates this definitional relationship violation of the definition. This is an important assumption, and it rests on a judgement of what causal models ought to do. I think it is quite clear that when anyone asks for a causal effect, they expect that any operations required to define the causal effect \emph{do not change the definitions of the variables they are employing}. While theories like SCMs have a role in sharpening our understanding of the term \emph{causal effect}, the thing called a ``causal effect'' in an SCM should still respect some of our pre-theoretic intuitions about what causal effects are or else it should be called something else. ``Causal effects'' that depend on redefining variables do not respect pre-theoretic intuitions about what causal effects are:
+
 \begin{itemize}
-	\item If a variable $\RV{X}$ is defined to be equal to $f(\RV{Y})$ where $f$ is non-invertible, is it inappropriate to say $\RV{Y}$ causes $\RV{X}$? If so, why?
-	\item Are there some sets of variables that are forbidden from co-occurring in interventional models? If so, which sets are forbidden, and how can we be sure a chosen set of variables is acceptable?
-	\item Are causal effects usually non-unique? If so, how should the non-uniqueness be handled?
+	\item If I ask for the ``causal effect of a person's BMI'', I do not imagine that I am asking what would happen if someone's BMI were defined to be something other than their weight divided by their height
+	\item If I ask for the ``causal effect of a person's weight'', I do not imagine that I am asking what would happen if someone's weight were not equal to their volume multiplied by their density
+	\item If I ask for the ``causal effect of a person's weight'', I also do not imagine that I am asking what would happen if their weight were not equal to the weight of fat in their body plus the weight of all non-fat parts of their body
+	\item If I ask for the ``causal effect of taking a medicine'', I do not imagine that I am asking what would happen if a person were declared to have taken a medicine independently of whatever substances have actually entered their body and how they entered
 \end{itemize}
 
+We will call relationships that have to hold \emph{necessary relationships}. We provide the example of relationships that have to hold by definition as examples of relationships that should be necessary in causal models, but one might also wish to stipulate that certain laws of physics are required to hold in all submodels.
 
-\section{Criticism of the potential outcomes system}
+If an SCM contains variables that are necessarily related, we wish to impose the additional restriction that these necessary relationships hold for every submodel. This can be done by extending the previous definition:
+
+\begin{definition}[SCM with necessary relationships]
+An SCM with necessary relationships (SCNM) is a tuple $\mathcal{M}:=\langle \mathcal{I},\mathcal{J},\mathbf{X}_{\mathcal{I}},\mathbf{E}_{\mathcal{J}},\mathbf{f}_{\mathcal{I}},\mathbf{g}_{\mathcal{I}},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$, which is an SCM with the addition of a vector function of \emph{necessary relationships} $\mathbf{g}_{\mathcal{I}}:=\utimes_{i\in\mathcal{I}} g_i$ where each $g_i:\mathbf{X}_{\mathcal{I}}\to X_i$ is a necessary relationship involving $\RV{X}_i$.
+
+An SCM with necessary induces a unique probability space if for $\mathbb{P}_{\mathcal{E}}$-almost every $e\in\mathcal{E}$ there exists a unique $\mathbf{x}\in\mathbf{X}_{\mathcal{I}}$ such that simultaneously
+\begin{align}
+	\mathbf{x} &= \mathbf{f}_{\mathcal{I}}(\mathbf{x},\mathbf{e})\\
+	\mathbf{x} &= \mathbf{g}_{\mathcal{I}}(\mathbf{x})
+\end{align}
+
+If no such $\mathbf{x}$ exists then an SCNM is invalid.
+
+Mechanism surgery for SCNMs involves modification of $\mathbf{f}_{\mathcal{I}}$ only, just like SCMs.
+
+If we wish to stipulate that a particular variable $\RV{X}_i$ has no causal relationships or necessary relationships we can specify this with the trivial mechanisms $f_i:(\mathbf{x},\mathbf{e})\mapsto x_i$ and $g_i:\mathbf{x} \mapsto x_i$ respectively. An SCNM $\mathcal{M}$ with the trivial necessary relationship $\mathbf{g}_{\mathcal{I}}: \mathbf{x}\mapsto \mathbf{x}$ induces the equivalent probability spaces as the SCM obtained by removing $\mathbf{g}_{\mathcal{I}}$ from $\mathcal{M}$.
+\end{definition}
+
+Because BMI is always equal height/weight, a causal model that includes height and weight ought to be able to model anything that a model containing height, weight and BMI can model. \todo{explain why}
+
+However, as Theroem \ref{th:no_interventions} shows, if an SCNM with height, weight and BMI can be derived from an SCNM containing just height and weight then there are no valid interventions on BMI.
+
+\begin{definition}[Derived model]
+Given a SCNM $\mathcal{M}:=\langle \mathcal{I},\mathcal{J},\mathbf{X}_{\mathcal{I}},\mathbf{E}_{\mathcal{J}},\mathbf{f}_{\mathcal{I}},\mathbf{g}_{\mathcal{I}},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$, say $\mathcal{M}'=\langle \mathcal{I}',\mathcal{J},\mathbf{X}_{\mathcal{I}'},\mathbf{E}_{\mathcal{J}},\mathbf{f}_{\mathcal{I}'},\mathbf{g}_{\mathcal{I}'},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$ is \emph{derived} from $\mathcal{M}$ if there exists some additional index/variable/relationships $i'\not\in\mathcal{I},X_{i'},f_{i'},g_{i'}$ such that
+\begin{align}
+	\mathcal{I}' &= \mathcal{I}\cup\{i'\}\\
+	\mathbf{X}_{\mathcal{I}'} &= \mathbf{X}_{\mathcal{I}}\cup X_{i'}\\
+	\mathbf{f}_{\mathcal{I}'} &= \mathbf{f}_{\mathcal{I}}\utimes f_{i'}\\
+	\mathbf{g}_{\mathcal{I}'} &= \mathbf{g}_{\mathcal{I}}\utimes g_{i'}
+\end{align}
+
+Call $i',X_{i'},f_{i'},g_{i'}$ the \emph{additional elements}. \todo{I need to stipulate that $f_k$ ``forgets'' $\RV{X}_{i'}$ for $k\neq i'$, $g_k$ ``forgets'' for all $k$}
+\end{definition}
+
+\begin{theorem}[Interventions and necessary relationships don't mix]\label{th:no_interventions}
+If $\mathcal{M}'$ is derived from $\mathcal{M}$ with the additional elements $i',X_{i'},f_{i'},g_{i'}$ and both $\mathcal{M}$ and $\mathcal{M}'$ are uniquely solvable and $\mathbb{P}_{\mathcal{X}'\otimes\mathcal{E}}(\RV{X}_{i'})$ is not single valued then no hard interventions on $\RV{X}_{i'}$ are possible.
+\end{theorem}
+
+\begin{proof}
+Because $\mathcal{M}$ is uniquely solvable, for $\mathbb{P}_{\mathcal{E}}$ almost every $\mathbf{e}$ there is a unique $\mathbf{x}^e$ such that
+\begin{align}
+	\mathbf{x}^e &= \mathbf{f}_{\mathcal{I}}(\mathbf{x}^e,\mathbf{e})\\
+	\mathbf{x}^e &= \mathbf{g}_{\mathcal{I}}(\mathbf{x}^e)
+\end{align}
+
+Because $\mathcal{M}'$ is also uniquely solvable, for $\mathbb{P}_{\mathcal{E}}$ almost every $\mathbf{e}$ we have
+\begin{align}
+	x^e_{i'} = \mathbf{g}_{i'}(\mathbf{x}^e) \label{eq:necessary_relationship}
+\end{align}
+
+Because $\mathbb{P}_{\mathcal{X}'\otimes\mathcal{E}}(\RV{X}_{i'})$ is not single valued there are non-null sets $A,B\in \mathcal{E}$ such that $e_a\in A$, $e_b\in B$ implies
+
+\begin{align}
+	\mathbf{g}_{i'}(\mathbf{x}^{e_a}) \neq \mathbf{g}_{i'}(\mathbf{x}^{e_b})
+\end{align}
+
+Therefore there exists no $a\in X_{i'}$ that can simultaneously satisfy \ref{eq:necessary_relationship} for almost every $\mathbf{e}$. However, any hard intervention $\mathcal{M}^{\prime,do(\RV{X}_{i'}=a)}$ requires such an $a$ in order to be solvable.
+\end{proof}
+
+\begin{corollary}
+Either there are no hard interventions defined on BMI or there is no SCNM containing height and weight with a unique solution from which an SCNM containing height, weight and BMI can be derived.
+\end{corollary}
+
+\todo[inline]{I can formalise the following, but I'm just writing it out so I can get to the end for now}
+
+The problem posed by Theorem \ref{th:no_interventions} can be circumvented to some extent by joint interventions. Consider the variables $\RV{X}_1$ and $\RV{X}_2$ where $\RV{X}_1 = - \RV{X}_2$ necessarily. While Theorem \ref{th:no_interventions} disallows interventions on $\RV{X}_2$ individually (supposing we can obtain a unique model featuring only $\RV{X}_1$), it does not disallow interventions that jointly set $\RV{X}_1$ and $\RV{X}_2$ to permissible values. In this case, this is unproblematic as the only joint intervention that sets $\RV{X}_1$ to $1$ must also set $\RV{X}_2$ to $-1$.
+
+If we have non-invertible necessary relationships such as $\RV{X}_1 = \RV{X}_2 + \RV{X}_3$, however, there are now \emph{multiple} joint interventions on $\RV{X}_1$ that can be performed. I regard this as the most plausible solution to the difficulties raised so far: for variables that are in non-invertible necessary relationships, there is a set of operations associated with the ``intervention'' that sets $\RV{X}_1=1$.
+
+However, we still need to make sure the interventions that we have supposed comprise the operations associated with setting $\RV{X}_1=1$ exist themselves. It is sufficient that the SCNM with $\RV{X}_1$ is derived from a higher order \emph{uniquely solvable SCM} with $\RV{X}_2$ and $\RV{X}_3$ only \todo{because interventions are defined in uniquely solvable SCMs and derivation preserves interventions on the old variables}.
+
+\todo[inline]{And necessary? There might be ``degenerate'' necessary relationships that don't harm the possibility of defining interventions, and I'd need to show an equivalence to an SCM in this case}
+
+If any variables are included in a causal model that are necessarily related to other variables (and honestly, is there any variable that isn't?), it is not enough to suppose that the model being used is a marginalisation of some larger causal model. Rather, it must be obtained by derivation and marginalisation from some model that represents the basic interventions that are possible, which we call the \emph{atomic model}.
+
+\begin{definition}[Atomic model]
+Given an SCNM $\mathcal{M}$, the \emph{atomic model} $\mathcal{M}_{\text{atom}}$ is a uniquely solvable SCM such that there exists a model $\mathcal{M}$ is derived from of $\mathcal{M}_{\text{atom}}$.
+\end{definition}
+
+\todo[inline]{Typically, in order to get an actually usable model you'll also need to marginalize, but I think this complication can be avoided}
+
+\begin{definition}[Causal universality hypothesis]
+There exists a uniquely solvable SCM $\mathcal{M}_{\text{atom}}$ which is the atomic model that correctly represents \todo{what does that mean?} all decision problems \todo{or causal problems?}
+\end{definition}
+
+\todo[inline]{I don't know how to define ``correctly represents'' or ``causal problem'', but it seems like something like the universality hypothesis is necessary if you want to define ``the causal effect of $\RV{X}$'' independent of any atomic model}
+
+\todo[inline]{Relate decisions to interventions on atomic model. Decisions->atomic model is straightforward, but the reverse direction is not so obvious}
+
+\todo[inline]{Causal effects are uniquely defined via atoms iff they are defined via decisions}
+
+\todo[inline]{Are there any plausible ways to construct atomic models?}
 
 
-Rough outline:
+% This stipulation appears to conflict with certain definitions of causal models. For example, if we define $\RV{B}$ to be a person's body mass index, $\RV{W}$ to be a person's weight and $\RV{H}$ to be a person's height and them posit that the following is a \emph{structural equation} in a causal model:
+% \begin{align}
+% 	\RV{B} = \frac{\RV{W}}{\RV{H}} \label{eq:bmi_seq}
+% \end{align}
 
-\begin{itemize}
- \item Overall, it's under-specified and confused
- \item Some call consistency a definition, some an assumption. Note that consistency is "half of a similarity metric" a la Lewis, but the other half is nowhere to be found
- \item Some talk about interventions (see above)
- \item Some say ``what would happen if you did an ideal intervention'' - but is this a definition or an example?
- \item 
-\end{itemize}
+% Then operation of ``equation surgery'' arbitrarily alters the right hand side of Equation \ref{eq:bmi_seq}. Furthermore, the ``causal effect of BMI'' is apparently defined by surgically setting the right hand side to a constant value, independent of $\RV{W}$ and $\RV{H}$. However, it shouldn't be. After such surgery, the variable $\RV{B}$ no longer represents a person's body mass index and, whatever the resulting model describes, it is totally irrelevant to finding out what might happen if you did something that changed a person's body mass index. It is a famously difficult problem to say what causal effects should be, but it seems clear to me that causal effects are \emph{not} things that describe what happens when you change the definitions of variables. 
 
-The potential outcomes system of causal inference is under-specified. When someone judges ignorability to hold in a particular randomised experiment and judges it to fail for some other experiment, the potential outcomes system does not provide any more basic claims that constitute the assumptions. Rather, they are judged to hold or fall by direct appeals to intuition. Appeals to intuition render it difficult to direct pointed criticism at the theory, as the truth and falsehood of certain propositions depends on the intiutions of the people involved in the argument. This makes it a poor system for the collaborative pursuit of truth, as criticism plays an essential role in this.
+% If we reject the notion that the ``causal effect of BMI'' is defined by doing surgery on Equation \ref{eq:bmi_seq}, then we are left with two options: either BMI has no causal effect or its causal effect is somehow defined differently. I will 
 
-It is in principle possible to ground the potential outcomes system in more fundamental assumptions. For example, \citet{lewis_causation_1986} has proposed that the ``truth'' of counterfactual propositions should be evaluated in terms of their truth values in the ``most similar worlds'' that make these propositions true. If it were possible to define a satisfactory measure of world similarity then assumptions like ignorability \emph{would} reduce to more basic claims, and could be disproved by showing that a more similar world exists in which ignorability fails. As it stands, however, I am not aware of any suitable metrics of world similarity, and as I will show it is likely that no single metric will serve.
 
-The potential outcomes system does feature the assumption of \emph{consistency}. This is the assumption that the potential outcome $\RV{Y}^a$ ``the value of $\RV{Y}$ on the supposition that $a$ occurs'' is equal to $\RV{Y}$ if $a$ actually occurs. This precisely matches Lewis' view that if $a$ actually happens then the most similar world in which $a$ occurs is the real world. So far so good, but the whole point of the similarity measure is to say something nontrivial about $\RV{Y}^a$ if $a$ \emph{does not} occur. The potential outcomes system is silent on this, handwaving the issue away with the admonition that this must be determined by expert judgement. They do not explain how one should obtain expertise in offering true answers to unanswerable questions.
+% \subsection{Interventions and definitional relationships}
 
-\citet{hernan_does_2008}: "Suppose that, in the observational study in the neighboring country, the data analyst compared the mortality of subjects who happened to have a BMI of 30 ($A = 1$) and a BMI of 20 ($A = 0$) at baseline. Now consider a study subject who had a BMI of 20 at baseline. It is not obvious that, had he been assigned to a BMI of 20 some time before baseline, his counterfactual outcome at the end of the study would have been necessarily equal to his observed outcome because there are many possible methods to assign someone to a BMI of 20."
+% We next show that given a set of variables that are related to one another by definition, there exists no causal model that avoids redefining this relationship and that determines a unique ``effect'' of interventions on any of these variables.
 
-Hern\'{a}n here invokes an informal notion of intervention to argue against the consistency of BMI.
+% If we suppose that $\RV{W}$ and $\RV{H}$ are causes of $\RV{B}$ as in model \ref{eq:dumb_bmi_model} then a change to $\RV{W}$ or $\RV{H}$ while holding the other constant yields a change in $\RV{B}$, as we expect. However, a change in $\RV{B}$ must also yield a change in $\RV{W}$ or $\RV{H}$ or both so that $\RV{B}=\frac{\RV{W}}{\RV{H}}$ continues to hold. It is not standard for causal models to contain sets of variables such that intervention on each changes the other. 
+
+% What happens if we ``intervene'' on $\RV{B}$ to set it to 1? There are obviously many combinations of $\RV{W}$ and $\RV{H}$ that are consistent with $\RV{B}=1$ - we could have $\RV{W}=100$ kg and $\RV{H}=100$ cm or $\RV{W}=80$ kg and $\RV{H}= 80$ cm or any other setting where $\RV{W}=\RV{H}$. One option would be to define an intervention on $\RV{B}$ as \emph{any} intervention on $\RV{W}$ and $\RV{H}$. Alternatively, we might suppose that the distributions of $\RV{W}$ and $\RV{H}$ after intervention are still found by the rule of \emph{ancestral invariance} with respect to a cyclic causal model. However, it is not generally possible to respect ancestral invariance for all variables in definitonal relationships.
+
+% This is easiest to illustrate in a modified problem. Let $\RV{A}$ be caused by $\RV{A_0}$ such that $P(\RV{A}|\RV{A}_0=a)=\delta_a(\RV{A})$ and likewise $\RV{B}$ is caused by $\RV{B_0}$ with $P(\RV{B}|\RV{B}_0=b)=\delta_b(\RV{B})$ and $\RV{B}_0\CI\RV{A}_0$. Furthermore, $\RV{C}=\RV{A}+\RV{B}$ is a definitional relationship and $\RV{A}_0$ and $\RV{B}_0$ are not caused by $\RV{C}$.
+
+% If we demand that $P(\RV{A}|\RV{A}_0=a,do(\RV{C}=c))=P(\RV{A}|\RV{A}_0=a,\RV{C}=c)=\delta_a(\RV{A})$ then $P(\RV{B}|\RV{A}_0=a,do(\RV{C}=c))=P(\RV{B}|\RV{A}=a,do(\RV{C}=c))=delta_{c-a}(\RV{B})$. Therefore (under mild conditions) $\RV{B}\not\CI_{do(\RV{C}=c)}\RV{A}_0$ but $\RV{B}_0\CI_{do(\RV{C}=c)}\RV{A}_0$ so it cannot be that $P(\RV{B}|\RV{B}_0=b,do(\RV{C}=c))=\delta_b(\RV{B})$.
+
+% In general, under an intervention on a variable in a definitional relationship, not all ancestral invariances can be maintained. Therefore it is necessary to invoke some rule other than ancestral invariance to determine what happens when $\RV{C}$ is intervened on. In a decisions-first framework, this is straightforward - the ambiguity about what happens when $\RV{C}$ is intervened on corresponds to multiple effects a decision with a known effect on $\RV{C}$ could have on $\RV{A}$ and $\RV{B}$, and more knowledge about effects of decisions can resolve the ambiguity. If \emph{causes} are the building block of the theory, however, it is not so clear how this should be resolved - we have already established that causal relationships combined with the principle of ancestral invariance cannot do it.
+
+% \todo[inline]{I wrote the following definitions when I had a more complex argument. Pearl's notation is not ideal for formalising intervention, but it's also familiar so I used it for the simpler argument above.}
+
+% \paragraph{Interventions:}
+
+% \begin{enumerate}[label={$I\arabic*$)}]%[Interventions]
+% 	\item Random variables are measurable functions on a probability space $(E,\mathcal{E},P)$
+% 	\item Causal relationships are a transitive set $\mathbf{R}$ of pairwise relations $\rightarrowtriangle$ among random variables on $\mathcal{E}$. For $\RV{X}\in\mathcal{E}$, $\text{Anc}_{\mathbf{R}}(\RV{X})$ is the set of all $\RV{Y}\in\mathcal{E}$ such that $\RV{Y}\rightarrowtriangle\RV{X}\in\mathbf{R}$
+% 	\item \emph{Intervention} with respect to a probability space $(E,\mathcal{E},P)$, a set of causal relationships $\mathbf{R}$ and a random variable $\RV{X}$ is a map $I^{P,\RV{X}}:X\to \Delta(\mathcal{E})$ where we leave the dependence on $\mathbf{R}$ implicit
+% 	\item The function that defines the random variable $\RV{Y}$ on $(E,\mathcal{E},P)$ defines a random variable $\RV{Y}'$ on $(E,\mathcal{E},I^{P,\RV{X}}_x)$ for any post-intervention probability space $I^{\RV{X}}_x$
+% \end{enumerate}
+
+% \paragraph{Post interventional distributions:}
+
+% \begin{enumerate}[label={$C\arabic*$)}]%[Computing post intervention distributions]
+% 	\item Intervention sets the value of variables: For all variables $\RV{X}$, $I^{P,\RV{X}}_x(\RV{X}')=\delta_x(\RV{X}')$
+% 	\item Ancestral invariance holds for non-intervened variables: For any random variables $\RV{X}\neq \RV{Y}$, $x\in \RV{X}$, $I^{P,\RV{X}}_x(\RV{Y}'|\text{Anc}_{\mathbf{R}}(\RV{Y}'))=P(\RV{Y}|\text{Anc}_{\mathbf{R}}(\RV{Y}))$, $I^{P,\RV{X}}_x$ almost
+% 	\item Interventions do not change the definitions of variables: If some variable $\RV{X}$ is by definition equal to $f(\RV{Y},\RV{Z})$ for some $f:X\times Z\to Y$ then for all random variables $\RV{W}$, $w\in \RV{W}$, $I^{P,\RV{W}}_w(\RV{X}'|\RV{Y}'=y,\RV{Z}'=z)=\delta_{f(y,z)}(\RV{X}')$
+% \end{enumerate}
+
+% \subsection{Definitional relationships are ubiquitous}
+
+% It may not seem like a particularly big problem if interventions cannot be uniquely defined on body mass index if they are definable on most other variables. However, this is not the case, and as we will see variables like BMI are the rule rather than the exception. For example, the prospective causes in all of the following statements are by definition equal to non-injective functions of other variables:
+
+% \begin{itemize}
+% 	\item \emph{Weight causes BMI}: ``Weight'' is itself by definition equal to $\text{weight of left foot} + \text{weight of body excluding their left foot}$
+% 	\item \emph{Rain causes wet roads}: ``Rain in my town'' is by definition equal to $\text{rain in the south of my town}\lor\text{rain in the north of my town}$
+% 	\item \emph{Antibiotics cause recovery from plague}: ``Antibiotics'' is by definition equal to $\text{streptomycin}\vee \text{gentamicin}\lor \text{doxycycline}\lor...$
+% 	\item \emph{Economic freedom causes GDP growth}: ``Economic freedom'' as defined by \citet{noauthor_2020_nodate} is equal to the average of 12 variables addressing different aspects of economic freedom
+% \end{itemize}
+
+% Furthermore, the defining variables we have proposed are themselves related by definition to other variables. Rain before lunch must be equal to rain before 10am $\lor$ rain between 10am and 12pm.
+
+% \subsection{Causal Universe}
+
+% Causal models always feature an implicit quantification over a ``universe'' of variables and causal relationships. The statement ``$\RV{X}$ and $\RV{Y}$ have no common causes'' does not mean that $\RV{X}$ and $\RV{Y}$ have no common causes out of the variables that I happened to write on the page; rather, it means that $\RV{X}$ and $\RV{Y}$ have no common causes at all. Causal models generally lack an explicit definition of a ``universe'' of variables that may be cause of $\RV{X}$ and $\RV{Y}$ which would allow a formal quantification of the phrase \emph{at all}, but it is usually understood that most variables that ``measure something real'' are reasonable to include in this universe (the number of galaxies within 100 million lightyears of myself probably does not cause my headaches, but it is not a type error to ask this question). I have proposed variables that ``measure something real'' as fair game, which is a rather vague definition to begin with, but it is also apparently insufficient as there are many causal models that include \emph{counterfactual} variables \citep{shpitser_complete_2008}. If counterfactual variables are fair game, however, it isn't clear to me why I cannot define \emph{every} variable as a non-injective function of counterfactual variables. 
+
+% If a set of ``atomic variables'' making up a causal universe were explicitly defined then this problem with definitional relationships could be resolved. Regular probability theory defines a sample space that serves as a ``universe'', and random variables are measurable functions of this sample space. In a similar manner, we could suppose that random variables in causal models are functions of ``causal atoms'' which have canonical causal relationships to one another. Causal relationships between atoms might, under some circumstances, induce higher level causal relationships between random variables.
+
+
+% \paragraph{Sufficient conditions for causal relationships:}
+
+% \begin{enumerate}[label={$S\arabic*$)}]%[Sufficient conditions for causation]
+% 	\item If an intervention on $\RV{Y}$ yields a change in $\RV{X}$ then $\RV{Y}$ is a cause of $\RV{X}$ unless $\RV{X}=\RV{Y}$. Specifically, if there exists $\RV{X},\RV{Y}$, $y\in Y$ such that $I^{P,\RV{Y}}_y(\RV{X}')\neq P(\RV{X})$ and $\RV{Y}\neq\RV{X}$ then $\RV{Y}$ is a cause of $\RV{X}$ in $\mathbf{R}$
+% 	\item If, after intervening on $\RV{Y}$, an intervention on $\RV{Z}$ yields a change in $\RV{X}$ then $\RV{Z}$ is a cause of $\RV{X}$. Specifically, if there exists $\RV{X},\RV{Y},\RV{Z}$, $y\in Y$, $z\in Z$ such that $I^{I^{P,\RV{Y}}_y,\RV{Z}}_z(\RV{X}'')\neq I^{P,\RV{Y}}_y(\RV{X}')$ and $\RV{X}\neq \RV{Y}\neq \RV{Z}$ then $\RV{Z}$ is a cause of $\RV{X}$ in $\mathbf{R}$
+% \end{enumerate}
+
+
+% We begin with Lemma \ref{th:mutual_cause}, which shows that under the assumptions listed above $\RV{B}$, $\RV{H}$ and $\RV{W}$ must all cause one another.
+
+% \begin{lemma}[Mutual causation]\label{th:mutual_cause}
+% If there exist three variables $\RV{X},\RV{Y}, \RV{Z}$ such that $\RV{X}$ is by definition equal to $f(\RV{Y},\RV{Z})$ and there exist $z,z',z''\in Z$, $y,y',y''\in Y$ such that $f(z,y')\neq f(z,y'')$ and $f(z',y)\neq f(z'',y)$ then the causes of $\RV{X}$ include $\RV{Y}$ and $\RV{Z}$.
+% \end{lemma}
+
+% \begin{proof}
+% By (C1) and (C3), $I^{I^{P,\RV{Z}_{z'}},\RV{Y}}_y(\RV{X}''|\RV{Y}''=y,\RV{Z}''=z')=I^{I^{P,\RV{Z}_{z'}},\RV{Y}}_y(\RV{X}'')=\delta_{f(y,z')}(\RV{X}')$. By assumption on $f$ this is not equal to $\delta_{f(y,z'')}(\RV{X}')=I^{I^{P,\RV{Z}_{z''}},\RV{Y}}_y(\RV{X}'')$. By (S2) therefore, $\RV{Z}$ is a cause of $\RV{X}$.
+
+% Similarly, $I^{I^{P,\RV{Y}_y},\RV{Y}_{y'}}(\RV{X}'')=\delta_{f(y',z)}(\RV{X}'')\neq \delta_{f(y'',z)}(\RV{X}'') = I^{I^{P,\RV{Y}_y},\RV{Y}_{y'}}(\RV{X}'')$ so $\RV{Y}$ is a cause of $\RV{X}$.
+% \end{proof}
+
+% \begin{corollary}\label{cor:mutually_causal}
+% By definition of body mass index we have $\RV{B}=\frac{\RV{W}}{\RV{H}}$, $\RV{W}=\RV{B}\RV{W}$ and $\RV{H}=\frac{\RV{W}}{\RV{B}}$. Clearly each function depends on both arguments, as required by \ref{th:mutual_cause}. Thus $\RV{B}$, $\RV{W}$ and $\RV{H}$ are all mutually causes of one another.
+% \end{corollary}
+
+% \begin{theorem}[No causal model that leaves $\RV{H}$ invariant]
+% There is no causal model $(E,\mathcal{E},P,\mathbf{R})$ such that interventions on $\RV{B}$ do not change the distribution of $\RV{H}$.
+% \end{theorem}
+
+% \begin{proof}
+% By corollary \ref{cor:mutually_causal}, $\RV{B}$, $\RV{H}$ and $\RV{W}$ are mutually causal. By (C2) we have 
+% \begin{align}
+% 	I^{P,\RV{B}}_b(\RV{H}'|\RV{W}',\RV{B}',\text{Anc}_{\mathbf{R}}(\RV{H}'))&=P(\RV{H}|\RV{W},\RV{B},\text{Anc}_{\mathbf{R}}(\RV{H}))\label{eq:y_invar}
+% \end{align}
+
+
+
+% and by (C1) we have $I^{P,\RV{X}}_x(\RV{X}')=\delta_x(\RV{X}')$. Given that $\RV{Y}'$ is a function of $\RV{X}'$ and $\RV{Z}'$, we must have $\RV{Y}'\CI\text{Anc}_{\mathbf{R}}(\RV{Y}')|\RV{X}',\RV{Z}'$ and likewise $\RV{Z}'\CI\text{Anc}_{\mathbf{R}}(\RV{Z}')|\RV{X}',\RV{Y}'$. If both conditional independences hold then the requirements reduce to
+
+% \begin{align}
+% 	I^{P,\RV{X}}_x(\RV{Y}'|\RV{X}',\RV{Z}')&=P(\RV{Y}|\RV{X},\RV{Z})=\delta_{g(\RV{X}',\RV{Z}')}(\RV{Y}')\label{eq:y_invar2}\\
+% 	I^{P,\RV{X}}_x(\RV{Z}'|\RV{X}',\RV{Y}')&=P(\RV{Z}|\RV{X},\RV{Y})=\delta_{h(\RV{X}',\RV{Y}')}(\RV{Z}')\label{eq:z_invar2}\\
+% 	I^{P,\RV{X}}_x(\RV{X}')&=\delta_x(\RV{X}')
+% \end{align}
+
+% This set of requirements can be satistied by any measure such that $\RV{X}'=f(\RV{Y}',\RV{Z}')$ almost surely.
+
+% Suppose that $\RV{Y}'\not\CI\text{Anc}_{\mathbf{R}}(\RV{Y}')|\RV{X}',\RV{Z}'$. If $\RV{X}$, $\RV{Y}$ or $\RV{Z}$ are causes of $\text{Anc}_{\mathbf{R}}(\RV{Y})$ then by the transitivity of $\mathbf{R}$ all three are causes. In this case we have
+
+% \begin{align}
+% 	I^{P,\RV{X}}_x(\text{Anc}_{\mathbf{R}}(\RV{Y}')|\RV{X}',\RV{Y}',\RV{Z}',\text{Anc}^2_{\mathbf{R}}(\RV{Y}'))&=P(\text{Anc}_{\mathbf{R}}(\RV{Y})|\RV{X},\RV{Y},\RV{Z},\text{Anc}^2_{\mathbf{R}}(\RV{Y}))\label{eq:y_invar}
+% \end{align}
+
+% By an analogous argument, if 
+
+% We require some $n$ such that 
+
+% Suppose there is a unique marginal $I^{*}_x(\RV{Y}')$ compatible with intervention on $\RV{X}$ and $\mathbf{R}$. Then $I^*_x$ obeys \ref{eq:y_invar} and \ref{eq:z_invar} and
+
+% \begin{align}
+% 	I^*(\RV{Y}') &= I^{P,\RV{X}}_x(\RV{Y}'|\RV{X}',\RV{Z}',\text{Anc}_{\mathbf{R}}(\RV{Y}')) I^*(\text{Anc}_{\mathbf{R}}(\RV{Y}')|\RV{X}') \delta_x(\RV{X}')
+% \end{align}
+
+
+% \end{proof}
+
+
+% Given that $\RV{B}$, $\RV{H}$ and $\RV{W}$ are all mutually causal, if we accept \emph{ancestral invariance} then under any intervention not on $\RV{H}$, $\RV{H}$ is uniquely determined by $\RV{B}$ and $\RV{W}$ (and similarly for $\RV{B}$ and $\RV{W}$). Therefore $\RV{H}$ cannot have any additional cause that is not itself equal to some fixed function of $\RV{B}$ and $\RV{W}$ under no intervention or under any intervention on $\RV{B}$ or $\RV{W}$. Any such additional cause $\RV{U}=m(\RV{B},\RV{W})$ where $m$ is not single valued must itself be caused by $\RV{B}$ or $\RV{W}$. By transitivity of causes, $\RV{U}$ is itself caused by $\RV{H}$ and the expanded set $\{\RV{B},\RV{W},\RV{H},\RV{U}\}$ is mutually ancestral. 
+
+% This conclusion is absurd. 
+
+
+% Then it is clear that $\RV{W}$ must cause $\RV{H}$
+
+
+%  If we accept that manipulations establish the presence of causal relationships, then this requires that $\RV{W}$ and/or $\RV{H}$ 
+
+% One way we could make sense of this is to say that there are simply no interventions defined on $\RV{B}$ - it is a ``non-intervenable'' variable. In this case, as we will argue, most practically measurable variables are non-intervenable, and so most variables do not have ``causal effects''.
+
+% Alternatively, it may be the case that a \emph{cyclic} causal model can tell us what happens when we intervene on $\RV{B}$. In general, however, the existence of the definitional relationships like the relationship between $\RV{W}$, $\RV{H}$ and $\RV{B}$ places apparently arbitrary restrictions on what the causes of $\RV{W}$ and $\RV{H}$ may be.
+
+% Suppose that the following property must hold for any cyclic causal model:
+
+% \begin{itemize}
+% 	\item If $\RV{Y}$ is an ancestor of $\RV{X}$ then  $P_{\RV{Y}=y}(\RV{X}|\text{Ancestors}_\mathcal{G}(\RV{X})) = P(\RV{X}|\text{Ancestors}_\mathcal{G}(\RV{X}))$
+% \end{itemize}
+
+% Consider a simpler case than model \ref{eq:dumb_bmi_model}.
+
+% Suppose the ancestors of height are $\RV{B}$ and $\RV{U}_{\RV{H}}$ and the ancestors of $\RV{W}$ are $\RV{B}$ and $\RV{U}_{\RV{W}}$. Then we have $P_b(\RV{H}|\RV{U}=u)=P(\RV{H}|\RV{U}=u,\RV{B}=b)$. However, we also know that $P_b(\RV{H}|\RV{W}=w)=\delta_{bw}(\RV{H})$.
+
+
+% On the other hand, if the researcher is interested in \emph{doing something} that might change the value of a person's $\RV{B}$, then \ref{eq:dumb_bmi_model} is completely useless, as any action they can take to influence $\RV{B}$ must influence $\RV{W}$ or $\RV{H}$. This is true of reasonable actions like diet, exercise or surgery and also true of unreasonable actions like bone-lengthening or magically doubling the number of fat cells in a person's body. 
+
+% Some causal knowledge is needed to define interventions, which can serve as a basis for discovering other causal knowledge in combination with data \citep{woodward_causation_2016}. It is not clear where the ``initial causal knowledge'' is to be found, but many authors place a strong emphasis on our own powerful causal intuitions \citep{spirtes_causation_1993,pearl_causality:_2009}. Here I argue that interventions cannot jointly satisfy either of two sets of criteria.
+
+% \textbf{A}: If causal relationships are acyclic, some variables can't be intervened on:
+
+% \begin{enumerate}[label={$A\arabic*$)}]
+% 	\item If there exists different interventions on $\RV{X}$ that result in different distributions of $\RV{Y}$ then $\RV{X}$ is a cause of $\RV{Y}$
+% 	\item Intervention does not redefine random variables
+% 	\item Every variable may be intervened on
+% 	\item Sets of causal relationships are acyclic
+% \end{enumerate}
+
+% \textbf{B}: If cyclic causal relationships are allowed, some interventions are nonunique:
+
+% \begin{enumerate}[label={$B\arabic*$)}]
+% 	\item If there exists different interventions on $\RV{X}$ that result in different distributions of $\RV{Y}$ then $\RV{X}$ is a cause of $\RV{Y}$
+%   	\item Intervention does not redefine random variables
+%   	\item Every variable may be intervened on
+%   	\item All invariances can be represented with directed relationships
+%   	\item Intervention on a variable removes all ``incoming relationships'' to intervened variable 
+% \end{enumerate} 
+
+% Unproven:
+
+% \begin{enumerate}[label={$C\arabic*$)}]
+% 	\item If there exists different interventions on $\RV{X}$ that result in different distributions of $\RV{Y}$ then $\RV{X}$ is a cause of $\RV{Y}$
+%   	\item Intervention does not redefine random variables
+%   	\item Every variable may be intervened on
+%   	\item Causal invariances can be represented with acyclic directed relationships
+%   	\item Intervention on a variable removes all ``incoming causal relationships'' to intervened variable
+%   	\item Interventions do not add causal relationships
+% 	\item Causal Markov condition
+%   	\item The causal relationships cut by a joint intervention on $\RV{X}$ and $\RV{Y}$ are the union of the relationships cut by individual interventions
+%   	\item The effect of an intervention on necessarily related variables depends on the causal relationships in the model 
+% \end{enumerate} 
+
+
+% \subsection{Necessary relationships}
+
+% Some variables have relationships that must be maintained under intervention whether or not these relationships are considered ``causal''. For example:
+% \begin{itemize}
+%  \item A person's BMI must always be their weight divided by their height; $\RV{B}=\frac{\RV{W}}{\RV{H}}$
+%  \item A person's height is the sum of their leg length, their torso length, their neck length and the height of their head; $\RV{H}=\RV{L}+\RV{T}+\RV{N}+\RV{D}$
+%  \item A soccer team's season record is the vector composed of [sum of season wins, sum of season losses, sum of season ties]; $\RV{R}=\splitter{0.1}(\RV{WIN}\otimes\RV{LOSS}\otimes\RV{TIE})$
+%  \item A soccer team's average salary is given by the sum of each player's salary divided by the number of players in the team; $\RV{S} = \frac{1}{|\text{team}|}\sum_{i\in\text{team}} \RV{S}_i$
+%  \item Whether a patient followed a treatment course; $$\RV{Compliance} = \llbracket \sum_{i\in \text{prescribed days}} \RV{Taken}_i + s \geq \text{prescribed days} \rrbracket$$ for some ``acceptable slippage'' $s$
+%  \item The size of a government's expenditure; $\RV{E}=\sum_{i\in \text{budget items}} \RV{E}_i$
+% \end{itemize}
+
+% These relationships must all be maintained under any intervention. In particular, unlike causal relationships, even \emph{after} an intervention on body mass index, weight or height we must continute to observe 
+% \begin{align}
+% 	\RV{B}=\frac{\RV{W}}{\RV{H}} \label{eq:bmi}
+% \end{align}
+
+% While it isn't strictly necessary that causal models maintain this relationship, an intervention on $\RV{B}$ that amounts to a redefinition is of no practical interest, and we suppose that causal models aspire to have some practical relevance, so we proceed with this assumption.
+
+% Call relationships among variables of this nature \emph{necessary relationships}.
+% \begin{definition}[Necessary relationship]
+% Given two variables $\RV{X}$ and $\RV{Y}$ on the sample space $(E,\mathcal{E})$, if $\RV{X}=f(\RV{Y})$ for some $f:Y\to X$ then there is a \emph{necessary relationship} between $\RV{X}$ and $\RV{Y}$.
+% \end{definition}
+
+
+
+% If we take necessary relationships to be causal relationships then note that they must be cyclic relationships: an intervention on $\RV{B}$ must result in $\RV{W}$ and $\RV{H}$ jointly set to some value such that \ref{eq:bmi} continues to hold. Similarly, an intervention on $\RV{W}$ must result in consistent values of $\RV{B}$ and $\RV{H}$, and an intervention on $\RV{H}$ must result in consistent values of $\RV{W}$ and $\RV{B}$.
+
+
+% Because it is necessarily the case that $\RV{B}=\frac{\RV{W}}{\RV{H}}$, any intervention on $\RV{B}$ must result in values of $\RV{W}$ and $\RV{H}$ that satisfy this relationship. 
+
+% These all have the property that we cannot change the ``target'' variable (BMI, height, season record) without changing one or more of the ``input'' variables (height/weight, length of each bodypart, outcome of each season game). Such variables are ubiquitous and at least some of them are sometimes the target of investigations looking for causal effects.
+
+% What, then, does it mean to intervene on such a variable? 
+
+% \subsection{Do nontrivial large causal models exist?}
+
+% In the following work ``a vector of random variables'' is simply a random variable itself, as in Definition \ref{def:joint_distribution}. Furthermore, we use the following equivalence relation on random variables: if $\sigma(\RV{X})=\sigma(\RV{Y})$ then $\RV{X}\sim \RV{Y}$. Thus if there is an invertible function $f$ such that $\RV{X}=f(\RV{Y})$ then $\RV{X}\sim \RV{Y}$.
+
+% We assume the following characteristics are shared by all interventionist causal models:
+
+% \begin{enumerate}
+%  \item Causal effects are defined on random variables, which are measurable functions on some probability space $(P,\mathcal{E})$. Denote the set of all random variables on $\mathcal{E}$ by $\mathbf{X}$
+%  \item Causal effects are defined by $(P,\mathcal{E})$ and a set of causal relationships $\mathbf{R}$, which is a transitive binary relation $\rightarrowtriangle$ on $\mathbf{X}$
+%  \item Given some $\RV{X}_i\in\mathbf{X}$, the \emph{causal effect} of $\RV{X}_i$ is a function $P_{\RV{X}_i}$ from the range of $\RV{X}_i$ to $\Delta(\mathcal{E})$
+%  \item (Ancestral invariance) if $\RV{X}_{\mathbf{A}(j)}$ is the vector of all $\RV{X}_i$ such that $i\neq j$ and $\RV{X}_i\rightarrowtriangle \RV{X}_j\in \mathbb{R}$, then for any $i$, $P_{\RV{X}_i} (\RV{X}_j|\RV{X}_{\mathbf{A}(j)}) = P (\RV{X}_j|\RV{X}_{\mathbf{A}(j)}$
+%  \item (Non causes have no effects) if $\RV{X}_i\not\in \RV{X}_{\mathbf{A}(j)}$ then $P_{\RV{X}_i}(\RV{X}_j)=P(\RV{X}_j)$
+%  \item (Setting) $P_{\RV{X}_i}(\RV{X}_i)$ evaluated at $x$ is equal to $\delta_x$
+%  \item (Ancestral projection) if $i\in \mathbf{A}(j)$ then there exists a function $f:X_{\mathbf{A}(j)}\to X_i$ such that $f(\RV{X}_{\mathbf{A}(j)})=\RV{X}_i$ \todo[inline]{seems like this should just be true, but I don't know a proof yet}
+% \end{enumerate}
+
+% Typically, interventional models will model causal variables as random variables (1) and suppose that $\mathbf{X}$ is a discrete set (2), assume that in addition to (3) causal effects are also \emph{antisymmetric}, and that causal effects are they are given by functions rather than sets of functions (4). Furthermore, (5) is implied by the causal Markov condition \citep{hausman_independence_1999} when $\mathbf{R}$ is antisymmetric. (6) and (7) are implied by rule 3 of the do-calculus \citep{pearl_causality:_2009}, but are independent given the other assumptions made.
+
+
+% Call a random variable \emph{trivial} if it maps all inputs to the same output (i.e. it is a version of the discard map $\stopper{0.2}$), and \emph{nontrivial} otherwise.
+
+% \begin{lemma}[All random variables are ancestors of themselves]\label{lem:total_ancestry}
+% Given a causal model $(P,\mathcal{E},\mathbf{R},\mathbf{X})$. Define $\mathbf{X}_{NT}$ to be the set of all nontrivial random variables. For any nontrivial $\RV{X}_i\in \mathbf{X}_{NT}$ there exists some function $f$ such that $\RV{X}_i=f(\RV{X}_{\mathbf{A}(i)})$.
+% \end{lemma}
+
+% \begin{proof}
+% Define $\RV{I}_E:E\to E$ as the identity map on $E$. Note that every random variable $\RV{X}_i$ is therefore by definition equal to $\RV{X}_i\circ \RV{I}_E$.
+
+% Consider any non-deterministic $\RV{X}_i$. By (6), if $\RV{I}_E\rightarrowtriangle \RV{X}_i$ is not in $\mathbf{R}$. Then $P_{\RV{I}_E}(\RV{X}_i)=P(\RV{X}_i)$. But by the assumption of nondeterminism, there are elements $e_1$, $e_2\in E$ such that $\RV{X}_i(e_1)\neq \RV{X}_i(e_2)$, and so $(\RV{X}_i)_\#\delta_{e_1} \neq (\RV{X}_i)_\# \delta_{e_2}$, so by (7), $P_{\RV{I}_E}(\RV{X}_i)(e_1) \neq P_{\RV{I}_E}(\RV{X}_i)(e_2)$. So $\RV{I}_E\rightarrowtriangle \RV{X}_i$ is in $\mathbf{R}$.
+
+% Suppose $\RV{X}_i\rightarrowtriangle \RV{I}_E$ is not in $\mathbf{R}$. Then $P_{\RV{X}_i}(\RV{I}_E)=P(\RV{I}_E)$ and so $P_{\RV{X}_i}(\RV{X}_i) = (\RV{X}_i)_\# P_{\RV{X}_i}(\RV{I}_E) = P (\RV{X}_i)$. But by setting, $P_{\RV{X}_i}(\RV{X}_i)(x)=\delta_x$, which is a deterministic measure, contradicting the assumption of non-determinism. Therefore $\RV{X}_i\rightarrowtriangle\RV{I}_E$ is in $\mathbf{R}$.
+
+% Because $\RV{X}_i\rightarrowtriangle \RV{I}_E$ and $\RV{I}_E\rightarrowtriangle \RV{X}_i$ are both in $\mathbf{R}$, so is $\RV{X}_i\rightarrowtriangle \RV{X}_i$ and so $\RV{X}_i\in \RV{X}_{\mathbf{A}(i)}$. By (7) we have the existence of the desired projection $f:\RV{X}_{\mathbf{A}(i)}\to \RV{X}_i$.
+% \end{proof}
+
+% Lemma \ref{lem:total_ancestry} shows why we cannot add antisymmetry to assumption (2) - this would result in a contradiction.
+
+% \begin{theorem}[All causal effects are permitted]\label{th:all_caual_effects}
+% Given a causal model $(P,\mathcal{E},\mathbf{R},\mathbf{X})$ and any $\RV{X}_i\in \mathbf{X}_{NT}$, $P_{\RV{X}_i}$ may be any stochastic map $X_i\to\Delta(\mathcal{E})$ such that $(\RV{X}_i)_\# P_{\RV{X}_i=x}=\delta_x$
+% \end{theorem}
+
+% \begin{proof}
+% Consider any map $Q:X_i\to \Delta(\mathcal{E})$ such that $(\RV{X}_i)_\# Q_x=\delta_x$. If $Q$ satisfies (4), (5) and (6) with respect to $P,\mathbf{R}$, then $Q$ is a version of $P_{\RV{X}_i}$.
+
+% $Q$ satisfies (6) by construction.
+
+% $\RV{X}_i$ is nontrivial so it is in the ancestral set of all nontrivial random variables. Therefore we need only check (5) for trivial random variables, but this holds automatically as there is only one probability measure on the one-element set.
+
+% It remains to check ancestral invariance (4). By  As $\RV{I}_E\in \mathbf{A}(i)$, it suffices to check for arbitrary $x\in X_i$, $\RV{X}_j\in \mathbf{X}_{NT}$ if $Q_x(\RV{X}_j|\RV{I}_E)=P(\RV{X}_j|\RV{I}_E)$. But both are equal to the function $e\mapsto \delta_{\RV{X}_j(e)}$ for all $e\in \mathcal{E}$, so this is also satisfied.
+% \end{proof}
+
+% Theorem \ref{th:all_caual_effects} would clearly be fatal to the interventionist project if it applied to all interventional models. There are a number of ways to avoid this conclusion:
+
+% \begin{enumerate}
+% 	\item An ``ordinary'' causal Bayesian network features an antisymmetric $\mathbf{R}$ over a subset of random variables on a given probability space, and adds to conditions (1)-(6) the \emph{causal Markov condition} \citep{woodward_causation_2016}. It is well known that causal Bayesian networks yield unique causal effects given interventions of positive measure. The key difference in our setup is that we require $\mathbf{R}$ to be defined over the \emph{entire} set $\mathbf{X}$, which in turn requires antisymmetry to be dropped from (2). Thus one way to avoid the conclusion is to assert that $\mathbf{R}$ can be defined only over a subset of $\mathbf{X}$
+% 	\item We may consider a version of interventionist models where the $do()$ operator changes the definition of random variables instead of (or as well as?) changing the probability measure
+% 	\item Perhaps assumption (5) could be rejected?
+% 	\item It may be possible to add some other assumption that serves to narrow down the set of causal effects considered viable
+% \end{enumerate}
+
+% In my view there are serious challenges to either (1) or (2), and I don't currently know of any good candidates for (3).
+
+% \subsection{Which random variables can be included?}
+
+% The first response to this theorem is that it might be possible to declare some sets of random variables $\mathbf{S}\subset\mathbf{X}$ ``causally viable'' and others to be ``causally nonsensical''. Including the identity function on the entire sample space as a random variable appears to be an odd choice.
+
+% The chief problem with this approach is that it makes the set of viable causal effects depend on the particular random variables chosen to include in the model. As we have shown above, including the whole sample space as a random variable makes \emph{all} causal effects viable. While this is an odd choice, there are more mundane examples of the same problem. Consider the variables:
+% \begin{itemize}
+% 	\item $\RV{B}$ - a particular person's body mass index (weight/height)
+% 	\item $\RV{W}$ - this person's weight
+% 	\item $\RV{H}$ - this person's height
+% 	\item $\RV{H}_l$ - the length of this person's legs
+% 	\item $\RV{H}_u$ - the length of this person's upper body
+% \end{itemize}
+
+
+% \begin{itemize}
+% 	\item  this yields unique causal effects in discrete probability spaces in general
+% 	\item 
+% 	If $\mathbf{R}$ were antisymmetric and transitive, (4) and (6) together with the \emph{causal Markov condition} would be sufficient to yield unique causal effects in the case of discrete probability spaces
+% 	\item 
+% \end{itemize}
+
+
+% Our argument was anticipated by \citet{pearl_does_2018} himself when he responded to Hern\'{a}n's criticism of ``the causal effect of obesity as measured by body mass index'' by substituting ``the effect of BMI'' for ``the effect of the vector of many factors that describe obesity'' (note that a function from a vector to a scalar is usually non-invertible):
+
+% \begin{quote}
+% That BMI is merely a coarse proxy of obesity is well taken; obesity should ideally be described by a vector of many factors, some are easy to measure and others are not. But accessibility to measurement has no bearing on whether the effect of that vector of factors on morbidity is ``well defined'' or whether the condition of consistency is violated when we fail to specify the interventions used to regulate those factors.
+% \end{quote}
+
+% I affirm that any difficulty in measuring the ``underlying vector of factors'' does not undermine the idea that this underlying vector might have some causal effect on morbidity. However, Pearl has notably not defended the idea that \emph{BMI} has a causal effect on morbidity. Rather, he asserts that the effect of BMI is actually a composite of effects of an ``underlying vector''. I argue that \emph{many} variable are vulnerable to having their ``causal effects'' collapse in the same manner.
+
+% Concretely, \citet{shahar_association_2009} argues that because BMI is defined as a person's weight divided by their height, it is appropriate to say BMI is caused by a person's height and weight and nothing else. He argues further that once these are included in a causal graph, BMI has no causal effects leftover - any possible ``effect'' of BMI is really just some combination of the joint effects of weight or height. Extending this argument, consider that a person's weight is by definition equal to the weight of the fat in their body plus the weight of everything else in their body. Therefore, any possible ``effect'' of a person's weight is really just some combination of the joint effects of the weight of fat in their body and the weight of everything else in their body. The weight of all the fat in a person's body is itself the sum of the weight of all the white fat, the weight of all the brown fat and the weight of all the beige fat in their body. Therefore, perhaps the notion that the weight of fat in a person's body has some causal effect is just an illusion, and what is actually under discussion is a combination of the joint effects of the weight of the brown fat in their body, the weight of the white fat in their body and the weight of the beige fat in their body. It's not clear that we ever arrive at something that supports a ``true'' causal effect, and if we do we clearly have a great deal of backtracking still to do. It is not at all clear how the enormous model that arises from all of this backtracking supports any approximate causal conclusion we could draw from a practical model that features variables we can feasibly measure (I expand on this below).
+
+% It is possible to define causal effects in CSDT that do not fail in this manner. This is because CSDT, unlike interventional models, does not guarantee that ``the effect of $\RV{X}$ on $\RV{Y}$'' exists for arbitrary $\RV{X}$ and $\RV{Y}$.
+
+% \subsection{The main argument}
+
+% Assume the following:
+
+% \todo{lemma}
+
+% Suppose $\RV{X}$ takes values in $\{0,1\}$, it is a basic definition of a given problem that $\RV{X}=f(\RV{Z})$, and there is a causal path in $\mathbf{R}$ from $\RV{Z}$ to $\RV{Y}$ that does not contain $\RV{X}$. By (4), $\RV{Z}$ is on a backdoor path from $\RV{X}$ to $\RV{Y}$. Then, by (3) there is a function $P(\RV{X},\RV{Y},\RV{Z}|do(\RV{X}))$ such that $P(\RV{Z}|do(\RV{X}=0))=P(\RV{Z}|do(\RV{X}=1))$. By (5), $P(\RV{Z}\in f^{-1}(0)|do(\RV{X}=0))=1$. Noting that $f^{-1}(0)$ is disjoint from $f^{-1}(1)$, we have $P(\RV{Z}\in f^{-1}(0)|do(\RV{X}=1))=0$, contradicting (3).
+
+% Assumptions (1) and (2) are universally endorsed by proponents of interventional causal models \citep{spirtes_causation_1993,pearl_causality:_2009,woodward_causation_2016}. Assumption (3) is strictly weaker than \citet{pearl_causality:_2009}'s definition of the do-operator, though we also investigate a weaker verson of (3) below. Assumptions (4) and (5) is new, require further discussion.
+
+% In defense of assumption (5), suppose that an intervention could change the \emph{definition of BMI}. Then the causal effect of BMI on mortality would have nothing to do with the effect of BMI \emph{as defined as weight/height} on mortality. For this reason, we think it is reasonable to disregard causal effects that contradict basic definitions.
+
+% Assumption (4) is somewhat tricky, as it depends on the condition of assumption (1) that $\mathbf{R}$ is ``sufficiently large''. We cannot make this condition precise. Nonetheless, we offer two separate arguments that the notion of ``sufficient largeness'' should lead us to include a causal path from $\RV{Z}$ to $\RV{X}$ in $\mathbf{R}$ if it is a basic definition that $\RV{X}=f(\RV{Z})$:
+
+% \begin{itemize}
+% 	\item $\RV{X}$ is determined from $\RV{Z}$ by an autonomous mechanism: $\RV{X}=f(\RV{Z})$ for all values of all other variables, which is an autonomous mechanism, and autonomous mechanisms should be included in $\mathbb{R}$ as causal relationships
+% 	\item Reasoning from ``possible interventions'': If $f$ is not a single valued function, then there are two of values $z_1, z_2$ of $\RV{Z}$ such that changing from $z_1$ to $z_2$ compels a change in the value of $\RV{X}$, and this restriction applies to any ``possible intervention''. Thus an intervention on $\RV{Z}$ produces a change in $\RV{X}$, and so $\RV{Z}$ is a cause of $\RV{X}$
+% \end{itemize}
+
+% Note that these arguments are not equivalent. The first does not compel us to accept that $\RV{X}$ is also a cause of $\RV{Z}$, while an argument analogous to the second does.
+
+% At this point we seem to have: if a variable $\RV{X}$ is by definition equal to some function of another variable $\RV{Z}$ and that variable may also be a cause of some third variable $\RV{Y}$, then the ``causal effect'' of $\RV{X}$ on $\RV{Y}$ \emph{cannot exist}. This seems to be quite alarming given that it is extremely common that we require some variable to be equal to a function of other variables.
+
+% There is a possible way around this contradiction: if we allow that $\RV{X}$ is also a cause of $\RV{Z}$ (which means that $\mathbf{R}$ contains a cycle), then we can allow interventions on $\RV{X}$ to alter the distribution of $\RV{Z}$; this can be accomplished by weakening assumption (3):
+% \begin{enumerate}[label={$\arabic*'$.}]
+%   \setcounter{enumi}{2}
+%   \item If $\RV{Z}$ is any variable that is on a backdoor path between $\RV{X}$ and $\RV{Y}$ in $\mathbf{R}$, then there exists a ``joint interventional map'' $P(\RV{X},\RV{Y},\RV{Z}|do(\RV{X})):X\to \Delta(\mathcal{Y}\otimes\mathcal{Z})$ such that the marginal on $\RV{Y}$ of $P(\RV{Y},\RV{Z}|do(\RV{X}))$ is $P(\RV{Y}|do(\RV{X}))$, and the marginal on $\RV{X}$, $P(\RV{X}|do(\RV{X}))$ is $x\mapsto \delta_x$ for all $x\in X$
+% \end{enumerate}
+
+% This avoids the previous contradiction - there is now nothing wrong with the support of $P(\RV{Z}|do(\RV{X}=0)$ being disjoint from the support of $P(\RV{Z}|do(\RV{X}=1))$. 
+
+% The assumptions made are far too weak to uniquely define the interventional map $P(\RV{X},\RV{Y},\RV{Z}|do(\RV{X}=x))$. For example, all that we require of $P(\RV{Z}|do(\RV{X}))$ is (5), and there are many functions that meet this requirement. The theory of causal Bayesian networks does provide a unique definition of an interventional map, but this rule implies (3) which we have found to be too strong for our purposes.
+
+% \todo{lemma}
+
+% We can propose a modified backdoor adjustment rule that substitutes $P(\RV{Z}|do(\RV{X}=x))$ for $P(\RV{Z})$, but this fails to be a satisfactory rule. If we make the additional supposition suppose that $\RV{Z}$ is the \emph{only} cause of $\RV{X}$ in $\mathbb{R}$($\RV{X}$ is, after all, uniquely determined by $\RV{Z}$) then we have no backdoor paths between $\RV{X}$ and $\RV{Z}$ and no unblocked backdoor paths between $\RV{X}$ and $\RV{Y}$ after conditioning on $\RV{Z}$. It follows that
+% \begin{align}
+% 	P(\RV{Z}|do(\RV{X})) &= P(\RV{Z}|\RV{X})\\
+% 	P(\RV{Y}|do(\RV{X})=x) &= \sum_{z} P(\RV{Y}|\RV{X}=x,\RV{Z}=z) P(\RV{Z}|do(\RV{X})=x)\\
+% 						   &= \sum_z P(\RV{Y}|\RV{X}=x,\RV{Z}=z) P(\RV{Z}|\RV{X})\\
+% 						   &= P(\RV{Y}|\RV{X}) \label{eq:always_the_conditional}
+% \end{align}
+
+% \todo{lemma}
+
+% Equation \ref{eq:always_the_conditional} holds for the causal effect of $\RV{X}$ on \emph{any} $\RV{Y}$. This is clearly unsatisfactory. We can turn instead to the theory of cyclic causal graphs presented in \cite{forre_constraint-based_2018}. In this theory, the causal arrow from $\RV{X}$ to $\RV{Z}$ must be witnessed by another function $g:X\times U\to Z$ such that $\RV{Z}=g(\RV{X},\RV{U})$where $\RV{U}$ is a ``noise'' variable with some distribution $P(\RV{U})$ that is fixed under the intervention $do(\RV{X})$. In this case, it is easy to see that $P(\RV{Z}|\RV{X}=x)=g(x,\cdot)_\# P(\RV{U})=P(\RV{Z}|do(\RV{X}=x))$ i.e. the interventional map of $\RV{Z}$ is again the same as the probability conditional on $\RV{X}$. Furthermore, we also have some $h:X\times Z\times U\to Y$ such that $\RV{Y}=h(\RV{X},\RV{Z},\RV{U})$. It is clear that $P(\RV{Y}|do(\RV{X}=x),\RV{Z}=z) = h(x,z,\cdot)_\# P(\RV{U}) = P(\RV{Y}|\RV{X}=x,\RV{Z}=z)$. These two facts again imply \ref{eq:always_the_conditional}!
+
+% \citet{pearl_physical_2017} has explored an ``imaging'' operator based on the intervention operator $do(\RV{X}=x)$ that is able to evaluate disjunctive ``interventions''. We might suppose that $do(\RV{X}=x)$ is equivalent to $do(\RV{Z}\in f^{-1}(x))$, in which case we might be able to make use of the imaging operator to evaluate $do(\RV{X}=x)$. However, as Pearl shows, the derived imaging operator implies that $P(\RV{Y}|do(\RV{Z}\in f^{-1}(x)))=P(\RV{Y}|\RV{Z}\in f^{-1}(x))=P(\RV{Y}|\RV{X}=x)$.
+
+% \subsection{Resolution?}
+
+% The difficulties raised here require some elaboration of interventional models. Three possibile elaborations are:
+% \begin{itemize}
+% 	\item If a variable $\RV{X}$ is defined to be equal to $f(\RV{Y})$ where $f$ is non-invertible, is it inappropriate to say $\RV{Y}$ causes $\RV{X}$? If so, why?
+% 	\item Are there some sets of variables that are forbidden from co-occurring in interventional models? If so, which sets are forbidden, and how can we be sure a chosen set of variables is acceptable?
+% 	\item Are causal effects usually non-unique? If so, how should the non-uniqueness be handled?
+% \end{itemize}
+
+
+% \todo{impossible approximation}
+
+% \section{Criticism of the potential outcomes system}
+
+
+% Rough outline:
+
+% \begin{itemize}
+%  \item Overall, it's under-specified and confused
+%  \item Some people call consistency a definition, some an assumption. Note that consistency is "half of a similarity metric" a la Lewis, but the other half is nowhere to be found
+%  \item Some people talk about interventions, so it's just a bad version of CSDT?
+%  \item Some say ``what would happen if you did a randomised controlled trial'' - but surely this is an example, not a definition? 
+% \end{itemize}
+
+% The potential outcomes system of causal inference is under-specified. When someone judges ignorability to hold in a particular randomised experiment and judges it to fail for some other experiment, the potential outcomes system does not provide any more basic claims that constitute the assumptions. Rather, they are judged to hold or fall by direct appeals to intuition. Appeals to intuition render it difficult to direct pointed criticism at the theory, as the truth and falsehood of certain propositions depends on the intiutions of the people involved in the argument. This makes it a poor system for the collaborative pursuit of truth, as criticism plays an essential role in this.
+
+% It is in principle possible to ground the potential outcomes system in more fundamental assumptions. For example, \citet{lewis_causation_1986} has proposed that the ``truth'' of counterfactual propositions should be evaluated in terms of their truth values in the ``most similar worlds'' that make these propositions true. If it were possible to define a satisfactory measure of world similarity then assumptions like ignorability \emph{would} reduce to more basic claims, and could be disproved by showing that a more similar world exists in which ignorability fails. As it stands, however, I am not aware of any suitable metrics of world similarity, and as I will show it is likely that no single metric will serve.
+
+% The potential outcomes system does feature the assumption of \emph{consistency}. This is the assumption that the potential outcome $\RV{Y}^a$ ``the value of $\RV{Y}$ on the supposition that $a$ occurs'' is equal to $\RV{Y}$ if $a$ actually occurs. This precisely matches Lewis' view that if $a$ actually happens then the most similar world in which $a$ occurs is the real world. So far so good, but the whole point of the similarity measure is to say something nontrivial about $\RV{Y}^a$ if $a$ \emph{does not} occur. The potential outcomes system is silent on this, handwaving the issue away with the admonition that this must be determined by expert judgement. They do not explain how one should obtain expertise in offering true answers to unanswerable questions.
+
+% \citet{hernan_does_2008}: "Suppose that, in the observational study in the neighboring country, the data analyst compared the mortality of subjects who happened to have a BMI of 30 ($A = 1$) and a BMI of 20 ($A = 0$) at baseline. Now consider a study subject who had a BMI of 20 at baseline. It is not obvious that, had he been assigned to a BMI of 20 some time before baseline, his counterfactual outcome at the end of the study would have been necessarily equal to his observed outcome because there are many possible methods to assign someone to a BMI of 20."
+
+% Hern\'{a}n here invokes an informal notion of intervention to argue against the consistency of BMI.
