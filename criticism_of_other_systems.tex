@@ -1,6 +1,21 @@
 
 %!TEX root = main.tex
 
+\section{Notation}
+
+\begin{itemize}
+	\item I use $\RV{X}$ for a random variable, $X$ for its codomain and $\mathcal{X}$ for the $\sigma$-algebra on $X$
+	\item Bold letters $\mathbf{X}$ indicate product spaces and $\mathbf{x}$ elements of product spaces
+	\item Given an indexed product space $\prod_{i\in \mathcal{I}} X_i$, $\pi_i:\prod_{i\in \mathcal{I}} X_i\to X_i$ is the projection map $(x_1,...,x_i,...,x_n)\mapsto x_i$
+	\item Given an index set $\mathcal{I}$, $\mathbf{X}_{\mathcal{I}}$ is the indexed product space $\prod_{i\in \mathcal{I}} X_i$
+	\item $[n]$ is the index set $\{1,...,n\}$ for $n\in\mathbb{N}$
+	\item Given an indexed product space $\mathbf{X}_{[n]}$, $\mathbf{X}_{<j}$ is the set $\prod_{i=1}^j X_i$
+	\item $\utimes$ is the coupled tensor product, see Definition \ref{def:ctensor}
+	\item Given a random variable $\RV{X}$, $F_{\RV{X}}$ is the associated Markov kernel, see Definition \ref{def:functional_kernel}
+	\item See section \ref{sssec:string_diagram_manipulation} for rules of string diagram manipulation
+\end{itemize}
+
+
 \section{Why you need decisions}
 
 CSDT differs from Causal Bayesian Networks in that See-Do models require a set $D$ of decisions to be specified as part of the definition, just as a function requires a domain to be specified as part of its definition. Causal Bayesian Networks, in contrast, appear to define causal effects of variables without reference to an underlying set of decisions. We show that this distinction is only apparent, and that Causal Bayesian Networks also require the specification of ``causal atoms'' which correspond precisely to the decision set in a See-Do model.
@@ -19,8 +34,469 @@ I propose that the actual difference here is the hypothesis of \emph{causal univ
 
 \todo[inline]{And I discuss whether or not you might want to assume universality}
 
+\subsection{Necessary relationships}
 
-\subsection{Structural Causal Models}
+The relationship between a person's body mass index, their weight and their height defines what body mass index is. A fundamental claim of ours is that any causal model that defines ``the causal effect of body mass index'' should do so without reference to any submodel that violates this definitional relationship violation of the definition. This is an important assumption, and it rests on a judgement of what causal models ought to do. I think it is quite clear that when anyone asks for a causal effect, they expect that any operations required to define the causal effect \emph{do not change the definitions of the variables they are employing}. While theories of causality have a role in sharpening our understanding of the term \emph{causal effect}, the thing called a ``causal effect'' in an SCM should still respect some of our pre-theoretic intuitions about what causal effects are or else it should be called something else. ``Causal effects'' that depend on redefining variables do not respect pre-theoretic intuitions about what causal effects are:
+
+\begin{itemize}
+	\item If I ask for the ``causal effect of a person's BMI'', I do not imagine that I am asking what would happen if someone's BMI were defined to be something other than their weight divided by their height
+	\item If I ask for the ``causal effect of a person's weight'', I do not imagine that I am asking what would happen if someone's weight were not equal to their volume multiplied by their density
+	\item If I ask for the ``causal effect of a person's weight'', I also do not imagine that I am asking what would happen if their weight were not equal to the weight of fat in their body plus the weight of all non-fat parts of their body
+	\item If I ask for the ``causal effect of taking a medicine'', I do not imagine that I am asking what would happen if a person were declared to have taken a medicine independently of whatever substances have actually entered their body and how they entered
+\end{itemize}
+
+We will call relationships that have to hold \emph{necessary relationships}. We provide the example of relationships that have to hold by definition as examples, but definitions may not be the only variety of necessary relationships. For example, one might also wish to stipulate that certain laws of physics are required to hold in all submodels.
+
+If a causal model contains variables that are necessarily related, then an intervention on one of them must always change another variable in the relationship. If I change a person's weight, their height or BMI must change (or both). If I change their height, their weight or BMI must change and if I change their BMI then their weight or height must change. This conflicts with the usual acyclic definition of causal models, where the proposition that $\RV{A}$ causes $\RV{B}$ rules out the possibility that $\RV{B}$ or any of its descendents are a cause of $\RV{A}$. Thus in an acyclic model it isn't possible for for an intervention on BMI to change weight or height and interventions on weight and height to also change BMI. Theroem \ref{th:recursive_no_interventions} formalises this conflict for recursive structural causal models: for any set of variables that are necessarily related by a cyclic relationship, at least one of them has no hard interventions defined.
+
+\subsection{Recursive Structural Causal Models}
+
+We begin by showing that necessary relationships are incompatible with structural causal models.
+
+\begin{definition}[Recursive Structural Causal Model]\label{def:acSCM}
+A recursive structural causal model (SCM) is a tuple 
+	\begin{align}
+		\mathcal{M}:=\langle N,M,\mathbf{X}_{[N]},\mathbf{E}_{[M]},\{f_i|i\in[N]\},\mathbb{P}_{\mathcal{E}}\rangle
+	\end{align}
+	where 
+	\begin{itemize}
+		\item $N\in \mathbb{N}$ is the number of \emph{endogenous variables} in the model
+		\item $M\in \mathbb{N}$ is the number of \emph{exogenous variables} in the model
+		\item $\mathbf{X}_{[N]}:=\{X_i|i\in[N]\}$ where, for each $i\in [N]$, $(X_i,\mathcal{X}_i)$ is a standard measurable space taking and the codomain of the $i$-th endogenous variable
+		\item $\mathbf{E}_{[M]}:=\{E_j|j\in[M]\}$ where, for $j\in [M]$, $E_j$ is a standard measurable space and the codomain of the $j$-th exogenous variable
+		\item $f_i:\mathbf{X}_{<i}\times\mathbf{E}_{\mathcal{J}}\to X_i$ is a measurable function which we call \emph{the causal mechanism controlling the $i$-th endogenous variable}
+		\item $\mathbb{P}_{\mathcal{E}}\in \Delta(\mathbf{E}_{\mathcal{J}})$ is a probability measure on the space of exogenous variables
+	\end{itemize}
+\end{definition}
+
+\begin{definition}[Observable kernel]
+Given an SCM $\mathcal{M}$ with causal mechanisms $\{f_i|i\in [N]\}$, define the \emph{observable kernel} $G_{i}:E\to \Delta(\mathbf{X}_{[i]})$ recursively:
+\begin{align}
+	G_1 &= \begin{tikzpicture}
+	\path (0,0) node (E) {$\mathbf{E}_{[M]}$}
+	++ (1,0) node[kernel] (F1) {$F_{f_1}$}
+	++(1,0) node (X) {$X_1$};
+	\draw (E) -- (F1) -- (X);
+	\end{tikzpicture}f_1 \label{eq:gen_base}\\
+	G_{n+1} &= \begin{tikzpicture}
+	\path (0,0) node (E) {$\mathbf{E}_{[M]}$}
+	++ (0.8,0) coordinate (copy0)
+	++ (0.5,0) node[kernel] (Gn) {$G_{n}$}
+	++ (0.5,0) coordinate (copy1)
+	++ (0.7,0) coordinate (skip)
+	+  (0,-0.5) node[kernel] (Fn) {$F_{f_{n+1}}$}
+	++ (1.3,0) node (Xn) {$\mathbf{X}_{<{n+1}}$}
+	+ (0,-0.5) node (Xn1) {$X_{n+1}$};
+	\draw (E) -- (Gn) -- (Xn);
+	\draw (copy0) to [bend right] ($(Fn.west) + (0,-0.15)$);
+	\draw (copy1) to [bend right] ($(Fn.west) + (0,0.15)$);
+	\draw (Fn) -- (Xn1);
+	\end{tikzpicture}\label{eq:gen_step}
+\end{align}
+\end{definition}
+
+\begin{definition}[Joint distribution on endogenous variables]
+The \emph{joint distribution on endogenous variables} defined by $\mathcal{M}$ is $\mathbb{P}_{\mathcal{M}}:=\mathbb{P}_\mathcal{E} G_N$ (which is the regular kernel product, see Definition \ref{ssec:product_notation}). For each $i\in[N]$ define the random variable $\RV{X}_i:\mathbf{X}_{[N]}\to X_i$ as the projection map $\pi_i:(x_1,...,x_i,..,x_N)\mapsto x_i$. By Lemma \ref{lem:coupled_product_is_ident}, $\utimes_{i\in [N]} \RV{X}_i = \mathrm{Id}_{\mathbf{X}_{[N]}}$, and so $\mathbb{P}_{\mathcal{M}}$ is the joint distribution of the variables $\{\RV{X}_i|i\in[N]\}$.
+\end{definition}
+
+I use the notation $\mathbb{P}_{\mathcal{M}}$ rather than $\mathbb{P}_{\RV{X}_{[N]}}$ to emphasize the dependence on the model $\mathcal{M}$.
+
+\begin{lemma}[Coupled product of all random variables is the identity]\label{lem:coupled_product_is_ident}
+$\utimes_{i\in [N]} \RV{X}_i = \mathrm{Id}_{\mathbf{X}_{[N]}}$
+\end{lemma}
+
+\begin{proof}
+for any $\mathbf{x}\in \mathbf{X}_{[N]}$,
+\begin{align}
+\utimes_{i\in [N]} \RV{X}_i (\mathbf{x}) &= (\pi_1(\mathbf{x}),...,\pi_N(\mathbf{x}))\\
+	&= (x_1,...,x_n)\\
+	&= \mathbf{x}
+\end{align}
+\end{proof}
+
+\begin{definition}[Hard Interventions]
+Let $\mathscr{M}$ be the set of all $SCMs$ sharing the indices, spaces and measure $\langle N,M,\mathbf{X}_{\mathcal{I}},\mathbf{E}_{[M]},\mathbb{P}_{\mathcal{E}}\rangle$. Note that the causal mechanisms are not fixed.
+
+Given an SCM $\mathcal{M}=\langle N,M,\mathbf{X}_{\mathcal{I}},\mathbf{E}_{[M]},\{f_i|i\in[N]\},\mathbb{P}_{\mathcal{E}}\rangle$ and $\mathcal{S}\subset[N]$, a \emph{hard intervention} on $\RV{X}_\mathcal{S}$ is a map $Do_{\mathcal{S}}:\mathbf{X}_\mathcal{S}\times\mathscr{M}\to \mathscr{M}$ such that for $\mathbf{a}\in \mathbf{X}_S$, $Do_{\mathcal{S}}(\mathbf{a},\mathcal{M}) = \langle N,M,\mathbf{X}_{\mathcal{I}},\mathbf{E}_{[M]},\{f'_i|i\in[N]\},\mathbb{P}_{\mathcal{E}}\rangle$ where
+\begin{align}
+	f_i' &= f_i  &i\not\in \mathcal{S}\\
+	f_i' &= \pi_i(\mathbf{a}) & i\in \mathcal{S}
+\end{align}
+
+To match standard notation, we will write $\mathcal{M}^{do(\RV{X}_\mathcal{S} = \mathbf{a})}:=Do_{\mathcal{S}}(\mathbf{a},\mathcal{M})$
+\end{definition}
+
+\subsection{Recursive Structural Causal Models with Necessary Relationships}
+
+Necessary relationships are extra constraints on the joint distribution on endogenous variables defined by an SCM. For example, given an SCM $\mathcal{M}$ if the variable $\RV{X}_1$ represents weight, $\RV{X}_2$ represents height and $\RV{X}_3$ represents BMI then we want to impose the constraint that
+\begin{align}
+	\RV{X}_3 = \frac{\RV{X}_1}{\RV{X}_2}
+\end{align}
+
+$\mathbb{P}_{\mathcal{M}}$-almost surely.
+
+\begin{definition}[Constrained Recursive Structural Causal Model (CSCM)]\label{def:cscm}
+	A CSCM $\mathcal{M}:= \langle N,M,\mathbf{X}_{[N]},\mathbf{E}_{[M]},\{f_i|i\in[N]\},\{r_i|i\in [N]\},\mathbb{P}_{\mathcal{E}}\rangle$ is an SCM along with a set of \emph{constraints} $r_i:\mathbf{X}_{[N]}\to X_i$. 
+
+	If $\RV{X}_i=r_i(\RV{X}_{[N]})$ $\mathbb{P}_{\mathcal{M}}$-almost surely then $\RV{M}$ is \emph{valid}, otherwise it is \emph{invalid}.
+\end{definition}
+
+We can recover regular SCMs by imposing only trivial constraints:
+
+\begin{lemma}[CSCM with trivial constraints is always valid]
+	Let $\mathcal{M}$ be a CSCM with the trivial constraints $r_i=\pi_i$ for all $i\in[N]$. Then $\mathcal{M}$ is valid.
+\end{lemma}
+
+\begin{proof}
+	By definition \ref{def:cscm}, we require $\RV{X}_i = \RV{X}_i$, $\mathbb{P}_{\mathcal{M}}$-almost surely. $\RV{X}_i(\mathbf{x}) = \RV{X}_i(\mathbf{x})$ for all $\mathbf{x}\in\mathbf{X}_{[N]}$ and $P_\mathcal{M}(\mathbf{X}_{[N]})=1$, therefore $\mathcal{M}$ is valid.
+\end{proof}
+
+Call a constraint $r_i$ \emph{cyclic} if $\RV{X}_i = r_i(\RV{X}_{[N]})$ implies there exists an index set $O\subset[N]$, $O\ni i$, such that for each $j\in O$, $\mathbf{b}\in \mathbf{X}_{O\setminus\{j\}}$ there exists $a\in X_j$ such that
+\begin{align}
+	\RV{X}_{O\setminus \{j\}} = \mathbf{b}\\
+	\implies \RV{X}_j = a
+\end{align}
+
+BMI is an example of a cyclic constraint if we insist that weight and height are always greater than 0. If $\RV{X}_3 = \frac{\RV{X}_1}{\RV{X}_2}$ then we have:
+\begin{align}
+	[\RV{X}_1,\RV{X}_2] &= [b_1,b_2]\\
+	\implies \RV{X}_3 &= \frac{b_1}{b_2}\\
+	[\RV{X}_2,\RV{X}_3] &= [b_2,b_3]\\
+	\implies \RV{X}_1 &= b_2 b_3\\
+	[\RV{X}_1,\RV{X}_3] &= [b_1,b_3]\\
+	\implies \RV{X}_2 &= \frac{b_1}{b_3}
+\end{align}
+
+\todo[inline]{The following is a generally useful lemma that should probably be in basic definitions of conditional probability spaces}
+
+\begin{lemma}[Projection and selectors]\label{lem:proj_and_select}
+Given an indexed product space $\mathbf{X}:=\prod_{i\in \mathcal{I}} X_i$ with ordered finite index set $\mathcal{I}\ni i$, let $\pi_i:\mathbf{X}\to X_i$ be the projection of the $i$-indexed element of $\mathbf{x}\in \mathbf{X}$.
+
+Let $F_{\pi_i}:\mathbf{X}\to \Delta(\mathcal{X}_i)$ be the Markov kernel associated with the function $\pi_i$, $F_{\pi_i}:\mathbf{x}\mapsto\delta_{\pi_i(\mathbf{x})}$. Given $O\subset\mathcal{I}$, define the selector $S^O_i$:
+
+\begin{align}
+	S^O_i = \begin{cases}
+		\mathrm{Id}_{X_i} & i\in O\\
+		\stopper{0.25}_{X_i} & i\not\in O
+	\end{cases}
+\end{align}
+
+Then $\utimes_{i\in O} F_{\pi_i}=\otimes_{i\in \mathcal{I}} S^O_i$.
+\end{lemma}
+
+
+\begin{proof}
+Suppose $O$ is the empty set. Then the empty tensor product $\otimes_{i\in \emptyset} S_i$ and the empty coupled tensor product $\utimes_{i\in\emptyset} F_{\pi_i}$ are both equal to $\stopper{0.25}_{\mathbf{X}}$.
+
+By definition of $F_{\pi_i}$, $F_{\pi_i} = \otimes_{i\in\mathcal{I}}S^{\{i\}}_i$.
+
+Suppose for $P\subsetneq O$ with greatest element $k$ we have $\utimes_{i\in P} F_{\pi_i}=\otimes_{i\in \mathcal{I}} S^P_i$, and suppose that $j$ is the next element of $O$ not in $P$.
+
+\begin{align}
+	(\utimes_{i\in P} F_{\pi_i}) \utimes F_{\pi_j} &= \begin{tikzpicture}
+		\path (0,0) node (X) {$\mathbf{X}$}
+		++ (0.5,0) coordinate (copy0) 
+		++ (1.8,0.5) node[kernel] (Fi) {$\utimes_{i\in P} F_{\pi_i}$}
+		+ (0,-1) node[kernel] (Fe) {$F_{\pi_j}$}
+		++ (1.5,0) node (Xi) {$\mathbf{X}_P$}
+		+ (0,-1) node (Xe) {$X_j$};
+		\draw (X) -- (copy0);
+		\draw (copy0) to [out = 30, in = 180] (Fi) (copy0) to [out = -30, in = 180] (Fe);
+		\draw (Fe) -- (Xe) (Fi) -- (Xi);
+	\end{tikzpicture}\\
+	 &= \begin{tikzpicture}
+		\path (0,0) node (X) {$X_j$}
+		++ (0.7,0) coordinate (copy0) 
+		++ (1.8,0.5) node[kernel] (Fi) {$\utimes_{i\in P} F_{\pi_i}$}
+		+ (0,-1) node[kernel] (Fe) {$ F_{\pi_j}$}
+		++ (1.5,0) node (Xi) {$\mathbf{X}_P$}
+		+ (0,-1) node (Xe) {$X_j$};
+		\path (0,0.5) node (Xp) {$\mathbf{X}_{<j}$}
+		++ (0.7,0) coordinate (copy0p);
+		\path (0,-0.5) node (Xg) {$\mathbf{X}_{>j}$}
+		++ (0.7,0) coordinate (copy0g);
+		\draw (X) -- (copy0);
+		\draw (copy0) to [out = 30, in = 180] (Fi) (copy0) to [out = -30, in = 180] ($(Fe.west) + (0,0)$);
+		\draw (Fe) -- (Xe) (Fi) -- (Xi);
+		\draw (Xg) -- (copy0g) (Xp) -- (copy0p);
+		\draw (copy0g) to [out = 30, in = 180] ($(Fi.west)+(0,-0.15)$) (copy0g) to [out = -30, in = 180] ($(Fe.west)+(0,-0.15)$);
+		\draw (copy0p) to [out = 30, in = 180] ($(Fi.west)+(0,0.15)$) (copy0p) to [out = -30, in = 180] ($(Fe.west)+(0,0.15)$);
+	\end{tikzpicture}\\
+	&= \begin{tikzpicture}
+		\path (0,0) node (X) {$X_j$}
+		++ (0.7,0) coordinate (copy0) 
+		++ (1.8,0.5) node[kernel] (Fi) {$\utimes_{i\in P} F_{\pi_i}$}
+		+ (0,-1) node (Fe) {}
+		++ (1.5,0) node (Xi) {$\mathbf{X}_P$}
+		+ (0,-1) node (Xe) {$X_j$};
+		\path (0,0.5) node (Xp) {$\mathbf{X}_{<j}$}
+		++ (0.7,0) coordinate (copy0p);
+		\path (0,-0.5) node (Xg) {$\mathbf{X}_{>j}$}
+		++ (0.7,0) coordinate (copy0g);
+		\draw (X) -- (copy0);
+		\draw (copy0) to [out = 30, in = 180] (Fi);
+		\draw (Fi) -- (Xi);
+		\draw (Xg) -- (copy0g) (Xp) -- (copy0p);
+		\draw (copy0g) to [out = 30, in = 180] ($(Fi.west)+(0,-0.15)$);
+		\draw[-{Rays[n=8]}] (copy0g) to [out = -30, in = 180] ($(Fe.west)+(0,-0.15)$);
+		\draw (copy0p) to [out = 30, in = 180] ($(Fi.west)+(0,0.15)$);
+		\draw[-{Rays[n=8]}] (copy0p) to [out = -30, in = 180] ($(Fe.west)+(0,0.15)$);
+		\draw (copy0) to [out=-30,in=180] (Xe);
+	\end{tikzpicture}\\
+	&=\begin{tikzpicture}
+		\path (0,0) node (X) {$X_j$}
+		++ (0.7,0) coordinate (copy0) 
+		++ (1.8,0.5) node[kernel] (Fi) {$\utimes_{i\in P} F_{\pi_i}$}
+		+ (0,-1) node (Fe) {}
+		++ (1.5,0) node (Xi) {$\mathbf{X}_P$}
+		+ (0,-1) node (Xe) {$X_j$};
+		\path (0,0.5) node (Xp) {$\mathbf{X}_{<j}$}
+		++ (0.7,0) coordinate (copy0p);
+		\path (0,-0.5) node (Xg) {$\mathbf{X}_{>j}$}
+		++ (0.7,0) coordinate (copy0g);
+		\draw (X) -- (copy0);
+		\draw (copy0) to [out = 30, in = 180] (Fi);
+		\draw (Fi) -- (Xi);
+		\draw (Xg) -- (copy0g) (Xp) -- (copy0p);
+		\draw (copy0g) to [out = 30, in = 180] ($(Fi.west)+(0,-0.15)$);
+		\draw (copy0p) to [out = 30, in = 180] ($(Fi.west)+(0,0.15)$);
+		\draw (copy0) to [out=-30,in=180] (Xe);
+	\end{tikzpicture}\\
+	&= \begin{tikzpicture}
+		\path (0,0) node (X) {$X_j$}
+		++ (0.7,0) coordinate (copy0) 
+		++ (1.8,0.5) node[kernel] (Fi) {$\otimes_{i\in \mathcal{I}} S^P_{i}$}
+		+ (0,-1) node (Fe) {}
+		++ (1.5,0) node (Xi) {$\mathbf{X}_P$}
+		+ (0,-1) node (Xe) {$X_j$};
+		\path (0,0.5) node (Xp) {$\mathbf{X}_{<j}$}
+		++ (0.7,0) coordinate (copy0p);
+		\path (0,-0.5) node (Xg) {$\mathbf{X}_{>j}$}
+		++ (0.7,0) coordinate (copy0g);
+		\draw (X) -- (copy0);
+		\draw (copy0) to [out = 30, in = 180] (Fi);
+		\draw (Fi) -- (Xi);
+		\draw (Xg) -- (copy0g) (Xp) -- (copy0p);
+		\draw (copy0g) to [out = 30, in = 180] ($(Fi.west)+(0,-0.15)$);
+		\draw (copy0p) to [out = 30, in = 180] ($(Fi.west)+(0,0.15)$);
+		\draw (copy0) to [out=-30,in=180] (Xe);
+	\end{tikzpicture}
+\end{align}
+Because all elements of $P$ are less than $j$, the selector $S^P_k$ resolves to the discard map for $k>j$:
+\begin{align}
+	&=\begin{tikzpicture}
+		\path (0,0) node (X) {$X_j$}
+		++ (0.7,0) coordinate (copy0) 
+		++ (1.8,0.5) node[kernel] (Fi) {$\otimes_{i<j} S^P_{i}$}
+		+ (0,-1) node (Fe) {}
+		++ (1.5,0) node (Xi) {$\mathbf{X}_P$}
+		+ (0,-1) node (Xe) {$X_j$};
+		\path (0,0.5) node (Xp) {$\mathbf{X}_{<j}$}
+		++ (0.7,0) coordinate (copy0p);
+		\path (0,-0.5) node (Xg) {$\mathbf{X}_{>j}$}
+		++ (0.7,0) coordinate (copy0g);
+		\draw (X) -- (copy0);
+		\draw[-{Rays[n=8]}] (copy0) to [out = 30, in = 180] ($(Fi.west)+(-0.20,0)$);
+		\draw (Fi) -- (Xi);
+		\draw (Xg) -- (copy0g) (Xp) -- (copy0p);
+		\draw[-{Rays[n=8]}] (copy0g) to [out = 30, in = 180] ($(Fi.west)+(-0.2,-0.15)$);
+		\draw (copy0p) to [out = 30, in = 180] ($(Fi.west)+(0,0.15)$);
+		\draw (copy0) to [out=-30,in=180] (Xe);
+	\end{tikzpicture}\\
+	&=\begin{tikzpicture}
+		\path (0,0) node (X) {$X_j$}
+		++ (0.7,0) coordinate (copy0) 
+		++ (1.8,0.5) node[kernel] (Fi) {$\otimes_{i<j} S^P_{i}$}
+		+ (0,-1) node (Fe) {}
+		++ (1.5,0) node (Xi) {$\mathbf{X}_P$}
+		+ (0,-0.5) node (Xe) {$X_j$};
+		\path (0,0.5) node (Xp) {$\mathbf{X}_{<j}$}
+		++ (0.7,0) coordinate (copy0p);
+		\path (0,-0.5) node (Xg) {$\mathbf{X}_{>j}$}
+		++ (1.5,0) coordinate (copy0g);
+		\draw (X) -- (copy0);
+		\draw (Fi) -- (Xi);
+		\draw[-{Rays[n=8]}] (Xg) -- (copy0g);
+		\draw (Xp) -- (copy0p);
+		\draw (copy0p) to [out = 0, in = 180] (Fi);
+		\draw (copy0) to [out=0,in=180] (Xe);
+	\end{tikzpicture}\\
+	&= \begin{tikzpicture}
+		\path (0,0) node (X) {$X_j$}
+		++ (1.8,0) node[kernel] (Fi) {$\otimes_{i\in\mathcal{I}} S^{P\cup\{j\}}_{i}$}
+		++ (2,0.3) node (Xi) {$\mathbf{X}_P$}
+		+ (0,-0.3) node (Xe) {$X_j$};
+		\path (0,0.5) node (Xp) {$\mathbf{X}_{<j}$};
+		\path (0,-0.5) node (Xg) {$\mathbf{X}_{>j}$};
+		\draw (X) to [out = 0, in = 180] (Fi);
+		\draw (Xp) to [out = 0, in = 180] ($(Fi.west)+(0,0.2)$);
+		\draw (Xg) to [out = 0, in = 180] ($(Fi.west)+(0,-0.2)$);
+		\draw ($(Fi.east) + (0,0.2)$) to [out = 0, in = 180] (Xi);
+		\draw ($(Fi.east) + (0,0.)$) to [out = 0, in = 180] (Xe);
+	\end{tikzpicture}\label{eq:def_selector}
+\end{align}
+
+Where \ref{eq:def_selector} follows from the definition of the selector $S^{P\cup\{j\}}_i$.
+
+The proof follows by induction on the elements of $O$.
+
+\end{proof}
+
+\begin{lemma}[Hard interventions do not affect the joint distributions of earlier variables]\label{lem:hard_dont_affect_early}
+Given a CSCM $\mathcal{M}=\langle N,M,\mathbf{X}_{[N]},\mathbf{E}_{[M]},\{f_i|i\in[N]\},\{r_i|i\in [N]\},\mathbb{P}_{\mathcal{E}}\rangle$, any $k\in [N]$ and any $O\subset [k-1]$, $P_{\mathcal{M}}(\RV{X}_O) = P_{\mathcal{M}}^{do(\RV{X}_k)=a}(\RV{X}_O)$ for all $a\in X_k$.
+\end{lemma}
+
+\begin{proof}
+Let $G^{\mathcal{Q}}_i$, $i\in[N]$ be the $i$-th iteration of the kernel defined in Equations \ref{eq:gen_base} and \ref{eq:gen_step} with respect to model $\mathcal{Q}$. Note that from Equation \ref{eq:gen_step}
+\begin{align}
+\begin{tikzpicture}
+	\path (0,0) node (E) {$\mathbf{E}_{[M]}$}
+	++ (1,0) node[kernel] (Gi) {$G^{\mathcal{Q}}_i$}
+	++ (1,0.15) node (Xl) {$\mathbf{X}_{<i}$}
+	+(0,-0.3) node (Xi) {};
+	\draw (E) -- (Gi);
+	\draw ($(Gi.east) + (0,0.15)$) to (Xl);
+	\draw[-{Rays[n=8]}] ($(Gi.east) + (0,-0.15)$) to (Xi);
+\end{tikzpicture} &= \begin{tikzpicture}
+	\path (0,0) node (E) {$\mathbf{E}_{[M]}$}
+	++ (0.8,0) coordinate (copy0)
+	++ (0.7,0) node[kernel] (Gn) {$G^{\mathcal{Q}}_{i-1}$}
+	++ (0.5,0) coordinate (copy1)
+	++ (0.7,0) coordinate (skip)
+	+  (0,-0.5) node[kernel] (Fn) {$F_{f_{i}}$}
+	++ (1.3,0) node (Xn) {$\mathbf{X}_{<{i}}$}
+	+ (0,-0.5) node (Xn1) {};
+	\draw (E) -- (Gn) -- (Xn);
+	\draw (copy0) to [bend right] ($(Fn.west) + (0,-0.15)$);
+	\draw (copy1) to [bend right] ($(Fn.west) + (0,0.15)$);
+	\draw[-{Rays[n=8]}] (Fn) -- (Xn1);
+	\end{tikzpicture}\\
+	&= G^{\mathcal{Q}}_{i-1}
+	\end{align}
+
+It follows that
+
+\begin{align}
+\begin{tikzpicture}
+	\path (0,0) node (E) {$\mathbf{E}_{[M]}$}
+	++ (1,0) node[kernel] (Gi) {$G_N$}
+	++ (1,0.15) node (Xl) {$\mathbf{X}_{<i}$}
+	+(0,-0.3) node (Xi) {};
+	\draw (E) -- (Gi);
+	\draw ($(Gi.east) + (0,0.15)$) to (Xl);
+	\draw[-{Rays[n=8]}] ($(Gi.east) + (0,-0.15)$) to (Xi);
+\end{tikzpicture}&= G_{i-1} \label{eq:prior_g_equal}
+	\end{align}
+
+Because $f_i = f^{do(\RV{X}_k=a)}_i$ for $i<k$, we have 
+\begin{align}
+	G^{\mathcal{M}}_i = G^{\mathcal{M}^{do(\RV{X}_k=a)}}_i \label{eq:equal_across_d}
+\end{align} 
+for all $i<k$. By lemma \ref{lem:proj_and_select}, for any $O\subset [k-1]$ we have $F_{\RV{X}_O}=\otimes_{i\in [N]} S^O_i$. As there are no elements of $O$ greater than or equal to $k$, the selector $S^O_i$ resolves to the discard for all $i>=k$. Thus $F_{\RV{X}_O} = (\otimes_{i\in[k-1]} S^O_i) \otimes \stopper{0.25}_{\mathbf{X}_{[N]\setminus[k-1]}}$. Defining $S^O_{[k-1]}:=\otimes_{i\in[k-1]} S^O_i$, we have:
+
+\begin{align}
+	F_{\RV{X}_O} = \begin{tikzpicture}
+		\path (0,0) node (XO) {$\mathbf{X}_{[k-1]}$}
+		+ (2,0) node[kernel] (So) {$S^O_{[k-1]}$}
+		+ (3.5,0) node (XOout) {$\mathbf{X}_{O}$}
+		++(-0.5,-0.5) node (XL) {$\mathbf{X}_{[N]\setminus [k-1]}$}
+		+(4,0) node (XLout) {};
+		\draw (XO) -- (So) -- (XOout);
+		\draw[-{Rays [n=8]}] (XL) -- (XLout);
+	\end{tikzpicture}\label{eq:marginal_kernel}
+\end{align}
+
+Thus
+\begin{align}
+	\mathbb{P}_{\mathcal{M}} (\RV{X}_O) &= \mathbb{P}_{\mathcal{E}} G^{\mathcal{M}}_N F_{\RV{X}_O}\\
+		&\overset{\ref{eq:marginal_kernel}}{=} 	\begin{tikzpicture}
+		\path (0,0) node[dist] (P) {$\mathbb{P}_{\mathcal{E}}$}
+		++ (1,0) node[kernel,inner sep = 6] (Gn) {$G^{\mathcal{M}}_N$}
+		++ (1.5,0.3) node[kernel] (Sok) {$S^O_{[k-1]}$}
+		++(1.5,0) node (XO) {$\mathbf{X}_{O}$}
+		+(0.7,-0.6) node (XL) {$(\mathbf{X}_{[N]\setminus [k-1]})$};
+		\draw (P) -- (Gn);
+		\draw[-{Rays [n=8]}] ($(Gn.east)+(0,-0.3)$) -- (XL);
+		\draw ($(Gn.east) + (0,0.3)$) -- (Sok);
+		\draw (Sok) -- (XO);
+	\end{tikzpicture}\\
+	&\overset{\ref{eq:prior_g_equal}}{=} \begin{tikzpicture}
+		\path (0,0) node[dist] (P) {$\mathbb{P}_{\mathcal{E}}$}
+		++ (1,0) node[kernel,inner sep = 6] (Gn) {$G^{\mathcal{M}}_{k-1}$}
+		++ (1.5,0.) node[kernel] (Sok) {$S^O_{[k-1]}$}
+		++(1.5,0) node (XO) {$\mathbf{X}_{O}$};
+		\draw (P) -- (Gn);
+		\draw (Gn) -- (Sok);
+		\draw (Sok) -- (XO);
+	\end{tikzpicture}\\
+	&\overset{\ref{eq:equal_across_d}}{=} \begin{tikzpicture}
+		\path (0,0) node[dist] (P) {$\mathbb{P}_{\mathcal{E}}$}
+		++ (1.5,0) node[kernel,inner sep = 6] (Gn) {$G^{\mathcal{M}^{do(\RV{X}_k=a)}}_{k-1}$}
+		++ (2,0.) node[kernel] (Sok) {$S^O_{[k-1]}$}
+		++(1.5,0) node (XO) {$\mathbf{X}_{O}$};
+		\draw (P) -- (Gn);
+		\draw (Gn) -- (Sok);
+		\draw (Sok) -- (XO);
+	\end{tikzpicture}\\
+	&\overset{\ref{eq:prior_g_equal}}{=} \begin{tikzpicture}
+		\path (0,0) node[dist] (P) {$\mathbb{P}_{\mathcal{E}}$}
+		++ (1.5,0) node[kernel,inner sep = 6] (Gn) {$G^{\mathcal{M}^{do(\RV{X}_k=a)}}_{N}$}
+		++ (2,0.3) node[kernel] (Sok) {$S^O_{[k-1]}$}
+		++(1.5,0) node (XO) {$\mathbf{X}_{O}$}
+		+(0.7,-0.6) node (XL) {$(\mathbf{X}_{[N]\setminus [k-1]})$};
+		\draw (P) -- (Gn);
+		\draw[-{Rays [n=8]}] ($(Gn.east)+(0,-0.3)$) -- (XL);
+		\draw ($(Gn.east) + (0,0.3)$) -- (Sok);
+		\draw (Sok) -- (XO);
+	\end{tikzpicture}\\
+	&= P_{\mathcal{M}^{do(\RV{X}_k=a)}}(\RV{X}_O)
+\end{align}
+
+
+\end{proof}
+
+\begin{theorem}[Undefined hard interventions with cyclic constraints]\label{th:recursive_no_interventions}
+Consier a CSCM $\mathcal{M}=\langle N,M,\mathbf{X}_{[N]},\mathbf{E}_{[M]},\{f_i|i\in[N]\},\{r_i|i\in [N]\},\mathbb{P}_{\mathcal{E}}\rangle$ with $r_i$ a cyclic constraint with respect to $O\subset[N]$ and the rest of the constraints trivial: $r_j = \pi_j$, $j\neq i$, and suppose $\mathcal{M}$ is valid.
+
+If for each $k\in O$, $\exists A\in \mathcal{X}_i$ such that $0<\mathbb{P}_{\mathcal{M}}(\RV{X}_i\in A)<1$ then for at least one $k\in O$ all models given by a hard intervention on $\RV{X}_k$ are invalid.
+\end{theorem}
+
+\begin{proof}
+Choose $k$ to be the maximum element of $O$. By the assumption $\mathcal{M}$ is valid, we have $\RV{X}_i=r_i(\mathbf{x})$, $\mathbb{P}_{\mathcal{M}}$-almost surely. Let $B^A=\{\mathbf{b}\in \mathbf{X}_{O\setminus k}|\RV{X}_{O\setminus k}=\mathbf{b}\implies \RV{X}_k \in A\}$ and $B^{A^C}=\{\mathbf{b}\in \mathbf{X}_{O\setminus k}|\RV{X}_{O\setminus k}=\mathbf{b}\implies \RV{X}_k \not\in A\}$. 
+
+$r_i$ holds on a set of measure 1, and wherever it holds $\RV{X}_{O\setminus\{k\}}$ is either in $B^A$ or $B^{A^C}$. Thus $\mathbb{P}_{\mathcal{M}}(\RV{X}_{O\setminus\{k\}}\in B^A\cup B^{A^C})=1$. 
+
+$B^A$ and $B^{A^C}$ are disjoint.
+
+By construction, $\mathbb{P}_{\mathcal{M}}(\RV{X}_{O\setminus\{k\}}\in B^A \And \RV{X}_k\in A) = \mathbb{P}_{\mathcal{M}}(\RV{X}_{O\setminus\{k\}}\in B^A)$ and $\mathbb{P}_{\mathcal{M}}(\RV{X}_{O\setminus\{k\}}\in B^{A^C} \And \RV{X}_k\in A^C) = \mathbb{P}_{\mathcal{M}}(\RV{X}_{O\setminus\{k\}}\in B^{A^C})$
+
+By additivity, $\mathbb{P}_{\mathcal{M}}(\RV{X}_{O\setminus\{k\}}\in B^A \And \RV{X}_k\in A) + \mathbb{P}_{\mathcal{M}} (\RV{X}_{O\setminus\{k\}}\not\in B^A \And \RV{X}_k\in A)=P_{\mathcal{M}} (\RV{X}_k\in A)$. 
+
+By additivity agian
+
+\begin{align}
+	\mathbb{P}_{\mathcal{M}} \left(\RV{X}_{O\setminus\{k\}}\not\in B^A \And \RV{X}_k\in A\right) &=\mathbb{P}_{\mathcal{M}} \left(\RV{X}_{O\setminus\{k\}}\in B^{A^C} \And \RV{X}_k\in A\right) \\
+	&\quad+  \mathbb{P}_{\mathcal{M}} \left(\RV{X}_{O\setminus\{k\}}\in (B^{A^C}\cup B^A)^C \And \RV{X}_k\in A\right)\\
+	&<= 0 + P_{\mathcal{M}} \left(\RV{X}_{O\setminus\{k\}}\in (B^{A^C}\cup B^A)^C\right)\\
+	&= 0
+\end{align}
+
+Thus $\mathbb{P}_{\mathcal{M}}\left(\RV{X}_{O\setminus\{k\}}\in B^A \And \RV{X}_k\in A\right)=P_{\mathcal{M}} (\RV{X}_k\in A)=P_{\mathcal{M}}(\RV{X}_{O\setminus\{k\}}\in B^A)$ and by an analogous argument $\mathbb{P}_{\mathcal{M}}(\RV{X}_{O\setminus\{k\}}\in B^{A^C})=P_{\mathcal{M}} (\RV{X}_k\in A^C)$.
+
+Choose some $a\in A$, and consider the hard intervention $\mathcal{M}^{do(\RV{X}_k=a)}$. Suppose $\mathcal{M}^{do(\RV{X}_k=a)}$ is also valid. Then, as before, $\mathbb{P}_{\mathcal{M}^{do(\RV{X}_k=a)}}(\RV{X}_{O\setminus\{k\}}\in B^{A^C})=\mathbb{P}_{\mathcal{M}^{do(\RV{X}_k=a)}}(\RV{X}_k\in A^C)$.
+
+By definition of hard interventions, $f_k^{do(\RV{X}_k=a)} = a$. Thus $G^{\mathcal{M}^{do(\RV{X}_k=a)}}_N F_{\RV{X}_k}$ is the kernel $\mathbf{x}\mapsto \delta_a$ and it follows that $\mathbb{P}_{\mathcal{M}^{do(\RV{X}_k=a)}}(\RV{X}_k) = \delta_a$. 
+
+By lemma \ref{lem:hard_dont_affect_early}, $\mathbb{P}_{\mathcal{M}^{do(\RV{X}_k=a)}}(\RV{X}_{O\setminus\{k\}}\in B^{A^C})=P_{\mathcal{M}}(\RV{X}_{O\setminus\{k\}}\in B^{A^C}) = P_{\mathcal{M}}(\RV{X}_k\in A^C)>0$. But $P_{\mathcal{M}^{do(\RV{X}_k=a)}}(\RV{X}_k \in {A^C})=\delta_z(\RV{X}_k\in A^C)=0$, contradicting the assumption of validity of $\mathcal{M}^{do(\RV{X}=a)}$.
+
+An analogous argument shows that all hard interventions $a'\in A^C$ are also invalid.
+\end{proof}
+
+\subsection{Cyclic Structural Causal Models}
+
+It is not very surprising that acyclic causal models cannot accommodate cyclic constraints. Can cyclic causal models do so? While \citet{bongers_theoretical_2016} has develope a theory of cyclic causal models, cyclic are generally far less well understood than acyclic models. I show that the theory of cyclic models that Bongers has developed also fails to define hard interventions on variables subject to cyclic constraints. This does not rule out the possibility that there is some other way to define cyclic causal models that do handle these constraints, but I have not taken it upon myself to develop such a theory.
+
+\todo[inline]{Haven't done any work from here on}
 
 We adopt the framework of cyclic structural causal models to make our arguments, adapted from \citet{bongers_theoretical_2016}. This is somewhat non-standard, but allows us to make a stronger argument for the impossibility of modelling arbitrary sets of variables using structural interventional models.
 
@@ -46,9 +522,9 @@ If for $\mathbb{P}_{\mathcal{E}}$-almost every $\mathbf{e}\in\mathbf{E}_{\mathca
 	\mathbf{x} = \mathbf{f}_{\mathcal{I}}(\mathbf{x},\mathbf{e})
 \end{align}
 
-Then an SCM $\mathcal{M}$ induces a unique probability space $(\mathbf{X}_{\mathcal{I}}\times\mathbf{E}_{\mathcal{J}},\mathcal{X}_{\mathcal{I}}\otimes\mathcal{E}_{\mathcal{J}},\mathbb{P}_{\mathcal{X}\otimes\mathcal{E}})$ \citep{bongers_theoretical_2016}. If no such solution exists then we will say an SCM is invalid, as it imposes mutually incompatible constraints on the endogenous variables.
+Then an SCM $\mathcal{M}$ induces a unique probability space $(\mathbf{X}_{\mathcal{I}}\times\mathbf{E}_{\mathcal{J}},\mathcal{X}_{\mathcal{I}}\otimes\mathcal{E}_{\mathcal{J}},\mathbb{P}_{\mathcal{M}})$ \citep{bongers_theoretical_2016}. If no such solution exists then we will say an SCM is invalid, as it imposes mutually incompatible constraints on the endogenous variables. It may be also the case that multiple solutions exist.
 
-If an SCM induces a unique probability space then there exist random variables $\{\RV{X}_i\}_{i\in\mathcal{I}}$ such that, almost surely \citet{bongers_theoretical_2016}:
+If an SCM induces a unique probability space then there exist random variables $\{\RV{X}_i\}_{i\in\mathcal{I}}$ such that, $P_{\mathcal{M}}$ almost surely \citet{bongers_theoretical_2016}:
 
 \begin{align}
 	\RV{X}_i = f_i(\bm{\RV{X}}_{\mathcal{I}},\bm{\RV{E}}_{\mathcal{J}})
@@ -56,9 +532,15 @@ If an SCM induces a unique probability space then there exist random variables $
 
 Where $\bm{\RV{X}}_{\mathcal{I}} = \utimes_{i\in \mathcal{I}} \RV{X}_i$.
 
-A structural causal model can be transformed by \emph{mechanism surgery}. This is an operation that replaces a model $\mathcal{M}$ with a modified model $\mathcal{M}'$ that shares all elements except the set of causal mechanisms, which is replaced by an arbitrarily different set $\mathbf{f}'_{\mathcal{I}}$.
+A structural causal model can be transformed by \emph{mechanism surgery}. Given $\mathcal{S}\subset\mathcal{I}$ and a set of new functions $\mathbf{f}^I_{\mathcal{S}}:\mathbf{X}_{\mathcal{S}}\times\mathbf{E}_{\mathcal{J}}\to\mathbf{X}_{\mathcal{S}}$, mechanism surgery ``replaces'' the corresponding parts of $\mathbf{f}_{\mathcal{I}}$ with $\mathbf{f}^I_{\mathcal{S}}$.
 
-If the mechanism surgery that transforms $\mathcal{M}$ to $\mathcal{M}'$ is such that $f'_i\neq f_i$ and $f'_j=f_j$, $j\neq i$, then we say that $\mathcal{M}'$ represents \emph{an intervention on $\RV{X}_i$}. If $f'_i$ is furthermore a constant function equal to $x$ then we say that $\mathcal{M}'$ represents a \emph{hard intervention on $i$} and use the special notation $\mathcal{M}^{do(\RV{X}_i=x)}:=\mathcal{M}'$. Similarly, $\mathcal{M}^{do(\RV{X}_i=x,\RV{X}_j=y)}$ is a model representing a hard intervention on $i$ and $j$. The \emph{causal effect} of $\RV{X}_i$ is the set of hard interventional SCMs $\{\mathcal{M}^{do(\RV{X}_i=x)}|x\in X_i\}$, which is generated by the fundamental model $\mathcal{M}$ and the operation of hard intervention on $\RV{X}_i$.
+\begin{definition}[Mechanism surgery]
+Let $\mathscr{M}$ be the set of SCMs with elements $\langle \mathcal{I},\mathcal{J},\mathbf{X}_{\mathcal{I}},\mathbf{E}_{\mathcal{J}},\_,\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$ (note that the causal mechanisms are unspecified). Mechanism surgery is an operation $I:\mathbf{X}_{\mathcal{I}}^{\mathbf{X}_{\mathcal{I}}\times\mathbf{E}_{\mathcal{J}}}\times \mathscr{M}\to\mathscr{M}$ that takes a causal model $\mathcal{M}$ with arbitrary causal mechanisms and a set of causal mechanisms $\mathbf{f}'_{\mathcal{I}}$ and maps it to a model $\mathcal{M}'=\langle \mathcal{I},\mathcal{J},\mathbf{X}_{\mathcal{I}},\mathbf{E}_{\mathcal{J}},\mathbf{f}'_{\mathcal{I}},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$.
+
+If $\mathcal{M}$ has causal mechanisms $\mathbf{f}_{\mathcal{I}}$ and $\mathcal{O}\subset\mathcal{I}$ is the largest set such that $\pi_{\mathcal{O}}\circ\mathbf{f}_{\mathcal{I}}=\pi_{\mathcal{O}}\circ\mathbf{f}'_{\mathcal{I}}$ then we say $I$ is an \emph{intervention} on $\mathcal{L}:=\mathcal{I}\setminus\mathcal{O}$. We will use the special notation $\mathcal{M}^{I(\mathcal{L}),\mathbf{f}'_{\mathcal{L}}}:=I(\mathcal{M},\mathbf{f}'_{\mathcal{L}}$ to denote an SCM related to $\mathcal{M}$ by intervention on a subset of $\mathcal{I}$.
+
+If \emph{furthermore} $\pi_{\mathcal{L}}\mathbf{f}'_{\mathcal{I}}$ is a constant function equal to $\mathbf{a}$, then we say $I$ is a \emph{hard intervention} on $\mathcal{L}$. We use the special notation $\mathcal{M}^{Do(\mathcal{L})=\mathbf{a}}:=I(\mathcal{M},\mathbf{f}'_{\mathcal{L}}$ to denote SCMs related to $\mathcal{M}$ by hard interventions. We also say that the \emph{causal effect} of $\mathcal{L}$ is the set of SCNMs $\{\mathcal{M}^{Do(\mathcal{L})=\mathbf{a}}|a\in \mathbf{X}_{\mathcal{L}}\}$.
+\end{definition}
 
 We say a \emph{causal model} is any kind of model that defines causal effects. An SCM $\mathcal{M}$ in combination with hard interventions defines causal effects, so an SCM is a causal model. Call each interventional model $\mathcal{M}^{do(\RV{X}_i=x)}$ a \emph{submodel} of $\mathcal{M}$.
 
@@ -78,18 +560,7 @@ That BMI is merely a coarse proxy of obesity is well taken; obesity should ideal
 We argue that BMI does \emph{not} have a well-defined causal effect, and without further assumptions neither does any variable.
 
 
-\subsection{Necessary relationships}
-
-The relationship between a person's body mass index, their weight and their height defines what body mass index is. A fundamental claim of ours is that any causal model that defines ``the causal effect of body mass index'' should do so without reference to any submodel that violates this definitional relationship violation of the definition. This is an important assumption, and it rests on a judgement of what causal models ought to do. I think it is quite clear that when anyone asks for a causal effect, they expect that any operations required to define the causal effect \emph{do not change the definitions of the variables they are employing}. While theories like SCMs have a role in sharpening our understanding of the term \emph{causal effect}, the thing called a ``causal effect'' in an SCM should still respect some of our pre-theoretic intuitions about what causal effects are or else it should be called something else. ``Causal effects'' that depend on redefining variables do not respect pre-theoretic intuitions about what causal effects are:
-
-\begin{itemize}
-	\item If I ask for the ``causal effect of a person's BMI'', I do not imagine that I am asking what would happen if someone's BMI were defined to be something other than their weight divided by their height
-	\item If I ask for the ``causal effect of a person's weight'', I do not imagine that I am asking what would happen if someone's weight were not equal to their volume multiplied by their density
-	\item If I ask for the ``causal effect of a person's weight'', I also do not imagine that I am asking what would happen if their weight were not equal to the weight of fat in their body plus the weight of all non-fat parts of their body
-	\item If I ask for the ``causal effect of taking a medicine'', I do not imagine that I am asking what would happen if a person were declared to have taken a medicine independently of whatever substances have actually entered their body and how they entered
-\end{itemize}
-
-We will call relationships that have to hold \emph{necessary relationships}. We provide the example of relationships that have to hold by definition as examples of relationships that should be necessary in causal models, but one might also wish to stipulate that certain laws of physics are required to hold in all submodels.
+\subsubsection{Necessary relationships in cyclic SCMs}
 
 If an SCM contains variables that are necessarily related, we wish to impose the additional restriction that these necessary relationships hold for every submodel. This can be done by extending the previous definition:
 
@@ -109,20 +580,43 @@ Mechanism surgery for SCNMs involves modification of $\mathbf{f}_{\mathcal{I}}$ 
 If we wish to stipulate that a particular variable $\RV{X}_i$ has no causal relationships or necessary relationships we can specify this with the trivial mechanisms $f_i:(\mathbf{x},\mathbf{e})\mapsto x_i$ and $g_i:\mathbf{x} \mapsto x_i$ respectively. An SCNM $\mathcal{M}$ with the trivial necessary relationship $\mathbf{g}_{\mathcal{I}}: \mathbf{x}\mapsto \mathbf{x}$ induces the equivalent probability spaces as the SCM obtained by removing $\mathbf{g}_{\mathcal{I}}$ from $\mathcal{M}$.
 \end{definition}
 
-Because BMI is always equal height/weight, a causal model that includes height and weight ought to be able to model anything that a model containing height, weight and BMI can model. \todo{explain why}
+Because BMI is always equal height/weight, given some SCNM $\mathcal{M}$ containing endogenous variables $\RV{X}_{h}$, $\RV{X}_w$ and $\RV{X}_{b}$ representing height, weight and BMI respectively, it should be possible to construct a more ``primitive'' SCNM $\mathcal{M}^{p}$ containing every variable $\mathcal{M}$ does except $\RV{X}_b$ that agrees with $\mathcal{M}$ on all interventions except those on $\RV{X}_b$.
 
-However, as Theroem \ref{th:no_interventions} shows, if an SCNM with height, weight and BMI can be derived from an SCNM containing just height and weight then there are no valid interventions on BMI.
+\begin{definition}[Marginal model]
+Given an SCNM $$\mathcal{M}=\langle \mathcal{I},\mathcal{J},\mathbf{X}_{\mathcal{I}},\mathbf{E}_{\mathcal{J}},\mathbf{f}_{\mathcal{I}},\mathbf{g}_{\mathcal{I}},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$$ a marginal model over $\mathcal{L}\subset\mathcal{I}$ is an SCNM $$\mathcal{M}^{\stopper{0.25}_L}=\langle \mathcal{O},\mathcal{J},\mathbf{X}_{\mathcal{O}},\mathbf{E}_{\mathcal{J}},\mathbf{f}^{\mathcal{L*}}_{\mathcal{O}},\mathbf{g}^{\mathcal{L*}}_{\mathcal{O}},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$$ such that $(\mathbb{P}_{\mathcal{M}}) \stopper{0.25}_{\mathcal{L}}=\mathbb{P}_{(\mathcal{M}^{\stopper{0.25}_L})}$ and for all interventions $\mathbf{f}'_{\mathcal{O}}$ on $\mathcal{O}:=\mathcal{I}\setminus\mathcal{L}$ that do not depend on $\mathcal{L}$ $$(\mathbb{P}_{\mathcal{M}^{I(\mathcal{O}),\mathbf{f}'_{O}}})  \stopper{0.25}_{\mathcal{L}}=\mathbb{P}_{(\mathcal{M}^{\stopper{0.25}_\mathcal{L}},I(\mathcal{O}),\mathbf{f}'_{\mathcal{O}}\circ\pi_{\mathcal{O}})} $$
+\end{definition}
+
+A \emph{primitive model} is a special case of a marginal model where any intervention that depended only on endogenous variables in the original model can be replicated with some intervention that depends only on endogenous variables in the marginal model. If the endogenous variables represent \emph{observed} variables, then the plausible intervention operations may only be allowed to depend on these variables. In general, there may be interventions that are possible in the original model that are not possible in the marginal model.
+
+\begin{definition}[Primitive model]
+A \emph{primitive model} $\mathcal{M}^p$ is a marginal model of $\mathcal{M}$ with respect to some $\mathcal{L}$ such that for all interventions $\mathbf{f}'_{\mathcal{O}}$ that do not depend on $\mathcal{J}$ there exists some $\mathbf{g}'_{\mathcal{O}}:\mathbf{X}_{\mathcal{O}}\times\mathbf{E}_{\mathcal{J}}\to\mathbf{X}_{\mathcal{O}}$ that does not depend on $\mathcal{J}$ such that $$(\mathbb{P}_{\mathcal{M}^{I(\mathcal{O}),\mathbf{f}'_{O}}})  \stopper{0.25}_{\mathcal{L}}=\mathbb{P}_{(\mathcal{M}^{\stopper{0.25}_\mathcal{L}},I(\mathcal{O}),\mathbf{g}'_{\mathcal{O}})} $$
+
+\end{definition}
+
+We claim that given any SCNM $\mathcal{M}$ containing endogenous variables $\RV{X}_{h}$, $\RV{X}_w$ and $\RV{X}_{b}$ representing height, weight and BMI there should be a primitive model $\mathcal{M}^p$ of $\mathcal{M}$ with respect to $\{p\}$.
+
+\begin{lemma}[Primitive models]
+$\mathcal{M}^p$ is a primitive model of $\mathcal{M}$ with respect to $\mathcal{L}\subset \mathcal{I}$ iff $S(\pi_{\mathcal{O}} \mathbf{f}_{\mathcal{I}})\overset{a.s.}{=}S(\mathbf{f}^p_{\mathcal{O}})$ for $\mathcal{O}:=\mathcal{I}\setminus\mathcal{L}$ and for all $\mathbf{x}\in \mathbf{X}_{\mathcal{I}}$, $\mathbf{g}$
+
+\end{lemma}
+
+However, as Theroem \ref{th:no_interventions} shows, if an SCNM with height, weight and BMI can be derived from an SCNM containing just height and weight then there are no valid hard interventions on BMI.
 
 \begin{definition}[Derived model]
-Given a SCNM $\mathcal{M}:=\langle \mathcal{I},\mathcal{J},\mathbf{X}_{\mathcal{I}},\mathbf{E}_{\mathcal{J}},\mathbf{f}_{\mathcal{I}},\mathbf{g}_{\mathcal{I}},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$, say $\mathcal{M}'=\langle \mathcal{I}',\mathcal{J},\mathbf{X}_{\mathcal{I}'},\mathbf{E}_{\mathcal{J}},\mathbf{f}_{\mathcal{I}'},\mathbf{g}_{\mathcal{I}'},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$ is \emph{derived} from $\mathcal{M}$ if there exists some additional index/variable/relationships $i'\not\in\mathcal{I},X_{i'},f_{i'},g_{i'}$ such that
+Given a SCNM $\mathcal{M}:=\langle \mathcal{I},\mathcal{J},\mathbf{X}_{\mathcal{I}},\mathbf{E}_{\mathcal{J}},\mathbf{f}_{\mathcal{I}},\mathbf{g}_{\mathcal{I}},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$, say $\mathcal{M}'=\langle \mathcal{I}',\mathcal{J},\mathbf{X}_{\mathcal{I}'},\mathbf{E}_{\mathcal{J}},\mathbf{f}'_{\mathcal{I}'},\mathbf{g}'_{\mathcal{I}'},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$ is \emph{derived} from $\mathcal{M}$ if there exists some additional index/variable/relationships $i'\not\in\mathcal{I},X_{i'}$ such that
 \begin{align}
 	\mathcal{I}' &= \mathcal{I}\cup\{i'\}\\
-	\mathbf{X}_{\mathcal{I}'} &= \mathbf{X}_{\mathcal{I}}\cup X_{i'}\\
-	\mathbf{f}_{\mathcal{I}'} &= \mathbf{f}_{\mathcal{I}}\utimes f_{i'}\\
-	\mathbf{g}_{\mathcal{I}'} &= \mathbf{g}_{\mathcal{I}}\utimes g_{i'}
+	\mathbf{X}_{\mathcal{I}'} &= \mathbf{X}_{\mathcal{I}}\cup X_{i'}
 \end{align}
 
-Call $i',X_{i'},f_{i'},g_{i'}$ the \emph{additional elements}. \todo{I need to stipulate that $f_k$ ``forgets'' $\RV{X}_{i'}$ for $k\neq i'$, $g_k$ ``forgets'' for all $k$}
+and, defining $\pi_{\mathcal{I'}\setminus{i'}}:\mathbf{X}_{\mathcal{I'}}\to \mathbf{X}_{\mathcal{I}}$ as the projection map that ``forgets'' $\RV{X}_{i'}$, for any $\mathbf{e}\in\mathbf{E}_{\mathcal{J}}$ we have
+
+\begin{align}
+	\mathbf{x}'&=\mathbf{f}'_{\mathcal{I}'}(\mathbf{x}',\mathbf{e})\\
+	\text{and } \mathbf{x}'&=\mathbf{g}'_{\mathcal{I}'}(\mathbf{x}')
+	\implies \pi_{\mathcal{I'}\setminus{i'}}(\mathbf{x}')&=\mathbf{f}_{\mathcal{I}}(\pi_{\mathcal{I'}\setminus{i'}}(\mathbf{x}'),\mathbf{e})\\
+	\text{and } \pi_{\mathcal{I'}\setminus{i'}}(\mathbf{x}')&=\mathbf{g}'_{\mathcal{I}'}(\pi_{\mathcal{I'}\setminus{i'}}(\mathbf{x}'))
+\end{align}
 \end{definition}
 
 \begin{theorem}[Interventions and necessary relationships don't mix]\label{th:no_interventions}
@@ -136,16 +630,17 @@ Because $\mathcal{M}$ is uniquely solvable, for $\mathbb{P}_{\mathcal{E}}$ almos
 	\mathbf{x}^e &= \mathbf{g}_{\mathcal{I}}(\mathbf{x}^e)
 \end{align}
 
-Because $\mathcal{M}'$ is also uniquely solvable, for $\mathbb{P}_{\mathcal{E}}$ almost every $\mathbf{e}$ we have
+Because $\mathcal{M}'$ is also uniquely solvable, for $\mathbb{P}_{\mathcal{E}}$ almost every $\mathbf{e}$ we have $\mathbf{x}^{\prime e}\in\mathbf{X}_{\mathcal{I}'}$ such that $\pi_{\mathcal{I'}\setminus{i'}}(\mathbf{x}')^{\prime e} = \mathbf{x}^e$ and
 \begin{align}
-	x^e_{i'} = \mathbf{g}_{i'}(\mathbf{x}^e) \label{eq:necessary_relationship}
+	x^{\prime e}_{i'} = \mathbf{g}_{i'}(\mathbf{x}^{\prime e}) \label{eq:necessary_relationship}
 \end{align}
 
 Because $\mathbb{P}_{\mathcal{X}'\otimes\mathcal{E}}(\RV{X}_{i'})$ is not single valued there are non-null sets $A,B\in \mathcal{E}$ such that $e_a\in A$, $e_b\in B$ implies
 
 \begin{align}
-	\mathbf{g}_{i'}(\mathbf{x}^{e_a}) \neq \mathbf{g}_{i'}(\mathbf{x}^{e_b})
+	\mathbf{g}_{i'}(\mathbf{x}^{\prime e_a}) \neq \mathbf{g}_{i'}(\mathbf{x}^{\prime e_b})
 \end{align}
+
 
 Therefore there exists no $a\in X_{i'}$ that can simultaneously satisfy \ref{eq:necessary_relationship} for almost every $\mathbf{e}$. However, any hard intervention $\mathcal{M}^{\prime,do(\RV{X}_{i'}=a)}$ requires such an $a$ in order to be solvable.
 \end{proof}
@@ -431,7 +926,7 @@ There exists a uniquely solvable SCM $\mathcal{M}_{\text{atom}}$ which is the at
 % Typically, interventional models will model causal variables as random variables (1) and suppose that $\mathbf{X}$ is a discrete set (2), assume that in addition to (3) causal effects are also \emph{antisymmetric}, and that causal effects are they are given by functions rather than sets of functions (4). Furthermore, (5) is implied by the causal Markov condition \citep{hausman_independence_1999} when $\mathbf{R}$ is antisymmetric. (6) and (7) are implied by rule 3 of the do-calculus \citep{pearl_causality:_2009}, but are independent given the other assumptions made.
 
 
-% Call a random variable \emph{trivial} if it maps all inputs to the same output (i.e. it is a version of the discard map $\stopper{0.2}$), and \emph{nontrivial} otherwise.
+% Call a random variable \emph{trivial} if it maps all inputs to the same output (i.e. it is a version of the discard map $\stopper{0.25}$), and \emph{nontrivial} otherwise.
 
 % \begin{lemma}[All random variables are ancestors of themselves]\label{lem:total_ancestry}
 % Given a causal model $(P,\mathcal{E},\mathbf{R},\mathbf{X})$. Define $\mathbf{X}_{NT}$ to be the set of all nontrivial random variables. For any nontrivial $\RV{X}_i\in \mathbf{X}_{NT}$ there exists some function $f$ such that $\RV{X}_i=f(\RV{X}_{\mathbf{A}(i)})$.
