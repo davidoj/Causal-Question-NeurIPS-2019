@@ -1,0 +1,24 @@
+\contentsline {section}{\numberline {1}Notation}{2}{section.1}%
+\contentsline {section}{\numberline {2}What is the difference between Causal Bayesian Networks and See-Do models?}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Influence Diagrams vs See-Do models}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Influence diagrams vs Causal Bayesian Networks}{5}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}What is meant by ``variables''?}{6}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Necessary relationships}{6}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Recursive Structural Causal Models}{7}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Recursive Structural Causal Models with Necessary Relationships}{8}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}Cyclic Structural Causal Models}{13}{subsection.2.7}%
+\contentsline {subsection}{\numberline {2.8}Not all variables have well-defined interventions}{14}{subsection.2.8}%
+\contentsline {subsubsection}{\numberline {2.8.1}Necessary relationships in cyclic SCMs}{15}{subsubsection.2.8.1}%
+\contentsline {section}{\numberline {3}Definitions and key notation}{18}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Standard Symbols}{19}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Probability Theory}{19}{subsection.3.2}%
+\contentsline {paragraph}{Common $\sigma $ algebras}{19}{section*.25}%
+\contentsline {subsection}{\numberline {3.3}Product Notation}{20}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}String Diagrams}{20}{subsection.3.4}%
+\contentsline {paragraph}{Elementary operations}{21}{section*.26}%
+\contentsline {paragraph}{Probability measures, Markov kernels and functions}{22}{section*.27}%
+\contentsline {paragraph}{Markov kernels with special notation}{22}{section*.28}%
+\contentsline {subsubsection}{\numberline {3.4.1}Comparison of notations}{24}{subsubsection.3.4.1}%
+\contentsline {subsubsection}{\numberline {3.4.2}Working With String Diagrams}{25}{subsubsection.3.4.2}%
+\contentsline {paragraph}{Axioms of Symmetric Monoidal Categories}{25}{section*.29}%
+\contentsline {subsubsection}{\numberline {3.4.3}Random Variables}{26}{subsubsection.3.4.3}%

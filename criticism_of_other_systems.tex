@@ -4,36 +4,184 @@
 \section{Notation}
 
 \begin{itemize}
-	\item I use $\RV{X}$ for a random variable, $X$ for its codomain and $\mathcal{X}$ for the $\sigma$-algebra on $X$
-	\item Bold letters $\mathbf{X}$ indicate product spaces and $\mathbf{x}$ elements of product spaces
-	\item Given an indexed product space $\prod_{i\in \mathcal{I}} X_i$, $\pi_i:\prod_{i\in \mathcal{I}} X_i\to X_i$ is the projection map $(x_1,...,x_i,...,x_n)\mapsto x_i$
-	\item Given an index set $\mathcal{I}$, $\mathbf{X}_{\mathcal{I}}$ is the indexed product space $\prod_{i\in \mathcal{I}} X_i$
+	\item $\RV{X}$ is a random variable, $X$ is its codomain and $\sigalg{X}$ is the $\sigma$-algebra on $X$
+	\item Bold letters $\prodSet{X}$ may be used for product spaces, $\vecVal{x}$ for elements of product spaces, $\mathbf{f}$ for vector valued functions and $\vecRV{X}$ for random variables taking values in product spaces. The absence of bold font does not imply the absence of product space structure
+	\item Nodes in a graph are italic sans serif $\nod{X}$
+	\item Given an indexed product space $\prod_{i\in \indx{I}} X_i$, $\pi_i:\prod_{i\in \indx{I}} X_i\to X_i$ is the projection map $(x_1,...,x_i,...,x_n)\mapsto x_i$
+	\item Given a product space $X\times Y$, $\pi_X:X\times Y\to X$ is the projection map $(x,y)\mapsto x$
+	\item Given an index set $\indx{I}$, $\prodSet{X}_{\indx{I}}$ is the indexed product space $\prod_{i\in \indx{I}} X_i$
 	\item $[n]$ is the index set $\{1,...,n\}$ for $n\in\mathbb{N}$
-	\item Given an indexed product space $\mathbf{X}_{[n]}$, $\mathbf{X}_{<j}$ is the set $\prod_{i=1}^j X_i$
+	\item Given an indexed product space $\prodSet{X}_{[n]}$, $\prodSet{X}_{<j}$ is the set $\prod_{i=1}^j X_i$
 	\item $\utimes$ is the coupled tensor product, see Definition \ref{def:ctensor}
 	\item Given a random variable $\RV{X}$, $F_{\RV{X}}$ is the associated Markov kernel, see Definition \ref{def:functional_kernel}
 	\item See section \ref{sssec:string_diagram_manipulation} for rules of string diagram manipulation
 	\item $\stopper{0.2}_X:X\to \Delta(\{*\})$ is the discard map defined in Equation \ref{eq:discard}
 \end{itemize}
 
+\section{What is the difference between Causal Bayesian Networks and See-Do models?}
 
-\section{Why you need decisions}
+See-Do models and Causal Bayesian Networks (and related models such as SCMs) are quite different in their appearance and in the interpretation of various elements. In defining See-Do models, we assume that there is a decision problem that fixes in advance the observation space $E$, the space of consequences $F$ and the set of available decisions $D$. By including $D$, See-Do models have an agent ``baked in'' to the definition. In contrast, Causal Bayesian Networks assume that a set of observed variables $\mathbf{X}$ and a set of unobserved variables $\mathbf{U}$ is fixed by nature. A subtlety here is that $\mathbf{U}$ is generally \emph{not} known, but it may be assumed that whatever variables actually comprise $\mathbf{U}$, they may be generically representable by some known set of variables $\mathbf{U}'$ without loss. Because a set of decisions $D$ is absent, Causal Bayesian Networks appear to model agent-independent ``causal relationships''.
 
-CSDT differs from Causal Bayesian Networks in that See-Do models require a set $D$ of decisions to be specified as part of the definition, just as a function requires a domain to be specified as part of its definition. Causal Bayesian Networks, in contrast, appear to define causal effects of variables without reference to an underlying set of decisions. We show that this distinction is only apparent, and that Causal Bayesian Networks also require the specification of ``causal atoms'' which correspond precisely to the decision set in a See-Do model.
+Despite the fact that Causal Bayesian Networks don't seem to built to model the consequences of an agent's decision making, they are nonetheless considered to be appropriate for this purpose. This is because the ``do-operations'' that Causal Bayesian Networks support are considered to have some relationship to any set $D$ decisions some agent might want to consider.
 
-In what follows, I will call the approach of CSDT a ``decisions first'' approach, as a set $D$ of decisions must be chosen before anything can be said about causation. I will call the approach taken by Causal Bayesian Networks a ``causes first'' approach, as one could take the view that the investigation of consequences of decisions is a specialisation of the study of causal effect, and such is my understanding of the philosophy behind the Causal Bayesian Network approach.
+The question of how this relationship might be determined in general is one that I have not seen addressed anywhere. Typically, the approach taken is ``I know it when I see it''. For example, if I were a doctor and I could either A) hand a patient a prescription or B) not hand the patient the prescription, and if I had a set of observational data of past patients including a variable $\RV{S}$ representing whether or not they had received a prescription for the drug, I could consider option A to correspond to $do(\RV{S}=1)$ and option B to correspond to $do(\RV{S}=0)$ in some causal model (perhaps in the ``true'' causal model). While this might appear to be reasonable, we should be cautious: this is a completely \emph{ad-hoc} assumption.
 
-``Causes first'' and ``decisions first'' approaches do not clearly necessitate one follow a particular school of \emph{modelling} causal relationships. \emph{Influence diagrams} are CBN-like graphical models that follow a decisions first paradigm \citep{peters_elements_2017,woodward_causation_2016,dawid_influence_2002}. It is unclear where the Potential Outcomes school sits on this question - like CBNs, causal effects in the Potential Outcomes school talks about causal effects of variables, an approach that avoids explicit definition of a set of decisions. On the other hand, unlike CBN models, Potential Outcomes models typically only consider a subset of variables to have causal effects, and consider causal effects to be difficult to define in general \citep{rubin_causal_2005}, so \emph{some} choices are made in terms of which variables can underwrite causal effects.
+In fact, given a sufficiently rich set of variables $\mathbf{U}\cup\RV{X}$, I argue that $do(\RV{S})$ will almost never even approximate the consequences of an action known in advance to fix the value of some variable $\RV{S}$. For this reason, it is valuable to have a theory like CSDT that is concerned only with the consequences of actions.
 
-An apparent difference between causes first and decisions first paradigms is whether the question ``what is the causal effect of $\RV{X}$ on $\RV{Y}$?'' is, in general, well-defined. In the decisions first approach, it seems to be necessary to ask ``what is the causal effect of $\RV{X}$ on $\RV{Y}$ with respect to decisions $D$?'', and the question is ill-posed without this clarification. On the other hand, it seems to be well defined in the causes first approach.
+\subsection{Influence Diagrams vs See-Do models}
 
-However, this too is merely an \emph{apparent} difference. Because the causes first approach requires the specification of a set of causal atoms, to properly pose the question in the causes first paradigm requires the clarification ``what is the causal effect of $\RV{X}$ on $\RV{Y}$ \emph{with respect to atoms $A$}?''.
+Influence diagrams are used to represent causal models in a manner similar to, but not quite the same as, Causal Bayesian Networks. Using the version found in \citet{dawid_influence_2002}, an influence diagram is a directed acyclic graph (DAG) with two node types: ``chance'' nodes and ``decision'' nodes. For example:
 
-I propose that the actual difference here is the hypothesis of \emph{causal universality}: that there exists a unique set of causal atoms $A^*$ that is appropriate for every problem. If such a set exists then the original question ``what is the causal effect of $\RV{X}$ on $\RV{Y}$?'' can be understood as implicitly invoking $A^*$. An analogous hypothesis of \emph{decision universality} can do the same thing in the decisions first paradigm.
+\begin{align}
+\begin{tikzpicture}[scale = 2]
+\path (0,0) node[rectangle,draw] (D) {$\nod{D}$}
+++ (0.5,0) node[circle,draw] (F) {$\nod{F}$};
+\draw[-latex] (D) -- (F);
+\end{tikzpicture}\label{eq:simple_ID}
+\end{align}
 
-\todo[inline]{I think there might be a useful theorem that work well with universality, but not sure yet}
+Is an influence diagram with the decision node $\nod{D}$ and the chance node $\nod{F}$. When nodes are associated with sets representing possible values, influence diagrams represent sets of Markov kernels. For example, if we associate the measurable set $(D,\mathcal{D})$ with $\nod{D}$ and $(F,\mathcal{F})$ with $\nod{F}$, then we could take Diagram \ref{eq:simple_ID} to represent the set of all Markov kernels $D\to \Delta(\mathcal{F})$, or if we add some additional assumptions it might represent a particular subset $S\subset \Delta(\mathcal{F})^D$ of these kernels that share certain properties. Compare this to a string diagram:
 
-\todo[inline]{And I discuss whether or not you might want to assume universality}
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (D) {$D$}
+++ (0.7,0) node[kernel] (K) {$\kernl{K}$}
+++ (0.7,0) node (F) {$F$};
+\draw (D) -- (K) -- (F);
+\end{tikzpicture}
+\end{align}
+
+This diagram represents a \emph{particular} Markov kernel $\kernl{K}:D\to \Delta(\mathcal{F})$. A set such as that represented by Diagram \ref{eq:simple_ID} could be constructed by creating a set $\Theta$ and a function $f:\Theta\to S$ that indexes each element of $S$ with $\theta\in \Theta$. Then $S=\{f(\theta)|\theta\in \Theta\}$. If $f$ is measurable then there is a Markov kernel $\kernl{T}:\Theta\times D\to \Delta(\mathcal{F})$ such that $f(\theta)=\kernl{T}_{\theta,\_}$\todo{notation}. In this sense, for any additional assumptions that are combined with Diagram \ref{eq:simple_ID} to yield the set $S$ of Markov kernels, there exists a single Markov kernel $\kernl{T}:\Theta\times D\to \Delta(\mathcal{F})$ that generates $S$. $\kernl{T}$ can be drawn as
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (D) {$D$}
++ (0,0.5) node (T) {$\Theta$}
+++ (0.7,0.25) node[kernel] (K) {$\kernl{T}$}
+++ (0.7,0) node (F) {$F$};
+\draw (D) to [out=0,in=180] ($(K.west)+(0,-0.1)$) (K) -- (F);
+\draw (T) to [out=0,in=180] ($(K.west) + (0,0.1)$);
+\end{tikzpicture}\label{eq:simple_ID_kernel}
+\end{align}
+
+Diagram \ref{eq:simple_ID_kernel} has a few more elements that Diagram \ref{eq:simple_ID} - $\Theta$ and $\kernl{T}$ in particular. If I were to define exactly what $D$, $\Theta$, $\kernl{T}$ and $F$ were, Diagram \ref{eq:simple_ID_kernel} would represent a unique Markov kernel. On the other hand, Diagram \ref{eq:simple_ID} along with a precise definition of $D$ and $F$ could represent many different sets of Markov kernels, depending on whatever additional properties I want elements of $S$ to share. Loosely, we can say that for any kernel $\kernl{T}$, there is a diagram \ref{eq:simple_ID} along with additional assumptions that represents ``the same thing''\todo{Under the condition that the choice of index ``doesn't matter'' somehow}.
+
+Influence diagrams \emph{as typically used in causal modelling} usually additional assumptions. For example, \citet{dawid_influence_2002} proposes that $D$ contains a special ``do nothing'' element $o\in D$ such that the observations in state $\theta$ are given by $\kernl{T}_{\theta,o}$\todo{notation} and consequences in state $\theta$ are given by $\kernl{T}_{\theta,\_}$. This corresponds to the See-Do model
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (D) {$D$}
++ (0,0.5) node (T) {$\Theta$}
++ (0.5,0.5) coordinate (copy0)
+++ (1.5,0.25) node[kernel] (K) {$\kernl{T}$}
++ (0,0.5) node[kernel] (To) {$\kernl{T}_{\_,o}$}
+++ (1,0) node (F) {$F$}
++(0,0.5) node (E) {$F$};
+\draw (D) to [out=0,in=180] ($(K.west)+(0,-0.1)$) (K) -- (F);
+\draw (T) -- (copy0) to [out=0,in=180] ($(K.west) + (0,0.1)$);
+\draw (T) -- (copy0) to [out=0,in=180] (To) (To) -- (E);
+\end{tikzpicture}
+\end{align} 
+
+While this is a feature of influence diagrams in \citet{dawid_influence_2002}, \emph{in general} a diagram like \ref{eq:simple_ID} can represent an arbitrary set of typed Markov kernels. See-Do models generate $\Theta$-indexed sets of Markov kernels. We can therefore represent generic See-Do models with influence diagrams.
+
+\todo[inline]{There is some kind of measurability condition needed to make the two representations coincide}
+
+Concretely, given the influence diagram
+\begin{align}\label{eq:see_do_id}
+\diagram{I} = \begin{tikzpicture}[scale = 2]
+\path (0,0) node[circle,draw] (E) {$\nod{E}$}
+++ (-0.5,-0.5) node[rectangle,draw] (D) {$\nod{D}$}
+++ (0.5,0) node[circle,draw] (F) {$\nod{F}$};
+\draw[-latex] (D) -- (F);
+\end{tikzpicture}
+\end{align}
+
+and any See-Do model $\kernl{T}:\Theta\times D\to \Delta(\mathcal{E}\otimes \mathcal{F})$ there exists a set of auxhiliary conditions $A$ such that the model $(\diagram{I},A)$ is equivalent to $\kernl{T}$\todo{subject to irrelevance of index $\Theta$}. To illustrate how influence diagrams and string diagrams compare, $\kernl{T}$ can be drawn:
+
+\begin{align}
+\kernl{T}:=\begin{tikzpicture}
+\path (0,0) node (D) {$D$}
++ (0,0.5) node (T) {$\Theta$}
++ (0.5,0.5) coordinate (copy0)
+++ (1.5,0.25) node[kernel] (K) {$\kernl{C}$}
++ (0,0.5) node[kernel] (To) {$\kernl{H}$}
+++ (1,0) node (F) {$E$}
++(0,0.5) node (E) {$F$};
+\draw (D) to [out=0,in=180] ($(K.west)+(0,-0.1)$) (K) -- (F);
+\draw (T) -- (copy0) to [out=0,in=180] ($(K.west) + (0,0.1)$);
+\draw (T) -- (copy0) to [out=0,in=180] (To) (To) -- (E);
+\end{tikzpicture}
+\end{align} 
+
+\todo[inline]{Maybe move the following to an appendix?}
+
+\begin{definition}[Markov kernel/influence diagram compatibility]
+	Given a Markov kernel $\kernl{K}:E\to \Delta(\sigalg{F})$, an influence diagram $\diagram{I}=(S,A,E)$ and an injective $f:X\cup A\to\sigalg{F}\otimes\sigalg{E}$ which assigns each node to exactly one random variable in $\sigalg{F}\otimes\sigalg{E}$, if for all $X_1,X_2\in\prodSet{X}$ we have $\nod{X}_1\perp_{\diagram{I}} \nod{X}_2\implies f(\nod{X}_1) \CI_{K} f(\nod{X}_2)$ 
+	\todo[inline]{still need to \emph{define} conditional independence WRT kernels, though I think I can do so}
+\end{definition}
+
+Consider an arbitrary See-Do model $\seedo:D\times \Theta\to \Delta(\sigalg{E}_1\otimes\sigalg{E}_2)$ and random variables $\RV{D}:=\pi_D,\RV{E}:=\pi_E,\RV{F}:=\pi_F$ on $\sigalg{D}\otimes\sigalg{E}\otimes\sigalg{F}$. For any $\theta\in \Theta$, $\seedo_\theta$ is compatible with the influence diagram $\diagram{I}=(\{\nod{E},\nod{F}\},\{\nod{D}\},\{\nod{D}\rightarrowtriangle \nod{F}\})$ with respect to the injective function
+\begin{align}
+	f:\begin{cases}&\nod{A}\mapsto \RV{D}\\
+	&\nod{E}\mapsto \RV{E}\\
+	&\nod{F}\mapsto \RV{F} \end{cases}
+\end{align} 
+
+There is always some $\kernl{H}:\Theta\to\Delta(\sigalg{E})$ and $\kernl{C}:\Theta\times D\to \Delta(\sigalg{E}\otimes\sigalg{F})$ such that: $\seedo_\theta$ is equal to
+\begin{align}
+	\seedo_\theta &= \begin{tikzpicture}[xscale=1.5]
+	\path(0,0) node[kernel] (H) {$\kernl{H}_\theta$}
+	+ (0.5,0) node (E) {$\RV{E}$}
+	++ (-0.5,-0.5) node (D) {$\RV{D}$}
+	++(0.5,0) node[kernel] (C) {$\kernl{C}_\theta$}
+	++ (0.5,0) node (F) {$\RV{F}$};
+	\draw (H) -- (E);
+	\draw (D) -- (C) -- (F);
+	\end{tikzpicture}
+\end{align}
+
+Which implies $\RV{E}\CI_{\seedo_\theta} \RV{F}$ and $\RV{E}\CI_{\seedo_\theta} \RV{D}$.
+
+The influence diagram
+\begin{align}\label{eq:see_do_id}
+\diagram{I} = \begin{tikzpicture}[scale = 2]
+\path (0,0) node[circle,draw] (E) {$\nod{E}$}
+++ (-0.5,-0.5) node[rectangle,draw] (D) {$\nod{D}$}
+++ (0.5,0) node[circle,draw] (F) {$\nod{F}$};
+\draw[-latex] (D) -- (F);
+\end{tikzpicture}
+\end{align}
+
+Features the d-separations $\nod{E}\perp_\diagram{I}\nod{F}$ and $\nod{E}\perp_\diagram{I}\nod{D}$\citep{peters_elements_2017,woodward_causation_2016,dawid_influence_2002}. Thus $\seedo_\theta$ is compatible with $\mathcal{I}$ for all $\theta\in\Theta$.
+
+\subsection{Influence diagrams vs Causal Bayesian Networks}
+
+See-Do models can always be represented by influence diagrams with auxhiliary assumptions. We can then learn something about how Causal Bayesian Networks compare to See-Do models by asking how they compare to influence diagrams. The key difference between Causal Bayesian Networks and influence diagrams is that the diagrams do not contain decision nodes. Instead of Diagram \ref{eq:simple_ID}, a Causal Bayesian Network for the same system might be
+
+\begin{align}
+\begin{tikzpicture}[scale = 2]
+\path (0,0) node[circle,draw] (F) {$\nod{F}$};
+\end{tikzpicture}\label{eq:simple_CBN}
+\end{align}
+
+The difference between Diagram \ref{eq:simple_ID} and Diagram \ref{eq:simple_CBN} is that the former demands a set $D$ to be bound to the decision node $\nod{D}$ and a set $F$ to be bound to $\nod{F}$, while Diagram \ref{eq:simple_CBN} demands only $F$. Instead of explicitly representing decisions that can be chosen, Causal Bayesian Networks \emph{by default} feature a set of \emph{do-interventions} on the chance nodes which seem to have a role similar to decisions in influence diagrams and See-Do models (in fact, \citet{pearl_causality:_2009} pg 108 suggests that do-interventions and decisions are the same thing). This default set of do-interventions is what allows CBNs to avoid explicitly requiring a set $D$. If a set of decisions is required that is not equivalent to the set of do-interventions, this can be specified via auxhiliary assumptions, although in practice influence diagrams are usually adopted such as in \citep{yang_characterizing_2018} \todo{some more examples}.
+
+Dealing with a set of decisions $D$ can be troublesome. It can easily be the case that, for example, I might be tasked with inferring a consequence map that someone else might use and I am not privy to the decisions that they might be able to make. In this case, I'd need to pick a set of decisions $D$ which I am pretty sure covers all the possibilities. 
+
+Alternatively, the set $D$ might be unworkably large. The set of \emph{all} the decisions you could in principle make at this moment in as much detail as you can - this is clearly something that's far too big to write down and work with in solving an inference problem.
+
+Speculatively, the fact that Causal Bayesian Networks default to do-interventions might help with the problems of unknown or unworkably large decision sets. If any possible decision must be resolvable to do-interventions of some type, and the effects of do-interventions are well defined, then could provide a basis for partially solving \todo{as in, doing the inference but not picking the best option} decision problems while remaining ignorant of the particular set of decisions that will ultimately be selected from.
+
+Beyond this, causal effects as they are informally understood \emph{seem} to refer to univeral things, not things that depend on the set of decisions one has available. While not an especially strong reason to avoid specifying $D$ in causal models, it is a reason nonetheless.
+
+Do-interventions, however, cannot solve these problems. If there are no restrictions on the variables that may be included in a CBN model, then as we show do-operations and equation surgery frequently produce invalid results. To ensure that any do-interventions at all are well defined, Causal Bayesian Networks require the specification of ``intervenable variables'' or ``basic interventions'', a requirement that is analogous to the requirement of a set of decisions $D$ in See-Do models and influence diagrams. Specifying $D$ may be difficult, but the do-intervention paradigm provides no solutions to this difficulty; it merely sweeps it under the rug.
+
+\subsection{What is meant by ``variables''?}
+
+
+\todo[inline]{Not sure where to put it, but Pearl pp 162-163 puts his models on the hook for including arbitrary variables}
+
 
 \subsection{Necessary relationships}
 
@@ -57,21 +205,21 @@ We begin by showing that necessary relationships are incompatible with structura
 \begin{definition}[Recursive Structural Causal Model]\label{def:acSCM}
 A recursive structural causal model (SCM) is a tuple 
 	\begin{align}
-		\mathcal{M}:=\langle N,M,\mathbf{X}_{[N]},\mathbf{E}_{[M]},\{f_i|i\in[N]\},\mathbb{P}_{\mathcal{E}}\rangle
+		\mathcal{M}:=\langle N,M,\prodSet{X}_{[N]},\mathbf{E}_{[M]},\{f_i|i\in[N]\},\mathbb{P}_{\mathcal{E}}\rangle
 	\end{align}
 	where 
 	\begin{itemize}
 		\item $N\in \mathbb{N}$ is the number of \emph{endogenous variables} in the model
 		\item $M\in \mathbb{N}$ is the number of \emph{exogenous variables} in the model
-		\item $\mathbf{X}_{[N]}:=\{X_i|i\in[N]\}$ where, for each $i\in [N]$, $(X_i,\mathcal{X}_i)$ is a standard measurable space taking and the codomain of the $i$-th endogenous variable
+		\item $\prodSet{X}_{[N]}:=\{X_i|i\in[N]\}$ where, for each $i\in [N]$, $(X_i,\mathcal{X}_i)$ is a standard measurable space taking and the codomain of the $i$-th endogenous variable
 		\item $\mathbf{E}_{[M]}:=\{E_j|j\in[M]\}$ where, for $j\in [M]$, $E_j$ is a standard measurable space and the codomain of the $j$-th exogenous variable
-		\item $f_i:\mathbf{X}_{<i}\times\mathbf{E}_{\mathcal{J}}\to X_i$ is a measurable function which we call \emph{the causal mechanism controlling the $i$-th endogenous variable}
-		\item $\mathbb{P}_{\mathcal{E}}\in \Delta(\mathbf{E}_{\mathcal{J}})$ is a probability measure on the space of exogenous variables
+		\item $f_i:\prodSet{X}_{<i}\times\mathbf{E}_{\indx{J}}\to X_i$ is a measurable function which we call \emph{the causal mechanism controlling the $i$-th endogenous variable}
+		\item $\mathbb{P}_{\mathcal{E}}\in \Delta(\mathbf{E}_{\indx{J}})$ is a probability measure on the space of exogenous variables
 	\end{itemize}
 \end{definition}
 
 \begin{definition}[Observable kernel]
-Given an SCM $\mathcal{M}$ with causal mechanisms $\{f_i|i\in [N]\}$, define the \emph{observable kernel} $G_{i}:E\to \Delta(\mathbf{X}_{[i]})$ recursively:
+Given an SCM $\mathcal{M}$ with causal mechanisms $\{f_i|i\in [N]\}$, define the \emph{observable kernel} $G_{i}:E\to \Delta(\prodSet{X}_{[i]})$ recursively:
 \begin{align}
 	G_1 &= \begin{tikzpicture}
 	\path (0,0) node (E) {$\mathbf{E}_{[M]}$}
@@ -86,7 +234,7 @@ Given an SCM $\mathcal{M}$ with causal mechanisms $\{f_i|i\in [N]\}$, define the
 	++ (0.5,0) coordinate (copy1)
 	++ (0.7,0) coordinate (skip)
 	+  (0,-0.5) node[kernel] (Fn) {$F_{f_{n+1}}$}
-	++ (1.3,0) node (Xn) {$\mathbf{X}_{<{n+1}}$}
+	++ (1.3,0) node (Xn) {$\prodSet{X}_{<{n+1}}$}
 	+ (0,-0.5) node (Xn1) {$X_{n+1}$};
 	\draw (E) -- (Gn) -- (Xn);
 	\draw (copy0) to [bend right] ($(Fn.west) + (0,-0.15)$);
@@ -97,28 +245,28 @@ Given an SCM $\mathcal{M}$ with causal mechanisms $\{f_i|i\in [N]\}$, define the
 \end{definition}
 
 \begin{definition}[Joint distribution on endogenous variables]
-The \emph{joint distribution on endogenous variables} defined by $\mathcal{M}$ is $\mathbb{P}_{\mathcal{M}}:=\mathbb{P}_\mathcal{E} G_N$ (which is the regular kernel product, see Definition \ref{ssec:product_notation}). For each $i\in[N]$ define the random variable $\RV{X}_i:\mathbf{X}_{[N]}\to X_i$ as the projection map $\pi_i:(x_1,...,x_i,..,x_N)\mapsto x_i$. By Lemma \ref{lem:coupled_product_is_ident}, $\utimes_{i\in [N]} \RV{X}_i = \mathrm{Id}_{\mathbf{X}_{[N]}}$, and so $\mathbb{P}_{\mathcal{M}}$ is the joint distribution of the variables $\{\RV{X}_i|i\in[N]\}$.
+The \emph{joint distribution on endogenous variables} defined by $\mathcal{M}$ is $\mathbb{P}_{\mathcal{M}}:=\mathbb{P}_\mathcal{E} G_N$ (which is the regular kernel product, see Definition \ref{ssec:product_notation}). For each $i\in[N]$ define the random variable $\RV{X}_i:\prodSet{X}_{[N]}\to X_i$ as the projection map $\pi_i:(x_1,...,x_i,..,x_N)\mapsto x_i$. By Lemma \ref{lem:coupled_product_is_ident}, $\utimes_{i\in [N]} \RV{X}_i = \mathrm{Id}_{\prodSet{X}_{[N]}}$, and so $\mathbb{P}_{\mathcal{M}}$ is the joint distribution of the variables $\{\RV{X}_i|i\in[N]\}$.
 \end{definition}
 
 I use the notation $\mathbb{P}_{\mathcal{M}}$ rather than $\mathbb{P}_{\RV{X}_{[N]}}$ to emphasize the dependence on the model $\mathcal{M}$.
 
 \begin{lemma}[Coupled product of all random variables is the identity]\label{lem:coupled_product_is_ident}
-$\utimes_{i\in [N]} \RV{X}_i = \mathrm{Id}_{\mathbf{X}_{[N]}}$
+$\utimes_{i\in [N]} \RV{X}_i = \mathrm{Id}_{\prodSet{X}_{[N]}}$
 \end{lemma}
 
 \begin{proof}
-for any $\mathbf{x}\in \mathbf{X}_{[N]}$,
+for any $\prodSet{X}\in \prodSet{X}_{[N]}$,
 \begin{align}
-\utimes_{i\in [N]} \RV{X}_i (\mathbf{x}) &= (\pi_1(\mathbf{x}),...,\pi_N(\mathbf{x}))\\
+\utimes_{i\in [N]} \RV{X}_i (\prodSet{X}) &= (\pi_1(\prodSet{X}),...,\pi_N(\prodSet{X}))\\
 	&= (x_1,...,x_n)\\
-	&= \mathbf{x}
+	&= \prodSet{X}
 \end{align}
 \end{proof}
 
 \begin{definition}[Hard Interventions]
-Let $\mathscr{M}$ be the set of all $SCMs$ sharing the indices, spaces and measure $\langle N,M,\mathbf{X}_{\mathcal{I}},\mathbf{E}_{[M]},\mathbb{P}_{\mathcal{E}}\rangle$. Note that the causal mechanisms are not fixed.
+Let $\mathscr{M}$ be the set of all $SCMs$ sharing the indices, spaces and measure $\langle N,M,\prodSet{X}_{\indx{I}},\mathbf{E}_{[M]},\mathbb{P}_{\mathcal{E}}\rangle$. Note that the causal mechanisms are not fixed.
 
-Given an SCM $\mathcal{M}=\langle N,M,\mathbf{X}_{\mathcal{I}},\mathbf{E}_{[M]},\{f_i|i\in[N]\},\mathbb{P}_{\mathcal{E}}\rangle$ and $\mathcal{S}\subset[N]$, a \emph{hard intervention} on $\RV{X}_\mathcal{S}$ is a map $Do_{\mathcal{S}}:\mathbf{X}_\mathcal{S}\times\mathscr{M}\to \mathscr{M}$ such that for $\mathbf{a}\in \mathbf{X}_S$, $Do_{\mathcal{S}}(\mathbf{a},\mathcal{M}) = \langle N,M,\mathbf{X}_{\mathcal{I}},\mathbf{E}_{[M]},\{f'_i|i\in[N]\},\mathbb{P}_{\mathcal{E}}\rangle$ where
+Given an SCM $\mathcal{M}=\langle N,M,\prodSet{X}_{\indx{I}},\mathbf{E}_{[M]},\{f_i|i\in[N]\},\mathbb{P}_{\mathcal{E}}\rangle$ and $\mathcal{S}\subset[N]$, a \emph{hard intervention} on $\RV{X}_\mathcal{S}$ is a map $Do_{\mathcal{S}}:\prodSet{X}_\mathcal{S}\times\mathscr{M}\to \mathscr{M}$ such that for $\mathbf{a}\in \prodSet{X}_S$, $Do_{\mathcal{S}}(\mathbf{a},\mathcal{M}) = \langle N,M,\prodSet{X}_{\indx{I}},\mathbf{E}_{[M]},\{f'_i|i\in[N]\},\mathbb{P}_{\mathcal{E}}\rangle$ where
 \begin{align}
 	f_i' &= f_i  &i\not\in \mathcal{S}\\
 	f_i' &= \pi_i(\mathbf{a}) & i\in \mathcal{S}
@@ -137,7 +285,7 @@ Necessary relationships are extra constraints on the joint distribution on endog
 $\mathbb{P}_{\mathcal{M}}$-almost surely.
 
 \begin{definition}[Constrained Recursive Structural Causal Model (CSCM)]\label{def:cscm}
-	A CSCM $\mathcal{M}:= \langle N,M,\mathbf{X}_{[N]},\mathbf{E}_{[M]},\{f_i|i\in[N]\},\{r_i|i\in [N]\},\mathbb{P}_{\mathcal{E}}\rangle$ is an SCM along with a set of \emph{constraints} $r_i:\mathbf{X}_{[N]}\to X_i$. 
+	A CSCM $\mathcal{M}:= \langle N,M,\prodSet{X}_{[N]},\mathbf{E}_{[M]},\{f_i|i\in[N]\},\{r_i|i\in [N]\},\mathbb{P}_{\mathcal{E}}\rangle$ is an SCM along with a set of \emph{constraints} $r_i:\prodSet{X}_{[N]}\to X_i$. 
 
 	If $\RV{X}_i=r_i(\RV{X}_{[N]})$ $\mathbb{P}_{\mathcal{M}}$-almost surely then $\RV{M}$ is \emph{valid}, otherwise it is \emph{invalid}.
 \end{definition}
@@ -149,10 +297,10 @@ We can recover regular SCMs by imposing only trivial constraints:
 \end{lemma}
 
 \begin{proof}
-	By definition \ref{def:cscm}, we require $\RV{X}_i = \RV{X}_i$, $\mathbb{P}_{\mathcal{M}}$-almost surely. $\RV{X}_i(\mathbf{x}) = \RV{X}_i(\mathbf{x})$ for all $\mathbf{x}\in\mathbf{X}_{[N]}$ and $P_\mathcal{M}(\mathbf{X}_{[N]})=1$, therefore $\mathcal{M}$ is valid.
+	By definition \ref{def:cscm}, we require $\RV{X}_i = \RV{X}_i$, $\mathbb{P}_{\mathcal{M}}$-almost surely. $\RV{X}_i(\prodSet{X}) = \RV{X}_i(\prodSet{X})$ for all $\prodSet{X}\in\prodSet{X}_{[N]}$ and $P_\mathcal{M}(\prodSet{X}_{[N]})=1$, therefore $\mathcal{M}$ is valid.
 \end{proof}
 
-Call a constraint $r_i$ \emph{cyclic} if $\RV{X}_i = r_i(\RV{X}_{[N]})$ implies there exists an index set $O\subset[N]$, $O\ni i$, such that for each $j\in O$, $\mathbf{b}\in \mathbf{X}_{O\setminus\{j\}}$ there exists $a\in X_j$ such that
+Call a constraint $r_i$ \emph{cyclic} if $\RV{X}_i = r_i(\RV{X}_{[N]})$ implies there exists an index set $O\subset[N]$, $O\ni i$, such that for each $j\in O$, $\mathbf{b}\in \prodSet{X}_{O\setminus\{j\}}$ there exists $a\in X_j$ such that
 \begin{align}
 	\RV{X}_{O\setminus \{j\}} = \mathbf{b}\\
 	\implies \RV{X}_j = a
@@ -171,9 +319,9 @@ BMI is an example of a cyclic constraint if we insist that weight and height are
 \todo[inline]{The following is a generally useful lemma that should probably be in basic definitions of Markov kernel spaces}
 
 \begin{lemma}[Projection and selectors]\label{lem:proj_and_select}
-Given an indexed product space $\mathbf{X}:=\prod_{i\in \mathcal{I}} X_i$ with ordered finite index set $\mathcal{I}\ni i$, let $\pi_i:\mathbf{X}\to X_i$ be the projection of the $i$-indexed element of $\mathbf{x}\in \mathbf{X}$.
+Given an indexed product space $\prodSet{X}:=\prod_{i\in \indx{I}} X_i$ with ordered finite index set $\indx{I}\ni i$, let $\pi_i:\prodSet{X}\to X_i$ be the projection of the $i$-indexed element of $\prodSet{X}\in \prodSet{X}$.
 
-Let $F_{\pi_i}:\mathbf{X}\to \Delta(\mathcal{X}_i)$ be the Markov kernel associated with the function $\pi_i$, $F_{\pi_i}:\mathbf{x}\mapsto\delta_{\pi_i(\mathbf{x})}$. Given $O\subset\mathcal{I}$, define the selector $S^O_i$:
+Let $F_{\pi_i}:\prodSet{X}\to \Delta(\mathcal{X}_i)$ be the Markov kernel associated with the function $\pi_i$, $F_{\pi_i}:\prodSet{X}\mapsto\delta_{\pi_i(\prodSet{X})}$. Given $O\subset\indx{I}$, define the selector $S^O_i$:
 
 \begin{align}
 	S^O_i = \begin{cases}
@@ -182,24 +330,24 @@ Let $F_{\pi_i}:\mathbf{X}\to \Delta(\mathcal{X}_i)$ be the Markov kernel associa
 	\end{cases}
 \end{align}
 
-Then $\utimes_{i\in O} F_{\pi_i}=\otimes_{i\in \mathcal{I}} S^O_i$.
+Then $\utimes_{i\in O} F_{\pi_i}=\otimes_{i\in \indx{I}} S^O_i$.
 \end{lemma}
 
 
 \begin{proof}
-Suppose $O$ is the empty set. Then the empty tensor product $\otimes_{i\in \emptyset} S_i$ and the empty coupled tensor product $\utimes_{i\in\emptyset} F_{\pi_i}$ are both equal to $\stopper{0.25}_{\mathbf{X}}$.
+Suppose $O$ is the empty set. Then the empty tensor product $\otimes_{i\in \emptyset} S_i$ and the empty coupled tensor product $\utimes_{i\in\emptyset} F_{\pi_i}$ are both equal to $\stopper{0.25}_{\prodSet{X}}$.
 
-By definition of $F_{\pi_i}$, $F_{\pi_i} = \otimes_{i\in\mathcal{I}}S^{\{i\}}_i$.
+By definition of $F_{\pi_i}$, $F_{\pi_i} = \otimes_{i\in\indx{I}}S^{\{i\}}_i$.
 
-Suppose for $P\subsetneq O$ with greatest element $k$ we have $\utimes_{i\in P} F_{\pi_i}=\otimes_{i\in \mathcal{I}} S^P_i$, and suppose that $j$ is the next element of $O$ not in $P$.
+Suppose for $P\subsetneq O$ with greatest element $k$ we have $\utimes_{i\in P} F_{\pi_i}=\otimes_{i\in \indx{I}} S^P_i$, and suppose that $j$ is the next element of $O$ not in $P$.
 
 \begin{align}
 	(\utimes_{i\in P} F_{\pi_i}) \utimes F_{\pi_j} &= \begin{tikzpicture}
-		\path (0,0) node (X) {$\mathbf{X}$}
+		\path (0,0) node (X) {$\prodSet{X}$}
 		++ (0.5,0) coordinate (copy0) 
 		++ (1.8,0.5) node[kernel] (Fi) {$\utimes_{i\in P} F_{\pi_i}$}
 		+ (0,-1) node[kernel] (Fe) {$F_{\pi_j}$}
-		++ (1.5,0) node (Xi) {$\mathbf{X}_P$}
+		++ (1.5,0) node (Xi) {$\prodSet{X}_P$}
 		+ (0,-1) node (Xe) {$X_j$};
 		\draw (X) -- (copy0);
 		\draw (copy0) to [out = 30, in = 180] (Fi) (copy0) to [out = -30, in = 180] (Fe);
@@ -210,11 +358,11 @@ Suppose for $P\subsetneq O$ with greatest element $k$ we have $\utimes_{i\in P} 
 		++ (0.7,0) coordinate (copy0) 
 		++ (1.8,0.5) node[kernel] (Fi) {$\utimes_{i\in P} F_{\pi_i}$}
 		+ (0,-1) node[kernel] (Fe) {$ F_{\pi_j}$}
-		++ (1.5,0) node (Xi) {$\mathbf{X}_P$}
+		++ (1.5,0) node (Xi) {$\prodSet{X}_P$}
 		+ (0,-1) node (Xe) {$X_j$};
-		\path (0,0.5) node (Xp) {$\mathbf{X}_{<j}$}
+		\path (0,0.5) node (Xp) {$\prodSet{X}_{<j}$}
 		++ (0.7,0) coordinate (copy0p);
-		\path (0,-0.5) node (Xg) {$\mathbf{X}_{>j}$}
+		\path (0,-0.5) node (Xg) {$\prodSet{X}_{>j}$}
 		++ (0.7,0) coordinate (copy0g);
 		\draw (X) -- (copy0);
 		\draw (copy0) to [out = 30, in = 180] (Fi) (copy0) to [out = -30, in = 180] ($(Fe.west) + (0,0)$);
@@ -228,11 +376,11 @@ Suppose for $P\subsetneq O$ with greatest element $k$ we have $\utimes_{i\in P} 
 		++ (0.7,0) coordinate (copy0) 
 		++ (1.8,0.5) node[kernel] (Fi) {$\utimes_{i\in P} F_{\pi_i}$}
 		+ (0,-1) node (Fe) {}
-		++ (1.5,0) node (Xi) {$\mathbf{X}_P$}
+		++ (1.5,0) node (Xi) {$\prodSet{X}_P$}
 		+ (0,-1) node (Xe) {$X_j$};
-		\path (0,0.5) node (Xp) {$\mathbf{X}_{<j}$}
+		\path (0,0.5) node (Xp) {$\prodSet{X}_{<j}$}
 		++ (0.7,0) coordinate (copy0p);
-		\path (0,-0.5) node (Xg) {$\mathbf{X}_{>j}$}
+		\path (0,-0.5) node (Xg) {$\prodSet{X}_{>j}$}
 		++ (0.7,0) coordinate (copy0g);
 		\draw (X) -- (copy0);
 		\draw (copy0) to [out = 30, in = 180] (Fi);
@@ -249,11 +397,11 @@ Suppose for $P\subsetneq O$ with greatest element $k$ we have $\utimes_{i\in P} 
 		++ (0.7,0) coordinate (copy0) 
 		++ (1.8,0.5) node[kernel] (Fi) {$\utimes_{i\in P} F_{\pi_i}$}
 		+ (0,-1) node (Fe) {}
-		++ (1.5,0) node (Xi) {$\mathbf{X}_P$}
+		++ (1.5,0) node (Xi) {$\prodSet{X}_P$}
 		+ (0,-1) node (Xe) {$X_j$};
-		\path (0,0.5) node (Xp) {$\mathbf{X}_{<j}$}
+		\path (0,0.5) node (Xp) {$\prodSet{X}_{<j}$}
 		++ (0.7,0) coordinate (copy0p);
-		\path (0,-0.5) node (Xg) {$\mathbf{X}_{>j}$}
+		\path (0,-0.5) node (Xg) {$\prodSet{X}_{>j}$}
 		++ (0.7,0) coordinate (copy0g);
 		\draw (X) -- (copy0);
 		\draw (copy0) to [out = 30, in = 180] (Fi);
@@ -266,13 +414,13 @@ Suppose for $P\subsetneq O$ with greatest element $k$ we have $\utimes_{i\in P} 
 	&= \begin{tikzpicture}
 		\path (0,0) node (X) {$X_j$}
 		++ (0.7,0) coordinate (copy0) 
-		++ (1.8,0.5) node[kernel] (Fi) {$\otimes_{i\in \mathcal{I}} S^P_{i}$}
+		++ (1.8,0.5) node[kernel] (Fi) {$\otimes_{i\in \indx{I}} S^P_{i}$}
 		+ (0,-1) node (Fe) {}
-		++ (1.5,0) node (Xi) {$\mathbf{X}_P$}
+		++ (1.5,0) node (Xi) {$\prodSet{X}_P$}
 		+ (0,-1) node (Xe) {$X_j$};
-		\path (0,0.5) node (Xp) {$\mathbf{X}_{<j}$}
+		\path (0,0.5) node (Xp) {$\prodSet{X}_{<j}$}
 		++ (0.7,0) coordinate (copy0p);
-		\path (0,-0.5) node (Xg) {$\mathbf{X}_{>j}$}
+		\path (0,-0.5) node (Xg) {$\prodSet{X}_{>j}$}
 		++ (0.7,0) coordinate (copy0g);
 		\draw (X) -- (copy0);
 		\draw (copy0) to [out = 30, in = 180] (Fi);
@@ -290,11 +438,11 @@ Because all elements of $P$ are less than $j$, the selector $S^P_k$ resolves to 
 		++ (0.7,0) coordinate (copy0) 
 		++ (1.8,0.5) node[kernel] (Fi) {$\otimes_{i<j} S^P_{i}$}
 		+ (0,-1) node (Fe) {}
-		++ (1.5,0) node (Xi) {$\mathbf{X}_P$}
+		++ (1.5,0) node (Xi) {$\prodSet{X}_P$}
 		+ (0,-1) node (Xe) {$X_j$};
-		\path (0,0.5) node (Xp) {$\mathbf{X}_{<j}$}
+		\path (0,0.5) node (Xp) {$\prodSet{X}_{<j}$}
 		++ (0.7,0) coordinate (copy0p);
-		\path (0,-0.5) node (Xg) {$\mathbf{X}_{>j}$}
+		\path (0,-0.5) node (Xg) {$\prodSet{X}_{>j}$}
 		++ (0.7,0) coordinate (copy0g);
 		\draw (X) -- (copy0);
 		\draw[-{Rays[n=8]}] (copy0) to [out = 30, in = 180] ($(Fi.west)+(-0.20,0)$);
@@ -309,11 +457,11 @@ Because all elements of $P$ are less than $j$, the selector $S^P_k$ resolves to 
 		++ (0.7,0) coordinate (copy0) 
 		++ (1.8,0.5) node[kernel] (Fi) {$\otimes_{i<j} S^P_{i}$}
 		+ (0,-1) node (Fe) {}
-		++ (1.5,0) node (Xi) {$\mathbf{X}_P$}
+		++ (1.5,0) node (Xi) {$\prodSet{X}_P$}
 		+ (0,-0.5) node (Xe) {$X_j$};
-		\path (0,0.5) node (Xp) {$\mathbf{X}_{<j}$}
+		\path (0,0.5) node (Xp) {$\prodSet{X}_{<j}$}
 		++ (0.7,0) coordinate (copy0p);
-		\path (0,-0.5) node (Xg) {$\mathbf{X}_{>j}$}
+		\path (0,-0.5) node (Xg) {$\prodSet{X}_{>j}$}
 		++ (1.5,0) coordinate (copy0g);
 		\draw (X) -- (copy0);
 		\draw (Fi) -- (Xi);
@@ -324,11 +472,11 @@ Because all elements of $P$ are less than $j$, the selector $S^P_k$ resolves to 
 	\end{tikzpicture}\\
 	&= \begin{tikzpicture}
 		\path (0,0) node (X) {$X_j$}
-		++ (1.8,0) node[kernel] (Fi) {$\otimes_{i\in\mathcal{I}} S^{P\cup\{j\}}_{i}$}
-		++ (2,0.3) node (Xi) {$\mathbf{X}_P$}
+		++ (1.8,0) node[kernel] (Fi) {$\otimes_{i\in\indx{I}} S^{P\cup\{j\}}_{i}$}
+		++ (2,0.3) node (Xi) {$\prodSet{X}_P$}
 		+ (0,-0.3) node (Xe) {$X_j$};
-		\path (0,0.5) node (Xp) {$\mathbf{X}_{<j}$};
-		\path (0,-0.5) node (Xg) {$\mathbf{X}_{>j}$};
+		\path (0,0.5) node (Xp) {$\prodSet{X}_{<j}$};
+		\path (0,-0.5) node (Xg) {$\prodSet{X}_{>j}$};
 		\draw (X) to [out = 0, in = 180] (Fi);
 		\draw (Xp) to [out = 0, in = 180] ($(Fi.west)+(0,0.2)$);
 		\draw (Xg) to [out = 0, in = 180] ($(Fi.west)+(0,-0.2)$);
@@ -344,7 +492,7 @@ The proof follows by induction on the elements of $O$.
 \end{proof}
 
 \begin{lemma}[Hard interventions do not affect the joint distributions of earlier variables]\label{lem:hard_dont_affect_early}
-Given a CSCM $\mathcal{M}=\langle N,M,\mathbf{X}_{[N]},\mathbf{E}_{[M]},\{f_i|i\in[N]\},\{r_i|i\in [N]\},\mathbb{P}_{\mathcal{E}}\rangle$, any $k\in [N]$ and any $O\subset [k-1]$, $P_{\mathcal{M}}(\RV{X}_O) = P_{\mathcal{M}}^{do(\RV{X}_k)=a}(\RV{X}_O)$ for all $a\in X_k$.
+Given a CSCM $\mathcal{M}=\langle N,M,\prodSet{X}_{[N]},\mathbf{E}_{[M]},\{f_i|i\in[N]\},\{r_i|i\in [N]\},\mathbb{P}_{\mathcal{E}}\rangle$, any $k\in [N]$ and any $O\subset [k-1]$, $P_{\mathcal{M}}(\RV{X}_O) = P_{\mathcal{M}}^{do(\RV{X}_k)=a}(\RV{X}_O)$ for all $a\in X_k$.
 \end{lemma}
 
 \begin{proof}
@@ -353,7 +501,7 @@ Let $G^{\mathcal{Q}}_i$, $i\in[N]$ be the $i$-th iteration of the kernel defined
 \begin{tikzpicture}
 	\path (0,0) node (E) {$\mathbf{E}_{[M]}$}
 	++ (1,0) node[kernel] (Gi) {$G^{\mathcal{Q}}_i$}
-	++ (1,0.15) node (Xl) {$\mathbf{X}_{<i}$}
+	++ (1,0.15) node (Xl) {$\prodSet{X}_{<i}$}
 	+(0,-0.3) node (Xi) {};
 	\draw (E) -- (Gi);
 	\draw ($(Gi.east) + (0,0.15)$) to (Xl);
@@ -365,7 +513,7 @@ Let $G^{\mathcal{Q}}_i$, $i\in[N]$ be the $i$-th iteration of the kernel defined
 	++ (0.5,0) coordinate (copy1)
 	++ (0.7,0) coordinate (skip)
 	+  (0,-0.5) node[kernel] (Fn) {$F_{f_{i}}$}
-	++ (1.3,0) node (Xn) {$\mathbf{X}_{<{i}}$}
+	++ (1.3,0) node (Xn) {$\prodSet{X}_{<{i}}$}
 	+ (0,-0.5) node (Xn1) {};
 	\draw (E) -- (Gn) -- (Xn);
 	\draw (copy0) to [bend right] ($(Fn.west) + (0,-0.15)$);
@@ -381,7 +529,7 @@ It follows that
 \begin{tikzpicture}
 	\path (0,0) node (E) {$\mathbf{E}_{[M]}$}
 	++ (1,0) node[kernel] (Gi) {$G_N$}
-	++ (1,0.15) node (Xl) {$\mathbf{X}_{<i}$}
+	++ (1,0.15) node (Xl) {$\prodSet{X}_{<i}$}
 	+(0,-0.3) node (Xi) {};
 	\draw (E) -- (Gi);
 	\draw ($(Gi.east) + (0,0.15)$) to (Xl);
@@ -393,14 +541,14 @@ Because $f_i = f^{do(\RV{X}_k=a)}_i$ for $i<k$, we have
 \begin{align}
 	G^{\mathcal{M}}_i = G^{\mathcal{M}^{do(\RV{X}_k=a)}}_i \label{eq:equal_across_d}
 \end{align} 
-for all $i<k$. By lemma \ref{lem:proj_and_select}, for any $O\subset [k-1]$ we have $F_{\RV{X}_O}=\otimes_{i\in [N]} S^O_i$. As there are no elements of $O$ greater than or equal to $k$, the selector $S^O_i$ resolves to the discard for all $i>=k$. Thus $F_{\RV{X}_O} = (\otimes_{i\in[k-1]} S^O_i) \otimes \stopper{0.25}_{\mathbf{X}_{[N]\setminus[k-1]}}$. Defining $S^O_{[k-1]}:=\otimes_{i\in[k-1]} S^O_i$, we have:
+for all $i<k$. By lemma \ref{lem:proj_and_select}, for any $O\subset [k-1]$ we have $F_{\RV{X}_O}=\otimes_{i\in [N]} S^O_i$. As there are no elements of $O$ greater than or equal to $k$, the selector $S^O_i$ resolves to the discard for all $i>=k$. Thus $F_{\RV{X}_O} = (\otimes_{i\in[k-1]} S^O_i) \otimes \stopper{0.25}_{\prodSet{X}_{[N]\setminus[k-1]}}$. Defining $S^O_{[k-1]}:=\otimes_{i\in[k-1]} S^O_i$, we have:
 
 \begin{align}
 	F_{\RV{X}_O} = \begin{tikzpicture}
-		\path (0,0) node (XO) {$\mathbf{X}_{[k-1]}$}
+		\path (0,0) node (XO) {$\prodSet{X}_{[k-1]}$}
 		+ (2,0) node[kernel] (So) {$S^O_{[k-1]}$}
-		+ (3.5,0) node (XOout) {$\mathbf{X}_{O}$}
-		++(-0.5,-0.5) node (XL) {$\mathbf{X}_{[N]\setminus [k-1]}$}
+		+ (3.5,0) node (XOout) {$\prodSet{X}_{O}$}
+		++(-0.5,-0.5) node (XL) {$\prodSet{X}_{[N]\setminus [k-1]}$}
 		+(4,0) node (XLout) {};
 		\draw (XO) -- (So) -- (XOout);
 		\draw[-{Rays [n=8]}] (XL) -- (XLout);
@@ -414,8 +562,8 @@ Thus
 		\path (0,0) node[dist] (P) {$\mathbb{P}_{\mathcal{E}}$}
 		++ (1,0) node[kernel,inner sep = 6] (Gn) {$G^{\mathcal{M}}_N$}
 		++ (1.5,0.3) node[kernel] (Sok) {$S^O_{[k-1]}$}
-		++(1.5,0) node (XO) {$\mathbf{X}_{O}$}
-		+(0.7,-0.6) node (XL) {$(\mathbf{X}_{[N]\setminus [k-1]})$};
+		++(1.5,0) node (XO) {$\prodSet{X}_{O}$}
+		+(0.7,-0.6) node (XL) {$(\prodSet{X}_{[N]\setminus [k-1]})$};
 		\draw (P) -- (Gn);
 		\draw[-{Rays [n=8]}] ($(Gn.east)+(0,-0.3)$) -- (XL);
 		\draw ($(Gn.east) + (0,0.3)$) -- (Sok);
@@ -425,7 +573,7 @@ Thus
 		\path (0,0) node[dist] (P) {$\mathbb{P}_{\mathcal{E}}$}
 		++ (1,0) node[kernel,inner sep = 6] (Gn) {$G^{\mathcal{M}}_{k-1}$}
 		++ (1.5,0.) node[kernel] (Sok) {$S^O_{[k-1]}$}
-		++(1.5,0) node (XO) {$\mathbf{X}_{O}$};
+		++(1.5,0) node (XO) {$\prodSet{X}_{O}$};
 		\draw (P) -- (Gn);
 		\draw (Gn) -- (Sok);
 		\draw (Sok) -- (XO);
@@ -434,7 +582,7 @@ Thus
 		\path (0,0) node[dist] (P) {$\mathbb{P}_{\mathcal{E}}$}
 		++ (1.5,0) node[kernel,inner sep = 6] (Gn) {$G^{\mathcal{M}^{do(\RV{X}_k=a)}}_{k-1}$}
 		++ (2,0.) node[kernel] (Sok) {$S^O_{[k-1]}$}
-		++(1.5,0) node (XO) {$\mathbf{X}_{O}$};
+		++(1.5,0) node (XO) {$\prodSet{X}_{O}$};
 		\draw (P) -- (Gn);
 		\draw (Gn) -- (Sok);
 		\draw (Sok) -- (XO);
@@ -443,8 +591,8 @@ Thus
 		\path (0,0) node[dist] (P) {$\mathbb{P}_{\mathcal{E}}$}
 		++ (1.5,0) node[kernel,inner sep = 6] (Gn) {$G^{\mathcal{M}^{do(\RV{X}_k=a)}}_{N}$}
 		++ (2,0.3) node[kernel] (Sok) {$S^O_{[k-1]}$}
-		++(1.5,0) node (XO) {$\mathbf{X}_{O}$}
-		+(0.7,-0.6) node (XL) {$(\mathbf{X}_{[N]\setminus [k-1]})$};
+		++(1.5,0) node (XO) {$\prodSet{X}_{O}$}
+		+(0.7,-0.6) node (XL) {$(\prodSet{X}_{[N]\setminus [k-1]})$};
 		\draw (P) -- (Gn);
 		\draw[-{Rays [n=8]}] ($(Gn.east)+(0,-0.3)$) -- (XL);
 		\draw ($(Gn.east) + (0,0.3)$) -- (Sok);
@@ -457,13 +605,13 @@ Thus
 \end{proof}
 
 \begin{theorem}[Undefined hard interventions with cyclic constraints]\label{th:recursive_no_interventions}
-Consier a CSCM $\mathcal{M}=\langle N,M,\mathbf{X}_{[N]},\mathbf{E}_{[M]},\{f_i|i\in[N]\},\{r_i|i\in [N]\},\mathbb{P}_{\mathcal{E}}\rangle$ with $r_i$ a cyclic constraint with respect to $O\subset[N]$ and the rest of the constraints trivial: $r_j = \pi_j$, $j\neq i$, and suppose $\mathcal{M}$ is valid.
+Consier a CSCM $\mathcal{M}=\langle N,M,\prodSet{X}_{[N]},\mathbf{E}_{[M]},\{f_i|i\in[N]\},\{r_i|i\in [N]\},\mathbb{P}_{\mathcal{E}}\rangle$ with $r_i$ a cyclic constraint with respect to $O\subset[N]$ and the rest of the constraints trivial: $r_j = \pi_j$, $j\neq i$, and suppose $\mathcal{M}$ is valid.
 
 If for each $k\in O$, $\exists A\in \mathcal{X}_i$ such that $0<\mathbb{P}_{\mathcal{M}}(\RV{X}_i\in A)<1$ then for at least one $k\in O$ all models given by a hard intervention on $\RV{X}_k$ are invalid.
 \end{theorem}
 
 \begin{proof}
-Choose $k$ to be the maximum element of $O$. By the assumption $\mathcal{M}$ is valid, we have $\RV{X}_i=r_i(\mathbf{x})$, $\mathbb{P}_{\mathcal{M}}$-almost surely. Let $B^A=\{\mathbf{b}\in \mathbf{X}_{O\setminus k}|\RV{X}_{O\setminus k}=\mathbf{b}\implies \RV{X}_k \in A\}$ and $B^{A^C}=\{\mathbf{b}\in \mathbf{X}_{O\setminus k}|\RV{X}_{O\setminus k}=\mathbf{b}\implies \RV{X}_k \not\in A\}$. 
+Choose $k$ to be the maximum element of $O$. By the assumption $\mathcal{M}$ is valid, we have $\RV{X}_i=r_i(\prodSet{X})$, $\mathbb{P}_{\mathcal{M}}$-almost surely. Let $B^A=\{\mathbf{b}\in \prodSet{X}_{O\setminus k}|\RV{X}_{O\setminus k}=\mathbf{b}\implies \RV{X}_k \in A\}$ and $B^{A^C}=\{\mathbf{b}\in \prodSet{X}_{O\setminus k}|\RV{X}_{O\setminus k}=\mathbf{b}\implies \RV{X}_k \not\in A\}$. 
 
 $r_i$ holds on a set of measure 1, and wherever it holds $\RV{X}_{O\setminus\{k\}}$ is either in $B^A$ or $B^{A^C}$. Thus $\mathbb{P}_{\mathcal{M}}(\RV{X}_{O\setminus\{k\}}\in B^A\cup B^{A^C})=1$. 
 
@@ -486,7 +634,7 @@ Thus $\mathbb{P}_{\mathcal{M}}\left(\RV{X}_{O\setminus\{k\}}\in B^A \And \RV{X}_
 
 Choose some $a\in A$, and consider the hard intervention $\mathcal{M}^{do(\RV{X}_k=a)}$. Suppose $\mathcal{M}^{do(\RV{X}_k=a)}$ is also valid. Then, as before, $\mathbb{P}_{\mathcal{M}^{do(\RV{X}_k=a)}}(\RV{X}_{O\setminus\{k\}}\in B^{A^C})=\mathbb{P}_{\mathcal{M}^{do(\RV{X}_k=a)}}(\RV{X}_k\in A^C)$.
 
-By definition of hard interventions, $f_k^{do(\RV{X}_k=a)} = a$. Thus $G^{\mathcal{M}^{do(\RV{X}_k=a)}}_N F_{\RV{X}_k}$ is the kernel $\mathbf{x}\mapsto \delta_a$ and it follows that $\mathbb{P}_{\mathcal{M}^{do(\RV{X}_k=a)}}(\RV{X}_k) = \delta_a$. 
+By definition of hard interventions, $f_k^{do(\RV{X}_k=a)} = a$. Thus $G^{\mathcal{M}^{do(\RV{X}_k=a)}}_N F_{\RV{X}_k}$ is the kernel $\prodSet{X}\mapsto \delta_a$ and it follows that $\mathbb{P}_{\mathcal{M}^{do(\RV{X}_k=a)}}(\RV{X}_k) = \delta_a$. 
 
 By lemma \ref{lem:hard_dont_affect_early}, $\mathbb{P}_{\mathcal{M}^{do(\RV{X}_k=a)}}(\RV{X}_{O\setminus\{k\}}\in B^{A^C})=P_{\mathcal{M}}(\RV{X}_{O\setminus\{k\}}\in B^{A^C}) = P_{\mathcal{M}}(\RV{X}_k\in A^C)>0$. But $P_{\mathcal{M}^{do(\RV{X}_k=a)}}(\RV{X}_k \in {A^C})=\delta_z(\RV{X}_k\in A^C)=0$, contradicting the assumption of validity of $\mathcal{M}^{do(\RV{X}=a)}$.
 
@@ -504,50 +652,50 @@ We adopt the framework of cyclic structural causal models to make our arguments,
 \begin{definition}[Structural Causal Model]\label{def:SCM}
 	A structural causal model (SCM) is a tuple 
 	\begin{align}
-		\mathcal{M}:=\langle \mathcal{I},\mathcal{J},\mathbf{X}_{\mathcal{I}},\mathbf{E}_{\mathcal{J}},\mathbf{f}_{\mathcal{I}},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle
+		\mathcal{M}:=\langle \indx{I},\indx{J},\prodSet{X}_{\indx{I}},\mathbf{E}_{\indx{J}},\mathbf{f}_{\indx{I}},\mathbb{P}_{\mathcal{E}},{\vecRV{E}}_{\indx{J}}\rangle
 	\end{align}
 	where 
 	\begin{itemize}
-		\item $\mathcal{I}$ is a finite index set of \emph{endogenous variables}
-		\item $\mathcal{J}$ is a finite index set of \emph{exogenous variables}
-		\item $\mathbf{X}_{\mathcal{I}}:=\{X_i\}_{\mathcal{I}}$ where, for each $i\in \mathcal{I}$, $(X_i,\mathcal{X}_i)$ is a standard measurable space taking and the codomain of the $i$-th endogenous variable
-		\item $\mathbf{E}_{\mathcal{J}}:=\{E_j\}_{\mathcal{J}}$ where, for $j\in \mathcal{J}$, $E_j$ is a standard measurable space and the codomain of the $j$-th endogenous variable
-		\item $\mathbf{f}_{\mathcal{I}}=\utimes_{i\in\mathcal{I}} f_i$ is a measurable function, and $f_i:\mathbf{X}_{\mathcal{I}}\times\mathbf{E}_{\mathcal{J}}\to X_i$ is the causal mechanism controlling $\RV{X}_i$
-		\item $\mathbb{P}_{\mathcal{E}}\in \Delta(\mathbf{E}_{\mathcal{J}})$ is a probability measure on the space of exogenous variables
-		\item $\bm{\RV{E}}_{\mathcal{J}}=\utimes_{j\in\mathcal{J}} \RV{E}_j$ is the set of exogenous variables, with $\mathbb{P}_{\mathcal{E}}=\bm{\RV{E}}_{\mathcal{J}\#}P_{\mathcal{E}}$ and $\RV{E}_j$ is the j-th exogenous variable with marginal distribution given by $\RV{E}_{j\#}\mathbb{P}_{\mathcal{E}}$
+		\item $\indx{I}$ is a finite index set of \emph{endogenous variables}
+		\item $\indx{J}$ is a finite index set of \emph{exogenous variables}
+		\item $\prodSet{X}_{\indx{I}}:=\{X_i\}_{\indx{I}}$ where, for each $i\in \indx{I}$, $(X_i,\mathcal{X}_i)$ is a standard measurable space taking and the codomain of the $i$-th endogenous variable
+		\item $\mathbf{E}_{\indx{J}}:=\{E_j\}_{\indx{J}}$ where, for $j\in \indx{J}$, $E_j$ is a standard measurable space and the codomain of the $j$-th endogenous variable
+		\item $\mathbf{f}_{\indx{I}}=\utimes_{i\in\indx{I}} f_i$ is a measurable function, and $f_i:\prodSet{X}_{\indx{I}}\times\mathbf{E}_{\indx{J}}\to X_i$ is the causal mechanism controlling $\RV{X}_i$
+		\item $\mathbb{P}_{\mathcal{E}}\in \Delta(\mathbf{E}_{\indx{J}})$ is a probability measure on the space of exogenous variables
+		\item $\vecRV{E}_{\indx{J}}=\utimes_{j\in\indx{J}} \RV{E}_j$ is the set of exogenous variables, with $\mathbb{P}_{\mathcal{E}}={\vecRV{E}}_{\indx{J}\#}P_{\mathcal{E}}$ and $\RV{E}_j$ is the j-th exogenous variable with marginal distribution given by $\RV{E}_{j\#}\mathbb{P}_{\mathcal{E}}$
 	\end{itemize}
 \end{definition}
 
-If for $\mathbb{P}_{\mathcal{E}}$-almost every $\mathbf{e}\in\mathbf{E}_{\mathcal{J}}$ there exists $\mathbf{x}\in\mathbf{X}_{\mathcal{I}}$ such that
+If for $\mathbb{P}_{\mathcal{E}}$-almost every $\mathbf{e}\in\mathbf{E}_{\indx{J}}$ there exists $\prodSet{X}\in\prodSet{X}_{\indx{I}}$ such that
 \begin{align}
-	\mathbf{x} = \mathbf{f}_{\mathcal{I}}(\mathbf{x},\mathbf{e})
+	\prodSet{X} = \mathbf{f}_{\indx{I}}(\prodSet{X},\mathbf{e})
 \end{align}
 
-Then an SCM $\mathcal{M}$ induces a unique probability space $(\mathbf{X}_{\mathcal{I}}\times\mathbf{E}_{\mathcal{J}},\mathcal{X}_{\mathcal{I}}\otimes\mathcal{E}_{\mathcal{J}},\mathbb{P}_{\mathcal{M}})$ \citep{bongers_theoretical_2016}. If no such solution exists then we will say an SCM is invalid, as it imposes mutually incompatible constraints on the endogenous variables. It may be also the case that multiple solutions exist.
+Then an SCM $\mathcal{M}$ induces a unique probability space $(\prodSet{X}_{\indx{I}}\times\mathbf{E}_{\indx{J}},\mathcal{X}_{\indx{I}}\otimes\mathcal{E}_{\indx{J}},\mathbb{P}_{\mathcal{M}})$ \citep{bongers_theoretical_2016}. If no such solution exists then we will say an SCM is invalid, as it imposes mutually incompatible constraints on the endogenous variables. It may be also the case that multiple solutions exist.
 
-If an SCM induces a unique probability space then there exist random variables $\{\RV{X}_i\}_{i\in\mathcal{I}}$ such that, $P_{\mathcal{M}}$ almost surely \citet{bongers_theoretical_2016}:
+If an SCM induces a unique probability space then there exist random variables $\{\RV{X}_i\}_{i\in\indx{I}}$ such that, $P_{\mathcal{M}}$ almost surely \citet{bongers_theoretical_2016}:
 
 \begin{align}
-	\RV{X}_i = f_i(\bm{\RV{X}}_{\mathcal{I}},\bm{\RV{E}}_{\mathcal{J}})
+	\RV{X}_i = f_i({\vecRV{X}}_{\indx{I}},{\vecRV{E}}_{\indx{J}})
 \end{align}
 
-Where $\bm{\RV{X}}_{\mathcal{I}} = \utimes_{i\in \mathcal{I}} \RV{X}_i$.
+Where ${\vecRV{X}}_{\indx{I}} = \utimes_{i\in \indx{I}} \RV{X}_i$.
 
-A structural causal model can be transformed by \emph{mechanism surgery}. Given $\mathcal{S}\subset\mathcal{I}$ and a set of new functions $\mathbf{f}^I_{\mathcal{S}}:\mathbf{X}_{\mathcal{S}}\times\mathbf{E}_{\mathcal{J}}\to\mathbf{X}_{\mathcal{S}}$, mechanism surgery ``replaces'' the corresponding parts of $\mathbf{f}_{\mathcal{I}}$ with $\mathbf{f}^I_{\mathcal{S}}$.
+A structural causal model can be transformed by \emph{mechanism surgery}. Given $\mathcal{S}\subset\indx{I}$ and a set of new functions $\mathbf{f}^I_{\mathcal{S}}:\prodSet{X}_{\mathcal{S}}\times\mathbf{E}_{\indx{J}}\to\prodSet{X}_{\mathcal{S}}$, mechanism surgery ``replaces'' the corresponding parts of $\mathbf{f}_{\indx{I}}$ with $\mathbf{f}^I_{\mathcal{S}}$.
 
 \begin{definition}[Mechanism surgery]
-Let $\mathscr{M}$ be the set of SCMs with elements $\langle \mathcal{I},\mathcal{J},\mathbf{X}_{\mathcal{I}},\mathbf{E}_{\mathcal{J}},\_,\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$ (note that the causal mechanisms are unspecified). Mechanism surgery is an operation $I:\mathbf{X}_{\mathcal{I}}^{\mathbf{X}_{\mathcal{I}}\times\mathbf{E}_{\mathcal{J}}}\times \mathscr{M}\to\mathscr{M}$ that takes a causal model $\mathcal{M}$ with arbitrary causal mechanisms and a set of causal mechanisms $\mathbf{f}'_{\mathcal{I}}$ and maps it to a model $\mathcal{M}'=\langle \mathcal{I},\mathcal{J},\mathbf{X}_{\mathcal{I}},\mathbf{E}_{\mathcal{J}},\mathbf{f}'_{\mathcal{I}},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$.
+Let $\mathscr{M}$ be the set of SCMs with elements $\langle \indx{I},\indx{J},\prodSet{X}_{\indx{I}},\mathbf{E}_{\indx{J}},\_,\mathbb{P}_{\mathcal{E}},{\vecRV{E}}_{\indx{J}}\rangle$ (note that the causal mechanisms are unspecified). Mechanism surgery is an operation $I:\prodSet{X}_{\indx{I}}^{\prodSet{X}_{\indx{I}}\times\mathbf{E}_{\indx{J}}}\times \mathscr{M}\to\mathscr{M}$ that takes a causal model $\mathcal{M}$ with arbitrary causal mechanisms and a set of causal mechanisms $\mathbf{f}'_{\indx{I}}$ and maps it to a model $\mathcal{M}'=\langle \indx{I},\indx{J},\prodSet{X}_{\indx{I}},\mathbf{E}_{\indx{J}},\mathbf{f}'_{\indx{I}},\mathbb{P}_{\mathcal{E}},{\vecRV{E}}_{\indx{J}}\rangle$.
 
-If $\mathcal{M}$ has causal mechanisms $\mathbf{f}_{\mathcal{I}}$ and $\mathcal{O}\subset\mathcal{I}$ is the largest set such that $\pi_{\mathcal{O}}\circ\mathbf{f}_{\mathcal{I}}=\pi_{\mathcal{O}}\circ\mathbf{f}'_{\mathcal{I}}$ then we say $I$ is an \emph{intervention} on $\mathcal{L}:=\mathcal{I}\setminus\mathcal{O}$. We will use the special notation $\mathcal{M}^{I(\mathcal{L}),\mathbf{f}'_{\mathcal{L}}}:=I(\mathcal{M},\mathbf{f}'_{\mathcal{L}}$ to denote an SCM related to $\mathcal{M}$ by intervention on a subset of $\mathcal{I}$.
+If $\mathcal{M}$ has causal mechanisms $\mathbf{f}_{\indx{I}}$ and $\mathcal{O}\subset\indx{I}$ is the largest set such that $\pi_{\mathcal{O}}\circ\mathbf{f}_{\indx{I}}=\pi_{\mathcal{O}}\circ\mathbf{f}'_{\indx{I}}$ then we say $I$ is an \emph{intervention} on $\mathcal{L}:=\indx{I}\setminus\mathcal{O}$. We will use the special notation $\mathcal{M}^{I(\mathcal{L}),\mathbf{f}'_{\mathcal{L}}}:=I(\mathcal{M},\mathbf{f}'_{\mathcal{L}}$ to denote an SCM related to $\mathcal{M}$ by intervention on a subset of $\indx{I}$.
 
-If \emph{furthermore} $\pi_{\mathcal{L}}\mathbf{f}'_{\mathcal{I}}$ is a constant function equal to $\mathbf{a}$, then we say $I$ is a \emph{hard intervention} on $\mathcal{L}$. We use the special notation $\mathcal{M}^{Do(\mathcal{L})=\mathbf{a}}:=I(\mathcal{M},\mathbf{f}'_{\mathcal{L}}$ to denote SCMs related to $\mathcal{M}$ by hard interventions. We also say that the \emph{causal effect} of $\mathcal{L}$ is the set of SCNMs $\{\mathcal{M}^{Do(\mathcal{L})=\mathbf{a}}|a\in \mathbf{X}_{\mathcal{L}}\}$.
+If \emph{furthermore} $\pi_{\mathcal{L}}\mathbf{f}'_{\indx{I}}$ is a constant function equal to $\mathbf{a}$, then we say $I$ is a \emph{hard intervention} on $\mathcal{L}$. We use the special notation $\mathcal{M}^{Do(\mathcal{L})=\mathbf{a}}:=I(\mathcal{M},\mathbf{f}'_{\mathcal{L}}$ to denote SCMs related to $\mathcal{M}$ by hard interventions. We also say that the \emph{causal effect} of $\mathcal{L}$ is the set of SCNMs $\{\mathcal{M}^{Do(\mathcal{L})=\mathbf{a}}|a\in \prodSet{X}_{\mathcal{L}}\}$.
 \end{definition}
 
 We say a \emph{causal model} is any kind of model that defines causal effects. An SCM $\mathcal{M}$ in combination with hard interventions defines causal effects, so an SCM is a causal model. Call each interventional model $\mathcal{M}^{do(\RV{X}_i=x)}$ a \emph{submodel} of $\mathcal{M}$.
 
 Strictly, the random variables $\RV{X}_i$ depend on the probability space induced by a particular model $\mathcal{M}$, they are intended to refer to ``the same variable'' across different models that are related by mechanism surgery. We will abuse notation and use $\RV{X}_i$ to refer to the \emph{family} of random variables induced by a set of models related by mechanism surgery, and rely on explicitly noting the measure $\mathbb{P}_{...}(...)$ to specify exactly which random variables we are talking about. \todo{Incidentally, this messiness with random variables can be solved if we use See-Do models.}
 
-In practice, we typically specify a ``small'' SCM containing a few endogenous variables $\mathcal{I}$ (called a ``marginal SCM'' by \citet{bongers_theoretical_2016}) which is understood to summarise the relevant characteristics of a ``large'' SCM containing many variables $\mathcal{I}^*$. We will argue that without restrictions on the large set of variables $\mathcal{I}^*$, surgically transformed SCMs will usually be invalid.
+In practice, we typically specify a ``small'' SCM containing a few endogenous variables $\indx{I}$ (called a ``marginal SCM'' by \citet{bongers_theoretical_2016}) which is understood to summarise the relevant characteristics of a ``large'' SCM containing many variables $\indx{I}^*$. We will argue that without restrictions on the large set of variables $\indx{I}^*$, surgically transformed SCMs will usually be invalid.
 
 
 \subsection{Not all variables have well-defined interventions}
@@ -566,57 +714,57 @@ We argue that BMI does \emph{not} have a well-defined causal effect, and without
 If an SCM contains variables that are necessarily related, we wish to impose the additional restriction that these necessary relationships hold for every submodel. This can be done by extending the previous definition:
 
 \begin{definition}[SCM with necessary relationships]
-An SCM with necessary relationships (SCNM) is a tuple $\mathcal{M}:=\langle \mathcal{I},\mathcal{J},\mathbf{X}_{\mathcal{I}},\mathbf{E}_{\mathcal{J}},\mathbf{f}_{\mathcal{I}},\mathbf{g}_{\mathcal{I}},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$, which is an SCM with the addition of a vector function of \emph{necessary relationships} $\mathbf{g}_{\mathcal{I}}:=\utimes_{i\in\mathcal{I}} g_i$ where each $g_i:\mathbf{X}_{\mathcal{I}}\to X_i$ is a necessary relationship involving $\RV{X}_i$.
+An SCM with necessary relationships (SCNM) is a tuple $\mathcal{M}:=\langle \indx{I},\indx{J},\prodSet{X}_{\indx{I}},\mathbf{E}_{\indx{J}},\mathbf{f}_{\indx{I}},\mathbf{g}_{\indx{I}},\mathbb{P}_{\mathcal{E}},{\vecRV{E}}_{\indx{J}}\rangle$, which is an SCM with the addition of a vector function of \emph{necessary relationships} $\mathbf{g}_{\indx{I}}:=\utimes_{i\in\indx{I}} g_i$ where each $g_i:\prodSet{X}_{\indx{I}}\to X_i$ is a necessary relationship involving $\RV{X}_i$.
 
-An SCM with necessary induces a unique probability space if for $\mathbb{P}_{\mathcal{E}}$-almost every $e\in\mathcal{E}$ there exists a unique $\mathbf{x}\in\mathbf{X}_{\mathcal{I}}$ such that simultaneously
+An SCM with necessary induces a unique probability space if for $\mathbb{P}_{\mathcal{E}}$-almost every $e\in\mathcal{E}$ there exists a unique $\prodSet{X}\in\prodSet{X}_{\indx{I}}$ such that simultaneously
 \begin{align}
-	\mathbf{x} &= \mathbf{f}_{\mathcal{I}}(\mathbf{x},\mathbf{e})\\
-	\mathbf{x} &= \mathbf{g}_{\mathcal{I}}(\mathbf{x})
+	\prodSet{X} &= \mathbf{f}_{\indx{I}}(\prodSet{X},\mathbf{e})\\
+	\prodSet{X} &= \mathbf{g}_{\indx{I}}(\prodSet{X})
 \end{align}
 
-If no such $\mathbf{x}$ exists then an SCNM is invalid.
+If no such $\prodSet{X}$ exists then an SCNM is invalid.
 
-Mechanism surgery for SCNMs involves modification of $\mathbf{f}_{\mathcal{I}}$ only, just like SCMs.
+Mechanism surgery for SCNMs involves modification of $\mathbf{f}_{\indx{I}}$ only, just like SCMs.
 
-If we wish to stipulate that a particular variable $\RV{X}_i$ has no causal relationships or necessary relationships we can specify this with the trivial mechanisms $f_i:(\mathbf{x},\mathbf{e})\mapsto x_i$ and $g_i:\mathbf{x} \mapsto x_i$ respectively. An SCNM $\mathcal{M}$ with the trivial necessary relationship $\mathbf{g}_{\mathcal{I}}: \mathbf{x}\mapsto \mathbf{x}$ induces the equivalent probability spaces as the SCM obtained by removing $\mathbf{g}_{\mathcal{I}}$ from $\mathcal{M}$.
+If we wish to stipulate that a particular variable $\RV{X}_i$ has no causal relationships or necessary relationships we can specify this with the trivial mechanisms $f_i:(\prodSet{X},\mathbf{e})\mapsto x_i$ and $g_i:\prodSet{X} \mapsto x_i$ respectively. An SCNM $\mathcal{M}$ with the trivial necessary relationship $\mathbf{g}_{\indx{I}}: \prodSet{X}\mapsto \prodSet{X}$ induces the equivalent probability spaces as the SCM obtained by removing $\mathbf{g}_{\indx{I}}$ from $\mathcal{M}$.
 \end{definition}
 
 Because BMI is always equal height/weight, given some SCNM $\mathcal{M}$ containing endogenous variables $\RV{X}_{h}$, $\RV{X}_w$ and $\RV{X}_{b}$ representing height, weight and BMI respectively, it should be possible to construct a more ``primitive'' SCNM $\mathcal{M}^{p}$ containing every variable $\mathcal{M}$ does except $\RV{X}_b$ that agrees with $\mathcal{M}$ on all interventions except those on $\RV{X}_b$.
 
 \begin{definition}[Marginal model]
-Given an SCNM $$\mathcal{M}=\langle \mathcal{I},\mathcal{J},\mathbf{X}_{\mathcal{I}},\mathbf{E}_{\mathcal{J}},\mathbf{f}_{\mathcal{I}},\mathbf{g}_{\mathcal{I}},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$$ a marginal model over $\mathcal{L}\subset\mathcal{I}$ is an SCNM $$\mathcal{M}^{\stopper{0.25}_L}=\langle \mathcal{O},\mathcal{J},\mathbf{X}_{\mathcal{O}},\mathbf{E}_{\mathcal{J}},\mathbf{f}^{\mathcal{L*}}_{\mathcal{O}},\mathbf{g}^{\mathcal{L*}}_{\mathcal{O}},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$$ such that $(\mathbb{P}_{\mathcal{M}}) \stopper{0.25}_{\mathcal{L}}=\mathbb{P}_{(\mathcal{M}^{\stopper{0.25}_L})}$ and for all interventions $\mathbf{f}'_{\mathcal{O}}$ on $\mathcal{O}:=\mathcal{I}\setminus\mathcal{L}$ that do not depend on $\mathcal{L}$ $$(\mathbb{P}_{\mathcal{M}^{I(\mathcal{O}),\mathbf{f}'_{O}}})  \stopper{0.25}_{\mathcal{L}}=\mathbb{P}_{(\mathcal{M}^{\stopper{0.25}_\mathcal{L}},I(\mathcal{O}),\mathbf{f}'_{\mathcal{O}}\circ\pi_{\mathcal{O}})} $$
+Given an SCNM $$\mathcal{M}=\langle \indx{I},\indx{J},\prodSet{X}_{\indx{I}},\mathbf{E}_{\indx{J}},\mathbf{f}_{\indx{I}},\mathbf{g}_{\indx{I}},\mathbb{P}_{\mathcal{E}},{\vecRV{E}}_{\indx{J}}\rangle$$ a marginal model over $\mathcal{L}\subset\indx{I}$ is an SCNM $$\mathcal{M}^{\stopper{0.25}_L}=\langle \mathcal{O},\indx{J},\prodSet{X}_{\mathcal{O}},\mathbf{E}_{\indx{J}},\mathbf{f}^{\mathcal{L*}}_{\mathcal{O}},\mathbf{g}^{\mathcal{L*}}_{\mathcal{O}},\mathbb{P}_{\mathcal{E}},{\vecRV{E}}_{\indx{J}}\rangle$$ such that $(\mathbb{P}_{\mathcal{M}}) \stopper{0.25}_{\mathcal{L}}=\mathbb{P}_{(\mathcal{M}^{\stopper{0.25}_L})}$ and for all interventions $\mathbf{f}'_{\mathcal{O}}$ on $\mathcal{O}:=\indx{I}\setminus\mathcal{L}$ that do not depend on $\mathcal{L}$ $$(\mathbb{P}_{\mathcal{M}^{I(\mathcal{O}),\mathbf{f}'_{O}}})  \stopper{0.25}_{\mathcal{L}}=\mathbb{P}_{(\mathcal{M}^{\stopper{0.25}_\mathcal{L}},I(\mathcal{O}),\mathbf{f}'_{\mathcal{O}}\circ\pi_{\mathcal{O}})} $$
 \end{definition}
 
 A \emph{primitive model} is a special case of a marginal model where any intervention that depended only on endogenous variables in the original model can be replicated with some intervention that depends only on endogenous variables in the marginal model. If the endogenous variables represent \emph{observed} variables, then the plausible intervention operations may only be allowed to depend on these variables. In general, there may be interventions that are possible in the original model that are not possible in the marginal model.
 
 \begin{definition}[Primitive model]
-A \emph{primitive model} $\mathcal{M}^p$ is a marginal model of $\mathcal{M}$ with respect to some $\mathcal{L}$ such that for all interventions $\mathbf{f}'_{\mathcal{O}}$ that do not depend on $\mathcal{J}$ there exists some $\mathbf{g}'_{\mathcal{O}}:\mathbf{X}_{\mathcal{O}}\times\mathbf{E}_{\mathcal{J}}\to\mathbf{X}_{\mathcal{O}}$ that does not depend on $\mathcal{J}$ such that $$(\mathbb{P}_{\mathcal{M}^{I(\mathcal{O}),\mathbf{f}'_{O}}})  \stopper{0.25}_{\mathcal{L}}=\mathbb{P}_{(\mathcal{M}^{\stopper{0.25}_\mathcal{L}},I(\mathcal{O}),\mathbf{g}'_{\mathcal{O}})} $$
+A \emph{primitive model} $\mathcal{M}^p$ is a marginal model of $\mathcal{M}$ with respect to some $\mathcal{L}$ such that for all interventions $\mathbf{f}'_{\mathcal{O}}$ that do not depend on $\indx{J}$ there exists some $\mathbf{g}'_{\mathcal{O}}:\prodSet{X}_{\mathcal{O}}\times\mathbf{E}_{\indx{J}}\to\prodSet{X}_{\mathcal{O}}$ that does not depend on $\indx{J}$ such that $$(\mathbb{P}_{\mathcal{M}^{I(\mathcal{O}),\mathbf{f}'_{O}}})  \stopper{0.25}_{\mathcal{L}}=\mathbb{P}_{(\mathcal{M}^{\stopper{0.25}_\mathcal{L}},I(\mathcal{O}),\mathbf{g}'_{\mathcal{O}})} $$
 
 \end{definition}
 
 We claim that given any SCNM $\mathcal{M}$ containing endogenous variables $\RV{X}_{h}$, $\RV{X}_w$ and $\RV{X}_{b}$ representing height, weight and BMI there should be a primitive model $\mathcal{M}^p$ of $\mathcal{M}$ with respect to $\{p\}$.
 
 \begin{lemma}[Primitive models]
-$\mathcal{M}^p$ is a primitive model of $\mathcal{M}$ with respect to $\mathcal{L}\subset \mathcal{I}$ iff $S(\pi_{\mathcal{O}} \mathbf{f}_{\mathcal{I}})\overset{a.s.}{=}S(\mathbf{f}^p_{\mathcal{O}})$ for $\mathcal{O}:=\mathcal{I}\setminus\mathcal{L}$ and for all $\mathbf{x}\in \mathbf{X}_{\mathcal{I}}$, $\mathbf{g}$
+$\mathcal{M}^p$ is a primitive model of $\mathcal{M}$ with respect to $\mathcal{L}\subset \indx{I}$ iff $S(\pi_{\mathcal{O}} \mathbf{f}_{\indx{I}})\overset{a.s.}{=}S(\mathbf{f}^p_{\mathcal{O}})$ for $\mathcal{O}:=\indx{I}\setminus\mathcal{L}$ and for all $\prodSet{X}\in \prodSet{X}_{\indx{I}}$, $\mathbf{g}$
 
 \end{lemma}
 
 However, as Theroem \ref{th:no_interventions} shows, if an SCNM with height, weight and BMI can be derived from an SCNM containing just height and weight then there are no valid hard interventions on BMI.
 
 \begin{definition}[Derived model]
-Given a SCNM $\mathcal{M}:=\langle \mathcal{I},\mathcal{J},\mathbf{X}_{\mathcal{I}},\mathbf{E}_{\mathcal{J}},\mathbf{f}_{\mathcal{I}},\mathbf{g}_{\mathcal{I}},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$, say $\mathcal{M}'=\langle \mathcal{I}',\mathcal{J},\mathbf{X}_{\mathcal{I}'},\mathbf{E}_{\mathcal{J}},\mathbf{f}'_{\mathcal{I}'},\mathbf{g}'_{\mathcal{I}'},\mathbb{P}_{\mathcal{E}},\bm{\RV{E}}_{\mathcal{J}}\rangle$ is \emph{derived} from $\mathcal{M}$ if there exists some additional index/variable/relationships $i'\not\in\mathcal{I},X_{i'}$ such that
+Given a SCNM $\mathcal{M}:=\langle \indx{I},\indx{J},\prodSet{X}_{\indx{I}},\mathbf{E}_{\indx{J}},\mathbf{f}_{\indx{I}},\mathbf{g}_{\indx{I}},\mathbb{P}_{\mathcal{E}},{\vecRV{E}}_{\indx{J}}\rangle$, say $\mathcal{M}'=\langle \indx{I}',\indx{J},\prodSet{X}_{\indx{I}'},\mathbf{E}_{\indx{J}},\mathbf{f}'_{\indx{I}'},\mathbf{g}'_{\indx{I}'},\mathbb{P}_{\mathcal{E}},{\vecRV{E}}_{\indx{J}}\rangle$ is \emph{derived} from $\mathcal{M}$ if there exists some additional index/variable/relationships $i'\not\in\indx{I},X_{i'}$ such that
 \begin{align}
-	\mathcal{I}' &= \mathcal{I}\cup\{i'\}\\
-	\mathbf{X}_{\mathcal{I}'} &= \mathbf{X}_{\mathcal{I}}\cup X_{i'}
+	\indx{I}' &= \indx{I}\cup\{i'\}\\
+	\prodSet{X}_{\indx{I}'} &= \prodSet{X}_{\indx{I}}\cup X_{i'}
 \end{align}
 
-and, defining $\pi_{\mathcal{I'}\setminus{i'}}:\mathbf{X}_{\mathcal{I'}}\to \mathbf{X}_{\mathcal{I}}$ as the projection map that ``forgets'' $\RV{X}_{i'}$, for any $\mathbf{e}\in\mathbf{E}_{\mathcal{J}}$ we have
+and, defining $\pi_{\mathcal{I'}\setminus{i'}}:\prodSet{X}_{\mathcal{I'}}\to \prodSet{X}_{\indx{I}}$ as the projection map that ``forgets'' $\RV{X}_{i'}$, for any $\mathbf{e}\in\mathbf{E}_{\indx{J}}$ we have
 
 \begin{align}
-	\mathbf{x}'&=\mathbf{f}'_{\mathcal{I}'}(\mathbf{x}',\mathbf{e})\\
-	\text{and } \mathbf{x}'&=\mathbf{g}'_{\mathcal{I}'}(\mathbf{x}')
-	\implies \pi_{\mathcal{I'}\setminus{i'}}(\mathbf{x}')&=\mathbf{f}_{\mathcal{I}}(\pi_{\mathcal{I'}\setminus{i'}}(\mathbf{x}'),\mathbf{e})\\
-	\text{and } \pi_{\mathcal{I'}\setminus{i'}}(\mathbf{x}')&=\mathbf{g}'_{\mathcal{I}'}(\pi_{\mathcal{I'}\setminus{i'}}(\mathbf{x}'))
+	\prodSet{X}'&=\mathbf{f}'_{\indx{I}'}(\prodSet{X}',\mathbf{e})\\
+	\text{and } \prodSet{X}'&=\mathbf{g}'_{\indx{I}'}(\prodSet{X}')
+	\implies \pi_{\mathcal{I'}\setminus{i'}}(\prodSet{X}')&=\mathbf{f}_{\indx{I}}(\pi_{\mathcal{I'}\setminus{i'}}(\prodSet{X}'),\mathbf{e})\\
+	\text{and } \pi_{\mathcal{I'}\setminus{i'}}(\prodSet{X}')&=\mathbf{g}'_{\indx{I}'}(\pi_{\mathcal{I'}\setminus{i'}}(\prodSet{X}'))
 \end{align}
 \end{definition}
 
@@ -625,21 +773,21 @@ If $\mathcal{M}'$ is derived from $\mathcal{M}$ with the additional elements $i'
 \end{theorem}
 
 \begin{proof}
-Because $\mathcal{M}$ is uniquely solvable, for $\mathbb{P}_{\mathcal{E}}$ almost every $\mathbf{e}$ there is a unique $\mathbf{x}^e$ such that
+Because $\mathcal{M}$ is uniquely solvable, for $\mathbb{P}_{\mathcal{E}}$ almost every $\mathbf{e}$ there is a unique $\prodSet{X}^e$ such that
 \begin{align}
-	\mathbf{x}^e &= \mathbf{f}_{\mathcal{I}}(\mathbf{x}^e,\mathbf{e})\\
-	\mathbf{x}^e &= \mathbf{g}_{\mathcal{I}}(\mathbf{x}^e)
+	\prodSet{X}^e &= \mathbf{f}_{\indx{I}}(\prodSet{X}^e,\mathbf{e})\\
+	\prodSet{X}^e &= \mathbf{g}_{\indx{I}}(\prodSet{X}^e)
 \end{align}
 
-Because $\mathcal{M}'$ is also uniquely solvable, for $\mathbb{P}_{\mathcal{E}}$ almost every $\mathbf{e}$ we have $\mathbf{x}^{\prime e}\in\mathbf{X}_{\mathcal{I}'}$ such that $\pi_{\mathcal{I'}\setminus{i'}}(\mathbf{x}')^{\prime e} = \mathbf{x}^e$ and
+Because $\mathcal{M}'$ is also uniquely solvable, for $\mathbb{P}_{\mathcal{E}}$ almost every $\mathbf{e}$ we have $\prodSet{X}^{\prime e}\in\prodSet{X}_{\indx{I}'}$ such that $\pi_{\mathcal{I'}\setminus{i'}}(\prodSet{X}')^{\prime e} = \prodSet{X}^e$ and
 \begin{align}
-	x^{\prime e}_{i'} = \mathbf{g}_{i'}(\mathbf{x}^{\prime e}) \label{eq:necessary_relationship}
+	x^{\prime e}_{i'} = \mathbf{g}_{i'}(\prodSet{X}^{\prime e}) \label{eq:necessary_relationship}
 \end{align}
 
 Because $\mathbb{P}_{\mathcal{X}'\otimes\mathcal{E}}(\RV{X}_{i'})$ is not single valued there are non-null sets $A,B\in \mathcal{E}$ such that $e_a\in A$, $e_b\in B$ implies
 
 \begin{align}
-	\mathbf{g}_{i'}(\mathbf{x}^{\prime e_a}) \neq \mathbf{g}_{i'}(\mathbf{x}^{\prime e_b})
+	\mathbf{g}_{i'}(\prodSet{X}^{\prime e_a}) \neq \mathbf{g}_{i'}(\prodSet{X}^{\prime e_b})
 \end{align}
 
 
@@ -915,22 +1063,22 @@ There exists a uniquely solvable SCM $\mathcal{M}_{\text{atom}}$ which is the at
 % We assume the following characteristics are shared by all interventionist causal models:
 
 % \begin{enumerate}
-%  \item Causal effects are defined on random variables, which are measurable functions on some probability space $(P,\mathcal{E})$. Denote the set of all random variables on $\mathcal{E}$ by $\mathbf{X}$
-%  \item Causal effects are defined by $(P,\mathcal{E})$ and a set of causal relationships $\mathbf{R}$, which is a transitive binary relation $\rightarrowtriangle$ on $\mathbf{X}$
-%  \item Given some $\RV{X}_i\in\mathbf{X}$, the \emph{causal effect} of $\RV{X}_i$ is a function $P_{\RV{X}_i}$ from the range of $\RV{X}_i$ to $\Delta(\mathcal{E})$
+%  \item Causal effects are defined on random variables, which are measurable functions on some probability space $(P,\mathcal{E})$. Denote the set of all random variables on $\mathcal{E}$ by $\prodSet{X}$
+%  \item Causal effects are defined by $(P,\mathcal{E})$ and a set of causal relationships $\mathbf{R}$, which is a transitive binary relation $\rightarrowtriangle$ on $\prodSet{X}$
+%  \item Given some $\RV{X}_i\in\prodSet{X}$, the \emph{causal effect} of $\RV{X}_i$ is a function $P_{\RV{X}_i}$ from the range of $\RV{X}_i$ to $\Delta(\mathcal{E})$
 %  \item (Ancestral invariance) if $\RV{X}_{\mathbf{A}(j)}$ is the vector of all $\RV{X}_i$ such that $i\neq j$ and $\RV{X}_i\rightarrowtriangle \RV{X}_j\in \mathbb{R}$, then for any $i$, $P_{\RV{X}_i} (\RV{X}_j|\RV{X}_{\mathbf{A}(j)}) = P (\RV{X}_j|\RV{X}_{\mathbf{A}(j)}$
 %  \item (Non causes have no effects) if $\RV{X}_i\not\in \RV{X}_{\mathbf{A}(j)}$ then $P_{\RV{X}_i}(\RV{X}_j)=P(\RV{X}_j)$
 %  \item (Setting) $P_{\RV{X}_i}(\RV{X}_i)$ evaluated at $x$ is equal to $\delta_x$
 %  \item (Ancestral projection) if $i\in \mathbf{A}(j)$ then there exists a function $f:X_{\mathbf{A}(j)}\to X_i$ such that $f(\RV{X}_{\mathbf{A}(j)})=\RV{X}_i$ \todo[inline]{seems like this should just be true, but I don't know a proof yet}
 % \end{enumerate}
 
-% Typically, interventional models will model causal variables as random variables (1) and suppose that $\mathbf{X}$ is a discrete set (2), assume that in addition to (3) causal effects are also \emph{antisymmetric}, and that causal effects are they are given by functions rather than sets of functions (4). Furthermore, (5) is implied by the causal Markov condition \citep{hausman_independence_1999} when $\mathbf{R}$ is antisymmetric. (6) and (7) are implied by rule 3 of the do-calculus \citep{pearl_causality:_2009}, but are independent given the other assumptions made.
+% Typically, interventional models will model causal variables as random variables (1) and suppose that $\prodSet{X}$ is a discrete set (2), assume that in addition to (3) causal effects are also \emph{antisymmetric}, and that causal effects are they are given by functions rather than sets of functions (4). Furthermore, (5) is implied by the causal Markov condition \citep{hausman_independence_1999} when $\mathbf{R}$ is antisymmetric. (6) and (7) are implied by rule 3 of the do-calculus \citep{pearl_causality:_2009}, but are independent given the other assumptions made.
 
 
 % Call a random variable \emph{trivial} if it maps all inputs to the same output (i.e. it is a version of the discard map $\stopper{0.25}$), and \emph{nontrivial} otherwise.
 
 % \begin{lemma}[All random variables are ancestors of themselves]\label{lem:total_ancestry}
-% Given a causal model $(P,\mathcal{E},\mathbf{R},\mathbf{X})$. Define $\mathbf{X}_{NT}$ to be the set of all nontrivial random variables. For any nontrivial $\RV{X}_i\in \mathbf{X}_{NT}$ there exists some function $f$ such that $\RV{X}_i=f(\RV{X}_{\mathbf{A}(i)})$.
+% Given a causal model $(P,\mathcal{E},\mathbf{R},\prodSet{X})$. Define $\prodSet{X}_{NT}$ to be the set of all nontrivial random variables. For any nontrivial $\RV{X}_i\in \prodSet{X}_{NT}$ there exists some function $f$ such that $\RV{X}_i=f(\RV{X}_{\mathbf{A}(i)})$.
 % \end{lemma}
 
 % \begin{proof}
@@ -946,7 +1094,7 @@ There exists a uniquely solvable SCM $\mathcal{M}_{\text{atom}}$ which is the at
 % Lemma \ref{lem:total_ancestry} shows why we cannot add antisymmetry to assumption (2) - this would result in a contradiction.
 
 % \begin{theorem}[All causal effects are permitted]\label{th:all_caual_effects}
-% Given a causal model $(P,\mathcal{E},\mathbf{R},\mathbf{X})$ and any $\RV{X}_i\in \mathbf{X}_{NT}$, $P_{\RV{X}_i}$ may be any stochastic map $X_i\to\Delta(\mathcal{E})$ such that $(\RV{X}_i)_\# P_{\RV{X}_i=x}=\delta_x$
+% Given a causal model $(P,\mathcal{E},\mathbf{R},\prodSet{X})$ and any $\RV{X}_i\in \prodSet{X}_{NT}$, $P_{\RV{X}_i}$ may be any stochastic map $X_i\to\Delta(\mathcal{E})$ such that $(\RV{X}_i)_\# P_{\RV{X}_i=x}=\delta_x$
 % \end{theorem}
 
 % \begin{proof}
@@ -956,13 +1104,13 @@ There exists a uniquely solvable SCM $\mathcal{M}_{\text{atom}}$ which is the at
 
 % $\RV{X}_i$ is nontrivial so it is in the ancestral set of all nontrivial random variables. Therefore we need only check (5) for trivial random variables, but this holds automatically as there is only one probability measure on the one-element set.
 
-% It remains to check ancestral invariance (4). By  As $\RV{I}_E\in \mathbf{A}(i)$, it suffices to check for arbitrary $x\in X_i$, $\RV{X}_j\in \mathbf{X}_{NT}$ if $Q_x(\RV{X}_j|\RV{I}_E)=P(\RV{X}_j|\RV{I}_E)$. But both are equal to the function $e\mapsto \delta_{\RV{X}_j(e)}$ for all $e\in \mathcal{E}$, so this is also satisfied.
+% It remains to check ancestral invariance (4). By  As $\RV{I}_E\in \mathbf{A}(i)$, it suffices to check for arbitrary $x\in X_i$, $\RV{X}_j\in \prodSet{X}_{NT}$ if $Q_x(\RV{X}_j|\RV{I}_E)=P(\RV{X}_j|\RV{I}_E)$. But both are equal to the function $e\mapsto \delta_{\RV{X}_j(e)}$ for all $e\in \mathcal{E}$, so this is also satisfied.
 % \end{proof}
 
 % Theorem \ref{th:all_caual_effects} would clearly be fatal to the interventionist project if it applied to all interventional models. There are a number of ways to avoid this conclusion:
 
 % \begin{enumerate}
-% 	\item An ``ordinary'' causal Bayesian network features an antisymmetric $\mathbf{R}$ over a subset of random variables on a given probability space, and adds to conditions (1)-(6) the \emph{causal Markov condition} \citep{woodward_causation_2016}. It is well known that causal Bayesian networks yield unique causal effects given interventions of positive measure. The key difference in our setup is that we require $\mathbf{R}$ to be defined over the \emph{entire} set $\mathbf{X}$, which in turn requires antisymmetry to be dropped from (2). Thus one way to avoid the conclusion is to assert that $\mathbf{R}$ can be defined only over a subset of $\mathbf{X}$
+% 	\item An ``ordinary'' causal Bayesian network features an antisymmetric $\mathbf{R}$ over a subset of random variables on a given probability space, and adds to conditions (1)-(6) the \emph{causal Markov condition} \citep{woodward_causation_2016}. It is well known that causal Bayesian networks yield unique causal effects given interventions of positive measure. The key difference in our setup is that we require $\mathbf{R}$ to be defined over the \emph{entire} set $\prodSet{X}$, which in turn requires antisymmetry to be dropped from (2). Thus one way to avoid the conclusion is to assert that $\mathbf{R}$ can be defined only over a subset of $\prodSet{X}$
 % 	\item We may consider a version of interventionist models where the $do()$ operator changes the definition of random variables instead of (or as well as?) changing the probability measure
 % 	\item Perhaps assumption (5) could be rejected?
 % 	\item It may be possible to add some other assumption that serves to narrow down the set of causal effects considered viable
@@ -972,7 +1120,7 @@ There exists a uniquely solvable SCM $\mathcal{M}_{\text{atom}}$ which is the at
 
 % \subsection{Which random variables can be included?}
 
-% The first response to this theorem is that it might be possible to declare some sets of random variables $\mathbf{S}\subset\mathbf{X}$ ``causally viable'' and others to be ``causally nonsensical''. Including the identity function on the entire sample space as a random variable appears to be an odd choice.
+% The first response to this theorem is that it might be possible to declare some sets of random variables $\mathbf{S}\subset\prodSet{X}$ ``causally viable'' and others to be ``causally nonsensical''. Including the identity function on the entire sample space as a random variable appears to be an odd choice.
 
 % The chief problem with this approach is that it makes the set of viable causal effects depend on the particular random variables chosen to include in the model. As we have shown above, including the whole sample space as a random variable makes \emph{all} causal effects viable. While this is an odd choice, there are more mundane examples of the same problem. Consider the variables:
 % \begin{itemize}
