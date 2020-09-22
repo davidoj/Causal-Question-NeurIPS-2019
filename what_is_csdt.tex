@@ -1,53 +1,53 @@
 
 %!TEX root = main.tex
 
-\section{What is a causal model?}
+\section{Theories of causal inference}
 
-What is a causal model? Anyone with even a cursory knowledge of causal inference is likely to have heard that \emph{correlation does not imply causation}. This idea has been expanded in some depth by Judea Pearl, who distinguishes three levels of a ``causal hierarchy'':
+Beginning in the 1930s, a number of associations between cigarette smoking and lung cancer were established: on a population level, lung cancer rates rose rapidly alongside the prevalence of cigarette smoking. Lung cancer patients were far more likely to have a smoking history than demographically similar individuals without cancer and smokers were around 40 times as likely as demographically similar non-smokers to go on to develop lung cancer. In laborotory experiments, cells which were introduced to tobacco smoke developed \emph{ciliastasis}, and mice exposed to cigarette smoke tars developed tumours\citep{proctor_history_2012}. Nevertheless, until the late 1950s, substantial controversy persisted over the question of whether the available data was sufficient to establish that smoking cigarettes \emph{caused} lung cancer. Cigarette manufacturers famously argued against any possible connection \citep{oreskes_merchants_2011} and Roland Fisher in particular argued that the available data was not enough to establish that smoking actually caused lung cancer \citep{fisher_cancer_1958}. Today, it is widely accepted that cigarettes do cause lung cancer, along with other serious conditions such as vascular disease and chronic respiratory disease \citep{world_health_organisation_tobacco_nodate,wiblin_why_2016}.
 
+The question of a causal link between smoking and cancer is a very important one. Individuals who enjoy smoking (or think they might) may wish to avoid smoking if cigarettes pose a severe health risk, so they are interested in knowing whether or not it is so. Potential investors in cigarette manufacturers want to know if the product they are backing is likely to see limited adoption due to health concerns. People holding investments in cigarette manufacturering firms want the world to be such that cigarettes do not pose a substantial health risk, as this increases the value of their investment. Governments and organisations with a responsibility for public health may see themselves as having responsibility to discourage smoking as much as possible if smoking is severely detrimental to health. The stakes on both sides of the question are large: 8 million annual deaths are attributed to cigarette-caused cancer and vascular disease in 2018\citep{world_health_organisation_tobacco_nodate} while  global cigarette sales were estimated at US\$711 million in 2020, while \citep{noauthor_cigarettes_nodate} (a figure which might be substantially larger if cigarettes were not widely believed to be harmful).
+
+The question of whether or not cigarette smoking causes cancer illustrates two key facts about causal questions: First, having the right answers to some causal questions is of life and death importance to huge numbers of people. Second, even when large amounts of data show unambiguous associations between phenomena of interest, it is still difficult to know when a causal conclusion is justified.
+
+Many causal questions are still answered on the basis of ad-hoc reasoning. For example \citet{krittanawong_association_2020} states:
+
+\begin{quote}
+[...] the potential benefit of increased chocolate consumption, reducing coronary artery disease (CAD) risk is not known. We aimed to explore the association between chocolate consumption and CAD.
+\end{quote}
+
+It is not clear whether Krittanawong et. al. mean that a negative association between chocolate consumption and CAD implies that increased chocolate consumption is likely to reduce coronary artery disease, or that an association may be relevant to the question and the reader should draw their own conclusions. Whether the implication is being suggested by Krittanawong et. al. or merely imputed by na\"ive readers, it is being drawn on an ad-hoc basis -- no argument for the implication can be found in this paper.\footnote{Judea Pearl deserves credit for making the distinction between causal and associational claims clear.}
+
+Theories of causal inference provide a linguistic and conceptual toolkit to enable causal questions to be precisely stated and reasoned about. In general, theories of causal inference will assume a causal question provides an ``observed'' set of random variables $\vecRV{X}$ distributed according to  ``observational'' probability distribution $\prob{P}_{\RV{X}}$. Theories of causal inference posit that causal questions are answered by properties of \emph{causal models}. Causal models in the potential outcomes framework is given by a ``counterfactual'' probability $\prob{P}_{\vecRV{X}^*}$ (where $\vecRV{X}\subset\vecRV{X}^*$), and interventional causal models are labelled collections of probabilities $\{\prob{P}_{\vecRV{X}|do(\RV{X}_i=a)}\}$. The final thing that theories of causal inference provide is means of relating observational distributions $\prob{P}_{\vecRV{X}}$ with the ``causal models'' $\prob{P}_{\vecRV{X}^*}$ or $\prob{P}_{\vecRV{X}|do(...)}$ and key assumptions such as \emph{causally sufficient graphs} or \emph{counterfactual independences} that can constrain these relationships.
+
+The forms of causal models adopted by theories of causal inference are heavily influenced by philosophical theories of causation. There are two main theories of causation that are used in theories of causal inference:
 \begin{enumerate}
-	\item Associational or correlational models represent relationships in a passively observed system
-	\item Interventional models represent the consequences of performing actions on a system
-	\item Counterfactual models represent the way a system could have turned out if certain elements of it were altered from their actual state
+	\item ``$\RV{X}_i$ causes $\RV{X}_j$'' means that there exist different \emph{ideal interventions} that result in different values of of $\RV{X}_i$, hold other ``causally sufficient'' variables constant, do not directly affect $\RV{X}_j$ but nonetheless entail different values of $\RV{X}_j$
+	\item ``$\RV{X}_i$ causes $\RV{X}_j$'' means that the \emph{counterfactual value} of $\RV{X}_j$ would be different ``if $\RV{X}_i$ had taken a different value''
 \end{enumerate}
 
-While many people are aware that there is a distinction between levels 1 and 2 + 3 of this hierarchy, knowledge of how to construct causal models that handle levels 2 and 3 is held mostly by people who have studied causal inference in more detail. As it is, there are a number of methods for doing this
+In the \emph{interventional models} school of causal inference, causal models are a set of probabilities labeled by interventions. These ``post-intervention probabilities'' can be computed using the \emph{do-calculus} given a ``causally sufficient'' triple $((\Omega,\mathcal{F},\prob{Q}),\graph{G},\vecRV{U})$ consisiting of a probability space $(\Omega,\mathcal{F},\prob{Q})$, random variables $\vecRV{U}\subset \mathcal{F}$ and graph $\graph{G}$ with nodes that are identified with the elements of $\vecRV{U}$.
 
+On the other hand, in the \emph{potential outcomes} school of causal inference, the joint ``counterfactual values'' of variables are modelled by random variables in ${\vecRV{X}^*}$; for any $\RV{X}_i\in \vecRV{X}$ there is a copy $\RV{X}^{\RV{X}_j=a}_i\in\vecRV{X}^*$ representing ``the value $\RV{X}_i$ would have taken had $\RV{X}_j$ taken the value $a$''.
 
-Judea Pearl has argued forcefully for the overwhelming importance of \emph{causal relationships} in models employed by decision making agents \cite{pearl_book_2018}. 
+This distinction is complicated considerably by the difficulty of explaining how ``counterfactual values'' are determined. This problem is frequently ignored altogether, dealt with in an ad-hoc manner or addressed by supposing that the ``counterfactual value'' of $(\RV{X}_i,\RV{X}_j)$ is simply the value of $(\RV{X}_i,\RV{X}_j)$ ``had an ideal intervention been performed on $\RV{X}_i$'' \citep{morgan_counterfactuals_2014,rubin_causal_2005,richardson2013single}; this last option seems to accept ideal interventions as the fundamental principle.
 
-What is a causal model? I am sure it is impossible to give an answer to this question that satisfies everybody, because there are too many jobs that the word ``causal'' . In spite of this, I am still going to answer it.  :
-\begin{enumerate}
-	\item A \emph{Causal Bayesian Network} is a directed acyclic graph $\mathcal{G}$ that satisfies three compatibility conditions with respect to a probability distribution $P(\RV{V})$ on a set $\RV{V}$ of random variables along with a map $P_*:D\to \Delta(V)$ where $D$ is a set of so-called \emph{do-interventions} on the variables $\RV{V}$ \citep{pearl_causality:_2009}
-	\item A \emph{causal theory} is a 4-tuple $\langle \RV{V}, \RV{U}, P(\RV{U}), \{f_i\}\rangle$ where $\RV{V}=\{\RV{X}_1,...\RV{X}_n\}$ is a set of observed variables, $\RV{U}$ is a set of unobserved variables, $P(\RV{U})$ is a probability distribution over unobserved variables and $\{f_i\}$ is a set of functions $V\times U\to X_i$ and the requirement is imposed that $\RV{X}_i = f_i(\RV{V},\RV{U})$ \cite{galles_testing_1995}
-	\item A \emph{potential outcomes} model is a joint probability distribution over a set of observed values $\RV{Y}$, potential outcomes $\RV{Y}_0, \RV{Y}_1$ and an assignment $\RV{W}\in\{0,1\}$ such that $\RV{Y}=\RV{W}\RV{Y}_0 + (1-\RV{W})\RV{Y}_1$ \cite{rubin_causal_2005}
-\end{enumerate}
-	
+``Ideal interventions'' and ``causal sufficiency'' are, in turn, difficult to jointly define. One can be defined in terms of the other:
+\begin{itemize}
+	\item An $[\RV{X}_i,\RV{X}_j]$-ideal intervention is an operation whose result is determined by applying the do-calculus to a causally sufficient triple $((\Omega,\mathcal{F},\prob{Q}),\graph{G},\vecRV{U})$
+	\item A triple $((\Omega,\mathcal{F},\prob{Q}),\graph{G},\vecRV{U})$ is $[\RV{X}_i,\RV{X}_j]$-causally sufficient if $\RV{U}$ contains $\RV{X}_i$, $\RV{X}_j$ and ``all intervenable variables'' that ``cause'' (defintion (1)) both $\RV{X}_i$ and $\RV{X}_j$ \footnote{Weaker conditions for causal sufficiency are possible, but they are still premised on causal relationships, so the charge of circularity stands \citep{shpitser_complete_2008}.}
+\end{itemize}
+
+However, this definition is circular, a problem that is recognised in the philosophical literature on interventional definitions of causation \citep{woodward_causation_2016}.
+
+Causal statistical decision theory (CSDT), the theory that is introduced here, proceeds from the observation that causal questions often give us enough information to determine \emph{type} of ``causal model'' that we seek without appealing to any theory of causation. Determining the \emph{relation} between observational probabilities $\prob{P}$ and causal models is hard, and theories of causation are clearly helpful for working this out, given the right problems. The role of a theory of causation for solving causal problems can in this view be likened to the role of interpretations of statistics for solving statistical inference problems. To solve a statistical inference problem it is necessary to assume some interpretation of statistics that explicates the relation between observed data and probability distributions, but an interpretation is not required to understand that statistical questions are ultimately about properties of probability distributions.
+
+\section{Causal Questions}
+
 
 
 \section{The ``causes first'' and ``decisions first'' approaches to causal decisions problems}
 
 
-
-
-Causal inference is usually concerned with inferring \emph{causal relationships} or \emph{causal effects}. Often (though not always), these inferences then inform decision makers about which of their available decisions are likely to have good consequences. Using causal models to inform decision making involves additional assumptions that are often made implicitly that relate causal effects to decisions. This relationship may be very simple: suppose we have a treatment $\RV{X}$ and an outcome $\RV{Y}$. Each decision might be held to yield the realisation of a particular potential outcome $\RV{Y}_x$. However, the association isn't always so simple - for example, if decisions involve \emph{incentivizing} treatment, each decision may be identified with a particular \emph{selection function} rather than a particular potential outcome \citep{heckman_policy-relevant_2001}. Similarly, there are a number of ways that we might want to identify decisions with $do()$ operations in Causal Bayesian Networks, see \citet{pearl_does_2018} for some examples. We will call this approach the \emph{causes first} approach to decision problems. Concretely, the causes first approach involves three steps:
-
-\begin{enumerate}[(1)]
-	\item Propose a set of possible causal models given the investigator's prior knowledge (a \emph{causal theory})
-	\item Infer a reduced set of likely causal models by comparing the possible models' fit to available data
-	\item Combine the likely causal models with a secondary decision model to determine the consequences that decisions are likely to have (often done implicitly)
-\end{enumerate}
-
-The causes first approach can be contrasted with the \emph{decisions first} approach. The decisions first involves two steps:
-
-\begin{enumerate}[(a)]
-	\item Propose a set of possible decision models given the investigator's prior knowledge (a \emph{decision theory})
-	\item Infer a reduced set of likely decision models by comparing the possible models' fit to available data
-\end{enumerate}
-
-Step (a) in the decisions first approach is equivalent the combination of steps (1) and (3) in the causes first approach. There are at least two reasons why we might benefit from combining these steps. Firstly, (1) and (3) cannot be made independently. Returning to our example of a treatment $\RV{X}$ and outcome $\RV{Y}$, it is possible to propose a causal model that yields a correct decision model if compliance with our recommendations is perfect (i.e. $\RV{X}$ depends deterministically on our decision to treat or withold treatment), but an incorrect decision model if compliance is imperfect (i.e. $\RV{X}$ depends stochastically on our decision to treat or withold treatment) \citep{heckman_policy-relevant_2001}.  This strongly suggests that (1) and (3) should actually be carried out jointly. Secondly, while it is always possible to accomplish (a) via a combination of (1) and (3) using existing causal modelling schemes, we are not obliged to do so. Combining (1) and (3) also allows us the flexibility to avoid making causal assumptions if we believe a problem can be solved without doing so.
-
-What we are calling ``decision models'' have a number of additional compelling properties. We will show that we can essentially always represent decision models with stochastic functions (otherwise known as \emph{Markov kernels}). These are ordinary objects in probability theory, in contrast to graphical models that feature non-probabilistic ``intervention'' operations. We will show, in addition, that both Causal Bayesian Networks and Single World Intervention Graphs have natural interpretations as special classes of decision models.
 
 \section{Decision makers and decision models}
 

@@ -1,24 +1,32 @@
-\contentsline {section}{\numberline {1}Notation}{2}{section.1}%
-\contentsline {section}{\numberline {2}What is the difference between Causal Bayesian Networks and See-Do models?}{2}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Influence Diagrams vs See-Do models}{2}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Influence diagrams vs Causal Bayesian Networks}{5}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}What is meant by ``variables''?}{6}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}Necessary relationships}{6}{subsection.2.4}%
-\contentsline {subsection}{\numberline {2.5}Recursive Structural Causal Models}{7}{subsection.2.5}%
-\contentsline {subsection}{\numberline {2.6}Recursive Structural Causal Models with Necessary Relationships}{8}{subsection.2.6}%
-\contentsline {subsection}{\numberline {2.7}Cyclic Structural Causal Models}{13}{subsection.2.7}%
-\contentsline {subsection}{\numberline {2.8}Not all variables have well-defined interventions}{14}{subsection.2.8}%
-\contentsline {subsubsection}{\numberline {2.8.1}Necessary relationships in cyclic SCMs}{15}{subsubsection.2.8.1}%
-\contentsline {section}{\numberline {3}Definitions and key notation}{18}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Standard Symbols}{19}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Probability Theory}{19}{subsection.3.2}%
-\contentsline {paragraph}{Common $\sigma $ algebras}{19}{section*.25}%
-\contentsline {subsection}{\numberline {3.3}Product Notation}{20}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}String Diagrams}{20}{subsection.3.4}%
-\contentsline {paragraph}{Elementary operations}{21}{section*.26}%
-\contentsline {paragraph}{Probability measures, Markov kernels and functions}{22}{section*.27}%
-\contentsline {paragraph}{Markov kernels with special notation}{22}{section*.28}%
-\contentsline {subsubsection}{\numberline {3.4.1}Comparison of notations}{24}{subsubsection.3.4.1}%
-\contentsline {subsubsection}{\numberline {3.4.2}Working With String Diagrams}{25}{subsubsection.3.4.2}%
-\contentsline {paragraph}{Axioms of Symmetric Monoidal Categories}{25}{section*.29}%
-\contentsline {subsubsection}{\numberline {3.4.3}Random Variables}{26}{subsubsection.3.4.3}%
+\contentsline {section}{\numberline {1}Theories of causal inference}{2}{section.1}%
+\contentsline {section}{\numberline {2}What is CSDT?}{4}{section.2}%
+\contentsline {section}{\numberline {3}The ``causes first'' and ``decisions first'' approaches to causal decisions problems}{4}{section.3}%
+\contentsline {section}{\numberline {4}Decision makers and decision models}{6}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Expected utility maximisers}{7}{subsection.4.1}%
+\contentsline {paragraph}{Version 1}{8}{section*.4}%
+\contentsline {paragraph}{Version 2}{9}{section*.5}%
+\contentsline {paragraph}{Version 3}{9}{section*.6}%
+\contentsline {section}{\numberline {5}Notation}{12}{section.5}%
+\contentsline {section}{\numberline {6}What is the difference between Causal Bayesian Networks and See-Do models?}{12}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Influence Diagrams vs See-Do models}{13}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Influence diagrams vs Causal Bayesian Networks}{15}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}What is meant by ``variables''?}{17}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Necessary relationships}{17}{subsection.6.4}%
+\contentsline {subsection}{\numberline {6.5}Recursive Structural Causal Models}{18}{subsection.6.5}%
+\contentsline {subsection}{\numberline {6.6}Recursive Structural Causal Models with Necessary Relationships}{19}{subsection.6.6}%
+\contentsline {subsection}{\numberline {6.7}Cyclic Structural Causal Models}{23}{subsection.6.7}%
+\contentsline {subsection}{\numberline {6.8}Not all variables have well-defined interventions}{25}{subsection.6.8}%
+\contentsline {subsubsection}{\numberline {6.8.1}Necessary relationships in cyclic SCMs}{26}{subsubsection.6.8.1}%
+\contentsline {section}{\numberline {7}Definitions and key notation}{29}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Standard Symbols}{30}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Probability Theory}{30}{subsection.7.2}%
+\contentsline {paragraph}{Common $\sigma $ algebras}{30}{section*.31}%
+\contentsline {subsection}{\numberline {7.3}Product Notation}{31}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}String Diagrams}{31}{subsection.7.4}%
+\contentsline {paragraph}{Elementary operations}{32}{section*.32}%
+\contentsline {paragraph}{Probability measures, Markov kernels and functions}{33}{section*.33}%
+\contentsline {paragraph}{Markov kernels with special notation}{33}{section*.34}%
+\contentsline {subsubsection}{\numberline {7.4.1}Comparison of notations}{35}{subsubsection.7.4.1}%
+\contentsline {subsubsection}{\numberline {7.4.2}Working With String Diagrams}{36}{subsubsection.7.4.2}%
+\contentsline {paragraph}{Axioms of Symmetric Monoidal Categories}{36}{section*.35}%
+\contentsline {subsubsection}{\numberline {7.4.3}Random Variables}{37}{subsubsection.7.4.3}%
