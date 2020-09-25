@@ -81,7 +81,7 @@
 \newcommand{\ID}[1]{\ensuremath{\text{Id}_{#1}}}
 \newcommand{\utimes}{\ensuremath{\underline{\otimes}}}
 \newcommand{\prob}[1]{\ensuremath{\mathbb{#1}}}
-\newcommand{\kernl}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\kernel}[1]{\ensuremath{\mathbb{#1}}}
 \newcommand{\seedo}{\ensuremath{\mathbb{T}}}
 \newcommand{\diagram}[1]{\ensuremath{\mathscr{#1}}}
 \newcommand{\sigalg}[1]{\ensuremath{\mathcal{#1}}}
@@ -127,6 +127,13 @@
 \end{tikzpicture}
 }
 
+\newcommand\source[1]{%
+\begin{tikzpicture}[scale=#1]
+\path (0,0) node[prob,fill=gray] (P) {};
+\draw (P) -- ($(P.east) + (1,0)$);
+\end{tikzpicture}
+}
+
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\arginf}{arg\,inf}
@@ -155,6 +162,7 @@
 % \input{story}
 % \input{subjunctive_probability}
 \input{markov_kernels}
+\input{conditional_probability_space}
 % \input{cbn_vs_csdt_assumptions}
 % \input{notation}
 % \input{category_theory_string_diagrams}

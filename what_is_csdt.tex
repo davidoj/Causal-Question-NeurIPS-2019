@@ -3,191 +3,177 @@
 
 \section{Theories of causal inference}
 
-Beginning in the 1930s, a number of associations between cigarette smoking and lung cancer were established: on a population level, lung cancer rates rose rapidly alongside the prevalence of cigarette smoking. Lung cancer patients were far more likely to have a smoking history than demographically similar individuals without cancer and smokers were around 40 times as likely as demographically similar non-smokers to go on to develop lung cancer. In laborotory experiments, cells which were introduced to tobacco smoke developed \emph{ciliastasis}, and mice exposed to cigarette smoke tars developed tumours\citep{proctor_history_2012}. Nevertheless, until the late 1950s, substantial controversy persisted over the question of whether the available data was sufficient to establish that smoking cigarettes \emph{caused} lung cancer. Cigarette manufacturers famously argued against any possible connection \citep{oreskes_merchants_2011} and Roland Fisher in particular argued that the available data was not enough to establish that smoking actually caused lung cancer \citep{fisher_cancer_1958}. Today, it is widely accepted that cigarettes do cause lung cancer, along with other serious conditions such as vascular disease and chronic respiratory disease \citep{world_health_organisation_tobacco_nodate,wiblin_why_2016}.
+\todo[inline]{Feedback start here}
 
-The question of a causal link between smoking and cancer is a very important one. Individuals who enjoy smoking (or think they might) may wish to avoid smoking if cigarettes pose a severe health risk, so they are interested in knowing whether or not it is so. Potential investors in cigarette manufacturers want to know if the product they are backing is likely to see limited adoption due to health concerns. People holding investments in cigarette manufacturering firms want the world to be such that cigarettes do not pose a substantial health risk, as this increases the value of their investment. Governments and organisations with a responsibility for public health may see themselves as having responsibility to discourage smoking as much as possible if smoking is severely detrimental to health. The stakes on both sides of the question are large: 8 million annual deaths are attributed to cigarette-caused cancer and vascular disease in 2018\citep{world_health_organisation_tobacco_nodate} while  global cigarette sales were estimated at US\$711 million in 2020, while \citep{noauthor_cigarettes_nodate} (a figure which might be substantially larger if cigarettes were not widely believed to be harmful).
+Beginning in the 1930s, a number of associations between cigarette smoking and lung cancer were established: on a population level, lung cancer rates rose rapidly alongside the prevalence of cigarette smoking. Lung cancer patients were far more likely to have a smoking history than demographically similar individuals without cancer and smokers were around 40 times as likely as demographically similar non-smokers to go on to develop lung cancer. In laborotory experiments, cells which were introduced to tobacco smoke developed \emph{ciliastasis}, and mice exposed to cigarette smoke tars developed tumors\citep{proctor_history_2012}. Nevertheless, until the late 1950s, substantial controversy persisted over the question of whether the available data was sufficient to establish that smoking cigarettes \emph{caused} lung cancer. Cigarette manufacturers famously argued against any possible connection \citep{oreskes_merchants_2011} and Roland Fisher in particular argued that the available data was not enough to establish that smoking actually caused lung cancer \citep{fisher_cancer_1958}. Today, it is widely accepted that cigarettes do cause lung cancer, along with other serious conditions such as vascular disease and chronic respiratory disease \citep{world_health_organisation_tobacco_nodate,wiblin_why_2016}.
 
-The question of whether or not cigarette smoking causes cancer illustrates two key facts about causal questions: First, having the right answers to some causal questions is of life and death importance to huge numbers of people. Second, even when large amounts of data show unambiguous associations between phenomena of interest, it is still difficult to know when a causal conclusion is justified.
+The question of a causal link between smoking and cancer is a very important one. Individuals who enjoy smoking (or think they might) may wish to avoid smoking if cigarettes pose a severe health risk, so they are interested in knowing whether or not it is so. Potential investors in cigarette manufacturers want to know if the product they are backing is likely to see limited adoption due to health concerns. People holding investments in cigarette manufacturering firms want the world to be such that cigarettes do not pose a substantial health risk, as this increases the value of their investment. Governments and organisations with a responsibility for public health may see themselves as having responsibility to discourage smoking as much as possible if smoking is severely detrimental to health. The costs and benefits of poor decisions about smoking are large: 8 million annual deaths are attributed to cigarette-caused cancer and vascular disease in 2018\citep{world_health_organisation_tobacco_nodate} while  global cigarette sales were estimated at US\$711 million in 2020, while \citep{noauthor_cigarettes_nodate} (a figure which might be substantially larger if cigarettes were not widely believed to be harmful).
 
-Many causal questions are still answered on the basis of ad-hoc reasoning. For example \citet{krittanawong_association_2020} states:
+The question of whether or not cigarette smoking causes cancer illustrates two key facts about causal questions: First, having the right answers to some causal questions is of tremendous importance to huge numbers of people. Second, even when large amounts of data show unambiguous associations between phenomena of interest, it is still difficult to know when a causal conclusion is justified.
+
+Causal conclusions are often justified on the basis of ad-hoc reasoning. For example \citet{krittanawong_association_2020} states:
 
 \begin{quote}
 [...] the potential benefit of increased chocolate consumption, reducing coronary artery disease (CAD) risk is not known. We aimed to explore the association between chocolate consumption and CAD.
 \end{quote}
 
-It is not clear whether Krittanawong et. al. mean that a negative association between chocolate consumption and CAD implies that increased chocolate consumption is likely to reduce coronary artery disease, or that an association may be relevant to the question and the reader should draw their own conclusions. Whether the implication is being suggested by Krittanawong et. al. or merely imputed by na\"ive readers, it is being drawn on an ad-hoc basis -- no argument for the implication can be found in this paper.\footnote{Judea Pearl deserves credit for making the distinction between causal and associational claims clear.}
+It is not clear whether Krittanawong et. al. mean that a negative association between chocolate consumption and CAD implies that increased chocolate consumption is likely to reduce coronary artery disease, or that an association may be relevant to the question and the reader should draw their own conclusions. Whether the implication is being suggested by Krittanawong et. al. or merely imputed by na\"ive readers, it is being drawn on an ad-hoc basis -- no argument for the implication can be found in this paper. As \citet{pearl_causality:_2009} has forcefully argued, additional assumptions are always required to answer causal questions from associational facts, and stating these assumptions explicitly allows those assumptions to be productively scrutinised.
 
-Theories of causal inference provide a linguistic and conceptual toolkit to enable causal questions to be precisely stated and reasoned about. In general, theories of causal inference will assume a causal question provides an ``observed'' set of random variables $\vecRV{X}$ distributed according to  ``observational'' probability distribution $\prob{P}_{\RV{X}}$. Theories of causal inference posit that causal questions are answered by properties of \emph{causal models}. Causal models in the potential outcomes framework is given by a ``counterfactual'' probability $\prob{P}_{\vecRV{X}^*}$ (where $\vecRV{X}\subset\vecRV{X}^*$), and interventional causal models are labelled collections of probabilities $\{\prob{P}_{\vecRV{X}|do(\RV{X}_i=a)}\}$. The final thing that theories of causal inference provide is means of relating observational distributions $\prob{P}_{\vecRV{X}}$ with the ``causal models'' $\prob{P}_{\vecRV{X}^*}$ or $\prob{P}_{\vecRV{X}|do(...)}$ and key assumptions such as \emph{causally sufficient graphs} or \emph{counterfactual independences} that can constrain these relationships.
+Theories of causal inference exist to enable formal rather than ad-hoc reasoning about causal questions. Instead of posing informal causal question and answering them based on ad-hoc reasoning, within a theory of causal inference we ask about properties of ``causal models'' (which are simply mathematical types defined by the theory) subject to certain assumptions we are willing to make. A successful theory of causal inference should enable causal models that ``adequately represent'' the original informal question, and the assumptions we invoke should be more accessible to scrutiny than ad-hoc assertions made in the course of answering the informal question.
 
-The forms of causal models adopted by theories of causal inference are heavily influenced by philosophical theories of causation. There are two main theories of causation that are used in theories of causal inference:
+As well as defining causal models, which represent \emph{claims about causation}, theories of causal inference also formalise the problem of \emph{inferring the correct causal model} - this is the problem of taking some observational data and concluding which causal models are ``possible'' or ``appropriate to use for the given purpose''.
+
+Defining causal models is difficult. While philosophical theories of causation are not heavily discussed in the applied literature on causal inference, the principles used to motivate the definitions of causal models are widely discussed in the philosophical literature. Applied theories of causal inference:
 \begin{enumerate}
-	\item ``$\RV{X}_i$ causes $\RV{X}_j$'' means that there exist different \emph{ideal interventions} that result in different values of of $\RV{X}_i$, hold other ``causally sufficient'' variables constant, do not directly affect $\RV{X}_j$ but nonetheless entail different values of $\RV{X}_j$
-	\item ``$\RV{X}_i$ causes $\RV{X}_j$'' means that the \emph{counterfactual value} of $\RV{X}_j$ would be different ``if $\RV{X}_i$ had taken a different value''
+    \item ``$\RV{X}_i$ causes $\RV{X}_j$'' means that there exist different \emph{ideal interventions} that result in different values of of $\RV{X}_i$, hold other ``causally sufficient'' variables constant, do not directly affect $\RV{X}_j$ but nonetheless entail different values of $\RV{X}_j$
+    \item ``$\RV{X}_i$ causes $\RV{X}_j$'' means that the \emph{counterfactual value} of $\RV{X}_j$ would be different ``if $\RV{X}_i$ had taken a different value''
 \end{enumerate}
 
-In the \emph{interventional models} school of causal inference, causal models are a set of probabilities labeled by interventions. These ``post-intervention probabilities'' can be computed using the \emph{do-calculus} given a ``causally sufficient'' triple $((\Omega,\mathcal{F},\prob{Q}),\graph{G},\vecRV{U})$ consisiting of a probability space $(\Omega,\mathcal{F},\prob{Q})$, random variables $\vecRV{U}\subset \mathcal{F}$ and graph $\graph{G}$ with nodes that are identified with the elements of $\vecRV{U}$.
+In practice, most theories of causal inference seem to be based on the notion of \emph{ideal interventions}. Even ``counterfactual'' theories of causal inference (such as the theory based on ``potential outcomes'' notation) tend to define counterfactual values as ``values that a variable would have taken were it exposed to an ideal intervention'', if they are defined at all \citep{morgan_counterfactuals_2014,rubin_causal_2005,richardson2013single}. There are, however, alternative definitions of counterfactual values such as Lewis' closest world semantics \citep{lewis_causation_1986}, though these definitions have serious difficulties.
 
-On the other hand, in the \emph{potential outcomes} school of causal inference, the joint ``counterfactual values'' of variables are modelled by random variables in ${\vecRV{X}^*}$; for any $\RV{X}_i\in \vecRV{X}$ there is a copy $\RV{X}^{\RV{X}_j=a}_i\in\vecRV{X}^*$ representing ``the value $\RV{X}_i$ would have taken had $\RV{X}_j$ taken the value $a$''.
-
-This distinction is complicated considerably by the difficulty of explaining how ``counterfactual values'' are determined. This problem is frequently ignored altogether, dealt with in an ad-hoc manner or addressed by supposing that the ``counterfactual value'' of $(\RV{X}_i,\RV{X}_j)$ is simply the value of $(\RV{X}_i,\RV{X}_j)$ ``had an ideal intervention been performed on $\RV{X}_i$'' \citep{morgan_counterfactuals_2014,rubin_causal_2005,richardson2013single}; this last option seems to accept ideal interventions as the fundamental principle.
-
-``Ideal interventions'' and ``causal sufficiency'' are, in turn, difficult to jointly define. One can be defined in terms of the other:
+``Ideal interventions'' are difficult to define. The structural model approach of \citet{pearl_causality:_2009} defines ideal interventions in terms of ``causally sufficient models''. However, this definition ends up circular:
 \begin{itemize}
-	\item An $[\RV{X}_i,\RV{X}_j]$-ideal intervention is an operation whose result is determined by applying the do-calculus to a causally sufficient triple $((\Omega,\mathcal{F},\prob{Q}),\graph{G},\vecRV{U})$
-	\item A triple $((\Omega,\mathcal{F},\prob{Q}),\graph{G},\vecRV{U})$ is $[\RV{X}_i,\RV{X}_j]$-causally sufficient if $\RV{U}$ contains $\RV{X}_i$, $\RV{X}_j$ and ``all intervenable variables'' that ``cause'' (defintion (1)) both $\RV{X}_i$ and $\RV{X}_j$ \footnote{Weaker conditions for causal sufficiency are possible, but they are still premised on causal relationships, so the charge of circularity stands \citep{shpitser_complete_2008}.}
+    \item An $[\RV{X}_i,\RV{X}_j]$-ideal intervention is an operation whose result is determined by applying the do-calculus to a causally sufficient triple $((\Omega,\mathcal{F},\prob{Q}),\diagram{G},\vecRV{U})$
+    \item A triple $((\Omega,\mathcal{F},\prob{Q}),\diagram{G},\vecRV{U})$ is $[\RV{X}_i,\RV{X}_j]$-causally sufficient if $\RV{U}$ contains $\RV{X}_i$, $\RV{X}_j$ and ``all intervenable variables'' that \emph{cause} (definition (1)) both $\RV{X}_i$ and $\RV{X}_j$ \footnote{Weaker conditions for causal sufficiency are possible, but they are still premised on causal relationships, so the charge of circularity stands \citep{shpitser_complete_2008}.}
 \end{itemize}
 
-However, this definition is circular, a problem that is recognised in the philosophical literature on interventional definitions of causation \citep{woodward_causation_2016}.
+Circularity is a recognised problem with interventional definitions of causation \citep{woodward_causation_2016}. An alternative approach is to designate certain real-world events -- such as flipping coins, querying random number generators and so forth -- as prototypical ``ideal interventions''. The main problem with this definition is that it fails to answer any causal query that hasn't been subject to a randomised trial, which seems to leave most causal questions unanswerable, despite the fact that many of them have apparent answers \citep{pearl_challenging_2018}, and the causal questions represented under this definition are often considered to be inadequate representations of the original questions to which answers were sought \citep{deaton_understanding_2018,heckman_randomization_1991}. Additional challenges posed by ``ideal interventions'' are discussed in Section \ref{sec:cbns_without_d}.
 
-Causal statistical decision theory (CSDT), the theory that is introduced here, proceeds from the observation that causal questions often give us enough information to determine \emph{type} of ``causal model'' that we seek without appealing to any theory of causation. Determining the \emph{relation} between observational probabilities $\prob{P}$ and causal models is hard, and theories of causation are clearly helpful for working this out, given the right problems. The role of a theory of causation for solving causal problems can in this view be likened to the role of interpretations of statistics for solving statistical inference problems. To solve a statistical inference problem it is necessary to assume some interpretation of statistics that explicates the relation between observed data and probability distributions, but an interpretation is not required to understand that statistical questions are ultimately about properties of probability distributions.
+An account of ideal interventions has not yet been offered that stands up to scrutiny. This difficulty is not without precedent, and is certainly no reason to abandon theories built upon ideal interventions. It is also difficult to provide an account of what it means for data to be ``distributed according to probability distribution $\prob{P}$''\citep{hajek_interpretations_2019} that stands up under scrutiny, but the usefulness of probability distributions in representing data regularities is widely accepted.
+
+However, in light of the difficulties with theories of causation, it is notable that many causal questions can be formalised without appealing to a theory of causation at all, an observation also made by \citet{dawid_decision-theoretic_2020}. Causal statistical decision theory (CSDT), introduced here, shows how the type definition of ``causal models'' is almost completely determined by the given \emph{causal decision problem}. Causal decision problems are problems such as: Should I smoke? Should cigarettes be taxed? Such problems are ubiquitous, and causal inferences are instrumental in answering them. As with existing theories of causal inference, determining the relation between observational probabilities and causal models is the key problem in CSDT, and existing theories of causal inference have developed many useful approaches to this. CSDT additionally offers the opportunity to understand what remains true of causal decision problems regardless of the theory of causation in use and the opportunity to consider theories of causation which may be useful in solving particular causal decision problems but need not be universally valid.
 
 \section{Causal Questions}
 
-
-
-\section{The ``causes first'' and ``decisions first'' approaches to causal decisions problems}
-
-
-
-\section{Decision makers and decision models}
-
-We will consider a very general type of decision maker to motivate the construction of decision models. A decision maker takes some kind of evidence - for example, data, prior knowledge or a problem specification - and determines the consequences it believes each decision will have via some \emph{inference rule}. It then examines the consequences of each decision and chooses a preferred decision via some \emph{choice rule}. 
-
-More formally, let the set $A$ be a set of possible pieces of evidence a decision maker could obtain, $E$ be the set of consequences it may experience and $D$ the set of decisions it may take. Call any function $C:D\to E$ a \emph{consequence map}. A \emph{inference rule} is a function $f:A\to E^D$ that takes a piece of evidence and returns a consequence map. A \emph{choice rule} $\mathrm{ch}:E^D\to D$ is a function that takes a consequence map and returns a preferred decision. A decision maker is specified by a particular choice of $f$ and $\mathrm{ch}$ and implements the \emph{decision function} $h:=\mathrm{ch}\circ f$.
-
-Suppose $D=\{0,1\}$ represents the decision to turn some switch to the on or off positions. Some examples of consequence maps follow:
-\begin{itemize}
-	\item $E=\{0,1\}$ is the state of a light connected to the switch and $\mathbf{C}=\mathrm{Id}_{\{0,1\}}$ is the consequence function that implies the light is always in the same state as the switch
-	\item $E=\{\{0\},\{1\},\{0,1\}\}$ represents sets of possible outcomes and $\mathbf{C}:0\mapsto \{0\}$, $1\mapsto\{0,1\}$ is the consequence function that implies the light is always off when the switch is off, but may take either state with the switch on (i.e. "the bulb may be out")
-\end{itemize}
-
-If $A=\{0,1\}^{2N}$ is a sequence of joint states of the switch and lightbulb, then an inference function could be the map
-\begin{align}
-	f(s_{1},l_{1},..,s_N,l_N) = \begin{cases}
-									&0\mapsto \llbracket\frac{\sum_{i\in N} l_i(1-s_i)}{\sum_{i\in N} (1-s_i)}>0.5\rrbracket\\
-									&1\mapsto \llbracket\frac{\sum_{i\in N} l_i s_i}{\sum_{i\in N} s_i}>0.5\rrbracket\\
-								\end{cases}
-\end{align}
-
-That is, $f$ returns the consequence function that maps each switch position to the lightbulb state more commonly observed in conjunction with that switch position in the given data.
-
-Some examples of decision rules, where in each case $\mathbf{C}:D\to E$ is some consequence map:
-\begin{itemize}
-	\item $E=\{\mathrm{off},\mathrm{on}\}$ are states of the light bulb, $u:\mathrm{off}\mapsto 0$, $\mathrm{on}\mapsto 1$ is a utility function and $\mathrm{ch}(\mathbf{C}) = \argmin_{d\in D} u(\mathbf{C}(d))$ 
-	\item $E=[0,1]$ is a set of losses and $\mathrm{ch}(\mathbf{C}) = \argmin_{d\in D} (\mathbf{C}(d))$
-	\item $E=\{\{0\},\{1\},\{0,1\}\}$ are sets of possible outcomes and $\mathrm{ch}$ is the minimax operator: $\mathrm{ch}(\mathbf{C}) = \argmin_{d\in D}\max_{e\in \mathbf{C}(d)} (e)$
-\end{itemize}
-
-Another example of a decision maker is a learning algorithm that produces binary classifiers. A binary classifier takes some piece of data $X$ and returns a class in $\{0,1\}$. That is, the set of available decisions $D$ is the set of functions from $X\to\{0,1\}$. Suppose also that the given information is a set of $N$ labeled examples $A=(X\times\{0,1\})^N$. Then the inference function $f$ might be an \emph{empirical risk} functional that takes data $a\in A$ and a possible classifier $d\in D$ and returns the number of misclassified examples when $d$ is applied to $A$. In such a case, $\mathrm{ch}$ might be the $\argmin$ functional, making our decision maker an \emph{empirical risk minimiser}. This is not necessarily a good inference function - typically we are interested in the number of misclassified examples a classifier will produce on unseen data, not the number of misclassified examples it will produce on the data that has already been seen.
-
-\subsection{Expected utility maximisers}
-
-
-Expected utility maximisation (henceforth ``EU'') necessitates that the class of results models $f$ have a particular signature. The EU choice rule compares a set of probability distributions over states of the world $E$ and returns a decision associated with the preferred probability distribution. Thus, denoting by $\Delta(\mathcal{E})$ the set of probability distribution over $E$ (now equipped with $\sigma$-algebra $\mathcal{E}$), $f$ must have the signature $f:A\to \Delta(\mathcal{E})^D$. In particular $f$ returns stochastic functions of the type $D\to \Delta(\mathcal{E})$.
-
-So far we have not made any structural assumptions about the set $D$. One such assumption that we do want to make is that stochastic decisions are possible. That is, if we can choose $d_1\in D$ and we can choose $d_2 \in D$, then it is also possible to choose $d_1$ with probability $\alpha$ and $d_2$ with probability $(1-\alpha)$ for $0\leq \alpha \leq 1$. We will make this assumption as follows: $D$ represents an underlying set of ``elementary'' decisions, and the true set of decisions is the set $\Delta(\mathcal{D})$ of probability measures on $D$ (equipped with some $\sigma$-algebra $\mathcal{D}$). Then, for example, if $D=\{d_1,d_2\}$ we can ``choose'' $d_1$ by selecting the measure $\delta_{d_1}$, and we can choose a mixture of $d_1$ and $d_2$ by selecting the measure $\alpha \delta_{d_1}+(1-\alpha)\delta_{d_2}$. Technically, all that we have done so far is assume that the set of decisions is isomorphic to $\Delta(\mathcal{D})$ - which, if $D$ is standard Borel, ensures that the set of decisions is convex closed. In many cases, we also want the following to hold:
-\begin{align}
-	f_a(\alpha\delta_{d_1} + (1-\alpha)\delta_{d_2}) = \alpha f_a(\delta_{d_1}) + (1-\alpha) f_a(\delta_{d_2}) \label{eq:additivity}
-\end{align}
-
-That is, we assume that the results model $f$ is \emph{additive}. Informally, choosing to do $d_1$ with probability $\alpha$ and $d_2$ with probability $1-\alpha$ will yield the result of $d_1$ with probability $\alpha$ and the result of $d_2$ with probability $1-\alpha$. In addition, $f_a$ must be continuous with respect to the total variation norm.
-
-For arbitrary $\gamma\in \Delta(\mathcal{D})$, we can write for all $B\in \mathcal{D}$
-
-\begin{align}
-	\gamma (B) = \int_D \delta_d(B) d\gamma(d)
-\end{align}
-
-\todo[inline]{Can we also say}
-
-\begin{align}
-	\gamma = \int_D \delta_d d\gamma(d)
-\end{align}
-
-For $G\in \mathcal{E}$, write $f_a(\delta_d;C)$ for the probability measure $f_a(\delta_d)$ evaluated at $C$, and $f_a(\cdot;G)$ for the map $d\mapsto f_a(d;C)$. If $f_a(\cdot; C)$ is measurable for all $C$ and additive, then it is a property of the Lebesgue integral that for all $\gamma\in \Delta(\mathcal{D})$
-
-\begin{align}
-	\int f_a(\gamma ;C) &= \int f_a(\int_D \delta_{d'}d\gamma(d') ;C)\\
-											   &=\int_D f_a(\delta_{d'};C) d\gamma(d')
-\end{align}
-
-Define $\mathscr{C}_a:D\to \Delta(\mathcal{E})$ by $\mathscr{C}_a:d\mapsto f_a(\delta_{d};\cdot)$. Then $\mathscr{C}_a(\cdot;B)$ is measurable and $\mathscr{C}_a(d;\cdot)$ is a probability measure - that is, $\mathscr{C}_a$ is a Markov kernel. We can therefore adopt the product notation defined elsewhere to write the consequences of choosing a distribution $\gamma$ as $\gamma \mathscr{C}_a$.
-
-\todo[inline]{Have I made any assumptions here besides additivity, convex closedness of $D$?}
-
-As we are chiefly interested in the set of elementary decisions $D'$, we will henceforth simply use $(D,\mathcal{D})$ for this set.
-
-Assumption \ref{eq:additivity} still permits some unexpected behaviour with respect to randomised decisions. Consider the following variations of a problem:
-
-\begin{example}[Fighting children problem]
-A decision maker is mediating a dispute over a toy between two children. If he chooses to give the toy to the first child, the second child will cry, and if he chooses to give the toy to the second child, the first child will cry (the underlying decision set $D'=\{\text{give to first child}, \text{give to second child}\}$. If he chooses a random procedure:
-
-\paragraph{Version 1} These children strongly object to randomness, and both will cry no matter the outcome
-\paragraph{Version 2} These are children with a strong insistence on a version of procedural fairness which no doubt make a great deal of sense to them. In particular, if a procedure is used which gives the first child a chance $p$ of receiving the toy, the first child will cry with probability $p$ irrespective of the outcome. The second child, meanwhile, will cry iff the first child does not
-\paragraph{Version 3} Whether or not the children cry depends only on whether or not they receive the toy
-\end{example}
-
-In version 1, assumption \ref{eq:additivity} is violated - the outcome when choosing a random procedure is not simply a mixture of the outcomes of each deterministic decision. In version 3, assumption \ref{eq:additivity} holds, and the results depend only on the outcome of randomisation, as is desired. In version 2, assumption \ref{eq:additivity} \emph{also} holds - one child cries iff the other does not, and each child cries with the same probability as the probability that they receive the toy. However, the consequences of randomising and then giving the first child the toy are not the same as simply giving the first child the toy. To discount the possibility of this kind of behaviour, we need additional assumptions. 
-
-In the text of this example, we have spoken as if our decision had multiple consequences - whether or not each kid gets a toy, whether or not each kid cries - but the compliance of version 2 with \ref{eq:additivity} depends on considering only the children crying to be a consequence of our decison. To support the intuition that only version 3 is the kind of problem we want to deal with, we introduce the additional assumption that if we choose an extreme decision $\delta_d$, then one consequence of this decision is that we will have chosen $d$ with probability 1.
-
-Formally, we assume the sample space can be written as $E\times D$ for some $E$, and, defining the random variable $\RV{D}:E\times D\to D$ by the projection $\RV{D}:(e,d)\mapsto d$, suppose
-
-\begin{align}
-	(\mathscr{C}_{(a,d)})_{\RV{D}} = \delta_d \label{eq:assumption_decision_forsure}
-\end{align}
-
-We find in \cite{joyce_why_2000} the assumption of a ``supposition function'' $\mathrm{prob}(\cdot\|\cdot)$ that $\mathrm{prob}(C\|C)=1$ where $C$ is ``some distinguished condition''. Assumption \ref{eq:assumption_decision_forsure} along with assumption \ref{eq:additivity} implies an analogous condition.
-
-\begin{theorem}[[Decision determinism implies decision certainty]
-		
-\end{theorem}
-
-That is, for any stochastic decision $\gamma$, the consequence conditional on $\RV{D}$ is the consequence map $f_a$ itself. This assumption rules out both versions 1 and 2 of the fighting children problem above - it assumes that if we randomise and the result of randomisation is some $d\in D$, this is the same as having chosen $d$ to begin with.
-
-\begin{lemma}[Conditional agreement implies randomised decisions]
-If we have 
-\begin{align}
-(\gamma f_{a})_{|\RV{D}} = f_a
-\end{align}
-Then for all $\gamma\in \Delta(\mathcal{D})$,
-\begin{align}
-\gamma f_a (G) = \int_D f_a(d';G) d\gamma(d')
-\end{align}
-\end{lemma}
-
-\begin{proof}
-By definition, for $\gamma\in \Delta(\mathcal{D})$
-\end{proof}
-
-A consequence of assumption \ref{eq:consequence_is_conditional} is that for fixed $a\in A$, every stochastic decision $\gamma\in \Delta(\mathcal{D})$ leads to the same conditional probability $(\gamma f_{a})_{|\RV{D}}$. In fact, as a result of the assumption that the codomain of $f$ is a set of probability measures as well as assumptions \ref{eq:assumption_decision_forsure} and \ref{eq:consequence_is_conditional} we find that the tuple $\langle E\times D, \mathcal{E}\otimes\mathcal{D}, \mathcal{D}, f_a\rangle$ for each $a\in A$ forms a \emph{conditional probability space} \citep{renyi_new_1955}.
-
-
-
-For our causal analysis we work with \emph{subjunctive probability spaces}, a generalisation of the more familiar probability spaces. The subjunctive mood is used to describe hypothetical or supposed states of the world\todo{Does this definition need to be here? I didn't know what this word meant before I looked it up}, and subjunctive probability spaces are models that ask for some hypothetical state and give us back a probability space. Subjunctive probability spaces are also different to \emph{conditional probability spaces} \citet{renyi_conditional_1956} as \emph{hypothesising} or \emph{supposing} (that is, those things described by the subjunctive mood) are different to \emph{conditioning}, which is more closely analogous to \emph{focussing your attention}.
-
-We use subjunctive probability spaces because \emph{supposition} is a core part of decision problems, one we cannot get away from. In contrast, modelling supposition with conditional probability (which would be necessary if we were to insist on using probability spaces) adds additional structure to our models which isn't clearly warranted and is potentially confusing.
-
-Any decision problem must involve the comparison of different decisions. This comparison takes the form
-\begin{itemize}
-	\item \emph{Suppose} I choose the first decision - then the consequence would be $X$
-	\item \emph{Suppose} I choose the second decision - then the consequence would be $Y$
-	\item Etc.
-\end{itemize}
-
-If we prefer $X$ to $Y$, then perhaps we should choose the first decision. We may be ambivalent as to what type of thing $X$ and $Y$ represent, how we ought to determine what values $X$ and $Y$ take or how we ought to determine what is preferable, but it is hard to do away with supposing that different decisions were taken and that these decisions come with their own consequences and still have what could reasonably be considered a decision problem. This process of supposition implicitly invokes a ``subjunctive function'' - we provide a hypothetical decision, and we are given a consequence of that hypothetical. Of particular interest are models that, for each hypothetical choice, return a probability distribution over space $\Omega$. Such models are called \emph{supposition functions} by \citet{joyce_why_2000}, but we will call them \emph{consequence maps} in this work. We consider this particular type of subjunctive function - from possible decisions to probability distributions - to be attractive because we consider probability to be a sound choice for modelling uncertainty and stochasticity.
-
-Formally, a consequence map $\mathscr{C}$ is a stochastic function or \emph{Markov kernel} from $D\to \Delta(\Omega)$, where $\Delta(\Omega)$ represents the set of all probability distributions on $\Omega$. One might recall that, given two random variables $\RV{Y}:\Omega\to Y$ and $\RV{X}:\Omega \to X$ on some probability space $(\mathbb{P},\Omega,\mathcal{F})$, the probability of $\RV{Y}$ conditional on $\RV{X}$ is a Markov kernel $X\to \Delta(\mathcal{Y})$. It is possible, in general, to define a probability distribution on the expanded space $\Omega\times D$ such that $\mathscr{C}$ is a conditional probability. However, there are good reasons to keep the concepts of consequence maps and conditional probability separate. Firstly, there are technical issues such as the fact that it is not always possible to find a distribution on $\Omega\times D$ that yields $\mathscr{C}$ as a \emph{unique} conditional probability \citep{hajek_what_2003} (though this requires an uncountable set of possible decisions, which is not a problem we consider in this work). Secondly, it is not clear that that the way we ought to handle consequence maps is identical to the way we handle conditional probabilities. Consider an expanded set of options:
-
+\citet{pearl_book_2018} has proposed three types of causal question:
 \begin{enumerate}
-	\item Suppose I choose the first decision $d_1$ - then the consequence would be $P_1$
-	\item Suppose I choose the second decision $d_2$ - then the consequence would be $P_2$
-	\item Suppose I choose either the first or second decision $d_1$ or $d_2$ - then the consequence would be ???
-	\item Suppose I choose $d_1$ with probability $0\leq q\leq 1$ and $d_2$ otherwise - then the consequence would be ???
+    \item Association: How are $\RV{X}$ and $\RV{Y}$ related? How would observing $\RV{X}$ change my beliefs about $\RV{Y}$?
+    \item Intervention: What would happen if I do ... ? How can I make $E$ happen?
+    \item Counterfactual: Was $\RV{X}$ responsible for $\RV{Y}$? What if I had done ... instead of what I actually did?
 \end{enumerate}
 
-If we regard the consequence map as a conditional probability then it would be natural to consider the result of the third option to be a unique probability distribution obtained by conditioning on $\{d_1,d_2\}$, equal to  $\alpha P_1 + (1-\alpha)P_2$ for some fixed $0\leq \alpha\leq 1$. However, there is no obvious reason that these should be mixed in some fixed proportion $\alpha$ - it seems more appropriate to me to say that if $d_1$ or $d_2$ is chosen then the result will be $P_1$ or $P_2$.
+I focus on a particular type of question here: ``How can I make $E$ happen?''. Pearl calls this type of question an ``interventional'' question but we observe that this query is in fact a \emph{causal decision problem} (I also wish to avoid the term ``intervention'' as it has a technical meaning which that I touched on above). A causal decision problem is a problem of the following form:
 
-On the other hand, the result of the fourth option seems like it should be given by $q P_1 + (1-q) P_2$, at least for most ordinary problems. If we were confronted with a mind reader who could tell the difference between us having chosen $d_1$ and us having randomised between $d_1$ and $d_2$ but come up with $d_1$ anyway then we might have reason to revise this assumption, but we will generally proceed under the assumption that such mind readers are absent. For any ambient probability measure, we can choose $q$ not to be equal to $\alpha$ (as defined in the previous paragraph), and so the result will not be equal to the ambient measure conditioned on $\{d_1,d_2\}$. 
+\begin{quote}\label{def:causal_decision_problem}
+    Given my available options $D$ and the way I would like the world to turn out, which options are likely to have a desirable result?
+\end{quote}
 
-In general, choosing the consequence map to be a conditional probability requires there to exist some joint distribution over the decision $\RV{D}$ and all other random variables in the problem. However, when we adopt hypotheses about what decisions we might make, we throw away key parts of this joint distribution (for example, we throw away the marginal distribution of $\RV{D}$) and replace it with whatever we want to suppose instead. Instead of adopting a full joint distribution and then throwing away some parts to get hold of the consequence map, as we would if we were working with a probability space, a subjunctive probability space only supplies those parts which we intend to keep - i.e. in only supplies the consequence map.
+When one asks ``How can I make $E$ happen?'', I suppose that the answer will be one or more elements of a set of available options $D$. Observing that $E$ corresponds to ``the way I would like the world to turn out'', we can see that this question is a causal decision problem.
+
+I choose to focus on this type of problem because the problem of choosing a decision given desired results is ubiquitous, and Definition \ref{def:causal_decision_problem} is a broadly applicable prototype for this kind of problem. It's possible that a similar approach can succeed for counterfactual queries, but obviously a different prototype problem would be required. Enough questions are raised by focusing on causal decision problems to restrict our attention to this type of problem for now.
+
+Causal \emph{statistical} causal decision problems extend causal decision problems by introducing data and assumptions about how the world works:
+
+\begin{quote}\label{def:causal_statistical_decision_problem}
+    Given my available options $D$, data $\vecRV{X}$ and preferences $u$, which options are likely to have a desirable result?
+\end{quote}
+
+\subsection{Formalising Causal Statistical Decision Problems: See-Do Maps}
+
+I introduce \emph{see-do maps} which formalise causal statistical decision problems introduced in Definition \ref{def:causal_statistical_decision_problem}. I don't derive see-do maps from first principles - rather, I make use of probability theory and expected utility theory because they're the standard tools used to formalise models of noisy observations and choice under uncertainty.
+
+\todo[inline]{Section \ref{sec:decision_makers_decision_models} (currently unfinished) considers more fundamental assumptions that might lead to see-do maps}
+
+First, we formally define \emph{causal statistical decision problems}.
+
+\begin{definition}[Causal Statistical Decision Problem]\label{def:csdp}
+A \emph{causal statistical decision problem} (CSDP) is a tuple $(D,x,X,Y,u)$ where $D$ is a set of \emph{decisions} that may be taken, $x\in X$ is a \emph{data sequence} of observations, $Y$ is the space of possible \emph{consequences} of decisions and $u:Y\to \mathbb{R}$ is a \emph{utility function} where $u(y)\geq u(y')$ implies that $y$ is at least as desirable as $y'$.
+
+We place a number of additional requirements on causal statistical decision problems:
+\begin{itemize}
+    \item $D$ is a denumerable set
+    \item The principle of \emph{expected utility maximisation} is acceptable, so the desirability of a probability distribution $\prob{P}_{\RV{Y}}\in \Delta(\mathcal{Y})$ can be found by evaluating $\mathbb{E}_{\prob{P}_{\RV{Y}}} [u]$
+    \item $X$ and $Y$ are \emph{standard measurable} ($D$ is automatically standard measurable due to it being denumerable)
+    \item A decision maker may select any probability distribution in $\Delta(\mathcal{D})$ as its stochastic decision. A deterministic distribution $\delta_d$ is equivalent to directly choosing $d\in D$, while deciding on a non-deterministic distribution involves consulting a source of randomness to select a particular decision in accordance with the probabilities chosen
+\end{itemize}
+\end{definition}
+
+Definition \ref{def:csdp} are the elements of a CSDP that we regard as fixed.
+
+A \emph{decision maker} brings prior knowledge to the problem in the form of a \emph{see-do map}, which captures the relation between the \emph{observed probability distribution} and the \emph{consequence map}.
+
+\begin{definition}[Observed probability distribution]\label{def:observed_probability}
+Given a CSDP $(D,x,X,Y,u)$, under hypothesis $\theta$ the data $x$ are ``distributed according to'' some \emph{observed probability} $\prob{O}_\theta\in \Delta(\mathcal{X})$.\todo{``Distributed according to'' is a weasel phrase with no particularly satisfactory interpretation, but I'd like to avoid worrying about it at this point \citep{hajek_interpretations_2019}.}
+\end{definition}
+
+\begin{definition}[Consequence map]\label{def:conseq_map}
+Given a decision set $D$ and a consequence set $Y$, under hypothesis $\theta$ a \emph{consequence map} $\kernel{C}_\theta:D\to \Delta(\mathcal{Y})$ is a Markov kernel mapping decisions to probability distributions on the consequence space. For a stochastic decision $\gamma\in \Delta(\mathcal{D})$, $\gamma\kernel{C}$ is the \emph{consequence} of $\gamma$ with respect to $\kernel{C}_\theta$.
+\end{definition}
+
+\begin{definition}[Causal hypothesis]\label{def:hypothesis}
+A causal hypothesis $\theta$ on a CSDP $(D,x,X,Y,u)$ is a pair $(\prob{O}_\theta,\kernel{C}_\theta)\in \Delta(\mathcal{X})\times\Delta(\mathcal{Y})^D$. A hypothesis $(\prob{O}_\theta,\kernel{C}_\theta)$ can be interpreted as the statement ``the observed data are distributed according to $\prob{O}_\theta$ and the consequences of decisions are given by $\prob{C}_\theta$''
+\end{definition}
+
+\begin{definition}[Causal hypothesis class]\label{def:chc}
+A \emph{causal hypothesis class} $\Theta$ is a set of causal hypotheses on $(D,x,X,Y,u)$.
+\end{definition}
+
+\begin{definition}[See-do map]\label{def:see-do}
+Given a CSDP $(D,x,X,Y,u)$ and a causal hypothesis class $\Theta$, the\emph{see-do} model $\kernel{T}:\Theta\times D\times (\mathcal{X}\otimes \mathcal{Y})$ is the map $\kernel{T}:(\theta,d,A\times B)\mapsto \prob{O}_\theta(A) \kernel{C}_{(\theta,d)} (B)$.
+
+We assume that see-do maps are Markov kernels (i.e. there is a $\sigma$-algebra $\theta\otimes\mathcal{D}$ such that the map $(\theta,d)\mapsto \prob{O}_\theta(A) \kernel{C}_{(\theta,d)} (B)$ is $\theta\otimes\mathcal{D}$-measurable). This is guaranteed if $\Theta$ is denumerable and endowed with the discrete $\sigma$-algebra. If $\Theta$ is standard measurable, this imposes restrictions on $\Theta$; for example, we can't have some$d\in D$, $A\times B\in \mathcal{X}\otimes \mathcal{Y}$ such that $\prob{O}_\cdot(A) \kernel{C}_{(\cdot,d)} (B)^{-1}(\{1\})$ is a non-measurable collection of hypotheses in $\Theta$.
+\end{definition}
+
+There is a generic graphical representation of see-do maps. See Section \ref{ssec:mken_diagrams} for a thorough explanation of the notation used. 
+
+Define $\kernel{O}:\Theta\to \Delta(\mathcal{X})$ by $\kernel{O}:\theta\mapsto \kernel{O}_\theta$ and $\kernel{C}:\Theta\times D\to \Delta(\mathcal{X}\otimes\mathcal{Y})$ by $\kernel{C}:(\theta,d)\mapsto \kernel{C}_{(\theta,d)}$. Then we have
+
+\begin{align}
+\kernel{T} = \begin{tikzpicture}
+          \path (0,0) node(theta) {$\Theta$}
+             +(0,-1) node (P) {$\RV{D}$}
+             ++(0.5,0) coordinate (copy0)
+             ++(0.5,0) node[kernel] (H) {$\kernel{O}$}
+             +(0,-1) node[kernel] (I) {$\kernel{C}$}
+             ++(0.7,0.) node (N1) {$\RV{X}$}
+             +(0,-1) node (N2) {$\RV{Y}$};
+          \draw (theta) -- (copy0);
+          \draw (P) -- (I);
+          \draw (I) -- (N2);
+          \draw (copy0) to [bend right] ($(I.west)+(0,0.1)$);
+          \draw (copy0) -- (H);
+          \draw (H) -- (N1);
+          \end{tikzpicture}
+\end{align}
+
+A key difference between CSDT and other approaches to causal inference is that diagrams in CSDT feature two coupled maps $\kernel{O}$ and $\kernel{C}$, while most other approaches to causal inference represent both $\kernel{O}$ and $\kernel{C}$ in one diagram. \citet{lattimore_replacing_2019} is the only other example I am aware of that draws both $\kernel{O}$ and $\kernel{C}$.
+
+A causal hypothesis class $\Theta$ induces a binary relation between observed probability distributions $\prob{O}_\theta$ and consequence maps $\prob{C}_\theta$. This approach is very agnostic about the actual relation induced -- we do not even insist that the range of the observed data $X$ is the same as the range of possible consequences $Y$ (though we will generally limit our attention to cases where the two coincide). 
+
+In common with \citet{heckerman_decision-theoretic_1995}, decisions (or ``acts'') are primitive elements of see-do maps. In contrast to our work, \citet{heckerman_decision-theoretic_1995} only discuss deterministic \emph{consequence maps}, while see-do maps represent relations between consequence maps and observed probability.
+
+Decisions are similar to the ``regime indicators'' found in \citet{dawid_decision-theoretic_2020}. They coincide precisely if we suppose that the observation and consequence spaces coincide ($X=Y$) and there exists an ``idle'' decision $d^*\in D$ such that $\kernel{C}_{(\cdot,d^*)} = \kernel{O}_{\cdot}$. However, in general we don't require that $\kernel{O}$ and $\kernel{C}$ are related in this manner. This assumption will be revisited in \todo[inline]{A section I haven't written yet}.
+
+\subsection{D-causation}
+
+\todo[inline]{Feedback end here, WIP}
+
+It is possible to define a notion of $D$-dependent causation for consequence maps $\kernel{C}_\theta$. A similar idea is discussed extensively in \citet{heckerman_decision-theoretic_1995}. The main differences are that what we call ``consequence maps'' map decisions to probability distributions over possible consequences while Heckerman and Shachter work with ``states'' that map decisions deterministically to consequences, thus where we discuss ``conditional independence'' Heckerman and Shachter discuss ``limited unresponsiveness''. In addition, while we define $D$-causation relative to a particular consequence map $\kernel{C}_\theta$, Heckerman and Shachter define it with respect to a \emph{set} of states. \citet{dawid_decision-theoretic_2020} also introduces the key concept of ``extended conditional independence'' which is related to $D$-causation. 
+
+As discussed in Section \ref{sec:cbns_without_d}, in my view it is very difficult to define a notion of ``causation'' without reference to a set of basic operations such as $D$.
+
+See Section \ref{ssec:random_variables} for the definition of random variables.
+
+\todo[inline]{Add definition of conditional independence, revise wire label definitions}
+
+A variable $\RV{Y}_1$ $D$-causes another variable $\RV{Y}_2$ if knowing the effect decisions have on $\RV{Y}_1$ is enough to determine the effect of decisions on $\RV{Y}_2$. 
+
+\begin{definition}[$D$-causation]
+Given a consequence map $\kernel{C}_\theta:D\to \Delta(\mathcal{Y})$, random variables $\RV{Y}_1:Y\times D\to Y_1$, $\RV{Y}_2:Y\times D\to Y_2$ and domain variable $\RV{D}:Y\times D\to D$ (Definition \ref{def:domain_variable}), $\RV{Y}_1$ $D$-causes $\RV{Y}_2$ iff $\RV{Y}_2\CI_{\kernel{C}_\theta} \RV{D}|\RV{Y}_1$.
+\end{definition}
+
+For example, under most obvious consequence maps $\kernel{C}_\theta$, my light switch $D$-causes my light to turn on given the set of decisions:
+\begin{align*}
+D=&\{\text{walk to the switch and press it with my thumb}, \\
+    &\text{trip over the lego on the floor, hop to the light switch and stab my finger at it},\\
+    &\text{stay in bed}\}
+\end{align*}
+Given some reasonable hypothesis $\theta$, for any $d\in D$ the light will be on if and only if the switch ends up in the on position. 
+
+However, the light switch does \emph{not} $D$-cause the light to turn on under the set of decisions :
+\begin{align*}
+ D=&\{\text{flip the light switch without touching the fuse box},\\
+ &\text{flip the fuse box, then flip the light switch}\}
+\end{align*}
+In this case, the state of the light depends on the decision taken beyond the position of the light switch.
+

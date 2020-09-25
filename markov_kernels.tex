@@ -82,7 +82,7 @@ We can use a notation similar to the standard notation for matrix-vector product
 
 The tensor product $(\mathbf{M}\otimes \mathbf{N})(x,y;G,H) := \mathbf{M}(x;G)\mathbf{N}(y;H)$ yields a kernel $(\mathbf{M}\otimes \mathbf{N}):X\times Y\to \Delta(\mathcal{Y}\otimes\mathcal{Z})$.
 
-\subsection{String Diagrams}
+\subsection{String Diagrams}\label{ssec:mken_diagrams}
 
 Some constructions are unwieldly in product notation; for example, given $\mu\in \Delta(\mathcal{E})$ and $\mathbf{M}:E\to (\mathcal{F})$, it is not straightforward to construct a measure $\nu\in\Delta(\mathcal{E}\otimes\mathcal{F})$ that captures the ``joint distribution'' given by $A\times B\mapsto \int_A \mathbf{M}(x;B)d\mu$. 
 
@@ -553,7 +553,7 @@ Equation \ref{eq:copy_commutes} holds iff $\mathbf{A}$ is deterministic.
 \end{theorem}
 
 
-\subsubsection{Random Variables}\label{par:random_variables}
+\subsection{Random Variables}\label{ssec:random_variables}
 
 The summary of this section is:
 \begin{itemize}
@@ -638,11 +638,11 @@ It is in general much more practical to work with $\mathbb{K}$ than $\mathbb{K}_
 
 \end{definition}
 
-\begin{definition}[Random variable]
-Given a sample space $\Omega$ and an domain $D$, a random variable $\RV{X}$ is a measurable function $\Omega\times D\to E$ for arbitrary measurable $E$.
+\begin{definition}[Random variable]\label{def:random_variable}
+Given a sample space $\Omega$ and domain $D$, a random variable $\RV{X}$ is a measurable function $\Omega\times D\to E$ for arbitrary measurable $E$.
 \end{definition}
 
-\begin{definition}[Domain variable]
+\begin{definition}[Domain variable]\label{def:domain_variable}
 Given a sample space $\Omega$ and an domain $D$, the \emph{domain variable} $\RV{D}:\Omega\times D\to D$ is the random variable given by $\RV{D}:(x,d)\mapsto d$.
 \end{definition}
 
@@ -898,8 +898,6 @@ Given a Markov kernel space $(\mathbb{K},\Omega,D)$ and random variables $\RV{X}
 
 Write $\mathbb{K}_{\{\RV{Y}|\RV{XD}\}}$ for the set of kernels satisfying \ref{eq:def_k_disint} and $\mathbb{K}_{\RV{Y}|\RV{XD}}$ for an arbitrary member of $\mathbb{K}_{\{\RV{Y}|\RV{XD}\}}$.
 
-
-
 Note that for any variable $\RV{X}:\Omega\times D\to X$ and the domain variable $\RV{D}:\Omega\times D\to D$ we have by definition of $\mathbb{K}$:
 \begin{align}
 \begin{tikzpicture}
@@ -995,7 +993,7 @@ Given a conditional probability space with ambient kernel $\mathscr{K}:D\to \Del
 
 Note that $\mathbb{P}^*$ is simply $\mathbb{P}$ for a probability space
 
-Recall that $\RV{D}$ is the global conditioning variable. Given two collections of random variables $c_1 = [\RV{X}_1,\RV{X}_2,...]$ and $c_2 = [\RV{Y}_1,\RV{Y}_2]$, we adopt the convention that any diagram with the input wires labeled with $c_1$ and the output wires labeled with $c_2$ is an element of $\mathscr{K}^*_{\RV{Y_1Y_2...}|\RV{X}_1\RV{X}_2...}$. 
+Recall that $\RV{D}$ is the domain variable. Given two collections of random variables $c_1 = [\RV{X}_1,\RV{X}_2,...]$ and $c_2 = [\RV{Y}_1,\RV{Y}_2]$, we adopt the convention that any diagram with the input wires labeled with $c_1$ and the output wires labeled with $c_2$ is an element of $\mathscr{K}^*_{\RV{Y_1Y_2...}|\RV{X}_1\RV{X}_2...}$. 
 
 That is, by this convention, the diagram
 
@@ -1366,7 +1364,7 @@ The following property, on the other hand, does \emph{not} generally hold:
 \end{tikzpicture}\label{eq:composition}
 \end{align}
 
-Consider some ambient measure $\mathbb{P}$ with $\RV{Z}=\RV{X}$ and $\mathbb{P}_{\RV{Y}|\RV{X}}=x\mapsto \mathrm{Bernouli}(0.5)$ for all $z\in Z$. Then $\mathbb{P}_{\RV{Z}|\RV{Y}}=y\mapsto \mathbb{P}_{\RV{Z}}$, $\forall y\in Y$ and therefore $\mathbb{P}_{\RV{Y}|\RV{Z}}\mathbb{P}_{\RV{Z}|\RV{Y}}=x\mapsto \mathbb{P}_{\RV{Z}}$ but $\mathbb{P}_{\RV{Z}|\RV{X}} = x\mapsto \delta_x\neq \mathbf{\mathbb{P}_{\RV{Y}|\RV{Z}}\mathbb{P}_{\RV{Z}|\RV{Y}}}$.
+Consider some ambient measure $\mathbb{P}$ with $\RV{Z}=\RV{X}$ and $\mathbb{P}_{\RV{Y}|\RV{X}}=x\mapsto \mathrm{Bernoulli}(0.5)$ for all $z\in Z$. Then $\mathbb{P}_{\RV{Z}|\RV{Y}}=y\mapsto \mathbb{P}_{\RV{Z}}$, $\forall y\in Y$ and therefore $\mathbb{P}_{\RV{Y}|\RV{Z}}\mathbb{P}_{\RV{Z}|\RV{Y}}=x\mapsto \mathbb{P}_{\RV{Z}}$ but $\mathbb{P}_{\RV{Z}|\RV{X}} = x\mapsto \delta_x\neq \mathbf{\mathbb{P}_{\RV{Y}|\RV{Z}}\mathbb{P}_{\RV{Z}|\RV{Y}}}$.
 
 
 

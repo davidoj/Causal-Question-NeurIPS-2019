@@ -18,7 +18,7 @@
 	\item $\stopper{0.2}_X:X\to \Delta(\{*\})$ is the discard map defined in Equation \ref{eq:discard}
 \end{itemize}
 
-\section{What is the difference between Causal Bayesian Networks and See-Do models?}
+\section{What is the difference between Causal Bayesian Networks and See-Do models?}\label{sec:cbns_without_d}
 
 See-Do models and Causal Bayesian Networks (and related models such as SCMs) are quite different in their appearance and in the interpretation of various elements. In defining See-Do models, we assume that there is a decision problem that fixes in advance the observation space $E$, the space of consequences $F$ and the set of available decisions $D$. By including $D$, See-Do models have an agent ``baked in'' to the definition. In contrast, Causal Bayesian Networks assume that a set of observed variables $\mathbf{X}$ and a set of unobserved variables $\mathbf{U}$ is fixed by nature. A subtlety here is that $\mathbf{U}$ is generally \emph{not} known, but it may be assumed that whatever variables actually comprise $\mathbf{U}$, they may be generically representable by some known set of variables $\mathbf{U}'$ without loss. Because a set of decisions $D$ is absent, Causal Bayesian Networks appear to model agent-independent ``causal relationships''.
 
@@ -45,36 +45,36 @@ Is an influence diagram with the decision node $\nod{D}$ and the chance node $\n
 \begin{align}
 \begin{tikzpicture}
 \path (0,0) node (D) {$D$}
-++ (0.7,0) node[kernel] (K) {$\kernl{K}$}
+++ (0.7,0) node[kernel] (K) {$\kernel{K}$}
 ++ (0.7,0) node (F) {$F$};
 \draw (D) -- (K) -- (F);
 \end{tikzpicture}
 \end{align}
 
-This diagram represents a \emph{particular} Markov kernel $\kernl{K}:D\to \Delta(\mathcal{F})$. A set such as that represented by Diagram \ref{eq:simple_ID} could be constructed by creating a set $\Theta$ and a function $f:\Theta\to S$ that indexes each element of $S$ with $\theta\in \Theta$. Then $S=\{f(\theta)|\theta\in \Theta\}$. If $f$ is measurable then there is a Markov kernel $\kernl{T}:\Theta\times D\to \Delta(\mathcal{F})$ such that $f(\theta)=\kernl{T}_{\theta,\_}$\todo{notation}. In this sense, for any additional assumptions that are combined with Diagram \ref{eq:simple_ID} to yield the set $S$ of Markov kernels, there exists a single Markov kernel $\kernl{T}:\Theta\times D\to \Delta(\mathcal{F})$ that generates $S$. $\kernl{T}$ can be drawn as
+This diagram represents a \emph{particular} Markov kernel $\kernel{K}:D\to \Delta(\mathcal{F})$. A set such as that represented by Diagram \ref{eq:simple_ID} could be constructed by creating a set $\Theta$ and a function $f:\Theta\to S$ that indexes each element of $S$ with $\theta\in \Theta$. Then $S=\{f(\theta)|\theta\in \Theta\}$. If $f$ is measurable then there is a Markov kernel $\kernel{T}:\Theta\times D\to \Delta(\mathcal{F})$ such that $f(\theta)=\kernel{T}_{\theta,\_}$\todo{notation}. In this sense, for any additional assumptions that are combined with Diagram \ref{eq:simple_ID} to yield the set $S$ of Markov kernels, there exists a single Markov kernel $\kernel{T}:\Theta\times D\to \Delta(\mathcal{F})$ that generates $S$. $\kernel{T}$ can be drawn as
 
 \begin{align}
 \begin{tikzpicture}
 \path (0,0) node (D) {$D$}
 + (0,0.5) node (T) {$\Theta$}
-++ (0.7,0.25) node[kernel] (K) {$\kernl{T}$}
+++ (0.7,0.25) node[kernel] (K) {$\kernel{T}$}
 ++ (0.7,0) node (F) {$F$};
 \draw (D) to [out=0,in=180] ($(K.west)+(0,-0.1)$) (K) -- (F);
 \draw (T) to [out=0,in=180] ($(K.west) + (0,0.1)$);
 \end{tikzpicture}\label{eq:simple_ID_kernel}
 \end{align}
 
-Diagram \ref{eq:simple_ID_kernel} has a few more elements that Diagram \ref{eq:simple_ID} - $\Theta$ and $\kernl{T}$ in particular. If I were to define exactly what $D$, $\Theta$, $\kernl{T}$ and $F$ were, Diagram \ref{eq:simple_ID_kernel} would represent a unique Markov kernel. On the other hand, Diagram \ref{eq:simple_ID} along with a precise definition of $D$ and $F$ could represent many different sets of Markov kernels, depending on whatever additional properties I want elements of $S$ to share. Loosely, we can say that for any kernel $\kernl{T}$, there is a diagram \ref{eq:simple_ID} along with additional assumptions that represents ``the same thing''\todo{Under the condition that the choice of index ``doesn't matter'' somehow}.
+Diagram \ref{eq:simple_ID_kernel} has a few more elements that Diagram \ref{eq:simple_ID} - $\Theta$ and $\kernel{T}$ in particular. If I were to define exactly what $D$, $\Theta$, $\kernel{T}$ and $F$ were, Diagram \ref{eq:simple_ID_kernel} would represent a unique Markov kernel. On the other hand, Diagram \ref{eq:simple_ID} along with a precise definition of $D$ and $F$ could represent many different sets of Markov kernels, depending on whatever additional properties I want elements of $S$ to share. Loosely, we can say that for any kernel $\kernel{T}$, there is a diagram \ref{eq:simple_ID} along with additional assumptions that represents ``the same thing''\todo{Under the condition that the choice of index ``doesn't matter'' somehow}.
 
-Influence diagrams \emph{as typically used in causal modelling} usually additional assumptions. For example, \citet{dawid_influence_2002} proposes that $D$ contains a special ``do nothing'' element $o\in D$ such that the observations in state $\theta$ are given by $\kernl{T}_{\theta,o}$\todo{notation} and consequences in state $\theta$ are given by $\kernl{T}_{\theta,\_}$. This corresponds to the See-Do model
+Influence diagrams \emph{as typically used in causal modelling} usually additional assumptions. For example, \citet{dawid_influence_2002} proposes that $D$ contains a special ``do nothing'' element $o\in D$ such that the observations in state $\theta$ are given by $\kernel{T}_{\theta,o}$\todo{notation} and consequences in state $\theta$ are given by $\kernel{T}_{\theta,\_}$. This corresponds to the See-Do model
 
 \begin{align}
 \begin{tikzpicture}
 \path (0,0) node (D) {$D$}
 + (0,0.5) node (T) {$\Theta$}
 + (0.5,0.5) coordinate (copy0)
-++ (1.5,0.25) node[kernel] (K) {$\kernl{T}$}
-+ (0,0.5) node[kernel] (To) {$\kernl{T}_{\_,o}$}
+++ (1.5,0.25) node[kernel] (K) {$\kernel{T}$}
++ (0,0.5) node[kernel] (To) {$\kernel{T}_{\_,o}$}
 ++ (1,0) node (F) {$F$}
 +(0,0.5) node (E) {$F$};
 \draw (D) to [out=0,in=180] ($(K.west)+(0,-0.1)$) (K) -- (F);
@@ -97,15 +97,15 @@ Concretely, given the influence diagram
 \end{tikzpicture}
 \end{align}
 
-and any See-Do model $\kernl{T}:\Theta\times D\to \Delta(\mathcal{E}\otimes \mathcal{F})$ there exists a set of auxhiliary conditions $A$ such that the model $(\diagram{I},A)$ is equivalent to $\kernl{T}$\todo{subject to irrelevance of index $\Theta$}. To illustrate how influence diagrams and string diagrams compare, $\kernl{T}$ can be drawn:
+and any See-Do model $\kernel{T}:\Theta\times D\to \Delta(\mathcal{E}\otimes \mathcal{F})$ there exists a set of auxhiliary conditions $A$ such that the model $(\diagram{I},A)$ is equivalent to $\kernel{T}$\todo{subject to irrelevance of index $\Theta$}. To illustrate how influence diagrams and string diagrams compare, $\kernel{T}$ can be drawn:
 
 \begin{align}
-\kernl{T}:=\begin{tikzpicture}
+\kernel{T}:=\begin{tikzpicture}
 \path (0,0) node (D) {$D$}
 + (0,0.5) node (T) {$\Theta$}
 + (0.5,0.5) coordinate (copy0)
-++ (1.5,0.25) node[kernel] (K) {$\kernl{C}$}
-+ (0,0.5) node[kernel] (To) {$\kernl{H}$}
+++ (1.5,0.25) node[kernel] (K) {$\kernel{C}$}
++ (0,0.5) node[kernel] (To) {$\kernel{H}$}
 ++ (1,0) node (F) {$E$}
 +(0,0.5) node (E) {$F$};
 \draw (D) to [out=0,in=180] ($(K.west)+(0,-0.1)$) (K) -- (F);
@@ -117,7 +117,7 @@ and any See-Do model $\kernl{T}:\Theta\times D\to \Delta(\mathcal{E}\otimes \mat
 \todo[inline]{Maybe move the following to an appendix?}
 
 \begin{definition}[Markov kernel/influence diagram compatibility]
-	Given a Markov kernel $\kernl{K}:E\to \Delta(\sigalg{F})$, an influence diagram $\diagram{I}=(S,A,E)$ and an injective $f:X\cup A\to\sigalg{F}\otimes\sigalg{E}$ which assigns each node to exactly one random variable in $\sigalg{F}\otimes\sigalg{E}$, if for all $X_1,X_2\in\prodSet{X}$ we have $\nod{X}_1\perp_{\diagram{I}} \nod{X}_2\implies f(\nod{X}_1) \CI_{K} f(\nod{X}_2)$ 
+	Given a Markov kernel $\kernel{K}:E\to \Delta(\sigalg{F})$, an influence diagram $\diagram{I}=(S,A,E)$ and an injective $f:X\cup A\to\sigalg{F}\otimes\sigalg{E}$ which assigns each node to exactly one random variable in $\sigalg{F}\otimes\sigalg{E}$, if for all $X_1,X_2\in\prodSet{X}$ we have $\nod{X}_1\perp_{\diagram{I}} \nod{X}_2\implies f(\nod{X}_1) \CI_{K} f(\nod{X}_2)$ 
 	\todo[inline]{still need to \emph{define} conditional independence WRT kernels, though I think I can do so}
 \end{definition}
 
@@ -128,13 +128,13 @@ Consider an arbitrary See-Do model $\seedo:D\times \Theta\to \Delta(\sigalg{E}_1
 	&\nod{F}\mapsto \RV{F} \end{cases}
 \end{align} 
 
-There is always some $\kernl{H}:\Theta\to\Delta(\sigalg{E})$ and $\kernl{C}:\Theta\times D\to \Delta(\sigalg{E}\otimes\sigalg{F})$ such that: $\seedo_\theta$ is equal to
+There is always some $\kernel{H}:\Theta\to\Delta(\sigalg{E})$ and $\kernel{C}:\Theta\times D\to \Delta(\sigalg{E}\otimes\sigalg{F})$ such that: $\seedo_\theta$ is equal to
 \begin{align}
 	\seedo_\theta &= \begin{tikzpicture}[xscale=1.5]
-	\path(0,0) node[kernel] (H) {$\kernl{H}_\theta$}
+	\path(0,0) node[kernel] (H) {$\kernel{H}_\theta$}
 	+ (0.5,0) node (E) {$\RV{E}$}
 	++ (-0.5,-0.5) node (D) {$\RV{D}$}
-	++(0.5,0) node[kernel] (C) {$\kernl{C}_\theta$}
+	++(0.5,0) node[kernel] (C) {$\kernel{C}_\theta$}
 	++ (0.5,0) node (F) {$\RV{F}$};
 	\draw (H) -- (E);
 	\draw (D) -- (C) -- (F);
