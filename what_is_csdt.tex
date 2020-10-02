@@ -136,7 +136,7 @@ Define $\kernel{O}:\Theta\to \Delta(\mathcal{X})$ by $\kernel{O}:\theta\mapsto \
           \end{tikzpicture}
 \end{align}
 
-A key difference between CSDT and other approaches to causal inference is that diagrams in CSDT feature two coupled maps $\kernel{O}$ and $\kernel{C}$, while most other approaches to causal inference represent both $\kernel{O}$ and $\kernel{C}$ in one diagram. \citet{lattimore_replacing_2019} is the only other example I am aware of that draws both $\kernel{O}$ and $\kernel{C}$.
+A key difference between CSDT and other approaches to causal inference is that diagrams in CSDT feature two coupled maps $\kernel{O}$ and $\kernel{C}$, while most other approaches to causal inference represent both $\kernel{O}$ and $\kernel{C}$ in one diagram. \citet{lattimore_replacing_2019} is the only other example I am aware of that represents both $\kernel{O}$ and $\kernel{C}$. Nevertheless, ``one-picture'' causal models such as Causal Bayesian Networks, Single World Intervention Graphs \emph{do} represent observational distributions and interventional maps, and the two differ (see Section \ref{sec:single_double_representation})
 
 A causal hypothesis class $\Theta$ induces a binary relation between observed probability distributions $\prob{O}_\theta$ and consequence maps $\prob{C}_\theta$. This approach is very agnostic about the actual relation induced -- we do not even insist that the range of the observed data $X$ is the same as the range of possible consequences $Y$ (though we will generally limit our attention to cases where the two coincide). 
 
@@ -146,34 +146,89 @@ Decisions are similar to the ``regime indicators'' found in \citet{dawid_decisio
 
 \subsection{D-causation}
 
-\todo[inline]{Feedback end here, WIP}
+While we take $D$ to be a primitive element of causal decision problems, and therefore a primitive of see-do maps. Causes are not primitive, but we can offer a secondary notion of causation. We call this $D$-causation to stress the fact that it arises in a theory of causal inference in which the set $D$ of available decisions is primitive. A similar idea is discussed extensively in \citet{heckerman_decision-theoretic_1995}. The main differences are that what we call ``consequence maps'' map decisions to probability distributions over possible consequences while Heckerman and Shachter work with ``states'' that map decisions deterministically to consequences. In addition, while we define $D$-causation relative to a particular consequence map $\kernel{C}_\theta$, Heckerman and Shachter define it with respect to a \emph{set} of states.
 
-It is possible to define a notion of $D$-dependent causation for consequence maps $\kernel{C}_\theta$. A similar idea is discussed extensively in \citet{heckerman_decision-theoretic_1995}. The main differences are that what we call ``consequence maps'' map decisions to probability distributions over possible consequences while Heckerman and Shachter work with ``states'' that map decisions deterministically to consequences, thus where we discuss ``conditional independence'' Heckerman and Shachter discuss ``limited unresponsiveness''. In addition, while we define $D$-causation relative to a particular consequence map $\kernel{C}_\theta$, Heckerman and Shachter define it with respect to a \emph{set} of states. \citet{dawid_decision-theoretic_2020} also introduces the key concept of ``extended conditional independence'' which is related to $D$-causation. 
-
-As discussed in Section \ref{sec:cbns_without_d}, in my view it is very difficult to define a notion of ``causation'' without reference to a set of basic operations such as $D$.
+Section \ref{sec:cbns_without_d} explores the difficulty of defining ``objective causation'' without reference to a set of basic decisions, acts or operations. $D$ need not be interpreted as the set of decisions an agent may make, but whatever interpretation it is assigned, all existing examples of causal models seem to require a ``domain set''.
 
 See Section \ref{ssec:random_variables} for the definition of random variables.
 
 \todo[inline]{Add definition of conditional independence, revise wire label definitions}
 
-A variable $\RV{Y}_1$ $D$-causes another variable $\RV{Y}_2$ if knowing the effect decisions have on $\RV{Y}_1$ is enough to determine the effect of decisions on $\RV{Y}_2$. 
+One way to motivate the notion of $D$-causation is to observe that for many decision problems, the full set $D$ may be extremely large. Suppose I aim to have my light switched on, and there is a switch that controls the light. Often, the relevant choice of acts for such a problem would appear to be $D_0=\{\text{flip the switch},\text{don't flip the switch}\}$. However, in principle I have a much larger range of options to choose from. For simplicity's sake, suppose I have instead the following set of options:
 
-\begin{definition}[$D$-causation]
+\begin{align*}
+D_1:=&\{``\text{walk to the switch and press it with my thumb}'', \\
+    &``\text{trip over the lego on the floor, hop to the light switch and stab my finger at it}'',\\
+    &``\text{stay in bed}''\}
+\end{align*}
+
+If having the light turned on is all that matters, I could consider any acts in $D_1$ to be equivalent if they have the same ultimate impact on the position of the light switch. $D_0$ is a quotient over $D_1$ under this equivalence relation. 
+
+If I hypothesize that, relative to $D_1$, the ultimate state of the light switch is all that matters to determine the ultimate state of the light, I can say that the light switch $D_1$-causes the state of the light. Given this $D_1$-causation, the $D_1$ decision problem can (subject to my hypothesis) be reduced to a $D_0$ decision between states of the light switch.
+
+If I consider an even larger set of possible acts $D_2$, I might not accept the hypothesis of $D_2$-causation. Let $D_2$ be the following acts:
+
+\begin{align*}
+D_2:=&\{``\text{walk to the switch and press it with my thumb}'', \\
+    &``\text{trip over the lego on the floor, hop to the light switch and stab my finger at it}'',\\
+    &``\text{stay in bed}'',
+    &``\text{toggle the mains power, then flip the light switch}''\}
+\end{align*}
+
+In this case, it would be unreasonable to hypothesize that all acts that left the light switch in the ``on'' position would also result in the light being ``on''. Thus the switch does not $D_2$-cause the light to be on.
+
+Formally, $D$-causation is defined in terms of conditional independence:
+
+\begin{definition}[$D$-causation]\label{def:d_cause}
 Given a consequence map $\kernel{C}_\theta:D\to \Delta(\mathcal{Y})$, random variables $\RV{Y}_1:Y\times D\to Y_1$, $\RV{Y}_2:Y\times D\to Y_2$ and domain variable $\RV{D}:Y\times D\to D$ (Definition \ref{def:domain_variable}), $\RV{Y}_1$ $D$-causes $\RV{Y}_2$ iff $\RV{Y}_2\CI_{\kernel{C}_\theta} \RV{D}|\RV{Y}_1$.
 \end{definition}
 
-For example, under most obvious consequence maps $\kernel{C}_\theta$, my light switch $D$-causes my light to turn on given the set of decisions:
-\begin{align*}
-D=&\{\text{walk to the switch and press it with my thumb}, \\
-    &\text{trip over the lego on the floor, hop to the light switch and stab my finger at it},\\
-    &\text{stay in bed}\}
-\end{align*}
-Given some reasonable hypothesis $\theta$, for any $d\in D$ the light will be on if and only if the switch ends up in the on position. 
+\subsection{D-causation vs Heckerman and Shachter}
 
-However, the light switch does \emph{not} $D$-cause the light to turn on under the set of decisions :
-\begin{align*}
- D=&\{\text{flip the light switch without touching the fuse box},\\
- &\text{flip the fuse box, then flip the light switch}\}
-\end{align*}
-In this case, the state of the light depends on the decision taken beyond the position of the light switch.
+Heckerman and Shachter study deterministic ``consequence maps''. Furthermore, what we call hypotheses $\theta\in\Theta$, Heckerman and Schachter call states $s\in S$. One could consider a state to be a hypothesis that is specific enough to yield a deterministic map from decisions to outcomes. Heckerman and Shachter's notion of causation is defined by \emph{limited unresponsiveness} rather than \emph{conditional independence}, which depends on a partition of states rather than a particular hypothesis.
 
+\begin{definition}[Limited unresponsiveness]
+    Given states $S$, deterministic consequence maps $\kernel{C}_s:D\to \Delta(F)$ for each $s\in A$ and a random variables $\RV{X}:F\to X$, $\RV{Y}:F\to Y$, $\RV{Y}$ is unresponsive to $\RV{D}$ in states limited by $\RV{X}$ if $\kernel{C}_{(s,d)}^{\RV{X}|\RV{D}}=\kernel{C}_{(s,d')}^{\RV{X}|\RV{D}\RV{S}}\implies \kernel{C}_{(s,d)}^{\RV{Y}|\RV{D}\RV{S}}=\kernel{C}_{(s,d')}^{\RV{Y}|\RV{D}\RV{S}}$ for all $d,d'\in D$, $s\in S$. Write $\RV{Y}\not\hookleftarrow_{\RV{X}} \RV{D}$
+\end{definition}
+
+\begin{lemma}[Limited unresponsiveness implies $D$-causation]
+For deterministic consequence maps, $\RV{Y}\not\hookleftarrow_{\RV{X}} \RV{D} $ implies $\RV{X}$ $D$-causes $\RV{Y}$ in every state $s\in S$.
+\end{lemma}
+
+\begin{proof}
+By the assumption of determinism, for each $s\in S$ and $d\in D$ there exists $x(s,d)$ and $y(s,d)$ such that $\kernel{C}^{\RV{X}\RV{Y}|\RV{D}\RV{S}}_{d,s} = \delta_{x(s,d)}\otimes\delta_{y(s,d)}$.
+
+By the assumption of limited unresponsiveness, for all $d,d'$ such that $x(s,d)=x(s,d')$, $y(s,d)=y(s,d')$ also. Define $f:X\times S\to Y$ by $(s,x)\mapsto y(s,[x(s,\cdot)]^{-1}(x(s,d)))$ where $[x(s,\cdot)]^{-1}(a)$ is an arbitrary element of $\{d|x(s,d)=a\}$. For all $s,d$, $f(x(s,d),s)=y(s,d)$. Define $\kernel{M}:X\times D\times S\to \Delta(\mathcal{Y})$ by $(x,d,s)\mapsto \delta_{f(x,s)}$. $\kernel{M}$ is a version of $\kernel{C}^{\RV{Y}|\RV{X},\RV{D},\RV{S}}$ because, for all $A\in \mathcal{X}$, $B\in \mathcal{Y}$, $s\in S$, $d\in D$:
+
+\begin{align}
+    \kernel{C}^{\RV{X}|\RV{D}\RV{S}}_{(d,s)}\splitter{0.1}(\kernel{M}\otimes\mathrm{Id}) &= \int_A \kernel{M}(x',d,s;B) d\delta_{x(s,d)}(x') \\
+                                                                                        &= \int_A \delta_{f(x',s)}(B) d\delta_{x(s,d)}(x') \\
+                                                                                        &= \delta_{f(x(s,d),s)}(B)\delta_{x(s,d)}(A) \\
+                                                                                        &= \delta_{y(s,d)}(B)\delta_{x(s,d)}(A)\\
+                                                                                        &= \delta_{x(s,d)}\otimes\delta_{y(s,d)}(A\times B)
+\end{align}
+
+$\kernel{M}$ is also independent of $\RV{D}$, given the obvious labeling of inputs. Therefore $\RV{Y}\CI_{\kernel{C}_s}\RV{D}|\RV{X}$.
+\end{proof}
+
+However, despite limited unresponsiveness implying $D$-causation within every state, it does not imply $D$-causation in mixtures of states. Suppose $D=\{1,0\}$ where $1$ stands for ``toggle light switch'' and $0$ stands for ``do nothing''. Suppose $S=\{[0,0],[0,1],[1,0],[1,1]\}$ where $[0,0]$ represents ``switch initially off, mains off'' the other states generalise this in the obvious way. Finally, $\RV{F}\in\{0,1\}$ is the final position of the switch and $\RV{L}\in\{0,1\}$ is the final state of the light. We have
+
+\begin{align}
+    \kernel{C}^{\RV{L}\RV{F}|\RV{D}\RV{S}}_{d,[i,m]} = \delta_{(d\text{ XOR }i)\text{ AND }m}\otimes \delta_{(d\text{ XOR }i)\text{ AND }m}
+\end{align}
+
+Within states $[0,0]$ and $[1,0]$, the light is always off, so $\RV{F}=a\implies \RV{L}=0$ for any $a$. In states $[0,1]$ and $[1,1]$, $\RV{F}=1\implies \RV{L}=1$ and $\RV{F}=0\implies \RV{L}=0$. Thus $\RV{L}\not\hookleftarrow_{\RV{F}} \RV{D}$. However, suppose we take a mixture of consequence maps:
+\begin{align}
+    \kernel{C}_\theta = \frac{1}{4}\kernel{C}_{[0,0]} + \frac{1}{4}\kernel{C}_{[0,1]} + \frac{1}{2}\kernel{C}_{[1,1]}
+\end{align}
+
+Note that $\kernel{C}^{\RV{F}|\RV{D}}_{[0,0]}=\kernel{C}^{\RV{F}|\RV{D}}_{[0,1]} = \delta_0$ and $\kernel{C}^{\RV{F}|\RV{D}}_{[1,1]}=\delta_1$.
+
+Then
+
+\begin{align}
+    \kernel{C}^{\RV{L}|\RV{F}\RV{D}}_{\theta,1,1}(\{1\}) &= 1/2\\
+    \kernel{C}^{\RV{L}|\RV{F}\RV{D}}_{\theta,1,0}(\{1\}) &= 1
+\end{align}
+
+Thus under hypothesis $\theta$, $\RV{F}$ does not $D$-cause $\RV{L}$ even though $\RV{F}$ $D$-causes $\RV{L}$ in all states $S$.

@@ -1,0 +1,143 @@
+
+I don't think the following is important, but I've saved it here just in case.
+
+In general, we don't want to spent time explicitly setting up conditional probability spaces. Rather, we will specify key marginals and disintegrations from which a conditional probability space can be constructed - call these marginals and conditional ``components''. Clearly we cannot build a conditional probability space from two kernels that represent the same component but disagree with each other on a non-negligible set. Also, in general, for an arbitrary collection of components there may be many ambient kernels from which we can extract these components. There is no particular problem if we have multiple ambient kernels over undefined random variable; if we are only interested in $\RV{X}$ then the possibility of many joint kernels over $\RV{X}$ and $\RV{Y}$ is no cause for concern. We do, however, want to avoid ambient kernels supporting non-negligibly distinct marginals or disintegrations over the random variables that have been defined. 
+
+\begin{example}[Implicit conditional probability space]
+Suppose we have labeled Markov kernels
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (X) {$\RV{D}$}
+++ (0.7,0) node[kernel] (L) {$\kernel{L}$}
+++(0.7,0) node (Y) {$\RV{X}$};
+\draw (X) -- (L) -- (Y);
+\end{tikzpicture}\qquad
+&\begin{tikzpicture}
+\path (0,0) node (X) {$\RV{X}$}
+++ (0.7,0) node[kernel] (L) {$\kernel{M}$}
+++(0.7,0) node (Y) {$\RV{Y}$};
+\draw (X) -- (L) -- (Y);
+\end{tikzpicture}
+\end{align}
+We want to define a conditional probability space $(\mathscr{K},\Omega,D)$ supporting random variables $\RV{D}$, $\RV{X}$ and $\RV{Y}$ yielding the above kernels as the relevant marginals and disintegrations. Strictly:
+\begin{itemize}
+	\item $\kernel{L}=\mathscr{K}_{\RV{X}|\RV{D}}$
+	\item $\kernel{M}\otimes \stopper{0.3}_D \in \mathscr{K}_{\RV{Y}|\RV{X}{D}}$ (``informally'', $\kernel{M}\in \mathscr{K}_{\RV{Y}|\RV{X}}$)
+\end{itemize} 
+
+Take $\Omega=W\times X\times Y\times Z$ and define $\mathscr{K}$ such that
+
+\begin{align}
+\mathscr{K}^* = \begin{tikzpicture}
+\path (0,0) node (X) {$\RV{D}$}
+++ (0.4,0) coordinate (copy1)
+++ (0.5,0) node[kernel] (L) {$\kernel{L}$}
+++ (0.7,0) coordinate (copy2)
+++ (0.7,0) node[kernel] (M) {$\kernel{M}$}
+++(0.7,0) node (Y) {$\RV{Y}$}
++(0,-0.4) node (X1) {$\RV{X}$}
++(0,-0.8) node (D) {$\RV{D}$};
+\draw (X) -- (L) -- (M) -- (Y);
+\draw (copy1) to [bend right] (D);
+\draw (copy2) to [bend right] (X1);
+\end{tikzpicture}
+\end{align}
+
+Where $\mathscr{K}^*$ is the copy map composed with $\mathscr{K}$ as in previous definitions. $\mathscr{K}$ is the unique Markov kernel $D\to \Delta(\mathcal{X}\otimes\mathcal{Y})$ supporting the two criteria above, assuming finite $D$ and standard measurable $X,Y$.
+
+\begin{proof}
+By assumption, for any suitable $\mathscr{K}':D\to \Delta(\mathcal{X}\otimes\mathcal{Y})$ we have
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (D) {$\RV{D}$}
+++ (0.7,0) node[kernel] (K) {$\mathscr{K}'$}
+++ (0.7,0.15) node (X) {$\RV{X}$}
++(0,-0.3) node (Y) {};
+\draw (D) -- (K) ($(K.east) + (0,0.15)$) -- (X);
+\draw[-{Rays [n=8]}] ($(K.east)+(0,-0.15)$) -- (Y);
+\end{tikzpicture} &=
+\begin{tikzpicture}
+\path (0,0) node (X) {$\RV{D}$}
+++ (0.7,0) node[kernel] (L) {$\kernel{L}$}
+++(0.7,0) node (Y) {$\RV{X}$};
+\draw (X) -- (L) -- (Y);
+\end{tikzpicture}
+\end{align}
+
+and by the fact that $\kernel{M}\otimes \stopper{0.3}_D$ is by assumption a disintegration of $\mathscr{K}^{\prime*}$:
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (D) {$\RV{D}$}
+++ (0.3,0) coordinate (copy0)
+++ (0.5,0) node[kernel] (K) {$\mathscr{K}'$}
+++ (0.7,0.15) node (X) {$\RV{X}$}
++(0,-0.3) node (Y) {$\RV{Y}$}
++(0,-0.6) node (D1) {$\RV{D}$};
+\draw (D) -- (K) ($(K.east) + (0,0.15)$) -- (X);
+\draw ($(K.east)+(0,-0.15)$) -- (Y);
+\draw (copy0) to [bend right] (D1);
+\end{tikzpicture}
+&= 
+\begin{tikzpicture}
+\path (0,0) node (X) {$\RV{D}$}
+++ (0.4,0) coordinate (copy1)
+++ (0.5,0) node[kernel] (L) {$\mathscr{K}'$}
+++ (0.7,0.15) coordinate (copy2)
++ (0,-0.3) node (Ys) {}
+++ (0.7,0) node[kernel] (M) {$\kernel{M}$}
+++(0.7,0) node (Y) {$\RV{Y}$}
++(0,-0.4) node (X1) {$\RV{X}$}
++(0,-0.8) node (D) {$\RV{D}$};
+\draw (X) -- (L) ($(L.east)+(0,0.15)$) -- (M) -- (Y);
+\draw[-{Rays [n=8]}] ($(L.east)+(0,-0.15)$) -- (Ys);
+\draw (copy1) to [bend right] (D);
+\draw (copy2) to [bend right] (X1);
+\draw[-{Rays [n=8]}] (copy1) to [bend left] ($(M.east) + (-0.05,0.3)$);
+\end{tikzpicture}\\
+&= \begin{tikzpicture}
+\path (0,0) node (X) {$\RV{D}$}
+++ (0.4,0) coordinate (copy1)
+++ (0.5,0) node[kernel] (L) {$\kernel{L}$}
+++ (0.7,0) coordinate (copy2)
+++ (0.7,0) node[kernel] (M) {$\kernel{M}$}
+++(0.7,0) node (Y) {$\RV{Y}$}
++(0,-0.4) node (X1) {$\RV{X}$}
++(0,-0.8) node (D) {$\RV{D}$};
+\draw (X) -- (L) -- (M) -- (Y);
+\draw (copy1) to [bend right] (D);
+\draw (copy2) to [bend right] (X1);
+\end{tikzpicture}
+\end{align}
+
+Finally, if $\mathscr{K}^* = \mathscr{K}^{\prime*}$, then at least if $D$ is countable we must have $\mathscr{K}=\mathscr{K}'$ as they must agree on all points in $D$.
+\end{proof}
+
+
+This example was chosen to illustrate a peculiarity of our notation of conditional probability spaces. Consider a problem that appears similar: find an ambient measure $\prob{P}$ decomposing into the following marginal and conditionals:
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node[dist] (mu) {$\mu$}
+++(0.7,0) node (D) {$\RV{D}$};
+\draw (mu) -- (D);
+\end{tikzpicture}\qquad
+\begin{tikzpicture}
+\path (0,0) node (X) {$\RV{D}$}
+++ (0.7,0) node[kernel] (L) {$\kernel{L}$}
+++(0.7,0) node (Y) {$\RV{X}$};
+\draw (X) -- (L) -- (Y);
+\end{tikzpicture}\qquad
+&\begin{tikzpicture}
+\path (0,0) node (X) {$\RV{X}$}
+++ (0.7,0) node[kernel] (L) {$\kernel{M}$}
+++(0.7,0) node (Y) {$\RV{Y}$};
+\draw (X) -- (L) -- (Y);
+\end{tikzpicture}
+\end{align}
+
+Here there are many choices of $\prob{P}$ that satisfy our conditions arising from different choices of $\prob{P}_{\RV{Y}|\RV{X}\RV{D}}$. This is not possible in the conditional probability space because $\mathscr{K}_{\RV{Y}|\RV{X}}$ only exists if $\mathscr{K}_{\RV{Y}|\RV{X}\RV{D}}$ is independent of $\RV{D}$. That is, in a conditional probability space every disintegration is conditional on $\RV{D}$, but we may not explicitly write this if it does not actually depend on $\RV{D}$.
+\end{example}
+
+A sufficient condition for the construction of a unique ambient kernel from a collection of components $\{C_1,...C_n\}$ is if there is some ordering of components $\{{i_1},{i_2},...{i_n}\}$ such that the input labels of $C_{i_{k+1}}$ is the union of the inputs and outputs of $C_{i_1},...,C_{i_j}$. This can be shown by repeated application of Theorem \ref{th:disintegration_exist_ker}.
