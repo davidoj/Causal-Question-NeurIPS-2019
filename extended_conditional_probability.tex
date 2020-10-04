@@ -1,0 +1,13 @@
+\begin{theorem}[Disintegration existence - conditional probability space]\label{th:disintegration_exist_ker}
+Given a Markov kernel space $(\kernel{K},X\times Y,D)$, if $D$ is countable and $(Y,\mathcal{Y})$ is standard then there is a disintegration $\kernel{M}:D\times X\to \Delta(\mathcal{Y})$ of $\kernel{K}$.
+\end{theorem}
+
+\begin{proof}
+By Theorem \ref{th:disintegration_exist}, for each $d\in D$ we have a disintegration $\kernel{K}_{(d)}^{\RV{Y}|\RV{D}\RV{X}}:X\to \Delta(\mathcal{Y})$ of the probability measure $\kernel{K}_d$. 
+
+Define $\kernel{M}:D\times X\to \Delta(\mathcal{Y})$ by $\kernel{M} (d,x;A) = \kernel{K}_{(d)} (x;A)$ for $d\in D$, $x\in X$, $A\in\mathcal{Y}$. Clearly $\kernel{M}_{(d,x)}$ is a probability measure. For $A\in \mathcal{Y}$, define $\kernel{M}(\cdot;A):D\times X\to [0,1]$ by $(d,x)\mapsto \kernel{M}(d,x;A)$. Then for all $B\in \mathcal{B}([0,1])$, 
+\begin{align}
+	[\kernel{M}(\cdot;A)]^{-1}(B) = \cup_{d\in D} \{d\}\times [\kernel{K}_{(d)}^{\RV{Y}|\RV{D}\RV{X}}(\cdot;A)]^{-1}(B)\label{eq:pullback_union}
+\end{align}
+Because $\kernel{K}_d$ is known to be a Markov kernel, the right hand side of Equation \ref{eq:pullback_union} is a countable union of measurable sets for all $B$, and so is itself a measurable set.
+\end{proof}

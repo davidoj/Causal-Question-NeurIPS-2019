@@ -1107,31 +1107,127 @@ and
 
 \end{definition}
 
-Under some (strong) regularity conditions, disintegrations of conditional probability spaces do exist.
+The existence of disintegrations of standard measurable probability spaces is well known.
 
 \begin{theorem}[Disintegration existence - probability space]\label{th:disintegration_exist}
 Given a probability measure $\mu\in \Delta(\mathcal{X}\otimes \mathcal{Y})$, if $(F,\mathcal{F})$ is standard then a disintegration $\kernel{K}:X\to \Delta(\mathcal{Y})$ exists \citep{cinlar_probability_2011}.
 \end{theorem}
 
-\begin{theorem}[Disintegration existence - conditional probability space]\label{th:disintegration_exist_ker}
-Given a Markov kernel space $(\kernel{K},X\times Y,D)$, if $D$ is countable and $(Y,\mathcal{Y})$ is standard then there is a disintegration $\kernel{M}:D\times X\to \Delta(\mathcal{Y})$ of $\kernel{K}$.
+For Markov kernel spaces, we make the simplifying assumption that the domain space $D$ is a discrete space. Given this assumption, there exists a positive definite probability $\mu\in \Delta(\mathcal{D})$. That is, for every $d\in D$, $\mu(\{d\})>0$. Given this assumption, for every Markov kernel space $(\kernel{K},\Omega,D)$ there is a probability space $(\prob{P},\Omega\times D)$ such that $\kernel{K}$ can be uniquely defined as a disintegration of $\prob{P}$. For uncountable $D$, even if it is standard measurable, this is not possible \citep{hajek_what_2003}.
+
+\begin{definition}[Relative probability space]
+
+\todo[inline]{better name}
+
+Given a Markov kernel space $(\kernel{K},\Omega,D)$ and a positive definite measure $\mu\in \Delta(\mathcal{D})$, $(\mu\kernel{K},\Omega\times D)$ is a \emph{relative} probability space.
+
+For any random variable $\RV{X}:\Omega\times D\to X$ on $(\kernel{K},\Omega,D)$, its relative on $(\mu\kernel{K},\Omega\times D)$ is given by the same measurable function, and we give it the same name $\RV{X}$.
+\end{definition}
+
+
+\begin{theorem}[Agreement of disintegrations]
+Given a Markov kernel space $(\kernel{K},\Omega,D)$, any relative probability space $(\mu\prob{K},\Omega\times D)$ and any random variables $\RV{X}:\Omega\times D\to X$, $\RV{Y}:\Omega\times D\to Y$, $\kernel{K}^{\{\RV{Y}|\RV{X}\RV{D}\}}=(\mu\prob{K})^{\{\RV{Y}|\RV{X}\RV{D}\}}$ (note that this set equality).
 \end{theorem}
 
 \begin{proof}
-By Theorem \ref{th:disintegration_exist}, for each $d\in D$ we have a disintegration $\kernel{K}_{(d)}^{\RV{Y}|\RV{D}\RV{X}}:X\to \Delta(\mathcal{Y})$ of the probability measure $\kernel{K}_d$. 
-
-Define $\kernel{M}:D\times X\to \Delta(\mathcal{Y})$ by $\kernel{M} (d,x;A) = \kernel{K}_{(d)} (x;A)$ for $d\in D$, $x\in X$, $A\in\mathcal{Y}$. Clearly $\kernel{M}_{(d,x)}$ is a probability measure. For $A\in \mathcal{Y}$, define $\kernel{M}(\cdot;A):D\times X\to [0,1]$ by $(d,x)\mapsto \kernel{M}(d,x;A)$. Then for all $B\in \mathcal{B}([0,1])$, 
+Define $\prob{P}:=\mu\kernel{K}$ and let $\kernel{M}$ be an arbitrary element of $\kernel{K}^{\{\RV{Y}|\RV{X}\RV{D}\}}$. Then
 \begin{align}
-	[\kernel{M}(\cdot;A)]^{-1}(B) = \cup_{d\in D} \{d\}\times [\kernel{K}_{(d)}^{\RV{Y}|\RV{D}\RV{X}}(\cdot;A)]^{-1}(B)\label{eq:pullback_union}
+\begin{tikzpicture}
+\path (0,0) node[dist] (m) {$\prob{P}^{\RV{X}\RV{Y}}$}
+++ (1,0.15) node (E) {$\RV{X}$}
+++ (0,-0.3) node (F) {$\RV{Y}$};
+\draw ($(m.east) + (0,0.15)$) -- (E);
+\draw ($(m.east) + (0,-0.15)$) -- (F);
+\end{tikzpicture} &= \begin{tikzpicture}
+\path (0,0) node[dist] (O) {$\mu$}
+++ (1,0) node[kernel] (m) {$\kernel{K}^{\RV{YX}|\RV{D}}$}
+++ (1,0.15) node (E) {$\RV{X}$}
+++ (0,-0.3) node (F) {$\RV{Y}$};
+\draw (O) -- (m) ($(m.east) + (0,0.15)$) -- (E);
+\draw ($(m.east) + (0,-0.15)$) -- (F);
+\end{tikzpicture}\\
+ &= \begin{tikzpicture}\path (0,0) node[dist] (O) {$\mu$}
+++ (0.3,0) coordinate (copy1)
+++ (1,0) node[kernel] (m) {$\kernel{K}^{\RV{YX}|\RV{D}}$}
+++ (1,0.15) coordinate (copy0)
++(0.2,-0.3) node (T) {}
+++ (1.2,0) node (E) {$\RV{X}$}
+++(-0.7,-0.3) node[kernel] (K) {$\kernel{M}$}
+++(0.7,0) node (F) {$\RV{Y}$};
+\draw (O) -- (m) ($(m.east) + (0,0.15)$) -- (E);
+\draw (copy0) to [bend right] (K) (K) -- (F);
+\draw (copy1) to [out=290,in=180] ($(K.west) + (0,-0.15)$);
+\draw[-{Rays [n=8]}] ($(m.east) + (0,-0.15)$) -- (T);
+\end{tikzpicture}\\
+ &= \begin{tikzpicture}
+\path (0,0) node[dist] (m) {$\prob{P}^{\RV{X}}$}
+++ (0.7,0.15) coordinate (copy0)
++(0.2,-0.3) node (T) {}
+++ (1.2,0) node (E) {$\RV{X}$}
+++(-0.7,-0.3) node[kernel] (K) {$\kernel{M}$}
+++(0.7,0) node (F) {$\RV{Y}$};
+\draw ($(m.east) + (0,0.15)$) -- (E);
+\draw (copy0) to [bend right] (K) (K) -- (F);
+\draw[-{Rays [n=8]}] ($(m.east) + (0,-0.15)$) -- (T);
+\end{tikzpicture}
 \end{align}
-Because $\kernel{K}_d$ is known to be a Markov kernel, the right hand side of Equation \ref{eq:pullback_union} is a countable union of measurable sets for all $B$, and so is itself a measurable set.
+
+Thus $\kernel{M}\in \prob{P}^{\{\RV{Y}|\RV{X}\RV{D}\}}$.
+
+Note that for arbitrary $\RV{X}$
+
+\begin{align}
+\prob{P}^{\RV{X}\RV{D}} &= \begin{tikzpicture}
+	\path (0,0) node[dist] (P) {$\prob{P}$}
+	++ (1,0.15) node (X) {$\RV{X}$}
+	++ (0,-0.3) node (D) {$\RV{D}$};
+	\draw ($(P.east)+(0,0.15)$) -- (X);
+	\draw ($(P.east)+(0,-0.15)$) -- (D);
+\end{tikzpicture}\\
+	&=  
+\begin{tikzpicture}
+	\path (0,0) node[dist] (m) {$\mu$}
+	++ (0.5,0) coordinate (copy0)
+	++ (0.7,0) node[kernel] (K) {$\kernel{K}$}
+	++ (0.7,0) coordinate (copy1)
+	+ (0, -0.5) coordinate (copy2)
+	++ (0.5,0) node[kernel] (Fx) {$\kernel{F}^{\RV{X}}$}
+	+(0,-0.5) node[kernel] (Fd) {$\kernel{F}^{\RV{D}}$}
+	++ (0.8,0) node (X) {$\RV{X}$}
+	+ (0,-0.5) node (D) {$\RV{D}$};
+	\draw (m) -- (copy0) -- (K) -- (copy1);
+	\draw (copy0) to [out=-90,in=180] (copy2);
+	\draw (copy1) to [out=0, in=180] ($(Fx.west)+(0,0.15)$);
+	\draw (copy1) to [out=0,in=180] ($(Fd.west)+(0,0.15)$);
+	\draw (copy2) to [out=0,in=180] ($(Fx.west)+(0,-0.15)$);
+	\draw (copy2) to [out=0, in=180] ($(Fd.west)+(0,-0.15)$);
+	\draw (Fx) -- (X) (Fd) -- (D);
+\end{tikzpicture}\\
+&= \begin{tikzpicture}
+	\path (0,0) node[dist] (m) {$\mu$}
+	++ (0.5,0) coordinate (copy0)
+	++ (0.7,0) node[kernel] (K) {$\kernel{K}$}
+	++ (0.7,0) coordinate (copy1)
+	+ (0, -0.5) coordinate (copy2)
+	++ (0.5,0) node[kernel] (Fx) {$\kernel{F}^{\RV{X}}$}
+	++ (0.8,0) node (X) {$\RV{X}$}
+	+ (0,-0.5) node (D) {$\RV{D}$};
+	\draw (m) -- (copy0) -- (K) -- (copy1);
+	\draw (copy0) to [out=-90,in=180] (copy2);
+	\draw (copy1) to [out=0, in=180] ($(Fx.west)+(0,0.15)$);
+	\draw (copy2) to [out=0,in=180] ($(Fx.west)+(0,-0.15)$);
+	\draw (copy2) to [out=0, in=180] (D);
+	\draw (Fx) -- (X);
+\end{tikzpicture}
+\end{align}
+
+Let $\kernel{N}$ be an arbitrary element of $\prob{P}^{\{\RV{Y}|\RV{X}\RV{D}\}}$.
+
 \end{proof}
 
-As an aside, \citet{hajek_what_2003} pointed out that in general there are many Markov kernels that satisfy the definition of conditional probability for a given probability measure and random variables. For a given Markov kernel space $(\kernel{K},\Omega,\mathcal{F},D,\mathcal{D})$ there is in general no probability measure on $\Omega\times D$ such that $\kernel{K}$ is uniquely defined as a disintegration of $\mu$. However, by limiting $D$ to countable sets there is for every Markov kernel space $(\kernel{K},\Omega,D)$ a probability space $(\prob{P},\Omega\times D)$ such that $\kernel{K}$ is the unique disintegraion of $\prob{P}$ on well-chosen random variables.
+\begin{lemma}[Diagrammatic consequences of labels]
 
 In general, diagram labels are ``well behaved'' with regard to the application of any of the special Markov kernels: identities \ref{eq:identity}, swaps \ref{eq:swap}, discards \ref{eq:discard} and copies \ref{eq:copy} as well as with respect to the coherence theorem of the CD category. They are not ``well behaved'' with respect to composition.
-
-\begin{lemma}[Diagrammatic consequences of labels]
 
 Fix some Markov kernel space $(\kernel{K},\Omega,D)$ and random variables $\RV{X}$, $\RV{Y}$, $\RV{Z}$ taking values in $X,Y,Z$ respectively. $\mathrm{Sat:}$ indicates that a labeled diagram satisfies definitions \ref{def:wl_jprob} and \ref{def:wl_disint} with respect to $(\mathscr{K},\Omega,D)$ and $\RV{X}$, $\RV{Y}$, $\RV{Z}$.  The following always holds:
 
