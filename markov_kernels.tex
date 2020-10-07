@@ -230,9 +230,20 @@ A number of Markov kernels are given special notation distinct from the generic 
 The identity kernel $\textbf{Id}:X\to \Delta(X)$ maps a point $x$ to the measure $\delta_x$ that places all mass on the same point:
 
 \begin{align}
-\textbf{Id}_x : x\mapsto \delta_x \equiv \begin{tikzpicture}\path (0,0) node (X) {$X$} + (1,0) node (X1) {$X$}; \draw (X)--(X1); \end{tikzpicture}\label{eq:identity}
+\textbf{Id} : x\mapsto \delta_x \equiv \begin{tikzpicture}\path (0,0) node (X) {$X$} + (1,0) node (X1) {$X$}; \draw (X)--(X1); \end{tikzpicture}\label{eq:identity}
 \end{align}
 
+The identity kernel acts as the identity under left or right products:
+
+\begin{align}
+	(\kernel{K}\textbf{Id})_w(A) &= \int_X \textbf{Id}_x(A) d\kernel{K}_w (x) \\
+							 	 &= \int_X \delta_x(A) d\kernel{K}_w(x)\\
+							 	 &= \int_A d\kernel{K}_w(x)\\
+							 	 &= \kernel{K}_w(A)\\
+	(\textbf{Id}\kernel{K})_w(A) &= \int_X \kernel{K}_x (A) d\textbf{Id}_w(x)\\
+								 &= \int_X  \kernel{K}_x(A) d\delta_w(x)\\
+								 &= \kernel{K}_w(A)								  
+\end{align}
 
 The copy map $\splitter{0.1}:X\to \Delta(\mathcal{X}\times \mathcal{X})$ maps a point $x$ to two identical copies of x:
 \begin{align}
@@ -241,6 +252,14 @@ The copy map $\splitter{0.1}:X\to \Delta(\mathcal{X}\times \mathcal{X})$ maps a 
  \end{tikzpicture}\label{eq:copy}
  \end{align} 
 
+The copy map ``copies'' its arguments under an integral:
+
+\begin{align}
+	\int_(X\times X) f(x,x',x'') d\splitter{0.1}_x (x',x'') &= \int_(X\times X) f(x,x',x'') d\delta_{(x,x)}(x',x'')\\
+															&= f(x,x,x)\\
+	\int_W \int_(X\times X) f(x',x'')d\splitter{0.1}_w (x',x'') d\mu(w)\\
+															&= \int_W f(w,w) d\mu(w)
+\end{align}
 
 The swap map $\sigma:X\times Y\to \Delta(\mathcal{Y}\otimes\mathcal{X})$ swaps its inputs:
 
@@ -252,6 +271,13 @@ The swap map $\sigma:X\times Y\to \Delta(\mathcal{Y}\otimes\mathcal{X})$ swaps i
 +(1,-0.3) node (Y1) {$Y$};
 \draw (X)--(X1) (Y) -- (Y1);
 \end{tikzpicture}\label{eq:swap}
+\end{align}
+
+The swap map swaps its arguments under an integral:
+
+\begin{align}
+	\int_(X\times X) f(x,x') d\sigma_{(x_0,x_1)}(x,x') &= \int_(X\times X) f(x,x') d\delta_{(x_1,x_0)}(x,x')\\
+													   &= f(x_1,x_0)
 \end{align}
 
 The discard map $\stopper{0.2}:X\to \Delta(\{*\})$ maps every input to $\delta_{*}$. Note that the only non-empty event in $\{\emptyset,\{*\}\}$ must have probability 1.
@@ -760,7 +786,7 @@ Given a Markov kernel space $(\kernel{K}, \Omega, D)$ and random variables $\RV{
 We will now define wire labels for ``output'' wires.
 
 \begin{definition}[Wire labels - joint kernels]\label{def:wl_jprob}
-Suppose we have a Markov kernel space $(\kernel{K},\Omega,D)$, random variables $\RV{X}:\Omega\times D\to X$, $\RV{Y}:\Omega\times D\to Y$ and a Markov kernel $\kernel{L}:D\to \Delta(\mathcal{X}\times\mathcal{Y})$. The following labelling of $\mathbf{L}$:
+Suppose we have a Markov kernel space $(\kernel{K},\Omega,D)$, random variables $\RV{X}:\Omega\times D\to X$, $\RV{Y}:\Omega\times D\to Y$ and a Markov kernel $\kernel{L}:D\to \Delta(\mathcal{X}\times\mathcal{Y})$. The following \emph{output labelling} of $\mathbf{L}$:
 
 \begin{align}
 \begin{tikzpicture}
@@ -825,7 +851,7 @@ For \emph{this} diagram, properties \ref{eq:labels_express_marginal_upper} and \
 
 \end{definition}
 
-\begin{lemma}[Label assignments exist]
+\begin{lemma}[Output label assignments exist]
 Given Markov kernel space $(\kernel{K},\Omega,D)$, random variables $\RV{X}:\Omega\times D\to X$ and $\RV{Y}:\Omega\times D\to Y$ then there exists a diagram of $\kernel{L}:=\kernel{K}^{\RV{X}\RV{Y}|\RV{D}}$ such that Equations \ref{eq:labels_express_marginal_upper} and \ref{eq:labels_express_marginal_lower} hold. Thus $\kernel{L}$ can be drawn such that the labels ${\color{blue}\RV{X}}$ and ${\color{blue}\RV{Y}}$ can be assigned.
 \end{lemma}
 
@@ -1046,11 +1072,19 @@ That is, any joint kernel including the variable $\RV{D}$ can be drawn such that
 \end{definition}
 
 
-We use this observation to motivate a general naming scheme for input wires: if precomposing a diagram with a copy map yields a diagram with an extra \emph{output} wire that can be labeled with $\RV{X}$, then the \emph{input} wire can also be labeled $\RV{X}$.
+If an input wire is connected to an output wire labeled $\RV{X}$ and passes through no boxes, then the input wire may be labeled $\RV{X}$. If a kernel $\kernel{K}=\kernel{L}\kernel{M}$ and $\kernel{L}$ can be drawn with input wire labels $\RV{X},\RV{Y},...$ then $\kernel{K}$ can be drawn with the same input wire labels.
 
-\todo[inline]{This definition is unfinished, I'm tired of terminology}
+\begin{definition}[Wire labels -- input]\label{def:wl_disint}
 
-\begin{definition}[Wire labels -- disintegration]\label{def:wl_disint}
+An input wire is \emph{connected} to an output wire if it is possible to trace a path from the start of the input wire to the end of the output wire without passing through any boxes, erase maps or right facing triangles.
+
+Iff an input wire is connected to an output wire and that output wire has a valid label $\RV{X}$, then it is valid to label the input wire with $\RV{X}$.
+
+For example:
+
+
+
+
 Suppose we have a Markov kernel space $(\kernel{K},\Omega,D)$, random variables $\RV{X}:\Omega\times D\to X$, $\RV{Y}:\Omega\times D\to Y$, $\RV{Z}:\Omega\times D\to Z$ and a Markov kernel $\kernel{L}:D\times X\to \Delta(\mathcal{Y}\times\mathcal{Z})$. The following labelling of $\kernel{L}$:
 
 \begin{align}
@@ -1130,100 +1164,102 @@ Given a Markov kernel space $(\kernel{K},\Omega,D)$, any relative probability sp
 \end{theorem}
 
 \begin{proof}
-Define $\prob{P}:=\mu\kernel{K}$ and let $\kernel{M}$ be an arbitrary element of $\kernel{K}^{\{\RV{Y}|\RV{X}\RV{D}\}}$. Then
+Define $\prob{P}:=\mu\kernel{K}$ and let $\kernel{M}$ be an arbitrary version of $\kernel{K}^{\{\RV{Y}|\RV{X}\RV{D}\}}$. Then
 \begin{align}
 \begin{tikzpicture}
-\path (0,0) node[dist] (m) {$\prob{P}^{\RV{X}\RV{Y}}$}
-++ (1,0.15) node (E) {$\RV{X}$}
-++ (0,-0.3) node (F) {$\RV{Y}$};
-\draw ($(m.east) + (0,0.15)$) -- (E);
-\draw ($(m.east) + (0,-0.15)$) -- (F);
+\path (0,0) node[dist,inner sep=0 pt] (m) {$\prob{P}^{\RV{X}\RV{Y}\RV{D}}$}
+++ (1,0.3) node (E) {$\RV{X}$}
+++ (0,-0.3) node (F) {$\RV{Y}$}
+++ (0,-0.3) node (D) {$\RV{D}$};
+\draw ($(m.east) + (0,0.3)$) -- (E);
+\draw ($(m.east) + (0,0)$) -- (F);
+\draw ($(m.east) + (0,-0.3)$) -- (D);
 \end{tikzpicture} &= \begin{tikzpicture}
 \path (0,0) node[dist] (O) {$\mu$}
-++ (1,0) node[kernel] (m) {$\kernel{K}^{\RV{YX}|\RV{D}}$}
++ (0.75,0) coordinate (copy0)
+++ (1.5,0) node[kernel] (m) {$\kernel{K}^{\RV{XY}|\RV{D}}$}
 ++ (1,0.15) node (E) {$\RV{X}$}
-++ (0,-0.3) node (F) {$\RV{Y}$};
+++ (0,-0.3) node (F) {$\RV{Y}$}
+++ (0,-0.3) node (D) {$\RV{D}$};
 \draw (O) -- (m) ($(m.east) + (0,0.15)$) -- (E);
 \draw ($(m.east) + (0,-0.15)$) -- (F);
+\draw (copy0) to [out=-60,in=180] (D);
 \end{tikzpicture}\\
  &= \begin{tikzpicture}\path (0,0) node[dist] (O) {$\mu$}
 ++ (0.3,0) coordinate (copy1)
-++ (1,0) node[kernel] (m) {$\kernel{K}^{\RV{YX}|\RV{D}}$}
+++ (1,0) node[kernel] (m) {$\kernel{K}^{\RV{X}|\RV{D}}$}
 ++ (1,0.15) coordinate (copy0)
-+(0.2,-0.3) node (T) {}
 ++ (1.2,0) node (E) {$\RV{X}$}
 ++(-0.7,-0.3) node[kernel] (K) {$\kernel{M}$}
-++(0.7,0) node (F) {$\RV{Y}$};
+++(0.7,0) node (F) {$\RV{Y}$}
+++(0,-0.3) node (D) {$\RV{D}$};
 \draw (O) -- (m) ($(m.east) + (0,0.15)$) -- (E);
-\draw (copy0) to [bend right] (K) (K) -- (F);
-\draw (copy1) to [out=290,in=180] ($(K.west) + (0,-0.15)$);
-\draw[-{Rays [n=8]}] ($(m.east) + (0,-0.15)$) -- (T);
+\draw (copy0) to [bend right] ($(K.west) + (0,0.1)$) (K) -- (F);
+\draw (copy1) to [out=-45,in=180] ($(K.west) + (0,-0.1)$);
+\draw (copy1) to [out=-90,in=180] (D);
 \end{tikzpicture}\\
  &= \begin{tikzpicture}
-\path (0,0) node[dist] (m) {$\prob{P}^{\RV{X}}$}
+\path (0,0) node[dist] (m) {$\prob{P}^{\RV{X}\RV{D}}$}
 ++ (0.7,0.15) coordinate (copy0)
++ (0,-0.3) coordinate (copy1)
 +(0.2,-0.3) node (T) {}
 ++ (1.2,0) node (E) {$\RV{X}$}
 ++(-0.7,-0.3) node[kernel] (K) {$\kernel{M}$}
-++(0.7,0) node (F) {$\RV{Y}$};
+++(0.7,0) node (F) {$\RV{Y}$}
+++ (0,-0.3) node (D) {$\RV{D}$};
 \draw ($(m.east) + (0,0.15)$) -- (E);
-\draw (copy0) to [bend right] (K) (K) -- (F);
-\draw[-{Rays [n=8]}] ($(m.east) + (0,-0.15)$) -- (T);
+\draw (copy0) to [bend right] ($(K.west) + (0,0.1)$) (K) -- (F);
+\draw ($(m.east) + (0,-0.15)$) -- (copy1) -- ($(K.west) + (0,0)$);
+\draw (copy1) to [out = -60, in=180] (D);
 \end{tikzpicture}
 \end{align}
 
 Thus $\kernel{M}\in \prob{P}^{\{\RV{Y}|\RV{X}\RV{D}\}}$.
 
-Note that for arbitrary $\RV{X}$
+Let $\kernel{N}$ be an arbitrary version of $\prob{P}^{\{\RV{Y}|\RV{X}\RV{D}\}}$. To show that $\kernel{N}\in \kernel{K}^{\{\RV{Y}|\RV{X}\RV{D}\}}$, we will show for all $d\in D$
 
 \begin{align}
-\prob{P}^{\RV{X}\RV{D}} &= \begin{tikzpicture}
-	\path (0,0) node[dist] (P) {$\prob{P}$}
-	++ (1,0.15) node (X) {$\RV{X}$}
-	++ (0,-0.3) node (D) {$\RV{D}$};
-	\draw ($(P.east)+(0,0.15)$) -- (X);
-	\draw ($(P.east)+(0,-0.15)$) -- (D);
+	\prob{Q} &:= \begin{tikzpicture}
+\path (0,0) node[dist] (D) {$\delta_{d}$}
+++ (0.7,0) coordinate (copy0)
+++(0.7,0) node[kernel] (K) {$\kernel{K}^{\RV{X}|\RV{D}}$}
+++(0.5,0) coordinate (copy1)
+++(0.8,0) node[kernel] (N) {$\kernel{N}$}
+++(1,0) node (Y) {$\RV{Y}$}
+++(0,-0.3) node (X) {$\RV{X}$}
+++(0,-0.3) node (Do) {$\RV{D}$};
+\draw (D) -- (K) -- (N) -- (Y);
+\draw (copy0) to [out=-90,in=180] (Do);
+\draw (copy1) to [out=-45,in=180] (X);
+\draw (copy0) to [out=90,in=180] ($(N.west)+(0,0.15)$);
 \end{tikzpicture}\\
-	&=  
-\begin{tikzpicture}
-	\path (0,0) node[dist] (m) {$\mu$}
-	++ (0.5,0) coordinate (copy0)
-	++ (0.7,0) node[kernel] (K) {$\kernel{K}$}
-	++ (0.7,0) coordinate (copy1)
-	+ (0, -0.5) coordinate (copy2)
-	++ (0.5,0) node[kernel] (Fx) {$\kernel{F}^{\RV{X}}$}
-	+(0,-0.5) node[kernel] (Fd) {$\kernel{F}^{\RV{D}}$}
-	++ (0.8,0) node (X) {$\RV{X}$}
-	+ (0,-0.5) node (D) {$\RV{D}$};
-	\draw (m) -- (copy0) -- (K) -- (copy1);
-	\draw (copy0) to [out=-90,in=180] (copy2);
-	\draw (copy1) to [out=0, in=180] ($(Fx.west)+(0,0.15)$);
-	\draw (copy1) to [out=0,in=180] ($(Fd.west)+(0,0.15)$);
-	\draw (copy2) to [out=0,in=180] ($(Fx.west)+(0,-0.15)$);
-	\draw (copy2) to [out=0, in=180] ($(Fd.west)+(0,-0.15)$);
-	\draw (Fx) -- (X) (Fd) -- (D);
-\end{tikzpicture}\\
-&= \begin{tikzpicture}
-	\path (0,0) node[dist] (m) {$\mu$}
-	++ (0.5,0) coordinate (copy0)
-	++ (0.7,0) node[kernel] (K) {$\kernel{K}$}
-	++ (0.7,0) coordinate (copy1)
-	+ (0, -0.5) coordinate (copy2)
-	++ (0.5,0) node[kernel] (Fx) {$\kernel{F}^{\RV{X}}$}
-	++ (0.8,0) node (X) {$\RV{X}$}
-	+ (0,-0.5) node (D) {$\RV{D}$};
-	\draw (m) -- (copy0) -- (K) -- (copy1);
-	\draw (copy0) to [out=-90,in=180] (copy2);
-	\draw (copy1) to [out=0, in=180] ($(Fx.west)+(0,0.15)$);
-	\draw (copy2) to [out=0,in=180] ($(Fx.west)+(0,-0.15)$);
-	\draw (copy2) to [out=0, in=180] (D);
-	\draw (Fx) -- (X);
-\end{tikzpicture}
+ &= \kernel{K}^{\RV{X}\RV{Y}\RV{D}|\RV{D}}_d\label{eq:prob_disint_in_kernel_disint}
 \end{align}
 
-Let $\kernel{N}$ be an arbitrary element of $\prob{P}^{\{\RV{Y}|\RV{X}\RV{D}\}}$.
 
+
+For $A\in\sigalg{X}$,$B\in\sigalg{Y}$, $d\in D$, we have $\prob{Q}(A\times B\times \emptyset)=0=\kernel{K}^{\RV{X}\RV{Y}\RV{D}|\RV{D}}_d(A\times B\times \emptyset$, and for $\{d\}\in\sigalg{D}$ we have $\mu(\{d\})>0$ so:
+
+\begin{align}
+\prob{Q}(A\times B\times \{d\}) &= \int_{X^2} \int_X \int_{D^3} \kernel{N}_{d'',x'}(A) \textbf{Id}_{x''}(B) \textbf{Id}_{d'''} (\{d\}) d\splitter{0.1}_d(d',d'',d''') d\kernel{K}^{\RV{X}|\RV{D}}_{d'}(x)d\splitter{0.1}_x(x',x'')\\
+							&= \delta_d(\{d\}) \int_X \kernel{N}_{d,x}(A) \delta_x(B) d\kernel{K}^{\RV{X}|\RV{D}}_d(x)\\
+							&= \frac{1}{\mu(\{d\})} \int_{\{d\}} d\mu(d') \int_X \kernel{N}_{d,x}(A) \delta_x(B) d\kernel{K}^{\RV{X}|\RV{D}}_d(x)\\
+							&= \frac{1}{\mu(\{d\})} \int_D\int_X \kernel{N}_{d,x}(A) \delta_{d'}(\{d\}) \delta_x(B) d\kernel{K}^{\RV{X}|\RV{D}}_d(a) d\mu(d')\\
+							&= \frac{1}{\mu(\{d\})} \int_D\int_X \kernel{N}_{d,x}(A) \delta_{d'}(\{d\}) \delta_x(B) d\kernel{K}^{\RV{X}|\RV{D}}_{d'}(a) d\mu(d')\\
+							&= \frac{1}{\mu(\{d\})} \prob{P}^{\RV{X}\RV{Y}\RV{D}}(A\times B\times \{d\})\\
+							&= \frac{1}{\mu(\{d\})} \int_D \kernel{K}_{d'}^{\RV{X}\RV{Y}\RV{D}|\RV{D}}(A\times B\times \{d\})d\mu(d')\\
+							&= \frac{1}{\mu(\{d\})} \int_D \kernel{K}_{d'}{\RV{X}\RV{Y}|\RV{D}}(A\times B) \delta_{d'}(\{d\})d\mu(d')\\
+							&= \kernel{K}_{d}^{\RV{X}\RV{Y}|\RV{D}}(A\times B)\\
+							&= \kernel{K}_d^{\RV{X}\RV{Y}|\RV{D}}(A\times B) \delta_d(\{d\})\\
+							&= \int_D \kernel{K}_{d'}^{\RV{X}\RV{Y}} (A\times B) \delta_{d''}(\{d\}) d\splitter{0.1}_d(d',d'')\\
+							&= \kernel{K}_d^{\RV{X}\RV{Y}\RV{D}|\RV{D}}(A\times B\times \{d\})
+\end{align}
+
+
+Equality follows from the monotone class theorem. Thus $\kernel{N}\in \kernel{K}^{\{\RV{Y}|\RV{X}\RV{D}\}}$.
 \end{proof}
+
+Thus any kernel conditional probability $\kernel{K}^{\RV{Y}|\RV{X}\RV{D}}$ can equally well be considered a regular conditional probability $\prob{P}^{\RV{Y}|\RV{X}\RV{D}}$ for a related probability space $(\prob{P},\Omega\times D)$ under the obvious identification of random variables, provided $D$ is countable. Note that any conditional probability $\prob{P}^{\RV{Y}|\RV{X}}$ that is \emph{not} conditioned on $\RV{D}$ is undefined in the kernel space $(\kernel{K},\Omega,D)$.
 
 \begin{lemma}[Diagrammatic consequences of labels]
 
