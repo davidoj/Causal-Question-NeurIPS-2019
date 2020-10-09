@@ -211,7 +211,7 @@ By the assumption of limited unresponsiveness, for all $d,d'$ such that $x(s,d)=
 $\kernel{M}$ is also independent of $\RV{D}$, given the obvious labeling of inputs. Therefore $\RV{Y}\CI_{\kernel{C}_s}\RV{D}|\RV{X}$.
 \end{proof}
 
-However, despite limited unresponsiveness implying $D$-causation within every state, it does not imply $D$-causation in mixtures of states. Suppose $D=\{1,0\}$ where $1$ stands for ``toggle light switch'' and $0$ stands for ``do nothing''. Suppose $S=\{[0,0],[0,1],[1,0],[1,1]\}$ where $[0,0]$ represents ``switch initially off, mains off'' the other states generalise this in the obvious way. Finally, $\RV{F}\in\{0,1\}$ is the final position of the switch and $\RV{L}\in\{0,1\}$ is the final state of the light. We have
+However, despite limited unresponsiveness implying $D$-causation within every state, it does not imply $D$-causation in mixtures of states. Suppose $D=\{0,1\}$ where $1$ stands for ``toggle light switch'' and $0$ stands for ``do nothing''. Suppose $S=\{[0,0],[0,1],[1,0],[1,1]\}$ where $[0,0]$ represents ``switch initially off, mains off'' the other states generalise this in the obvious way. Finally, $\RV{F}\in\{0,1\}$ is the final position of the switch and $\RV{L}\in\{0,1\}$ is the final state of the light. We have
 
 \begin{align}
     \kernel{C}^{\RV{L}\RV{F}|\RV{D}\RV{S}}_{d,[i,m]} = \delta_{(d\text{ XOR }i)\text{ AND }m}\otimes \delta_{(d\text{ XOR }i)\text{ AND }m}
@@ -219,16 +219,40 @@ However, despite limited unresponsiveness implying $D$-causation within every st
 
 Within states $[0,0]$ and $[1,0]$, the light is always off, so $\RV{F}=a\implies \RV{L}=0$ for any $a$. In states $[0,1]$ and $[1,1]$, $\RV{F}=1\implies \RV{L}=1$ and $\RV{F}=0\implies \RV{L}=0$. Thus $\RV{L}\not\hookleftarrow_{\RV{F}} \RV{D}$. However, suppose we take a mixture of consequence maps:
 \begin{align}
-    \kernel{C}_\theta = \frac{1}{4}\kernel{C}_{[0,0]} + \frac{1}{4}\kernel{C}_{[0,1]} + \frac{1}{2}\kernel{C}_{[1,1]}
+    \kernel{C}_\gamma &= \frac{1}{4}\kernel{C}_{\cdot,[0,0]} + \frac{1}{4}\kernel{C}_{\cdot,[0,1]} + \frac{1}{2}\kernel{C}_{\cdot,[1,1]}\\
+    \kernel{C}^{\RV{F}\RV{L}|\RV{D}}_\gamma &= \frac{1}{4} \left[\begin{matrix}
+                        1 & 0\\ 0 & 1
+                      \end{matrix}\right]\otimes \left[\begin{matrix}
+                        1 & 0\\ 1 & 0
+                      \end{matrix}\right] + \frac{1}{4} \left[\begin{matrix}
+                        1 & 0\\ 0 & 1
+                      \end{matrix}\right]\otimes \left[\begin{matrix}
+                        1 & 0\\ 0 & 1
+                      \end{matrix}\right] + \frac{1}{2}\left[\begin{matrix}
+                        0 & 1\\ 1 & 0
+                      \end{matrix}\right]\otimes \left[\begin{matrix}
+                        0 & 1\\ 1 & 0
+                      \end{matrix}\right]
 \end{align}
-
-Note that $\kernel{C}^{\RV{F}|\RV{D}}_{[0,0]}=\kernel{C}^{\RV{F}|\RV{D}}_{[0,1]} = \delta_0$ and $\kernel{C}^{\RV{F}|\RV{D}}_{[1,1]}=\delta_1$.
 
 Then
 
 \begin{align}
-    \kernel{C}^{\RV{L}|\RV{F}\RV{D}}_{\theta,1,1}(\{1\}) &= 1/2\\
-    \kernel{C}^{\RV{L}|\RV{F}\RV{D}}_{\theta,1,0}(\{1\}) &= 1
+    [1,0]\kernel{C}^{\RV{F}\RV{L}|\RV{D}}_{\gamma} &= \frac{1}{4}[0,1]\otimes[1,0]+\frac{1}{4}[0,1]\otimes[0,1]+\frac{1}{2}[1,0]\otimes[1,0]\\
+    [1,0]\splitter{0.1}(\kernel{C}^{\RV{F}|\RV{D}}_\gamma\otimes \kernel{C}^{\RV{L}|\RV{D}}_\gamma) &= (\frac{1}{2}[0,1]+\frac{1}{2}[1,0])\otimes(\frac{1}{4}[0,1]+\frac{3}{4}[1,0])\\
+    \implies [1,0]\kernel{C}^{\RV{F}\RV{L}|\RV{D}}_{\gamma} &\neq [1,0] \splitter{0.1} (\kernel{C}^{\RV{F}|\RV{D}}_\gamma\otimes \kernel{C}^{\RV{L}|\RV{D}}_\gamma)
 \end{align}
 
-Thus under hypothesis $\theta$, $\RV{F}$ does not $D$-cause $\RV{L}$ even though $\RV{F}$ $D$-causes $\RV{L}$ in all states $S$.
+Thus under hypothesis mixture $\gamma$, $\RV{F}$ does not $D$-cause $\RV{L}$ even though $\RV{F}$ $D$-causes $\RV{L}$ in all states $S$. The definition of $D$-causation was motivated by the idea that we could reduce a difficult decision problem with a large set $D$ to a simpler problem with a smaller ``effective'' set of decisions by exploiting conditional independence. Even if $\RV{X}$ $D$-causes $\RV{Y}$ in every $\theta\in S$, $\RV{X}$ does not necessarily $D$-cause $\RV{Y}$ in mixtures of states in $S$. For this reason, we do not say that $\RV{X}$ $D$-causes $\RV{Y}$ in $S$ if $\RV{X}$ $D$-causes $\RV{Y}$ in every $\theta\in S$, and in this way we differ substantially from \citet{heckerman_decision-theoretic_1995}.
+
+Instead, we simply extend the definition of $D$-causation to mixtures of hypotheses: if $\gamma\in \Delta(\Theta)$ is a mixture of hypotheses, define $\kernel{C}_\gamma:= (\gamma\otimes\textbf{Id})\kernel{C}$. Then $\RV{X}$ $D$-causes $\RV{Y}$ relative to $\gamma$ iff $\RV{Y}\CI_{\kernel{C}_\gamma} \RV{D}|\RV{X}$.
+
+Theorem \ref{th:univ_d_causation} shows that under some conditions, $D$-causation can hold for arbitrary mixtures over subsets of the hypothesis class $\Theta$.
+
+\begin{theorem}[Universal $D$-causation]\label{th:univ_d_causation}
+If $\kernel{C}^{\RV{X}|\RV{D}}_{\theta} = \kernel{C}^{\RV{X}|\RV{D}}_{\theta'}$ for all $\theta,\theta'\in S\subset \Theta$ and $\RV{X}$ $D$-causes $\RV{Y}$ in all $\theta\in S$, then $\RV{X}$ $D$-causes $\RV{Y}$ with respect to all mixtures $\gamma\in \Delta(\Theta)$ with $\gamma(S)=1$.
+\end{theorem}
+
+\begin{proof}
+
+\end{proof}

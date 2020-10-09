@@ -3,7 +3,7 @@
 \contentsline {subsection}{\numberline {2.1}Formalising Causal Statistical Decision Problems: See-Do Maps}{6}{subsection.2.1}%
 \contentsline {subsection}{\numberline {2.2}D-causation}{8}{subsection.2.2}%
 \contentsline {subsection}{\numberline {2.3}D-causation vs Heckerman and Shachter}{9}{subsection.2.3}%
-\contentsline {section}{\numberline {3}Notation}{10}{section.3}%
+\contentsline {section}{\numberline {3}Notation}{11}{section.3}%
 \contentsline {section}{\numberline {4}What is the difference between Causal Bayesian Networks and See-Do models?}{11}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Influence Diagrams vs See-Do models}{12}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Influence diagrams vs Causal Bayesian Networks}{14}{subsection.4.2}%
@@ -29,6 +29,6 @@
 \contentsline {subsection}{\numberline {5.5}Random Variables}{37}{subsection.5.5}%
 \contentsline {section}{\numberline {6}Decision makers and decision models}{47}{section.6}%
 \contentsline {subsection}{\numberline {6.1}Expected utility maximisers}{48}{subsection.6.1}%
-\contentsline {paragraph}{Version 1}{49}{section*.39}%
-\contentsline {paragraph}{Version 2}{50}{section*.40}%
-\contentsline {paragraph}{Version 3}{50}{section*.41}%
+\contentsline {paragraph}{Version 1}{49}{section*.38}%
+\contentsline {paragraph}{Version 2}{50}{section*.39}%
+\contentsline {paragraph}{Version 3}{50}{section*.40}%

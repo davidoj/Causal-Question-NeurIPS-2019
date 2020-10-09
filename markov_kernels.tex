@@ -852,7 +852,7 @@ For \emph{this} diagram, properties \ref{eq:labels_express_marginal_upper} and \
 \end{definition}
 
 \begin{lemma}[Output label assignments exist]
-Given Markov kernel space $(\kernel{K},\Omega,D)$, random variables $\RV{X}:\Omega\times D\to X$ and $\RV{Y}:\Omega\times D\to Y$ then there exists a diagram of $\kernel{L}:=\kernel{K}^{\RV{X}\RV{Y}|\RV{D}}$ such that Equations \ref{eq:labels_express_marginal_upper} and \ref{eq:labels_express_marginal_lower} hold. Thus $\kernel{L}$ can be drawn such that the labels ${\color{blue}\RV{X}}$ and ${\color{blue}\RV{Y}}$ can be assigned.
+Given Markov kernel space $(\kernel{K},\Omega,D)$, random variables $\RV{X}:\Omega\times D\to X$ and $\RV{Y}:\Omega\times D\to Y$ then there exists a diagram of $\kernel{L}:=\kernel{K}^{\RV{X}\RV{Y}|\RV{D}}$ with a valid output labelling assigning ${\color{blue}\RV{X}}$ and ${\color{blue}\RV{Y}}$ to the output wires.
 \end{lemma}
 
 \begin{proof}
@@ -982,13 +982,82 @@ Given a Markov kernel space $(\kernel{K},\Omega,D)$ and random variables $\RV{X}
 \end{align}
 
 Write $\kernel{K}^{\{\RV{Y}|\RV{XD}\}}$ for the set of kernels satisfying \ref{eq:def_k_disint} and $\kernel{K}^{\RV{Y}|\RV{XD}}$ for an arbitrary member of $\kernel{K}^{\{\RV{Y}|\RV{XD}\}}$.
+\end{definition}
 
-Note that for any variable $\RV{X}:\Omega\times D\to X$ and the domain variable $\RV{D}:\Omega\times D\to D$ we have by definition of $\kernel{K}$:
+\begin{definition}[Wire labels -- input]\label{def:wl_disint}
+
+An input wire is \emph{connected} to an output wire if it is possible to trace a path from the start of the input wire to the end of the output wire without passing through any boxes, erase maps or right facing triangles.
+
+If an input wire is connected to an output wire and that output wire has a valid label $\RV{X}$, then it is valid to label the input wire with $\RV{X}$.
+
+For example, if the following are valid output labels with respect to $(\prob{P},\Omega)$:
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (A) {}
+++ (0.7,0) coordinate (copy0)
+++ (0.7,0) node[kernel] (m) {$\kernel{L}$}
+++ (0.7,0) node (E) {\color{blue}$\RV{X}$}
+++ (0,-0.3) node (F) {\color{blue}$\RV{Y}$};
+\draw (A) -- (m) -- (E);
+\draw (copy0) to [out=-60,in=180] (F);
+\end{tikzpicture}\label{dia:kernel_l}
+\end{align}
+
+i.e. if $\kernel{L}\in \prob{P}^{\{\RV{X}\RV{Y}|\RV{Y}\}}$, then the following is a valid input label:
+
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (A) {\color{blue}$\RV{Y}$}
+++ (0.7,0) coordinate (copy0)
+++ (0.7,0) node[kernel] (m) {$\kernel{L}$}
+++ (0.7,0) node (E) {\color{blue}$\RV{X}$}
+++ (0,-0.3) node (F) {\color{blue}$\RV{Y}$};
+\draw (A) -- (m) -- (E);
+\draw (copy0) to [out=-60,in=180] (F);
+\end{tikzpicture}
+\end{align}
+
+An input wire in a diagram for $\kernel{M}$ may be labeled $\RV{X}$ \emph{if and only if} copy and identity maps can be inserted to yield a diagram in which the input wire labeled $\RV{X}$ is connected to an output wire with valid label $\RV{X}$.
+
+So, if $\kernel{M}\in \prob{P}^{\{\RV{X}|\RV{Y}\}}$, then it is straightforward to show that
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (A) {}
+++ (0.7,0) coordinate (copy0)
+++ (0.7,0) node[kernel] (m) {$\kernel{M}$}
+++ (0.7,0) node (E) {\color{blue}$\RV{X}$}
+++ (0,-0.3) node (F) {\color{blue}$\RV{Y}$};
+\draw (A) -- (m) -- (E);
+\draw (copy0) to [out=-60,in=180] (F);
+\end{tikzpicture} \in \prob{P}^{\{\RV{X}\RV{Y}|\RV{Y}\}} \label{eq:const_from_m}
+\end{align}
+
+and hence the output labels are valid. Diagram \ref{eq:const_from_m} is constructed by taking the product of the copy map with $\kernel{M}\otimes\textbf{Id}$. Thus it is valid to label $\kernel{M}$ with
+
+\begin{align}
+\begin{tikzpicture}
+\path (0,0) node (A) {\color{blue}$\RV{Y}$}
+++ (0.7,0) node[kernel] (m) {$\kernel{M}$}
+++ (0.7,0) node (E) {\color{blue}$\RV{X}$};
+\draw (A) -- (m) -- (E);
+\end{tikzpicture}
+\end{align}
+\end{definition}
+
+\begin{lemma}[labeling of disintegrations]
+Given a kernel space $(\kernel{K},\Omega,D)$, random variables $\RV{X}$ and $\RV{Y}$, domain variable $\RV{D}$ and disintegration $\kernel{L}\in \kernel{K}^{\{\RV{Y}|\RV{X}\RV{D}\}}$, there is a diagram of $\kernel{L}$ with valid input labels ${\color{blue} \RV{X}}$ and ${\color{blue} \RV{D}}$ and valid output label ${\color{blue} \RV{Y}}$.
+\end{lemma}
+
+\begin{proof}
+Note that for any variable $\RV{W}:\Omega\times D\to W$ and the domain variable $\RV{D}:\Omega\times D\to D$ we have by definition of $\kernel{K}$:
 \begin{align}
 \begin{tikzpicture}
 \path (0,0) node (O) {}
-++ (1,0) node[kernel] (m) {$\kernel{K}^{\RV{XD}|\RV{D}}$}
-++ (1,0.15) node (E) {$\RV{X}$}
+++ (1,0) node[kernel] (m) {$\kernel{K}^{\RV{WD}|\RV{D}}$}
+++ (1,0.15) node (E) {$\RV{W}$}
 ++ (0,-0.3) node (F) {$\RV{D}$};
 \draw (O) -- (m) ($(m.east) + (0,0.15)$) -- (E);
 \draw ($(m.east) + (0,-0.15)$) -- (F);
@@ -998,10 +1067,10 @@ Note that for any variable $\RV{X}:\Omega\times D\to X$ and the domain variable 
 ++ (1,0) node[kernel] (m) {$\kernel{K}_{0}$}
 ++ (0.7,0) coordinate (copy0)
 + (0,-0.5) coordinate (copy2)
-++ (0.7,0.3) node[kernel] (Fx) {$\kernel{F}^\RV{X}$}
+++ (0.7,0.3) node[kernel] (Fx) {$\kernel{F}^\RV{W}$}
 ++(0,-0.8) node[kernel] (Fd) {$\kernel{F}^{\RV{D}}$}
 ++(0.7,0) node (D) {$\RV{D}$}
-++ (0,0.8) node (X) {$\RV{X}$};
+++ (0,0.8) node (X) {$\RV{W}$};
 \draw (O) -- (m) -- (copy0);
 \draw (copy0) to [bend left] ($(Fx.west)+(0,0.1)$) (copy0) to [bend right] ($(Fd.west)+(0,0.1)$);
 \draw (copy1) to [out=290,in=180] (copy2);
@@ -1014,10 +1083,10 @@ Note that for any variable $\RV{X}:\Omega\times D\to X$ and the domain variable 
 ++ (1,0) node[kernel] (m) {$\kernel{K}_{0}$}
 ++ (0.7,0) coordinate (copy0)
 + (0,-0.5) coordinate (copy2)
-++ (0.7,0.3) node[kernel] (Fx) {$\kernel{F}^\RV{X}$}
+++ (0.7,0.3) node[kernel] (Fx) {$\kernel{F}^\RV{W}$}
 ++(0,-0.8) coordinate (Fd)
 ++(0.7,0) node (D) {$\RV{D}$}
-++ (0,0.8) node (X) {$\RV{X}$};
+++ (0,0.8) node (X) {$\RV{W}$};
 \draw (O) -- (m) -- (copy0);
 \draw (copy0) to [bend left] ($(Fx.west)+(0,0.1)$);
 \draw (copy1) to [out=290,in=180] (copy2) -- (D);
@@ -1031,10 +1100,10 @@ Note that for any variable $\RV{X}:\Omega\times D\to X$ and the domain variable 
 ++ (1,0) node[kernel] (m) {$\kernel{K}_{0}$}
 ++ (0.7,0) coordinate (copy0)
 + (0,-0.5) coordinate (copy2)
-++ (0.7,-0.1) node[kernel] (Fx) {$\kernel{F}^\RV{X}$}
+++ (0.7,-0.1) node[kernel] (Fx) {$\kernel{F}^\RV{W}$}
 ++(0,-0.5) coordinate (Fd)
 ++(0.7,0) node (D) {$\RV{D}$}
-++ (0,0.5) node (X) {$\RV{X}$};
+++ (0,0.5) node (X) {$\RV{W}$};
 \draw (O) -- (m);
 \draw (m) to [out=0,in=180]  ($(Fx.west)+(0,0.1)$);
 \draw (copy1) to [out=290,in=180] (D);
@@ -1047,10 +1116,10 @@ Note that for any variable $\RV{X}:\Omega\times D\to X$ and the domain variable 
 ++ (1,0) node[kernel] (m) {$\kernel{K}$}
 ++ (0.7,0) coordinate (copy0)
 + (0,-0.5) coordinate (copy2)
-++ (0.7,-0.) node[kernel] (Fx) {$\kernel{F}^\RV{X}$}
+++ (0.7,-0.) node[kernel] (Fx) {$\kernel{F}^\RV{W}$}
 ++(0,-0.5) coordinate (Fd)
 ++(0.7,0) node (D) {$\RV{D}$}
-++ (0,0.5) node (X) {$\RV{X}$};
+++ (0,0.5) node (X) {$\RV{W}$};
 \draw (O) -- (m);
 \draw (m) to [out=0,in=180]  ($(Fx.west)+(0,0.0)$);
 \draw (copy1) to [out=290,in=180] (D);
@@ -1059,87 +1128,18 @@ Note that for any variable $\RV{X}:\Omega\times D\to X$ and the domain variable 
 &=\begin{tikzpicture}
 \path (0,0) node (O) {}
 ++ (0.3,0) coordinate (copy1)
-++ (1,0) node[kernel] (m) {$\kernel{K}^{\RV{X}|\RV{D}}$}
+++ (1,0) node[kernel] (m) {$\kernel{K}^{\RV{W}|\RV{D}}$}
 ++(0,-0.5) coordinate (Fd)
 ++(1,0) node (D) {$\RV{D}$}
-++ (0,0.5) node (X) {$\RV{X}$};
+++ (0,0.5) node (X) {$\RV{W}$};
 \draw (O) -- (m) -- (X);
 \draw (copy1) to [out=290,in=180] (D);
 \end{tikzpicture}
 \end{align}
 
-That is, any joint kernel including the variable $\RV{D}$ can be drawn such that the wire labeled $\RV{D}$ is copied from the input wire. Conversely, pre-composing a joint kernel $\kernel{K}^{\RV{X}|\RV{D}}$ with the copy map yeilds $\kernel{K}^{\RV{XD}|\RV{D}}$. 
-\end{definition}
 
 
-If an input wire is connected to an output wire labeled $\RV{X}$ and passes through no boxes, then the input wire may be labeled $\RV{X}$. If a kernel $\kernel{K}=\kernel{L}\kernel{M}$ and $\kernel{L}$ can be drawn with input wire labels $\RV{X},\RV{Y},...$ then $\kernel{K}$ can be drawn with the same input wire labels.
-
-\begin{definition}[Wire labels -- input]\label{def:wl_disint}
-
-An input wire is \emph{connected} to an output wire if it is possible to trace a path from the start of the input wire to the end of the output wire without passing through any boxes, erase maps or right facing triangles.
-
-Iff an input wire is connected to an output wire and that output wire has a valid label $\RV{X}$, then it is valid to label the input wire with $\RV{X}$.
-
-For example:
-
-
-
-
-Suppose we have a Markov kernel space $(\kernel{K},\Omega,D)$, random variables $\RV{X}:\Omega\times D\to X$, $\RV{Y}:\Omega\times D\to Y$, $\RV{Z}:\Omega\times D\to Z$ and a Markov kernel $\kernel{L}:D\times X\to \Delta(\mathcal{Y}\times\mathcal{Z})$. The following labelling of $\kernel{L}$:
-
-\begin{align}
-\begin{tikzpicture}
-\path (0,0) node (A) {\color{blue} $\RV{D}$}
-+ (0,-0.3) node (B) {\color{blue} $\RV{X}$}
-++ (0.7,-0.15) node[kernel] (m) {$\kernel{L}$}
-++ (0.7,0.15) node (E) {\color{blue}$\RV{X}$}
-++ (0,-0.3) node (F) {\color{blue}$\RV{Y}$};
-\draw (A) -- ($(m.west)+(0,0.15)$);
-\draw (B) -- ($(m.west)+(0,-0.15)$);
-\draw ($(m.east) + (0,0.15)$) -- (E);
-\draw ($(m.east) + (0,-0.15)$) -- (F);
-\end{tikzpicture}
-\end{align}
-
-is \emph{valid} iff
-
-\begin{align}
-\kernel{L} \in \kernel{K}^{\{\RV{Y}\RV{Z}|\RV{D}\RV{X}\}}\label{eq:labels_express_disint}
-\end{align}
-
-and
-
-\begin{align}
-\begin{tikzpicture}
-\path (0,0) node (A) {\color{blue} $\RV{D}$}
-+ (0,-0.3) node (B) {\color{blue} $\RV{X}$}
-++ (0.7,-0.15) node[kernel] (m) {$\kernel{L}$}
-++ (1,0.15) node (E) {\color{blue}$\RV{X}$}
-++ (0,-0.3) node (F) {};
-\draw (A) -- ($(m.west)+(0,0.15)$);
-\draw (B) -- ($(m.west)+(0,-0.15)$);
-($(m.east) + (0,0.15)$) -- (E);
-\draw[-{Rays [n=8]}] ($(m.east) + (0,-0.15)$) -- (F);
-\end{tikzpicture} = \kernel{K}^{\RV{X}|\RV{D}}\label{eq:labels_express_marginal_upper_disint}
-\end{align}
-
-and
-
-\begin{align}
-\begin{tikzpicture}
-\path (0,0) node (A) {\color{blue} $\RV{D}$}
-+ (0,-0.3) node (B) {\color{blue} $\RV{X}$}
-++ (0.7,-0.15) node[kernel] (m) {$\kernel{L}$}
-++ (1,0.15) node (E) {}
-++ (0,-0.3) node (F) {\color{blue}$\RV{Y}$};
-\draw (A) -- ($(m.west)+(0,0.15)$);
-\draw (B) -- ($(m.west)+(0,-0.15)$);
-\draw[-{Rays [n=8]}] ($(m.east) + (0,0.15)$) -- (E);
-\draw ($(m.east) + (0,-0.15)$) -- (F);
-\end{tikzpicture} = \kernel{K}^{\RV{Y}|\RV{D}}\label{eq:labels_express_marginal_lower_disint}
-\end{align}
-
-\end{definition}
+\end{proof}
 
 The existence of disintegrations of standard measurable probability spaces is well known.
 
@@ -1147,7 +1147,10 @@ The existence of disintegrations of standard measurable probability spaces is we
 Given a probability measure $\mu\in \Delta(\mathcal{X}\otimes \mathcal{Y})$, if $(F,\mathcal{F})$ is standard then a disintegration $\kernel{K}:X\to \Delta(\mathcal{Y})$ exists \citep{cinlar_probability_2011}.
 \end{theorem}
 
+In particular, if for all $x\in X$, $\prob{P}^{\RV{X}}(\RV{X}\in\{x\})>0$, then $\prob{P}^{\RV{Y}|\RV{X}}_x(\RV{Y}\in A) = \frac{\prob{P}^{\RV{X}\RV{Y}}(\RV{Y}\in A \And \RV{X}\in \{x\})}{\prob{P}^{\RV{X}}(\RV{X}\in\{x\})}$.
+
 For Markov kernel spaces, we make the simplifying assumption that the domain space $D$ is a discrete space. Given this assumption, there exists a positive definite probability $\mu\in \Delta(\mathcal{D})$. That is, for every $d\in D$, $\mu(\{d\})>0$. Given this assumption, for every Markov kernel space $(\kernel{K},\Omega,D)$ there is a probability space $(\prob{P},\Omega\times D)$ such that $\kernel{K}$ can be uniquely defined as a disintegration of $\prob{P}$. For uncountable $D$, even if it is standard measurable, this is not possible \citep{hajek_what_2003}.
+
 
 \begin{definition}[Relative probability space]
 
