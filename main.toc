@@ -4,31 +4,32 @@
 \contentsline {subsection}{\numberline {2.2}D-causation}{8}{subsection.2.2}%
 \contentsline {subsection}{\numberline {2.3}D-causation vs Heckerman and Shachter}{9}{subsection.2.3}%
 \contentsline {section}{\numberline {3}Notation}{11}{section.3}%
-\contentsline {section}{\numberline {4}What is the difference between Causal Bayesian Networks and See-Do models?}{11}{section.4}%
+\contentsline {section}{\numberline {4}What is the difference between Causal Bayesian Networks and See-Do models?}{12}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Influence Diagrams vs See-Do models}{12}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Influence diagrams vs Causal Bayesian Networks}{14}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}What is meant by ``variables''?}{15}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.2}Influence diagrams vs Causal Bayesian Networks}{15}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}What is meant by ``variables''?}{16}{subsection.4.3}%
 \contentsline {subsection}{\numberline {4.4}Necessary relationships}{16}{subsection.4.4}%
 \contentsline {subsection}{\numberline {4.5}Recursive Structural Causal Models}{17}{subsection.4.5}%
 \contentsline {subsection}{\numberline {4.6}Recursive Structural Causal Models with Necessary Relationships}{18}{subsection.4.6}%
-\contentsline {subsection}{\numberline {4.7}Cyclic Structural Causal Models}{22}{subsection.4.7}%
-\contentsline {subsection}{\numberline {4.8}Not all variables have well-defined interventions}{24}{subsection.4.8}%
+\contentsline {subsection}{\numberline {4.7}Cyclic Structural Causal Models}{23}{subsection.4.7}%
+\contentsline {subsection}{\numberline {4.8}Not all variables have well-defined interventions}{25}{subsection.4.8}%
 \contentsline {subsubsection}{\numberline {4.8.1}Necessary relationships in cyclic SCMs}{25}{subsubsection.4.8.1}%
-\contentsline {section}{\numberline {5}Definitions and key notation}{28}{section.5}%
+\contentsline {section}{\numberline {5}Definitions and key notation}{29}{section.5}%
 \contentsline {subsection}{\numberline {5.1}Standard Symbols}{29}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Probability Theory}{29}{subsection.5.2}%
-\contentsline {paragraph}{Common $\sigma $ algebras}{29}{section*.30}%
-\contentsline {subsection}{\numberline {5.3}Product Notation}{30}{subsection.5.3}%
-\contentsline {subsection}{\numberline {5.4}String Diagrams}{30}{subsection.5.4}%
-\contentsline {paragraph}{Elementary operations}{31}{section*.31}%
-\contentsline {paragraph}{Probability measures, Markov kernels and functions}{32}{section*.32}%
-\contentsline {paragraph}{Markov kernels with special notation}{32}{section*.33}%
+\contentsline {subsection}{\numberline {5.2}Probability Theory}{30}{subsection.5.2}%
+\contentsline {paragraph}{Common $\sigma $ algebras}{30}{section*.30}%
+\contentsline {subsection}{\numberline {5.3}Product Notation}{31}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}String Diagrams}{31}{subsection.5.4}%
+\contentsline {paragraph}{Elementary operations}{32}{section*.31}%
+\contentsline {paragraph}{Probability measures, Markov kernels and functions}{33}{section*.32}%
+\contentsline {paragraph}{Markov kernels with special notation}{33}{section*.33}%
 \contentsline {subsubsection}{\numberline {5.4.1}Comparison of notations}{35}{subsubsection.5.4.1}%
-\contentsline {subsubsection}{\numberline {5.4.2}Working With String Diagrams}{35}{subsubsection.5.4.2}%
+\contentsline {subsubsection}{\numberline {5.4.2}Working With String Diagrams}{36}{subsubsection.5.4.2}%
 \contentsline {paragraph}{Axioms of Symmetric Monoidal Categories}{36}{section*.34}%
-\contentsline {subsection}{\numberline {5.5}Random Variables}{37}{subsection.5.5}%
-\contentsline {section}{\numberline {6}Decision makers and decision models}{47}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Expected utility maximisers}{48}{subsection.6.1}%
-\contentsline {paragraph}{Version 1}{49}{section*.38}%
-\contentsline {paragraph}{Version 2}{50}{section*.39}%
-\contentsline {paragraph}{Version 3}{50}{section*.40}%
+\contentsline {subsection}{\numberline {5.5}Random Variables}{38}{subsection.5.5}%
+\contentsline {subsubsection}{\numberline {5.5.1}Conditional Independence}{46}{subsubsection.5.5.1}%
+\contentsline {section}{\numberline {6}Decision makers and decision models}{48}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Expected utility maximisers}{49}{subsection.6.1}%
+\contentsline {paragraph}{Version 1}{51}{section*.38}%
+\contentsline {paragraph}{Version 2}{51}{section*.39}%
+\contentsline {paragraph}{Version 3}{51}{section*.40}%

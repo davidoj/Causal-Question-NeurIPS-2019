@@ -1162,9 +1162,9 @@ For any random variable $\RV{X}:\Omega\times D\to X$ on $(\kernel{K},\Omega,D)$,
 \end{definition}
 
 
-\begin{theorem}[Agreement of disintegrations]
+\begin{lemma}[Agreement of disintegrations]\label{lem:agree_disint}
 Given a Markov kernel space $(\kernel{K},\Omega,D)$, any relative probability space $(\mu\prob{K},\Omega\times D)$ and any random variables $\RV{X}:\Omega\times D\to X$, $\RV{Y}:\Omega\times D\to Y$, $\kernel{K}^{\{\RV{Y}|\RV{X}\RV{D}\}}=(\mu\prob{K})^{\{\RV{Y}|\RV{X}\RV{D}\}}$ (note that this set equality).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 Define $\prob{P}:=\mu\kernel{K}$ and let $\kernel{M}$ be an arbitrary version of $\kernel{K}^{\{\RV{Y}|\RV{X}\RV{D}\}}$. Then
@@ -1263,6 +1263,74 @@ Equality follows from the monotone class theorem. Thus $\kernel{N}\in \kernel{K}
 \end{proof}
 
 Thus any kernel conditional probability $\kernel{K}^{\RV{Y}|\RV{X}\RV{D}}$ can equally well be considered a regular conditional probability $\prob{P}^{\RV{Y}|\RV{X}\RV{D}}$ for a related probability space $(\prob{P},\Omega\times D)$ under the obvious identification of random variables, provided $D$ is countable. Note that any conditional probability $\prob{P}^{\RV{Y}|\RV{X}}$ that is \emph{not} conditioned on $\RV{D}$ is undefined in the kernel space $(\kernel{K},\Omega,D)$.
+
+\subsubsection{Conditional Independence}
+
+\begin{definition}[Kernels constant in an argument]
+	Given a kernel $(\kernel{K},\Omega,D)$ and random variables $\RV{Y}$ and $\RV{X}$, we say a verstion of the disintegration $\kernel{K}^{\RV{Y}|\RV{X}\RV{D}}$ is constant in $\RV{D}$ if for all $x\in X$, $d,d'\in D$, $\kernel{K}^{\RV{Y}|\RV{X}\RV{D}}_{(x,d)} = \kernel{K}^{\RV{Y}|\RV{X}\RV{D}}_{(x,d')}$.
+
+\end{definition}
+
+\begin{definition}[Domain Conditional Independence]
+Given a kernel space $(\kernel{K},\Omega,D)$, relative probability space $(\prob{P},\Omega\times D)$, variables $\RV{X}$,$\RV{Y}$ and domain variable $\RV{D}$, $\RV{X}$ is \emph{conditionally independent} of $\RV{D}$ given $\RV{Y}$, written $\RV{X}\CI_{\kernel{K}} \RV{D}|\RV{Y}$ if any of the following equivalent conditions hold:
+
+\begin{itemize}
+	\item $\prob{P}^{\RV{X}\RV{D}|\RV{Y}} = \prob{P}^{\RV{X}|\RV{Y}}\prob{P}^{\RV{D}|\RV{Y}}$
+	\item For any version of $\prob{P}^{\{\RV{X}|\RV{Y}\}}$, $\prob{P}^{\RV{X}|\RV{Y}}\otimes\stopper{0.1}_D$ is a version of  $\kernel{K}^{\{\RV{X}|\RV{Y}\RV{D}\}}$
+	\item There exists a version of $\kernel{K}^{\{\RV{X}|\RV{Y}\RV{D}\}}\text{ constant in }\RV{D}$
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Definitions are equivalent]
+(1)$\implies$(2):
+By Lemma \ref{lem:agree_disint}, $\prob{P}^{\{\RV{Y}|\RV{X}\RV{D}\}}=\kernel{K}^{\{\RV{Y}|\RV{X}\RV{D}\}}$. Thus it is sufficient to show that $\prob{P}^{\RV{X}|\RV{Y}}\otimes\stopper{0.1}$ is a version of $\prob{P}^{\{\RV{X}|\RV{Y}\RV{D}\}}$.
+
+\begin{align}
+\begin{tikzpicture}
+	\path (0,0) node[dist] (Pxd) {$\prob{P}^{\RV{X}\RV{D}}$}
+	+ (0.7,0.1) coordinate (copy0)
+	+ (0.7,-0.1) coordinate (copy1)
+	++ (1.5,0) node[kernel] (Pyxd) {$\prob{P}^{\RV{X}|\RV{Y}}$}
+	++(1,0) node (Y) {$\RV{Y}$}
+	+(0,0.3) node (D) {$\RV{D}$}
+	+(0,0.6) node (X) {$\RV{X}$};
+	\draw ($(Pxd.east) + (0,0.1)$) -- ($(Pyxd.west)+(0,0.1)$);
+	\draw ($(Pxd.east) + (0,-0.1)$) -- (copy1);
+	\draw[-{Rays[n=8]}] (copy1) to [out=-80,in=180] ($(Pyxd.south)+(0,-0.3)$);
+	\draw (copy0) to [out=80,in=180] (X);
+	\draw (copy1) to [out=80,in=180] (D);
+	\draw (Pyxd) -- (Y);
+\end{tikzpicture} &= \begin{tikzpicture}
+	\path (0,0) node[dist] (Pxd) {$\prob{P}^{\RV{X}\RV{D}}$}
+	+ (0.7,0.1) coordinate (copy0)
+	+ (0.7,-0.1) coordinate (copy1)
+	++ (1.5,0) node[kernel] (Pyxd) {$\prob{P}^{\RV{X}|\RV{Y}}$}
+	++(1,0) node (Y) {$\RV{Y}$}
+	+(0,0.3) node (D) {$\RV{D}$}
+	+(0,0.6) node (X) {$\RV{X}$};
+	\draw ($(Pxd.east) + (0,0.1)$) -- ($(Pyxd.west)+(0,0.1)$);
+	\draw ($(Pxd.east) + (0,-0.1)$) -- (copy1);
+	\draw (copy0) to [out=80,in=180] (X);
+	\draw (copy1) to [out=80,in=180] (D);
+	\draw (Pyxd) -- (Y);
+\end{tikzpicture} \\
+ &= \begin{tikzpicture}
+	\path (0,0) node[dist] (Pxd) {$\prob{P}^{\RV{X}}$}
+	+ (0.7,-0.2) coordinate (copy1)
+	++ (1.5,-0.2) node[kernel] (Pyxd) {$\prob{P}^{\RV{X}|\RV{Y}}$}
+	+ (0,0.4) node[kernel] (Pdx) {$\prob{P}^{\RV{X}|\RV{D}}$}
+	++(1,0) node (Y) {$\RV{Y}$}
+	+(0,0.4) node (D) {$\RV{D}$}
+	+(0,0.8) node (X) {$\RV{X}$};
+	\draw ($(Pxd.east) + (0,-0.2)$) -- ($(Pyxd.west)+(0,0)$);
+	\draw (copy1) to [out=90,in=180] (X);
+	\draw (copy1) to [out=80,in=180] (Pdx);
+	\draw (Pdx) -- (D);
+	\draw (Pyxd) -- (Y);
+\end{tikzpicture} 
+\end{align}
+\end{theorem}
+
 
 \begin{lemma}[Diagrammatic consequences of labels]
 
