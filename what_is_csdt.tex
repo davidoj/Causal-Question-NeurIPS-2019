@@ -250,9 +250,188 @@ Instead, we simply extend the definition of $D$-causation to mixtures of hypothe
 Theorem \ref{th:univ_d_causation} shows that under some conditions, $D$-causation can hold for arbitrary mixtures over subsets of the hypothesis class $\Theta$.
 
 \begin{theorem}[Universal $D$-causation]\label{th:univ_d_causation}
-If $\kernel{C}^{\RV{X}|\RV{D}}_{\theta} = \kernel{C}^{\RV{X}|\RV{D}}_{\theta'}$ for all $\theta,\theta'\in S\subset \Theta$ and $\RV{X}$ $D$-causes $\RV{Y}$ in all $\theta\in S$, then $\RV{X}$ $D$-causes $\RV{Y}$ with respect to all mixtures $\gamma\in \Delta(\Theta)$ with $\gamma(S)=1$.
+If $\kernel{C}^{\RV{X}|\RV{D}}_{\theta} = \kernel{C}^{\RV{X}|\RV{D}}_{\theta'}$ for all $\theta,\theta'\in S\subset \Theta$ and $\RV{X}$ $D$-causes $\RV{Y}$ in all $\theta\in S$, then $\RV{X}$ $D$-causes $\RV{Y}$ with respect to all mixed consequence maps $\kernel{C}_\gamma$ for all $\gamma\in \Delta(\Theta)$ with $\gamma(S)=1$.
 \end{theorem}
 
 \begin{proof}
 
+For $\gamma\in \Delta(\Theta)$, define the mixture
+
+\begin{align}
+\kernel{C}_\gamma := \begin{tikzpicture}
+    \path (0,0) node[dist] (g) {$\gamma$}
+    + (0,-0.45) node (D) {$\RV{D}$}
+    ++ (1,-0.3) node[kernel] (C) {$\kernel{C}$}
+    ++ (1,0) node (F) {$\RV{F}$};
+    \draw (g) to [out=0,in=180] ($(C.west) + (0,0.15)$) (D) -- ($(C.west) + (0,-0.15)$) (C) -- (F);
+\end{tikzpicture}
+\end{align}
+
+Because $\kernel{C}_\theta^{\RV{X}|\RV{D}} = \kernel{C}_{\theta'}^{\RV{X}|\RV{D}}$ for all $\theta,\theta'\in \Theta$, we have
+
+\begin{align}
+\begin{tikzpicture}
+    \path (0,0) node[dist] (g) {$\gamma$}
+    + (0.7,-0.15) coordinate (copy0)
+    + (0,-0.45) node (D) {$\RV{D}$}
+    ++ (1.5,-0.3) node[kernel] (C) {$\kernel{C}^{\RV{X}|\RV{D}\Theta}$}
+    ++ (1,0) node (X) {$\RV{X}$}
+    + (0,0.5) node (T) {$\Theta$};
+    \draw (g) to [out=0,in=180] (copy0) -- ($(C.west) + (0,0.15)$) (D) -- ($(C.west) + (0,-0.15)$);
+    \draw (C) -- (X);
+    \draw (copy0) to [out=90,in=180] (T);
+\end{tikzpicture} &= \begin{tikzpicture}
+    \path (0,0) node[dist] (g) {$\gamma$}
+    + (0,0.5) node[dist] (g2) {$\gamma$}
+    + (0.7,-0.15) coordinate (copy0)
+    + (0,-0.45) node (D) {$\RV{D}$}
+    ++ (1.5,-0.3) node[kernel] (C) {$\kernel{C}^{\RV{X}|\RV{D}\Theta}$}
+    ++ (1,0) node (X) {$\RV{X}$}
+    + (0,0.3) node (T) {$\Theta$};
+    \draw (g) to [out=0,in=180] (copy0) -- ($(C.west) + (0,0.15)$) (D) -- ($(C.west) + (0,-0.15)$);
+    \draw (C) -- (X);
+    \draw (g2) to [out=0,in=180] (T);
+\end{tikzpicture} \label{eq:decompose_condi_x}
+\end{align}
+
+Also
+
+\begin{align}
+    \kernel{C}_\gamma^{\RV{XY}|\RV{D}} &= \begin{tikzpicture}
+    \path (0,0) node[dist] (g) {$\gamma$}
+    + (0,-0.45) node (D) {$\RV{D}$}
+    ++ (1,-0.3) node[kernel] (C) {$\kernel{C}$}
+    ++ (1,0) node[kernel] (F) {$\kernel{F}^{\RV{X}\utimes\RV{Y}}$}
+    ++ (1,0.15) node (X) {$\RV{X}$}
+    + (0,-0.3) node (Y) {$\RV{Y}$};
+    \draw (g) to [out=0,in=180] ($(C.west) + (0,0.15)$) (D) -- ($(C.west) + (0,-0.15)$) (C) -- (F);
+    \draw ($(F.east) + (0,0.15)$) -- (X) ($(F.east) + (0,-0.15)$) -- (Y);
+\end{tikzpicture}\\
+    &= \begin{tikzpicture}
+    \path (0,0) node[dist] (g) {$\gamma$}
+    + (0,-0.45) node (D) {$\RV{D}$}
+    ++ (1,-0.3) node[kernel] (C) {$\kernel{C}^{\RV{XY}|\RV{D}\Theta}$}
+    ++ (1,0.15) node (X) {$\RV{X}$}
+    + (0,-0.3) node (Y) {$\RV{Y}$};
+    \draw (g) to [out=0,in=180] ($(C.west) + (0,0.15)$) (D) -- ($(C.west) + (0,-0.15)$);
+    \draw ($(C.east) + (0,0.15)$) -- (X) ($(C.east) + (0,-0.15)$) -- (Y);
+\end{tikzpicture}\\
+ &= \begin{tikzpicture}
+    \path (0,0) node[dist] (g) {$\gamma$}
+    + (0,-0.45) node (D) {$\RV{D}$}
+    + (0.7,-0.45) coordinate (copy0)
+    + (0.7,-0.15) coordinate (copy1)
+    ++ (1.4,-0.3) node[kernel] (C) {$\kernel{C}^{\RV{X}|\RV{D}\Theta}$}
+    + (0,0.6) coordinate (via0)
+    + (0,-0.6) coordinate (via1)
+    ++ (0.9,0) coordinate (copy2)
+    ++ (0.7,0) node[kernel] (Yx) {$\kernel{C}^{\RV{Y}|\RV{X}\RV{D}\Theta}$}
+    ++ (1.2,0.15) node (X) {$\RV{Y}$}
+    + (0,-0.5) node (Y) {$\RV{X}$};
+    \draw (g) to [out=0,in=180] (copy1) -- ($(C.west) + (0,0.15)$) (D) -- ($(C.west) + (0,-0.15)$) (C)--(Yx);
+    \draw (copy0) to [out=-90,in=180] (via1) to [out=0,in=180] ($(Yx.west) + (0,-0.15)$) (copy1) to [out=90,in=180] (via0) to [out=0,in=180] ($(Yx.west) + (0,0.15)$);
+    \draw ($(Yx.east) + (0,0.15)$) -- (X) (copy2) to [out=-90,in=180] (Y);
+ \end{tikzpicture}\\
+ &\overset{\RV{Y}\CI \RV{D}|\RV{X}\Theta}{=} \begin{tikzpicture}
+    \path (0,0) node[dist] (g) {$\gamma$}
+    + (0,-0.45) node (D) {$\RV{D}$}
+    + (0.7,-0.15) coordinate (copy1)
+    ++ (1.4,-0.3) node[kernel] (C) {$\kernel{C}^{\RV{X}|\RV{D}\Theta}$}
+    ++ (0.9,0.1) coordinate (copy2)
+    ++ (0.7,0.3) node[kernel] (Yx) {$\kernel{C}^{\RV{Y}|\RV{X}\Theta}$}
+    ++ (1.2,0.15) node (X) {$\RV{Y}$}
+    + (0,-0.5) node (Y) {$\RV{X}$};
+    \draw (g) to [out=0,in=180] (copy1) -- ($(C.west) + (0,0.15)$) (D) -- ($(C.west) + (0,-0.15)$) (C) to [out=0,in=180] (copy2) to [out=0,in=180] (Yx);
+    \draw (copy1) to [out=90,in=180] ($(Yx.west) + (0,0.15)$);
+    \draw ($(Yx.east) + (0,0.15)$) -- (X) (copy2) to [out=-90,in=180] (Y);
+ \end{tikzpicture} \\
+ &\overset{\ref{eq:decompose_condi_x}}{=} \begin{tikzpicture}
+    \path (0,0) node[dist] (g) {$\gamma$}
+    + (0,-0.45) node (D) {$\RV{D}$}
+    + (0.7,-0.15) coordinate (copy1)
+    ++ (1.4,-0.3) node[kernel] (C) {$\kernel{C}^{\RV{X}|\RV{D}\Theta}$}
+    + (1,0.6) node[dist] (g2) {$\gamma$}
+    ++ (0.9,0.1) coordinate (copy2)
+    ++ (1,0.3) node[kernel] (Yx) {$\kernel{C}^{\RV{Y}|\RV{X}\Theta}$}
+    ++ (1.2,0.15) node (X) {$\RV{Y}$}
+    + (0,-0.5) node (Y) {$\RV{X}$};
+    \draw (g) to [out=0,in=180] (copy1) -- ($(C.west) + (0,0.15)$) (D) -- ($(C.west) + (0,-0.15)$) (C) to [out=0,in=180] (copy2) to [out=0,in=180] (Yx);
+    \draw (g2) to [out=0,in=180] ($(Yx.west) + (0,0.15)$);
+    \draw ($(Yx.east) + (0,0.15)$) -- (X) (copy2) to [out=-90,in=180] (Y);
+ \end{tikzpicture}\\
+ &= \overset{\ref{eq:decompose_condi_x}}{=} \begin{tikzpicture}
+    \path (0,0) node (g) {}
+    + (0,-0.45) node (D) {$\RV{D}$}
+    + (0.7,-0.45) coordinate (copy1)
+    ++ (1.4,-0.3) node[kernel] (C) {$\kernel{C}_\gamma^{\RV{X}|\RV{D}\Theta}$}
+    + (1,0.6) node[dist] (g2) {$\gamma$}
+    ++ (0.9,0.1) coordinate (copy2)
+    ++ (1,0.3) node[kernel] (Yx) {$\kernel{C}^{\RV{Y}|\RV{X}\Theta}$}
+    + (-0.5,0.6) coordinate (stop0)
+    ++ (1.2,0.15) node (X) {$\RV{Y}$}
+    + (0,-0.5) node (Y) {$\RV{X}$};
+    \draw (D) -- ($(C.west) + (0,-0.15)$) (C) to [out=0,in=180] (copy2) to [out=0,in=180] (Yx);
+    \draw (g2) to [out=0,in=180] ($(Yx.west) + (0,0.15)$);
+    \draw ($(Yx.east) + (0,0.15)$) -- (X) (copy2) to [out=-90,in=180] (Y);
+    \draw[-{Rays[n=8]}] (copy1) to [out=90,in=180] (stop0);
+ \end{tikzpicture}\label{eq:is_conditional}
+\end{align}
+Equation \ref{eq:is_conditional} establishes that $(\gamma\otimes\textbf{Id}_X\otimes\stopper{0.3}_D)\kernel{C}^{\RV{Y}|\RV{X}\Theta}$ is a version of $\kernel{C}_\gamma^{\RV{Y}|\RV{X}\RV{D}}$, and thus $\RV{Y}\CI_{\kernel{C}_\gamma} \RV{D}|\RV{X}$.
+
+This can also be derived from the semi-graphoid rules:
+
+\begin{align}
+    \Theta\CI \RV{D} \land \Theta\CI \RV{X} | \RV{D} &\implies \Theta\CI \RV{XD}\\
+    &\implies \Theta\CI \RV{D}|\RV{X}\\
+    \RV{D} \CI \Theta|\RV{X} \land \RV{D}\CI \RV{Y}|\RV{X}\Theta &\implies \RV{D}\CI \RV{Y}|\RV{X}\\
+    &\implies \RV{Y}\CI\RV{D}|\RV{X}
+\end{align}
 \end{proof}
+
+\subsection{Properties of D-causation}
+
+If $\RV{X}$ D-causes $\RV{Y}$ relative to $\kernel{C}_\theta$, then the following holds:
+
+\begin{align}
+    \kernel{C}_{\theta}^{\RV{X}|\RV{D}} &= \begin{tikzpicture}
+    \path (0,0) node (D) {$\RV{D}$}
+    ++ (0.9,0) node[kernel] (Xd) {$\kernel{C}^{\RV{X}|\RV{D}}$}
+    ++ (1.3,0) node[kernel] (Yd) {$\kernel{C}^{\RV{Y}|\RV{X}}$}
+    ++ (0.9,0) node (Y) {$\RV{Y}$};
+    \draw (D) -- (Xd) -- (Yd) -- (Y); 
+    \end{tikzpicture}
+\end{align}
+
+This follows from version (2) of Definition \ref{def:conditional_independence}:
+
+\begin{align}
+    \kernel{C}_\theta^{\RV{X}|\RV{D}} &= \begin{tikzpicture}
+    \path (0,0) node (D) {$\RV{D}$}
+    ++ (0.7,0) coordinate (copy0)
+    ++ (0.7,0) node[kernel] (Xd) {$\kernel{C}^{\RV{X}|\RV{D}}$}
+    + (0,0.5) coordinate (via1)
+    ++ (1.3,0) node[kernel] (Yd) {$\kernel{C}^{\RV{Y}|\RV{X}\RV{D}}$}
+    ++ (0.9,0) node (Y) {$\RV{Y}$};
+    \draw (D) -- (Xd) -- (Yd) -- (Y);
+    \draw (copy0) to [out=90,in=180] (via1) to [out=0,in=180] ($(Yd.west)+(0,0.15)$); 
+    \end{tikzpicture}\\
+     &= \begin{tikzpicture}
+    \path (0,0) node (D) {$\RV{D}$}
+    ++ (0.7,0) coordinate (copy0)
+    ++ (0.7,0) node[kernel] (Xd) {$\kernel{C}^{\RV{X}|\RV{D}}$}
+    + (1.3,0.5) coordinate (via1)
+    ++ (1.3,0) node[kernel] (Yd) {$\kernel{C}^{\RV{Y}|\RV{X}}$}
+    ++ (0.9,0) node (Y) {$\RV{Y}$};
+    \draw (D) -- (Xd) -- (Yd) -- (Y);
+    \draw[-{Rays[n=8]}] (copy0) to [out=90,in=180] (via1); 
+    \end{tikzpicture}\\
+    &= \begin{tikzpicture}
+    \path (0,0) node (D) {$\RV{D}$}
+    ++ (0.9,0) node[kernel] (Xd) {$\kernel{C}^{\RV{X}|\RV{D}}$}
+    ++ (1.3,0) node[kernel] (Yd) {$\kernel{C}^{\RV{Y}|\RV{X}}$}
+    ++ (0.9,0) node (Y) {$\RV{Y}$};
+    \draw (D) -- (Xd) -- (Yd) -- (Y); 
+    \end{tikzpicture}
+\end{align}
+
+D-causation is not transitive: if $\RV{X}$ D-causes $\RV{Y}$ and $\RV{Y}$ D-causes $\RV{Z}$ then $\RV{X}$ doesn't necessarily D-cause $\RV{Z}$.

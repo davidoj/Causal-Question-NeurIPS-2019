@@ -1047,7 +1047,7 @@ and hence the output labels are valid. Diagram \ref{eq:const_from_m} is construc
 \end{align}
 \end{definition}
 
-\begin{lemma}[labeling of disintegrations]
+\begin{lemma}[Labeling of disintegrations]
 Given a kernel space $(\kernel{K},\Omega,D)$, random variables $\RV{X}$ and $\RV{Y}$, domain variable $\RV{D}$ and disintegration $\kernel{L}\in \kernel{K}^{\{\RV{Y}|\RV{X}\RV{D}\}}$, there is a diagram of $\kernel{L}$ with valid input labels ${\color{blue} \RV{X}}$ and ${\color{blue} \RV{D}}$ and valid output label ${\color{blue} \RV{Y}}$.
 \end{lemma}
 
@@ -1136,6 +1136,39 @@ Note that for any variable $\RV{W}:\Omega\times D\to W$ and the domain variable 
 \draw (copy1) to [out=290,in=180] (D);
 \end{tikzpicture}
 \end{align}
+\end{proof}
+
+We also use the informal convention of labelling wires in quote marks $``\RV{X}''$ if that wire is ``supposed to'' carry the label $\RV{X}$ but the label may not be valid.
+
+\begin{theorem}[Iterated disintegration]\label{th:iterated_disint}
+Given a kernel space $(\kernel{K},\Omega,D)$, random variables $\RV{X}$, $\RV{Y}$ and $\RV{Z}$ and domain variable $\RV{D}$,
+\begin{align}
+\begin{tikzpicture}
+	\path (0,0.15) node (D) {$``\RV{D}''$}
+	+ (0,-0.3) node (X) {$``\RV{X}''$}
+	++ (.7,-0.15) coordinate (copy0)
+	++ (.7,0) node[kernel] (Yxd) {$\kernel{K}^{\RV{Y}|\RV{XD}}$}
+	++ (0.7,0) coordinate (copy1)
+	++(1.5,0) node[kernel] (Zxyd) {$\kernel{K}^{\RV{Z}|\RV{XYD}}$}
+	++(1.5,0) node (Z) {$``\RV{Z}''$}
+	+(0,-0.4) node (Y) {$``\RV{Y}''$};
+	\draw (D) -- ($(Yxd.west) + (0,0.15)$) (X) -- ($(Yxd.west) + (0,-0.15)$);
+	\draw (Yxd) -- (Zxyd);
+	\draw ($(copy0) + (0,0.15)$) to [out=90,in=180] ($(Zxyd.west)+(0,0.15)$);
+	\draw ($(copy0) + (0,-0.15)$) to [out=-90,in = 180] ($(Zxyd.west)+(0,-0.15)$);
+	\draw (copy1) to [out=-90,in=180] (Y) (Zxyd) -- (Z);
+\end{tikzpicture}\in \kernel{K}^{\{\RV{ZY}|\RV{XD}\}}
+\end{align}
+
+Equivalently, for $d\in D$ and $x\in X$, $A\in \sigalg{Y}$, $B\in\sigalg{Z}$,
+
+\begin{align}
+	(d,x;A,B)\mapsto \int_A \kernel{K}^{\RV{Z}|\RV{XYD}}_{(x,y,d)}(B) d\kernel{K}^{\RV{Y}|\RV{XD}}_{(x,d)}(y) \in \kernel{K}^{\{\RV{ZY}|\RV{XD}\}}
+\end{align}
+\end{theorem}
+
+\begin{proof}
+\todo[inline]{write this up}
 
 
 
@@ -1274,8 +1307,10 @@ Thus any kernel conditional probability $\kernel{K}^{\RV{Y}|\RV{X}\RV{D}}$ can e
 \begin{definition}[Domain Conditional Independence]
 Given a kernel space $(\kernel{K},\Omega,D)$, relative probability space $(\prob{P},\Omega\times D)$, variables $\RV{X}$,$\RV{Y}$ and domain variable $\RV{D}$, $\RV{X}$ is \emph{conditionally independent} of $\RV{D}$ given $\RV{Y}$, written $\RV{X}\CI_{\kernel{K}} \RV{D}|\RV{Y}$ if any of the following equivalent conditions hold:
 
+\todo[inline]{Almost sure equality}
+
 \begin{itemize}
-	\item $\prob{P}^{\RV{X}\RV{D}|\RV{Y}} = \prob{P}^{\RV{X}|\RV{Y}}\prob{P}^{\RV{D}|\RV{Y}}$
+	\item $\prob{P}^{\RV{X}\RV{D}|\RV{Y}} \sim \prob{P}^{\RV{X}|\RV{Y}}\utimes \prob{P}^{\RV{D}|\RV{Y}}$
 	\item For any version of $\prob{P}^{\{\RV{X}|\RV{Y}\}}$, $\prob{P}^{\RV{X}|\RV{Y}}\otimes\stopper{0.1}_D$ is a version of  $\kernel{K}^{\{\RV{X}|\RV{Y}\RV{D}\}}$
 	\item There exists a version of $\kernel{K}^{\{\RV{X}|\RV{Y}\RV{D}\}}\text{ constant in }\RV{D}$
 \end{itemize}
@@ -1287,13 +1322,13 @@ By Lemma \ref{lem:agree_disint}, $\prob{P}^{\{\RV{Y}|\RV{X}\RV{D}\}}=\kernel{K}^
 
 \begin{align}
 \begin{tikzpicture}
-	\path (0,0) node[dist] (Pxd) {$\prob{P}^{\RV{X}\RV{D}}$}
+	\path (0,0) node[dist] (Pxd) {$\prob{P}^{\RV{Y}\RV{D}}$}
 	+ (0.7,0.1) coordinate (copy0)
 	+ (0.7,-0.1) coordinate (copy1)
 	++ (1.5,0) node[kernel] (Pyxd) {$\prob{P}^{\RV{X}|\RV{Y}}$}
-	++(1,0) node (Y) {$\RV{Y}$}
-	+(0,0.3) node (D) {$\RV{D}$}
-	+(0,0.6) node (X) {$\RV{X}$};
+	++(1,0) node (Y) {$``\RV{X}''$}
+	+(0,0.3) node (D) {$``\RV{D}''$}
+	+(0,0.6) node (X) {$``\RV{Y}''$};
 	\draw ($(Pxd.east) + (0,0.1)$) -- ($(Pyxd.west)+(0,0.1)$);
 	\draw ($(Pxd.east) + (0,-0.1)$) -- (copy1);
 	\draw[-{Rays[n=8]}] (copy1) to [out=-80,in=180] ($(Pyxd.south)+(0,-0.3)$);
@@ -1301,13 +1336,13 @@ By Lemma \ref{lem:agree_disint}, $\prob{P}^{\{\RV{Y}|\RV{X}\RV{D}\}}=\kernel{K}^
 	\draw (copy1) to [out=80,in=180] (D);
 	\draw (Pyxd) -- (Y);
 \end{tikzpicture} &= \begin{tikzpicture}
-	\path (0,0) node[dist] (Pxd) {$\prob{P}^{\RV{X}\RV{D}}$}
+	\path (0,0) node[dist] (Pxd) {$\prob{P}^{\RV{Y}\RV{D}}$}
 	+ (0.7,0.1) coordinate (copy0)
 	+ (0.7,-0.1) coordinate (copy1)
 	++ (1.5,0) node[kernel] (Pyxd) {$\prob{P}^{\RV{X}|\RV{Y}}$}
-	++(1,0) node (Y) {$\RV{Y}$}
-	+(0,0.3) node (D) {$\RV{D}$}
-	+(0,0.6) node (X) {$\RV{X}$};
+	++(1,0) node (Y) {$``\RV{X}''$}
+	+(0,0.3) node (D) {$``\RV{D}''$}
+	+(0,0.6) node (X) {$``\RV{Y}''$};
 	\draw ($(Pxd.east) + (0,0.1)$) -- ($(Pyxd.west)+(0,0.1)$);
 	\draw ($(Pxd.east) + (0,-0.1)$) -- (copy1);
 	\draw (copy0) to [out=80,in=180] (X);
@@ -1315,22 +1350,98 @@ By Lemma \ref{lem:agree_disint}, $\prob{P}^{\{\RV{Y}|\RV{X}\RV{D}\}}=\kernel{K}^
 	\draw (Pyxd) -- (Y);
 \end{tikzpicture} \\
  &= \begin{tikzpicture}
-	\path (0,0) node[dist] (Pxd) {$\prob{P}^{\RV{X}}$}
+	\path (0,0) node[dist] (Pxd) {$\prob{P}^{\RV{Y}}$}
 	+ (0.7,-0.2) coordinate (copy1)
 	++ (1.5,-0.2) node[kernel] (Pyxd) {$\prob{P}^{\RV{X}|\RV{Y}}$}
-	+ (0,0.4) node[kernel] (Pdx) {$\prob{P}^{\RV{X}|\RV{D}}$}
-	++(1,0) node (Y) {$\RV{Y}$}
-	+(0,0.4) node (D) {$\RV{D}$}
-	+(0,0.8) node (X) {$\RV{X}$};
+	+ (0,0.5) node[kernel] (Pdx) {$\prob{P}^{\RV{D}|\RV{Y}}$}
+	++(1,0) node (Y) {$``\RV{X}''$}
+	+(0,0.5) node (D) {$``\RV{D}''$}
+	+(0,1.2) node (X) {$``\RV{Y}''$};
 	\draw ($(Pxd.east) + (0,-0.2)$) -- ($(Pyxd.west)+(0,0)$);
 	\draw (copy1) to [out=90,in=180] (X);
 	\draw (copy1) to [out=80,in=180] (Pdx);
 	\draw (Pdx) -- (D);
 	\draw (Pyxd) -- (Y);
-\end{tikzpicture} 
+\end{tikzpicture} \\
+&\overset{condition (1)}{=} \begin{tikzpicture}
+	\path (0,0) node[dist] (Pxd) {$\prob{P}^{\RV{Y}}$}
+	+ (0.7,0) coordinate (copy1)
+	++ (1.5,0) node[kernel] (Pyxd) {$\prob{P}^{\RV{X}\RV{D}|\RV{Y}}$}
+	++(1,-0.15) node (Y) {$``\RV{X}''$}
+	+(0,0.3) node (D) {$``\RV{D}''$}
+	+(0,0.6) node (X) {$``\RV{Y}''$};
+	\draw (Pxd) -- (Pyxd);
+	\draw (copy1) to [out=90,in=180] (X);
+	\draw ($(Pyxd.east)+(0,0.15)$) -- (D);
+	\draw ($(Pyxd.east)+(0,-0.15)$) -- (Y);
+\end{tikzpicture}\\
+&= \begin{tikzpicture}
+	\path (0,0) node[dist] (Pxd) {$\prob{P}^{\RV{YDX}}$}
+	++(1,-0.3) node (Y) {$\RV{X}$}
+	+(0,0.3) node (D) {$\RV{D}$}
+	+(0,0.6) node (X) {$\RV{Y}$};
+	\draw ($(Pxd.east) + (0,0.3)$) -- (X) ($(Pxd.east) + (0,-0.3)$) -- (Y) (Pxd) -- (D);
+\end{tikzpicture}
+\end{align}
+
+(2)$\implies$ (3)
+
+$\prob{P}^{\RV{X}|\RV{Y}}\otimes\stopper{0.1}_D$ is a version of $\kernel{K}^{\{\RV{X}|\RV{Y}\RV{D}\}}$ by assumption, and is clearly constant in $\RV{D}$.
+
+(3)$\implies$ (1)
+
+By lemma \ref{lem:agree_disint}, there also exists a version of $\prob{P}^{\{\RV{X}|\RV{Y}\RV{D}\}}$ constant in $\RV{D}$. Let $\kernel{M}:Y\times D\to \Delta(\sigalg{X})$ be such a version. For arbitrary $d_0\in D$, let $\kernel{N}:=\kernel{M}_{(\cdot,d_0)}:Y\to \Delta(\sigalg{X})$ be the map $x\mapsto \kernel{M}_{(x,d_0)}$. By constancy in $\RV{D}$, $\kernel{M} = \stopper{0.1}\otimes \kernel{N}$. We wish to show $\prob{P}^{\RV{X}|\RV{Y}}\utimes \prob{P}^{\RV{D}|\RV{Y}}\in \prob{P}^{\{\RV{XD}|\RV{Y}\}}$. By Theorem \ref{th:iterated_disint}, we have 
+
+\begin{align}
+\begin{tikzpicture}
+	\path (0,0) node[dist] (Pxd) {$\prob{P}^{\RV{Y}\RV{D}}$}
+	+ (0.7,0.1) coordinate (copy0)
+	+ (0.7,-0.1) coordinate (copy1)
+	++ (1.5,0) node[kernel] (Pyxd) {$\kernel{N}$}
+	++(1,0) node (Y) {$\RV{X}$}
+	+(0,0.3) node (D) {$\RV{D}$}
+	+(0,0.6) node (X) {$\RV{Y}$};
+	\draw ($(Pxd.east) + (0,0.1)$) -- ($(Pyxd.west)+(0,0.1)$);
+	\draw ($(Pxd.east) + (0,-0.1)$) -- (copy1);
+	\draw[-{Rays[n=8]}] (copy1) to [out=-80,in=180] ($(Pyxd.south)+(0,-0.3)$);
+	\draw (copy0) to [out=80,in=180] (X);
+	\draw (copy1) to [out=80,in=180] (D);
+	\draw (Pyxd) -- (Y);
+\end{tikzpicture} &= \begin{tikzpicture}
+	\path (0,0) node[dist] (Pxd) {$\prob{P}^{\RV{Y}}$}
+	+ (0.7,0) coordinate (copy0)
+	++ (1.5,0) node[kernel] (Dy) {$\prob{P}^{\RV{D}|\RV{Y}}$}
+	++ (1.5,0) node[kernel] (Pyxd) {$\kernel{N}$}
+	++(1,0) node (Y) {$\RV{X}$}
+	+(0,0.3) node (D) {$\RV{D}$}
+	+(0,0.6) node (X) {$\RV{Y}$};
+	\draw ($(Pxd.east) + (0,0.1)$) -- ($(Pyxd.west)+(0,0.1)$);
+	\draw ($(Pxd.east) + (0,-0.1)$) -- (copy1);
+	\draw[-{Rays[n=8]}] (copy1) to [out=-80,in=180] ($(Pyxd.south)+(0,-0.3)$);
+	\draw (copy0) to [out=80,in=180] (X);
+	\draw (copy1) to [out=80,in=180] (D);
+	\draw (Pyxd) -- (Y);
+\end{tikzpicture}
 \end{align}
 \end{theorem}
 
+\begin{definition}[Conditional probability existence]\label{def:conditional_probability_existence}
+Given a kernel space $(\kernel{K},\Omega,D)$ and random variables $\RV{X}$, $\RV{Y}$, we say $\kernel{K}^{\{\RV{Y}|\RV{X}\}}$ \emph{exists} if $\RV{Y}\CI_{\kernel{K}} \RV{D}|\RV{X}$. If $\kernel{K}^{\{\RV{Y}|\RV{X}\}}$ exists then it is by definition equal to $\prob{P}^{\{\RV{Y}|\RV{X}\}}$ for any related probability space $(\prob{P},\Omega\times D)$.
+\end{definition}
+
+Note that $\kernel{K}^{\{\RV{Y}|\RV{X}\RV{D}\}}$ always exists.
+
+\begin{definition}[Conditional Independence]\label{def:conditional_independence}
+Given a kernel space $(\kernel{K},\Omega,D)$, relative probability space $(\prob{P},\Omega\times D)$, variables $\RV{X}$,$\RV{Y}$ and $\RV{Z}$, $\RV{X}$ is \emph{conditionally independent} of $\RV{Z}$ given $\RV{Y}$, written $\RV{X}\CI_{\kernel{K}} \RV{Z}|\RV{Y}$ if $\kernel{K}^{\{\RV{XY}|\RV{Z}\}}$ exists and any of the following equivalent conditions hold:
+
+\todo[inline]{Almost sure equality}
+
+\begin{itemize}
+	\item $\prob{P}^{\RV{X}\RV{Z}|\RV{Y}} \sim \prob{P}^{\RV{X}|\RV{Y}}\utimes \prob{P}^{\RV{Z}|\RV{Y}}$
+	\item For any version of $\prob{P}^{\{\RV{X}|\RV{Y}\}}$, $\prob{P}^{\RV{X}|\RV{Y}}\otimes\stopper{0.1}_Z$ is a version of  $\kernel{K}^{\{\RV{X}|\RV{Y}\RV{Z}\}}$
+	\item There exists a version of $\kernel{K}^{\{\RV{X}|\RV{Y}\RV{Z}\}}\text{ constant in }\RV{Z}$
+\end{itemize}
+\end{definition}
 
 \begin{lemma}[Diagrammatic consequences of labels]
 
