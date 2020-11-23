@@ -1,0 +1,2 @@
+\contentsline {section}{\numberline {1}Ignorability Does Not Identify the Average Causal Effect}{1}{section.1}%
+\contentsline {paragraph}{Random assignment eliminates selection bias}{2}{section*.3}%

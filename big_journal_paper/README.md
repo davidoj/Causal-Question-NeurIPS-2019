@@ -1,0 +1,46 @@
+# Storyboarding
+
+- Intro
+    - People like manipulating things. We want to manipulate things to be better, and avoid manipulations that make things worse.
+    - What do we need to do this?
+        - Some way of telling “better” from “worse” (utility)
+        - A set of interventions to choose from (Decisions)
+        - Some way of telling what actions accomplish (consequences)
+        - Some relation between given information to consequences
+    - Contrast to “normal” causal frameworks (Causal Bayesian Networks, Potential Outcomes Models): we want to find out “causal effects”. What do we need to do this?
+        - Some definition of causal effect
+        - Some means of relating given information to causal effects
+        - If we want to make stuff better, we still need utility, consequences, encyclopedia of interventions and means of relating given information to consequences. These are required by the original problem (causal effects might help)
+    - Causal approach has some problems
+        - Circularity/non-reducibility
+        - Constraints
+- Action
+    - What do we need to formalise “informed manipulation”?
+        - Markov kernels
+            - Notation
+            - Kernel spaces
+            - Random variables
+            - Conditional probability
+            - Conditional independence
+        - See-Do models
+            - Motivation
+            - Definition
+            - Comparison to Causal Bayesian Networks “pre-intervention distribution” and “post-intervention map” (note the lack of a domain for CBNs)
+        - D-causation
+            - Definition
+            - Closure under mixing
+            - Composition
+            - Comparison with do-interventions
+        - Identification
+            - Reproducibility + known in advance + D-causation
+            - Is it testable in principle?
+        - Constraints
+            - Don’t work with CBNs
+            - But we really need to be able to include them
+- Conclusion
+    - Causal manipulation problems require a set of [[Decisions]], implicit/absent in existing causal frameworks
+    - Given a set of decisions, inference is possible with causal assumptions that are reducible to more basic propositions:
+        - D-causation
+        - Reproducibility
+        - known in advance
+    - Key properties of CBNs can be naturally formulated within CSDT
