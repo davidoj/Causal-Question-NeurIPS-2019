@@ -1,2 +1,45 @@
-\contentsline {section}{\numberline {1}Ignorability Does Not Identify the Average Causal Effect}{1}{section.1}%
-\contentsline {paragraph}{Random assignment eliminates selection bias}{2}{section*.3}%
+\contentsline {section}{\numberline {1}Theories of causal inference}{2}{section.1}%
+\contentsline {section}{\numberline {2}Causal Questions}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Formalising Causal Statistical Decision Problems: See-Do Maps}{6}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}D-causation}{8}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}D-causation vs Heckerman and Shachter}{9}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Properties of D-causation}{12}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Notation}{13}{section.3}%
+\contentsline {section}{\numberline {4}What is the difference between Causal Bayesian Networks and See-Do models?}{14}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Influence Diagrams vs See-Do models}{14}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Influence diagrams vs Causal Bayesian Networks}{17}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}What is meant by ``variables''?}{18}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Necessary relationships}{18}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Recursive Structural Causal Models}{19}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Recursive Structural Causal Models with Necessary Relationships}{20}{subsection.4.6}%
+\contentsline {subsection}{\numberline {4.7}Cyclic Structural Causal Models}{25}{subsection.4.7}%
+\contentsline {subsection}{\numberline {4.8}Not all variables have well-defined interventions}{27}{subsection.4.8}%
+\contentsline {subsubsection}{\numberline {4.8.1}Necessary relationships in cyclic SCMs}{27}{subsubsection.4.8.1}%
+\contentsline {section}{\numberline {5}Potential Outcomes}{31}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Supposition maps to see-do models}{34}{subsection.5.1}%
+\contentsline {section}{\numberline {6}Ignorability Does Not Identify the Average Causal Effect}{35}{section.6}%
+\contentsline {paragraph}{Random assignment eliminates selection bias}{36}{section*.36}%
+\contentsline {section}{\numberline {7}Definitions and key notation}{37}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Standard Symbols}{38}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Probability Theory}{38}{subsection.7.2}%
+\contentsline {paragraph}{Common $\sigma $ algebras}{38}{section*.38}%
+\contentsline {subsection}{\numberline {7.3}Product Notation}{39}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}String Diagrams}{40}{subsection.7.4}%
+\contentsline {paragraph}{Elementary operations}{40}{section*.39}%
+\contentsline {paragraph}{Probability measures, Markov kernels and functions}{41}{section*.40}%
+\contentsline {paragraph}{Markov kernels with special notation}{42}{section*.41}%
+\contentsline {subsubsection}{\numberline {7.4.1}Comparison of notations}{44}{subsubsection.7.4.1}%
+\contentsline {subsubsection}{\numberline {7.4.2}Working With String Diagrams}{44}{subsubsection.7.4.2}%
+\contentsline {paragraph}{Axioms of Symmetric Monoidal Categories}{45}{section*.42}%
+\contentsline {subsection}{\numberline {7.5}Random Variables}{46}{subsection.7.5}%
+\contentsline {subsubsection}{\numberline {7.5.1}Conditional Independence}{55}{subsubsection.7.5.1}%
+\contentsline {section}{\numberline {8}Decision makers and decision models}{58}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Expected utility maximisers}{59}{subsection.8.1}%
+\contentsline {paragraph}{Version 1}{61}{section*.49}%
+\contentsline {paragraph}{Version 2}{61}{section*.50}%
+\contentsline {paragraph}{Version 3}{61}{section*.51}%
+\contentsline {section}{\numberline {9}Notes on category theoretic probability and string diagrams}{64}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Disintegration and Bayesian inversion}{67}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Generalisations}{68}{subsection.9.2}%
+\contentsline {subsection}{\numberline {9.3}Key questions for Causal Theories}{68}{subsection.9.3}%
+\contentsline {paragraph}{generalised disintegrations}{69}{section*.56}%

@@ -1,0 +1,297 @@
+
+%!TEX root = main.tex
+
+
+\section{Potential Outcomes}
+
+Counterfactual models would be easy to understand if you'd never heard of the Potential Outcomes approach to causality, but learning Potential Outcomes makes them harder to understand. In the following section, I attempt to untangle this mess.
+
+Potential Outcomes is an approach to formalising causal questions. Like Causal Bayeisan Networks, and unlike CSDT, it is a ``causes first'' approach. Potential Outcomes is motivated by the counterfactual definition of causation - that the ``causal effect'' of $\RV{X}$ on $\RV{Y}$ is the answer to the question ``what \emph{would have} happened to $\RV{Y}$ were $\RV{X}$ different?''. While CSDT was motivated by the question of ``what \emph{will} happen to $\RV{Y}$ if I take some action?'', see-do models are perfectly capable of modelling counterfactuals. Instead of $D$ representing \emph{decisions} or \emph{acts}, we can interpret $D$ as representing the available \emph{suppositions} or \emph{counterfactual acts}. Under this shift in interpretation Potential Outcomes models are a generalisation of see-do models.
+
+The core of any Potential Outcomes model is the potential outcomes. A standard definition of potential outcomes is: given a random variable $\RV{Y}$, potential outcomes of $\RV{Y}$ with respect to the set of viable suppositions $D$ are random variables $\RV{Y}^d$, $d\in D$ which share a codomain with $\RV{Y}$ and each potential outcome $\RV{Y}^d$ represents ``the value that `$\RV{Y}$' would take \emph{supposing} $d$''. This definition is problematic as the object referred to by `$\RV{Y}$' in the quoted definition is not the random variable $\RV{Y}$ -- were they the same thing, they would always take the same value, which defeats the whole point of supposing things. A good definition of potential outcomes must define `$\RV{Y}$'.
+
+To make sense of it, think about what is meant by ``suppose $d$''. We can suppose any $d\in D$ and after supposing $d$ we have some idea of what the world would be like if $d$ were so. That is, supposing is a function from $D$ to ``states of the world''. We have chosen to represent ``states of the world'' as probability measures on the outcome space $(E,\mathcal{E})$, so we might as well say supposing is a map $\kernel{S}:D \to Delta(E)$. The aforementioned `$\RV{Y}$' is therefore a random variable on the kernel space $(\kernel{S},D\times E)$, which we will call $\RV{Y}_S$. Now we have a precise definition of $\RV{Y}_S$, but we still need to account for the relation between $\RV{Y}_S$ and the potential outcomes $\RV{Y}^d$ stipulated in the original definition.
+
+The relation between $\RV{Y}_S$ and the potential outcomes requires the assumption of \emph{supposition stability}, which is my own: \emph{the joint distribution of observed variables and potential outcomes is the same under any supposition}. That is, $\utimes_{d\in D} \RV{Y}^d \CI_{\kernel{C}} \RV{D}$, with $\RV{D}$ being the domain random variable as defined in \ref{def:domain_variable}. This assumption looks like ``ignorability'', but it isn't, and the difference will be explained shortly.
+
+Define $\vecRV{Y}^D:=\utimes_{d\in D} \RV{Y}^d$. Given the assumption of supposition stability, we can factorise $\kernel{S}$ as follows:
+
+\begin{align}
+\begin{tikzpicture}
+	\path (0,0) node (D) {$\RV{D}$}
+	++ (1.3,0) node[kernel] (S) {$\kernel{S}^{\RV{Y}_S\vecRV{Y}^D|\RV{D}}$}
+	+ (1.3,0.15) node (Y) {$\vecRV{Y}^D$}
+	+ (1.3,-0.15) node (Y2) {$\RV{Y}_S$};
+	\draw (D) -- (S);
+	\draw ($(S.east) + (0,0.15)$) to (Y);
+	\draw ($(S.east) + (0,-0.15)$) to (Y2);
+\end{tikzpicture} &=
+\begin{tikzpicture}
+	\path (0,0) node[dist,inner sep=-1pt] (S) {$\kernel{S}^{\vecRV{Y}^D}$}
+	+ (0.7,0) coordinate (copy0)
+	+ (2.5,0) node (Y) {$\vecRV{Y}^D$}
+	++ (0,-1) node (D) {$\RV{D}$}
+	++ (1.3,0) node[kernel] (So) {$\kernel{S}^{\RV{Y}_S|\vecRV{Y}^D \RV{D}}$}
+	++ (1.2,0) node (Y2) {$\RV{Y}_S$};
+	\draw (S) -- (Y);
+	\draw (copy0) to [out=-90,in=180] ($(So.west)+(0,0.15)$);
+	\draw (D) [out =0, in=180] to ($(So.west)+(0,-0.15)$) (So) -- (Y2);
+\end{tikzpicture} \label{eq:generic_po}
+\end{align}
+
+Where $\kernel{S}^{\RV{Y}_S|\RV{D}}=\kernel{S}\kernel{F}^{\RV{Y}_S}$ is the marginal of $\RV{Y}_S$ and $\kernel{S}^{\vecRV{Y}^D}$ is the marginal of $\vecRV{Y}^D$, a version of which (independe of $\RV{D}$) exists by supposition stability.
+
+The original definition of a potential outcome says that the value of $\RV{Y}^d$ is the same as the value of $\RV{Y}_C$ under supposition $d$. This is equivalent to requiring for all $d\in D$:
+
+\begin{align}
+\begin{tikzpicture}
+	\path (0,0) node[dist,inner sep=-1pt] (S) {$\kernel{S}^{\vecRV{Y}^D}$}
+	+ (0.7,0) coordinate (copy0)
+	+ (1.5,0) node[kernel] (Fy) {$\kernel{F}^{\RV{Y}^d}$}
+	+ (2.4,0) node (Y) {$\RV{Y}^d$}
+	++ (0,-1) node[dist,inner sep=-1pt] (D) {$\delta_d$}
+	++ (1.2,0) node[kernel] (So) {$\kernel{S}^{\RV{Y}_S|\vecRV{Y}^D\RV{D}}$}
+	++ (1.2,0) node (Y2) {$\RV{Y}_S$};
+	\draw (S) -- (Fy) -- (Y);
+	\draw (copy0) to [out=-90,in=180] ($(So.west)+(0,0.15)$);
+	\draw (D) [out =0, in=180] to ($(So.west)+(0,-0.15)$) (So) -- (Y2);
+\end{tikzpicture} &= \begin{tikzpicture}
+	\path (0,0) node[dist,inner sep=-1pt] (S) {$\kernel{S}^{\RV{Y}^d}$}
+	+ (0.9,0) node[kernel] (Fy) {$\kernel{F}^{\RV{Y}^d}$}
+	+ (1.5,0) coordinate (copy0)
+	+ (2.2,0) node (Y) {$\RV{Y}^d$}
+	++ (0,-1) node[dist,inner sep=-1pt] (D) {$\delta_d$}
+	++ (1.2,0) coordinate (So)
+	++ (1,0) node (Y2) {$\RV{Y}_S$};
+	\draw (S) -- (Fy) -- (Y);
+	\draw (copy0) to [out=-90,in=180] (Y2);
+	\draw[-{Rays[n=8]}] (D) [out =0, in=180] to ($(So.west)+(0,-0.15)$);
+\end{tikzpicture} \label{eq:ass_potential_outcomes}
+\end{align}
+
+\todo[inline]{My intuition is that $\RV{D}=d$ is like a switch that ``chooses'' the $d$-th wire of $\vecRV{Y}^D$, but this isn't visually clear in \ref{eq:ass_potential_outcomes}}
+
+Equivalently, for all $d\in D$, $\mathbf{y}^D\in Y^D$:
+
+\begin{align}
+	\kernel{S}^{\RV{Y}_S|\vecRV{Y}^D\RV{D}}_{\mathbf{y}^D,d} = \delta_{y^{d}} \label{eq:alternative_potential_outcomes}
+\end{align}
+
+where $y^d$ is the $d$-th element of $\mathbf{y}^D$.
+
+$d\mapsto \sum_{i\in D} \llbracket d=i\rrbracket \delta_{\RV{Y}^i}$ is a version of $\kernel{S}^{\RV{Y}_S|\vecRV{Y}^D\RV{D}}$.
+
+Finally, we need to account for observed variables. Let the original random variable $\RV{Y}$ be an ``observed variable''. Suppose further that there exists at least one additional observed variable $\RV{X}$ taking values in $D$ which we will call the \emph{suppositional subject} ($\RV{X}$ represents ``the feature of the world that is change by supposing''). Recall that by supposition stability, both $\RV{Y}$ and $\RV{X}$ are independent of $\RV{D}$ (whatever I think might result from supposing $d$ doesn't change what I've actually seen).
+
+Potential outcomes features a standard assumption of \emph{consistency}. Given random variable $\RV{Y}$, potential outcomes $\vecRV{Y}^D$ and suppositional subject $\RV{X}$, a suppositional map $\kernel{S}$ obeys consistency iff for all $y^D\in Y^D$, $d\in D$:
+\begin{align}
+	\kernel{S}^{\RV{Y}|\vecRV{Y}^D\RV{X}}_{\mathbf{y}^D,d} = \delta_{y^{d}} \label{eq:consistency_new}
+\end{align}
+
+or, as it is more typically stated
+
+\begin{align}
+	\RV{X}=d' \implies \RV{Y}=\RV{Y}^{d'} \label{eq:consistency_old}
+\end{align}
+
+Definition \ref{eq:consistency_old} is informal in our framework; a more precise statement is that conditioning on $\mathds{1}_{\{d'\}}(\RV{X})$ leads to $\RV{Y}=\RV{Y}^{d'}$ almost surely. However, this is also informal as we haven't defined conditioning, which is not the same thing as conditional probability. In any case, equation \ref{eq:consistency_new} is well-defined, captures the core idea of consistency and doesn't require additional machinery to make sense of.
+
+A consequence of \ref{eq:consistency_new} is
+
+\begin{align}
+	\kernel{S}^{\RV{Y}|\vecRV{Y}^D\RV{X}} = \kernel{S}^{\RV{Y}_S|\vecRV{Y}^D\RV{D}} \label{eq:equality_of_maps}
+\end{align}
+
+Which captures the key idea of the consistency assumption: \emph{if what we suppose is something that actually happened, then the consequences of that supposition are the same as whatever actually happened}. This formalisation requires via $\RV{X}$ and $\RV{X}_S$ the identification of suppositions with an observed random variable. The existence of such a pair $\RV{X}$ and $\RV{X}_S$ appears to be related to the \emph{Stable Unit Treatment Value Assumption} (SUTVA), a basic assumption of the Potential Outcomes approach. SUTVA is actually two assumptions, one of which is informally stated as ``there is only one version of the treatment'' \citep{rubin_causal_2005}. Suppose we had a pair of variables $\RV{X}$ and $\RV{X}_S$ such that $\kernel{S}^{\RV{X}_S|\RV{D}}_d = \delta_{f(d)}$ for some non-invertible $f$. Then a value of $\RV{X}_S$ cannot be uniquely associated with a supposition in $D$.
+
+\todo[inline]{The existence of some $\RV{X}_S$ that $D$-causes $\RV{Y}_S$ and can be identified with $\RV{X}$ seems to be all we need for consistency, which is weaker than the assumptions given above}
+
+In any case, defining $\kernel{C}:= \kernel{S}^{\RV{Y}_S|\vecRV{Y}^D \RV{D}}$, $\kernel{W}:=\kernel{S}^{\RV{X}|\vecRV{Y}^D}$ and $\nu:=\kernel{S}^{\vecRV{Y}^D}$, given \ref{eq:equality_of_maps} the supposition map $\kernel{S}$ can be represented in the following form:
+
+\begin{align}
+\kernel{S} = \begin{tikzpicture}
+	\path (0,0) node[dist] (S) {$\nu$}
+	+ (0.7,0) coordinate (copy0)
+	+ (2.2,0) node[kernel] (So) {$\kernel{C}$}
+	+ (1.3,-0.4) node[kernel] (Sx) {$\kernel{W}$}
+	+ (1.6,-0.4) coordinate (copy1)
+	+ (3.5,0.4) node (Yd) {$\vecRV{Y}^D$}
+	+ (3.5,0) node (Y) {$\RV{Y}$}
+	+ (3.5,-0.4) node (X) {$\RV{X}$}
+	++ (0,-1) node (D) {$\RV{D}$}
+	++ (1.5,0) node[kernel] (Sc) {$\kernel{C}$}
+	++ (2.2,0) node (Y2) {$\RV{Y}_S$};
+	\draw (S) -- (So) to [out=0,in=180] (Y);
+	\draw (copy0) to [out=90,in=180] (Yd);
+	\draw (copy0) to [out=-60,in=180] ($(Sx.west) + (0,0)$) (Sx) to [out=0,in=180] (X);
+	\draw (copy1) to [out=90,in=190] ($(So.west) + (0,-0.15)$);
+	\draw (copy0) to [out=-90,in=180] ($(Sc.west)+(0,0.15)$);
+	\draw (D) [out =0, in=180] to ($(Sc.west)+(0,-0.15)$) (Sc) -- (Y2);
+\end{tikzpicture} \label{eq:po_supp}
+\end{align}
+
+So far, I've argued that given a supposition map where \emph{supposition stability} holds for a set of variables $\{\vecRV{Y}^D,\RV{Y},\RV{X}\}$, $\vecRV{Y}^D$ act as \emph{potential outcomes} for $\RV{Y}$ as in \ref{eq:ass_potential_outcomes} and $\kernel{S}$ obeys \emph{consistency} with respect to suppositional subject $\RV{X}$, potential outcomes $\vecRV{Y}^D$ and $\RV{Y}$, then it can be represented as in \ref{eq:po_supp}.
+
+Suppose that for some supposition map $\kernel{S}:D\to \Delta(\sigalg{Y}^D\otimes \sigalg{Y}\otimes \sigalg{X}\otimes\sigalg{Y}$, there exists some $\nu\in\Delta(\sigalg{Y}^D)$, $\kernel{C}\in D\times Y^D\to\Delta(\sigalg{Y})$ and $\kernel{W}:Y^D\to \Delta(\sigalg{D})$ such that \ref{eq:po_supp} holds where we make the obvious choices of random variable defintions. Then is is straightforward to show that consistency and supposition stability hold, but in general $\vecRV{Y}^D$ are not potential outcomes for $\RV{Y}$. For a simple example, suppose that there exists some $d\in D$, $\mathbf{y}^D\in Y^D$, $A\in\sigalg{Y}$ such that $0< \kernel{C}_{d,\mathbf{y}^D}(A) < 1$, i.e. $\kernel{C}$ is nondeterministic. Then $\kernel{C}$ cannot obey Equation \ref{eq:alternative_potential_outcomes}, which requires $\kernel{C}$ to be deterministic.
+
+\todo[inline]{This should be a theorem, I just didn't realise that's what I was writing when I started off.}
+
+\todo[inline]{If $\kernel{C}$ is deterministic, then it might be possible to find a set of potential outcomes for $\RV{Y}$, but these are not necessarily $\vecRV{Y}^D$}
+
+\subsection{Supposition maps to see-do models}
+
+The supposition map in Equation \ref{eq:po_supp} corresponds to a potential outcomes model with a known distribution of potential outcomes. If we identify the hypothesis space $\Theta$ with the space of potential outcomes $Y^D$, the model \ref{eq:po_supp} could be considered to be the product of a prior $\nu$ on the hypothesis space and the see-do model:
+
+\begin{align}
+\begin{tikzpicture}
+	\path (0,0) node (S) {$\Theta$}
+	+ (0.7,0) coordinate (copy0)
+	+ (2.2,0) node[kernel] (So) {$\kernel{C}$}
+	+ (1.3,-0.4) node[kernel] (Sx) {$\kernel{W}$}
+	+ (1.6,-0.4) coordinate (copy1)
+	+ (3.5,0.4) node (Yd) {$\vecRV{Y}^D$}
+	+ (3.5,0) node (Y) {$\RV{Y}$}
+	+ (3.5,-0.4) node (X) {$\RV{X}$}
+	++ (0,-1) node (D) {$\RV{D}$}
+	++ (1.5,0) node[kernel] (Sc) {$\kernel{C}$}
+	++ (2.2,0) node (Y2) {$\RV{Y}_S$};
+	\draw (S) -- (So) to [out=0,in=180] (Y);
+	\draw (copy0) to [out=90,in=180] (Yd);
+	\draw (copy0) to [out=-60,in=180] ($(Sx.west) + (0,0)$) (Sx) to [out=0,in=180] (X);
+	\draw (copy1) to [out=90,in=190] ($(So.west) + (0,-0.15)$);
+	\draw (copy0) to [out=-90,in=180] ($(Sc.west)+(0,0.15)$);
+	\draw (D) [out =0, in=180] to ($(Sc.west)+(0,-0.15)$) (Sc) -- (Y2);
+\end{tikzpicture} \label{eq:po_hard_see_do}
+\end{align}
+
+Note that \ref{eq:po_hard_see_do} doesn't quite represent the inference problem, as random variables $\vecRV{Y}^D$ are actually unobserved. The inference problem is instead represented by the see-do model that marginalises over this variable:
+
+\begin{align}
+\begin{tikzpicture}
+	\path (0,0) node (S) {$\Theta$}
+	+ (0.7,0) coordinate (copy0)
+	+ (2.2,0) node[kernel] (So) {$\kernel{C}$}
+	+ (1.3,-0.4) node[kernel] (Sx) {$\kernel{W}$}
+	+ (1.6,-0.4) coordinate (copy1)
+	+ (3.5,0) node (Y) {$\RV{Y}$}
+	+ (3.5,-0.4) node (X) {$\RV{X}$}
+	++ (0,-1) node (D) {$\RV{D}$}
+	++ (1.5,0) node[kernel] (Sc) {$\kernel{C}$}
+	++ (2.2,0) node (Y2) {$\RV{Y}_S$};
+	\draw (S) -- (So) to [out=0,in=180] (Y);
+	\draw (copy0) to [out=-60,in=180] ($(Sx.west) + (0,0)$) (Sx) to [out=0,in=180] (X);
+	\draw (copy1) to [out=90,in=190] ($(So.west) + (0,-0.15)$);
+	\draw (copy0) to [out=-90,in=180] ($(Sc.west)+(0,0.15)$);
+	\draw (D) [out =0, in=180] to ($(Sc.west)+(0,-0.15)$) (Sc) -- (Y2);
+\end{tikzpicture} \label{eq:po_hard_see_do}
+\end{align}
+
+Suppose the random variables discussed so far are sequences - i.e. $\vecRV{Y}^D=\utimes_{i\in [N]} \vecRV{Y}^D_i$ and similarly for $\RV{X},\RV{Y},\RV{D}$. We might want to assume that any ``legitimate'' distribution $\nu$ makes $[\vecRV{Y}^D_1,\vecRV{Y}^D_2,...]$ independent and identically distributed (see \citet{rubin_causal_2005} for the assumption that given a prior, the given sequence is exchangeable). 
+
+In general, given some class of allowable distributions over potential outcomes, an alternative choice is to consider the hypothesis space $\Theta$ to consist of the set of allowable distributions $\Theta\subset \Delta(\sigalg{Y}^D)$ and, letting $\kernel{E}:\Theta\to \Delta(\sigalg{Y}^D)$ be the evaluation map $\kernel{E}_\theta(A) = \theta(A)$, the modified see-do model becomes
+
+\begin{align}
+\begin{tikzpicture}
+	\path (0,0) node (S) {$\Theta$}
+	++ (0.6,0) node[kernel] (E) {$\kernel{E}$}
+	+ (0.6,0) coordinate (copy0)
+	+ (2.2,0) node[kernel] (So) {$\kernel{C}$}
+	+ (1.3,-0.4) node[kernel] (Sx) {$\kernel{W}$}
+	+ (1.6,-0.4) coordinate (copy1)
+	+ (3.5,0) node (Y) {$\RV{Y}$}
+	+ (3.5,-0.4) node (X) {$\RV{X}$}
+	++ (-0.6,-1) node (D) {$\RV{D}$}
+	++ (2,0) node[kernel] (Sc) {$\kernel{C}$}
+	++ (2.2,0) node (Y2) {$\RV{Y}_S$};
+	\draw (S) -- (E) -- (So) to [out=0,in=180] (Y);
+	\draw (copy0) to [out=-60,in=180] ($(Sx.west) + (0,0)$) (Sx) to [out=0,in=180] (X);
+	\draw (copy1) to [out=90,in=190] ($(So.west) + (0,-0.15)$);
+	\draw (copy0) to [out=-90,in=180] ($(Sc.west)+(0,0.15)$);
+	\draw (D) [out =0, in=180] to ($(Sc.west)+(0,-0.15)$) (Sc) -- (Y2);
+\end{tikzpicture} \label{eq:po_soft_see_do}
+\end{align}
+
+Model \ref{eq:po_soft_see_do} is \emph{not} a see-do model: in a see-do model, the consequences of an act are independent of the observations conditioned on the state $\Theta$, while \ref{eq:po_soft_see_do} does not in general have this property. 
+
+\section{Ignorability Does Not Identify the Average Causal Effect}
+
+\todo[inline]{I think this bit is not super interesting. The only potential point of interest is that it defuses the claim that the assumptions above are stronger than the assumptions of Potential Outcomes, as Potential Outcomes needs some more assumptions to work.}
+
+
+There is an error in derivations of the identification of the Average Causal Effect from the assumption of ignorability in Potential Outcomes. I will present a counterexample to the claim that ignorability + positivity leads to the identification of Average Causal Effect. The problem arises because authors assume that the average of an arbitrary sequence of random variables - absent any assumptions of IID or exchangeability - converges to something meaningful. I think the actual condition they want is ``treatment exchangeability''.
+
+For the setup, I refer to \citet{angrist_mastering_2014} \todo[inline]{(although I should probably actually refer to \citet{rubin_causal_2005}).}
+
+\begin{quote}
+We use the letter $\RV{Y}$ as shorthand for health, the outcome variable of interest. To make it clear when we’re talking about specific people, we use subscripts as a stand-in for names: $\RV{Y}_i$ is the health of individual $i$. The outcome $\RV{Y}_i$ is recorded in our data. But, facing the choice of whether to pay for health insurance, person $i$ has two potential  outcomes, only one of which is observed. To distinguish one potential outcome from another, we add a second subscript: The road taken without health insurance leads to $\RV{Y}_{0i}$ (read  this  as  “y-zero-i”)  for  person $i$,  while  the  road  with health insurance leads to $\RV{Y}_{1i}$ (read this as “y-one–i”) for person $i$. Potential outcomes lie at the end of each road one might take. The causal effect of insurance on health is the difference between them, written $\RV{Y}_{1i}-\RV{Y}_{0i}$.
+
+[...]
+
+Actual health outcomes: $\RV{Y}_i$, treatment: $\RV{D}_i$
+
+[...]
+
+$\kappa$ is both the individual and average causal effect on health outcomes.
+
+[...]
+
+\begin{align}
+	\mathrm{Avg}_n[\RV{Y}_{1i}-\RV{Y}_{0i}] &= \frac{1}{n}\sum_{i=1}^n [\RV{Y}_{1i} - \RV{Y}_{0i}] \label{eq:cond_avg}
+\end{align}
+
+[...]
+
+\begin{align}
+	\mathrm{Avg}_n[\RV{Y}_{1i}|\RV{D}_i=1] - &\mathrm{Avg}_n[\RV{Y}_{0i}|\RV{D}_i=0] = \nonumber \\&\kappa + \mathrm{Avg}_n[\RV{Y}_{0i}|\RV{D}_i=1] - \mathrm{Avg}_n[\RV{Y}_{0i}|\RV{D}_i=0] \label{eq:angristeq14}
+\end{align}
+
+[...]
+
+\paragraph{Random assignment eliminates selection bias} When $\RV{D}_i$ is randomly assigned, $\mathbb{E}[\RV{Y}_{0i}|\RV{D}_i = 1] = \mathbb{E}[\RV{Y}_{0i}|\RV{D}_i=0]$, and the difference in expectations by treatment status captures the causal effect of treatment:
+
+\begin{align}
+	\mathbb{E}[\RV{Y}_i|\RV{D}_i=1] - \mathbb{E}[\RV{Y}_i|\RV{D}_i=0] &= \mathbb{E}[\RV{Y}_{1i}|\RV{D}_i=1]-\mathbb{E}[\RV{Y}_{0i}|\RV{D}_i=0]\\
+																	  &= \mathbb{E}[\RV{Y}_{0i}+\kappa|\RV{D}_i=1] - \mathbb{E}[\RV{Y}_{0i}|\RV{D}_i=0]\\
+																	  &= \kappa + \mathbb{E}[\RV{Y}_{0i}|\RV{D}_i=1] - \mathbb{E}[\RV{Y}_{0i}|\RV{D}_i=0]\\
+																	  &= \kappa \label{eq:no_you_cant}
+\end{align}
+
+Provided the sample size is large enough for the law of large numbers to work its magic (so we can replace the conditional averages in equation \ref{eq:angristeq14} with conditional expectations), selection bias disappears in a randomized experiment
+
+\end{quote}
+
+The problem is that the expectations in Equation \ref{eq:no_you_cant} \emph{cannot} be replaced with conditional averages as defined in \ref{eq:cond_avg}, even in the infinite limit. From the strong law of large numbers we can deduce that, given IID variables $(\RV{Y}^j_{i0},\RV{D}^j_i)\sim \prob{P}(\RV{Y}_{i0},\RV{D}_i)$ for $j\in \mathbb{N}$,
+
+\begin{align}
+	\lim_{n\to\infty}\sum_{j}^n\frac{\RV{Y}^j_{i0}\llbracket\RV{D}^j_i=1\rrbracket}{\sum_j^n\llbracket\RV{D}^j_i=1\rrbracket} \overset{\prob{P}-a.s.}{=} \mathbb{E}[\RV{Y}_{1i}|\RV{D}_i=1]
+\end{align}
+
+Note that Angrist and Pischke do \emph{not} assume that $(\RV{Y}^j_{i0},\RV{D}^j_i)$ are given - in their conventions, this would refer to repeated samples of the ``same individual''.
+
+The quantity given by their ``conditional average'' is an average of random variables that share similar names, but are otherwise unrelated:
+
+\begin{align}
+	\sum_{i}^n\frac{\RV{Y}_{i0}\llbracket\RV{D}_i=1\rrbracket}{\sum_i^n\llbracket\RV{D}_i=1\rrbracket}\label{eq:avg_stull}
+\end{align}
+
+\todo[inline]{This counterexample satisfies the stronger assumptions presented in Rubin 2005, hence it doesn't quite line up with the assumptions from Angrist and Pischke; need to incorporate Rubin.}
+
+
+Suppose we have random variables $(\vecRV{D},\vecRV{Y}_0,\vecRV{Y}_1):=([\RV{D}_0,\RV{D}_1,...],[\RV{Y}_{00},\RV{Y}_{10},...],[\RV{Y}_{01},\RV{Y}_{11},...]])\in [0,1]^{3\mathbb{N}}$ and
+
+\begin{align}
+	\prob{P}(\vecRV{D}=\mathbf{d},\vecRV{Y}_0=\mathbf{y}_0,\vecRV{Y}_1=\mathbf{y}_1) &= \prod_{i\in \mathbb{N}}\left( (1-\epsilon)\delta_{(i\mod 2)}(d_i) +\epsilon\right) \delta_{(i\mod 2)} (y_{i0}) \delta_{(1-i\mod 2)}(y_{i1})
+\end{align}
+
+By construction $\vecRV{Y}_1,\vecRV{Y}_0\CI_{\prob{P}} \vecRV{D}$, and $\prob{P}(\RV{D}_i=d_i)>0$ for all $d_i$, which implies for all $i$ $\mathbb{E}[\RV{Y}_{0i}|\RV{D}_i=1]=\mathbb{E}[\RV{Y}_{0i}|\RV{D}_i=0]$. However
+
+\begin{align}
+	\lim_{n\to\infty} \sum_{i}^n\frac{\RV{Y}_{i1}\llbracket\RV{D}_i=1\rrbracket}{\sum_i^n\llbracket\RV{D}_i=1\rrbracket} - \lim_{n\to\infty} \sum_{i}^n\frac{\RV{Y}_{i0}\llbracket\RV{D}_i=0\rrbracket}{\sum_i^n\llbracket\RV{D}_i=0\rrbracket}&=1-\frac{\epsilon}{2}-\frac{\epsilon}{2}\label{eq:bad_limit}\\
+									  &= 1-\epsilon\\
+	\lim_{n\to\infty} \sum_{i}^n\frac{\RV{Y}_{i0}}{n} - \lim_{n\to\infty} \sum_{i}^n\frac{\RV{Y}_{i1}}{n}&=\frac{1}{2}-\frac{1}{2}\\
+									  &= 0\\
+									  &=\text{``the average causal effect''}\\
+									  &\neq \lim_{n\to\infty} \sum_{i}^n\frac{\RV{Y}_{i1}\llbracket\RV{D}_i=1\rrbracket}{\sum_i^n\llbracket\RV{D}_i=1\rrbracket}-\lim_{n\to\infty} \sum_{i}^n\frac{\RV{Y}_{i0}\llbracket\RV{D}_i=0\rrbracket}{\sum_i^n\llbracket\RV{D}_i=0\rrbracket}
+\end{align}
+
+Contradicting the claim made by Eq. \ref{eq:no_you_cant}.

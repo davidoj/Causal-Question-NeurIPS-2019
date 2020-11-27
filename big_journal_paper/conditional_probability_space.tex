@@ -1,0 +1,147 @@
+
+%!TEX root = main.tex
+
+This is an attempt to understand which assumptions lead to see-do models being represented by probability distributions.
+
+\section{Decision makers and decision models}\label{sec:decision_makers_decision_models}
+
+We will consider a very general type of decision maker to motivate the construction of decision models. A decision maker takes some kind of evidence - for example, data, prior knowledge or a problem specification - and determines the consequences it believes each decision will have via some \emph{inference rule}. It then examines the consequences of each decision and chooses a preferred decision via some \emph{choice rule}. 
+
+More formally, let the set $A$ be a set of possible pieces of evidence a decision maker could obtain, $E$ be the set of consequences it may experience and $D$ the set of decisions it may take. Call any function $C:D\to E$ a \emph{consequence map}. A \emph{inference rule} is a function $f:A\to E^D$ that takes a piece of evidence and returns a consequence map. A \emph{choice rule} $\mathrm{ch}:E^D\to D$ is a function that takes a consequence map and returns a preferred decision. A decision maker is specified by a particular choice of $f$ and $\mathrm{ch}$ and implements the \emph{decision function} $h:=\mathrm{ch}\circ f$.
+
+Suppose $D=\{0,1\}$ represents the decision to turn some switch to the on or off positions. Some examples of consequence maps follow:
+\begin{itemize}
+	\item $E=\{0,1\}$ is the state of a light connected to the switch and $\mathbf{C}=\mathrm{Id}_{\{0,1\}}$ is the consequence function that implies the light is always in the same state as the switch
+	\item $E=\{\{0\},\{1\},\{0,1\}\}$ represents sets of possible outcomes and $\mathbf{C}:0\mapsto \{0\}$, $1\mapsto\{0,1\}$ is the consequence function that implies the light is always off when the switch is off, but may take either state with the switch on (i.e. "the bulb may be out")
+\end{itemize}
+
+If $A=\{0,1\}^{2N}$ is a sequence of joint states of the switch and lightbulb, then an inference function could be the map
+\begin{align}
+	f(s_{1},l_{1},..,s_N,l_N) = \begin{cases}
+									&0\mapsto \llbracket\frac{\sum_{i\in N} l_i(1-s_i)}{\sum_{i\in N} (1-s_i)}>0.5\rrbracket\\
+									&1\mapsto \llbracket\frac{\sum_{i\in N} l_i s_i}{\sum_{i\in N} s_i}>0.5\rrbracket\\
+								\end{cases}
+\end{align}
+
+That is, $f$ returns the consequence function that maps each switch position to the lightbulb state more commonly observed in conjunction with that switch position in the given data.
+
+Some examples of decision rules, where in each case $\mathbf{C}:D\to E$ is some consequence map:
+\begin{itemize}
+	\item $E=\{\mathrm{off},\mathrm{on}\}$ are states of the light bulb, $u:\mathrm{off}\mapsto 0$, $\mathrm{on}\mapsto 1$ is a utility function and $\mathrm{ch}(\mathbf{C}) = \argmin_{d\in D} u(\mathbf{C}(d))$ 
+	\item $E=[0,1]$ is a set of losses and $\mathrm{ch}(\mathbf{C}) = \argmin_{d\in D} (\mathbf{C}(d))$
+	\item $E=\{\{0\},\{1\},\{0,1\}\}$ are sets of possible outcomes and $\mathrm{ch}$ is the minimax operator: $\mathrm{ch}(\mathbf{C}) = \argmin_{d\in D}\max_{e\in \mathbf{C}(d)} (e)$
+\end{itemize}
+
+Another example of a decision maker is a learning algorithm that produces binary classifiers. A binary classifier takes some piece of data $X$ and returns a class in $\{0,1\}$. That is, the set of available decisions $D$ is the set of functions from $X\to\{0,1\}$. Suppose also that the given information is a set of $N$ labeled examples $A=(X\times\{0,1\})^N$. Then the inference function $f$ might be an \emph{empirical risk} functional that takes data $a\in A$ and a possible classifier $d\in D$ and returns the number of misclassified examples when $d$ is applied to $A$. In such a case, $\mathrm{ch}$ might be the $\argmin$ functional, making our decision maker an \emph{empirical risk minimiser}. This is not necessarily a good inference function - typically we are interested in the number of misclassified examples a classifier will produce on unseen data, not the number of misclassified examples it will produce on the data that has already been seen.
+
+\subsection{Expected utility maximisers}
+
+
+Expected utility maximisation (henceforth ``EU'') necessitates that the class of results models $f$ have a particular signature. The EU choice rule compares a set of probability distributions over states of the world $E$ and returns a decision associated with the preferred probability distribution. Thus, denoting by $\Delta(\mathcal{E})$ the set of probability distribution over $E$ (now equipped with $\sigma$-algebra $\mathcal{E}$), $f$ must have the signature $f:A\to \Delta(\mathcal{E})^D$. In particular $f$ returns stochastic functions of the type $D\to \Delta(\mathcal{E})$.
+
+So far we have not made any structural assumptions about the set $D$. One such assumption that we do want to make is that stochastic decisions are possible. That is, if we can choose $d_1\in D$ and we can choose $d_2 \in D$, then it is also possible to choose $d_1$ with probability $\alpha$ and $d_2$ with probability $(1-\alpha)$ for $0\leq \alpha \leq 1$. We will make this assumption as follows: $D$ represents an underlying set of ``elementary'' decisions, and the true set of decisions is the set $\Delta(\mathcal{D})$ of probability measures on $D$ (equipped with some $\sigma$-algebra $\mathcal{D}$). Then, for example, if $D=\{d_1,d_2\}$ we can ``choose'' $d_1$ by selecting the measure $\delta_{d_1}$, and we can choose a mixture of $d_1$ and $d_2$ by selecting the measure $\alpha \delta_{d_1}+(1-\alpha)\delta_{d_2}$. Technically, all that we have done so far is assume that the set of decisions is isomorphic to $\Delta(\mathcal{D})$ - which, if $D$ is standard Borel, ensures that the set of decisions is convex closed. In many cases, we also want the following to hold:
+\begin{align}
+	f_a(\alpha\delta_{d_1} + (1-\alpha)\delta_{d_2}) = \alpha f_a(\delta_{d_1}) + (1-\alpha) f_a(\delta_{d_2}) \label{eq:additivity}
+\end{align}
+
+That is, we assume that the results model $f$ is \emph{additive}. Informally, choosing to do $d_1$ with probability $\alpha$ and $d_2$ with probability $1-\alpha$ will yield the result of $d_1$ with probability $\alpha$ and the result of $d_2$ with probability $1-\alpha$. In addition, $f_a$ must be continuous with respect to the total variation norm.
+
+For arbitrary $\gamma\in \Delta(\mathcal{D})$, we can write for all $B\in \mathcal{D}$
+
+\begin{align}
+	\gamma (B) = \int_D \delta_d(B) d\gamma(d)
+\end{align}
+
+\todo[inline]{Can we also say}
+
+\begin{align}
+	\gamma = \int_D \delta_d d\gamma(d)
+\end{align}
+
+For $G\in \mathcal{E}$, write $f_a(\delta_d;C)$ for the probability measure $f_a(\delta_d)$ evaluated at $C$, and $f_a(\cdot;G)$ for the map $d\mapsto f_a(d;C)$. If $f_a(\cdot; C)$ is measurable for all $C$ and additive, then it is a property of the Lebesgue integral that for all $\gamma\in \Delta(\mathcal{D})$
+
+\begin{align}
+	\int f_a(\gamma ;C) &= \int f_a(\int_D \delta_{d'}d\gamma(d') ;C)\\
+											   &=\int_D f_a(\delta_{d'};C) d\gamma(d')
+\end{align}
+
+Define $\mathscr{C}_a:D\to \Delta(\mathcal{E})$ by $\mathscr{C}_a:d\mapsto f_a(\delta_{d};\cdot)$. Then $\mathscr{C}_a(\cdot;B)$ is measurable and $\mathscr{C}_a(d;\cdot)$ is a probability measure - that is, $\mathscr{C}_a$ is a Markov kernel. We can therefore adopt the product notation defined elsewhere to write the consequences of choosing a distribution $\gamma$ as $\gamma \mathscr{C}_a$.
+
+\todo[inline]{Have I made any assumptions here besides additivity, convex closedness of $D$?}
+
+As we are chiefly interested in the set of elementary decisions $D'$, we will henceforth simply use $(D,\mathcal{D})$ for this set.
+
+Assumption \ref{eq:additivity} still permits some unexpected behaviour with respect to randomised decisions. Consider the following variations of a problem:
+
+\begin{example}[Fighting children problem]
+A decision maker is mediating a dispute over a toy between two children. If he chooses to give the toy to the first child, the second child will cry, and if he chooses to give the toy to the second child, the first child will cry (the underlying decision set $D'=\{\text{give to first child}, \text{give to second child}\}$. If he chooses a random procedure:
+
+\paragraph{Version 1} These children strongly object to randomness, and both will cry no matter the outcome
+\paragraph{Version 2} These are children with a strong insistence on a version of procedural fairness which no doubt make a great deal of sense to them. In particular, if a procedure is used which gives the first child a chance $p$ of receiving the toy, the first child will cry with probability $p$ irrespective of the outcome. The second child, meanwhile, will cry iff the first child does not
+\paragraph{Version 3} Whether or not the children cry depends only on whether or not they receive the toy
+\end{example}
+
+In version 1, assumption \ref{eq:additivity} is violated - the outcome when choosing a random procedure is not simply a mixture of the outcomes of each deterministic decision. In version 3, assumption \ref{eq:additivity} holds, and the results depend only on the outcome of randomisation, as is desired. In version 2, assumption \ref{eq:additivity} \emph{also} holds - one child cries iff the other does not, and each child cries with the same probability as the probability that they receive the toy. However, the consequences of randomising and then giving the first child the toy are not the same as simply giving the first child the toy. To discount the possibility of this kind of behaviour, we need additional assumptions. 
+
+In the text of this example, we have spoken as if our decision had multiple consequences - whether or not each kid gets a toy, whether or not each kid cries - but the compliance of version 2 with \ref{eq:additivity} depends on considering only the children crying to be a consequence of our decison. To support the intuition that only version 3 is the kind of problem we want to deal with, we introduce the additional assumption that if we choose an extreme decision $\delta_d$, then one consequence of this decision is that we will have chosen $d$ with probability 1.
+
+Formally, we assume the sample space can be written as $E\times D$ for some $E$, and, defining the random variable $\RV{D}:E\times D\to D$ by the projection $\RV{D}:(e,d)\mapsto d$, suppose
+
+\begin{align}
+	(\mathscr{C}_{(a,d)})_{\RV{D}} = \delta_d \label{eq:assumption_decision_forsure}
+\end{align}
+
+We find in \cite{joyce_why_2000} the assumption of a ``supposition function'' $\mathrm{prob}(\cdot\|\cdot)$ that $\mathrm{prob}(C\|C)=1$ where $C$ is ``some distinguished condition''. Assumption \ref{eq:assumption_decision_forsure} along with assumption \ref{eq:additivity} implies an analogous condition.
+
+\begin{theorem}[[Decision determinism implies decision certainty]
+		
+\end{theorem}
+
+That is, for any stochastic decision $\gamma$, the consequence conditional on $\RV{D}$ is the consequence map $f_a$ itself. This assumption rules out both versions 1 and 2 of the fighting children problem above - it assumes that if we randomise and the result of randomisation is some $d\in D$, this is the same as having chosen $d$ to begin with.
+
+\begin{lemma}[Conditional agreement implies randomised decisions]
+If we have 
+\begin{align}
+(\gamma f_{a})_{|\RV{D}} = f_a
+\end{align}
+Then for all $\gamma\in \Delta(\mathcal{D})$,
+\begin{align}
+\gamma f_a (G) = \int_D f_a(d';G) d\gamma(d')
+\end{align}
+\end{lemma}
+
+\begin{proof}
+By definition, for $\gamma\in \Delta(\mathcal{D})$
+\end{proof}
+
+A consequence of assumption \ref{eq:consequence_is_conditional} is that for fixed $a\in A$, every stochastic decision $\gamma\in \Delta(\mathcal{D})$ leads to the same conditional probability $(\gamma f_{a})_{|\RV{D}}$. In fact, as a result of the assumption that the codomain of $f$ is a set of probability measures as well as assumptions \ref{eq:assumption_decision_forsure} and \ref{eq:consequence_is_conditional} we find that the tuple $\langle E\times D, \mathcal{E}\otimes\mathcal{D}, \mathcal{D}, f_a\rangle$ for each $a\in A$ forms a \emph{conditional probability space} \citep{renyi_new_1955}.
+
+
+
+For our causal analysis we work with \emph{subjunctive probability spaces}, a generalisation of the more familiar probability spaces. The subjunctive mood is used to describe hypothetical or supposed states of the world\todo{Does this definition need to be here? I didn't know what this word meant before I looked it up}, and subjunctive probability spaces are models that ask for some hypothetical state and give us back a probability space. Subjunctive probability spaces are also different to \emph{conditional probability spaces} \citet{renyi_conditional_1956} as \emph{hypothesising} or \emph{supposing} (that is, those things described by the subjunctive mood) are different to \emph{conditioning}, which is more closely analogous to \emph{focussing your attention}.
+
+We use subjunctive probability spaces because \emph{supposition} is a core part of decision problems, one we cannot get away from. In contrast, modelling supposition with conditional probability (which would be necessary if we were to insist on using probability spaces) adds additional structure to our models which isn't clearly warranted and is potentially confusing.
+
+Any decision problem must involve the comparison of different decisions. This comparison takes the form
+\begin{itemize}
+	\item \emph{Suppose} I choose the first decision - then the consequence would be $X$
+	\item \emph{Suppose} I choose the second decision - then the consequence would be $Y$
+	\item Etc.
+\end{itemize}
+
+If we prefer $X$ to $Y$, then perhaps we should choose the first decision. We may be ambivalent as to what type of thing $X$ and $Y$ represent, how we ought to determine what values $X$ and $Y$ take or how we ought to determine what is preferable, but it is hard to do away with supposing that different decisions were taken and that these decisions come with their own consequences and still have what could reasonably be considered a decision problem. This process of supposition implicitly invokes a ``subjunctive function'' - we provide a hypothetical decision, and we are given a consequence of that hypothetical. Of particular interest are models that, for each hypothetical choice, return a probability distribution over space $\Omega$. Such models are called \emph{supposition functions} by \citet{joyce_why_2000}, but we will call them \emph{consequence maps} in this work. We consider this particular type of subjunctive function - from possible decisions to probability distributions - to be attractive because we consider probability to be a sound choice for modelling uncertainty and stochasticity.
+
+Formally, a consequence map $\mathscr{C}$ is a stochastic function or \emph{Markov kernel} from $D\to \Delta(\Omega)$, where $\Delta(\Omega)$ represents the set of all probability distributions on $\Omega$. One might recall that, given two random variables $\RV{Y}:\Omega\to Y$ and $\RV{X}:\Omega \to X$ on some probability space $(\mathbb{P},\Omega,\mathcal{F})$, the probability of $\RV{Y}$ conditional on $\RV{X}$ is a Markov kernel $X\to \Delta(\mathcal{Y})$. It is possible, in general, to define a probability distribution on the expanded space $\Omega\times D$ such that $\mathscr{C}$ is a conditional probability. However, there are good reasons to keep the concepts of consequence maps and conditional probability separate. Firstly, there are technical issues such as the fact that it is not always possible to find a distribution on $\Omega\times D$ that yields $\mathscr{C}$ as a \emph{unique} conditional probability \citep{hajek_what_2003} (though this requires an uncountable set of possible decisions, which is not a problem we consider in this work). Secondly, it is not clear that that the way we ought to handle consequence maps is identical to the way we handle conditional probabilities. Consider an expanded set of options:
+
+\begin{enumerate}
+	\item Suppose I choose the first decision $d_1$ - then the consequence would be $P_1$
+	\item Suppose I choose the second decision $d_2$ - then the consequence would be $P_2$
+	\item Suppose I choose either the first or second decision $d_1$ or $d_2$ - then the consequence would be ???
+	\item Suppose I choose $d_1$ with probability $0\leq q\leq 1$ and $d_2$ otherwise - then the consequence would be ???
+\end{enumerate}
+
+If we regard the consequence map as a conditional probability then it would be natural to consider the result of the third option to be a unique probability distribution obtained by conditioning on $\{d_1,d_2\}$, equal to  $\alpha P_1 + (1-\alpha)P_2$ for some fixed $0\leq \alpha\leq 1$. However, there is no obvious reason that these should be mixed in some fixed proportion $\alpha$ - it seems more appropriate to me to say that if $d_1$ or $d_2$ is chosen then the result will be $P_1$ or $P_2$.
+
+On the other hand, the result of the fourth option seems like it should be given by $q P_1 + (1-q) P_2$, at least for most ordinary problems. If we were confronted with a mind reader who could tell the difference between us having chosen $d_1$ and us having randomised between $d_1$ and $d_2$ but come up with $d_1$ anyway then we might have reason to revise this assumption, but we will generally proceed under the assumption that such mind readers are absent. For any ambient probability measure, we can choose $q$ not to be equal to $\alpha$ (as defined in the previous paragraph), and so the result will not be equal to the ambient measure conditioned on $\{d_1,d_2\}$. 
+
+In general, choosing the consequence map to be a conditional probability requires there to exist some joint distribution over the decision $\RV{D}$ and all other random variables in the problem. However, when we adopt hypotheses about what decisions we might make, we throw away key parts of this joint distribution (for example, we throw away the marginal distribution of $\RV{D}$) and replace it with whatever we want to suppose instead. Instead of adopting a full joint distribution and then throwing away some parts to get hold of the consequence map, as we would if we were working with a probability space, a subjunctive probability space only supplies those parts which we intend to keep - i.e. in only supplies the consequence map.

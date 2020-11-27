@@ -1,3 +1,5 @@
+This is a "branch" of the main work, but I'm just putting it into a subfolder instead of branching it.
+
 # Storyboarding
 
 - Intro

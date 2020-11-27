@@ -1,0 +1,437 @@
+
+%!TEX root = main.tex
+
+\section{Theories of causal inference}
+
+\todo[inline]{Feedback start here}
+
+Beginning in the 1930s, a number of associations between cigarette smoking and lung cancer were established: on a population level, lung cancer rates rose rapidly alongside the prevalence of cigarette smoking. Lung cancer patients were far more likely to have a smoking history than demographically similar individuals without cancer and smokers were around 40 times as likely as demographically similar non-smokers to go on to develop lung cancer. In laborotory experiments, cells which were introduced to tobacco smoke developed \emph{ciliastasis}, and mice exposed to cigarette smoke tars developed tumors\citep{proctor_history_2012}. Nevertheless, until the late 1950s, substantial controversy persisted over the question of whether the available data was sufficient to establish that smoking cigarettes \emph{caused} lung cancer. Cigarette manufacturers famously argued against any possible connection \citep{oreskes_merchants_2011} and Roland Fisher in particular argued that the available data was not enough to establish that smoking actually caused lung cancer \citep{fisher_cancer_1958}. Today, it is widely accepted that cigarettes do cause lung cancer, along with other serious conditions such as vascular disease and chronic respiratory disease \citep{world_health_organisation_tobacco_nodate,wiblin_why_2016}.
+
+The question of a causal link between smoking and cancer is a very important one. Individuals who enjoy smoking (or think they might) may wish to avoid smoking if cigarettes pose a severe health risk, so they are interested in knowing whether or not it is so. Potential investors in cigarette manufacturers want to know if the product they are backing is likely to see limited adoption due to health concerns. People holding investments in cigarette manufacturering firms want the world to be such that cigarettes do not pose a substantial health risk, as this increases the value of their investment. Governments and organisations with a responsibility for public health may see themselves as having responsibility to discourage smoking as much as possible if smoking is severely detrimental to health. The costs and benefits of poor decisions about smoking are large: 8 million annual deaths are attributed to cigarette-caused cancer and vascular disease in 2018\citep{world_health_organisation_tobacco_nodate} while  global cigarette sales were estimated at US\$711 million in 2020, while \citep{noauthor_cigarettes_nodate} (a figure which might be substantially larger if cigarettes were not widely believed to be harmful).
+
+The question of whether or not cigarette smoking causes cancer illustrates two key facts about causal questions: First, having the right answers to some causal questions is of tremendous importance to huge numbers of people. Second, even when large amounts of data show unambiguous associations between phenomena of interest, it is still difficult to know when a causal conclusion is justified.
+
+Causal conclusions are often justified on the basis of ad-hoc reasoning. For example \citet{krittanawong_association_2020} states:
+
+\begin{quote}
+[...] the potential benefit of increased chocolate consumption, reducing coronary artery disease (CAD) risk is not known. We aimed to explore the association between chocolate consumption and CAD.
+\end{quote}
+
+It is not clear whether Krittanawong et. al. mean that a negative association between chocolate consumption and CAD implies that increased chocolate consumption is likely to reduce coronary artery disease, or that an association may be relevant to the question and the reader should draw their own conclusions. Whether the implication is being suggested by Krittanawong et. al. or merely imputed by na\"ive readers, it is being drawn on an ad-hoc basis -- no argument for the implication can be found in this paper. As \citet{pearl_causality:_2009} has forcefully argued, additional assumptions are always required to answer causal questions from associational facts, and stating these assumptions explicitly allows those assumptions to be productively scrutinised.
+
+Theories of causal inference exist to enable formal rather than ad-hoc reasoning about causal questions. Instead of posing informal causal question and answering them based on ad-hoc reasoning, within a theory of causal inference we ask about properties of ``causal models'' (which are simply mathematical types defined by the theory) subject to certain assumptions we are willing to make. A successful theory of causal inference should enable causal models that ``adequately represent'' the original informal question, and the assumptions we invoke should be more accessible to scrutiny than ad-hoc assertions made in the course of answering the informal question.
+
+As well as defining causal models, which represent \emph{claims about causation}, theories of causal inference also formalise the problem of \emph{inferring the correct causal model} - this is the problem of taking some observational data and concluding which causal models are ``possible'' or ``appropriate to use for the given purpose''.
+
+Defining causal models is difficult. While philosophical theories of causation are not heavily discussed in the applied literature on causal inference, the principles used to motivate the definitions of causal models are widely discussed in the philosophical literature. Applied theories of causal inference:
+\begin{enumerate}
+    \item ``$\RV{X}_i$ causes $\RV{X}_j$'' means that there exist different \emph{ideal interventions} that result in different values of of $\RV{X}_i$, hold other ``causally sufficient'' variables constant, do not directly affect $\RV{X}_j$ but nonetheless entail different values of $\RV{X}_j$
+    \item ``$\RV{X}_i$ causes $\RV{X}_j$'' means that the \emph{counterfactual value} of $\RV{X}_j$ would be different ``if $\RV{X}_i$ had taken a different value''
+\end{enumerate}
+
+In practice, most theories of causal inference seem to be based on the notion of \emph{ideal interventions}. Even ``counterfactual'' theories of causal inference (such as the theory based on ``potential outcomes'' notation) tend to define counterfactual values as ``values that a variable would have taken were it exposed to an ideal intervention'', if they are defined at all \citep{morgan_counterfactuals_2014,rubin_causal_2005,richardson2013single}. There are, however, alternative definitions of counterfactual values such as Lewis' closest world semantics \citep{lewis_causation_1986}, though these definitions have serious difficulties.
+
+``Ideal interventions'' are difficult to define. The structural model approach of \citet{pearl_causality:_2009} defines ideal interventions in terms of ``causally sufficient models''. However, this definition ends up circular:
+\begin{itemize}
+    \item An $[\RV{X}_i,\RV{X}_j]$-ideal intervention is an operation whose result is determined by applying the do-calculus to a causally sufficient triple $((\Omega,\mathcal{F},\prob{Q}),\diagram{G},\vecRV{U})$
+    \item A triple $((\Omega,\mathcal{F},\prob{Q}),\diagram{G},\vecRV{U})$ is $[\RV{X}_i,\RV{X}_j]$-causally sufficient if $\RV{U}$ contains $\RV{X}_i$, $\RV{X}_j$ and ``all intervenable variables'' that \emph{cause} (definition (1)) both $\RV{X}_i$ and $\RV{X}_j$ \footnote{Weaker conditions for causal sufficiency are possible, but they are still premised on causal relationships, so the charge of circularity stands \citep{shpitser_complete_2008}.}
+\end{itemize}
+
+Circularity is a recognised problem with interventional definitions of causation \citep{woodward_causation_2016}. An alternative approach is to designate certain real-world events -- such as flipping coins, querying random number generators and so forth -- as prototypical ``ideal interventions''. The main problem with this definition is that it fails to answer any causal query that hasn't been subject to a randomised trial, which seems to leave most causal questions unanswerable, despite the fact that many of them have apparent answers \citep{pearl_challenging_2018}, and the causal questions represented under this definition are often considered to be inadequate representations of the original questions to which answers were sought \citep{deaton_understanding_2018,heckman_randomization_1991}. Additional challenges posed by ``ideal interventions'' are discussed in Section \ref{sec:cbns_without_d}.
+
+An account of ideal interventions has not yet been offered that stands up to scrutiny. This difficulty is not without precedent, and is certainly no reason to abandon theories built upon ideal interventions. It is also difficult to provide an account of what it means for data to be ``distributed according to probability distribution $\prob{P}$''\citep{hajek_interpretations_2019} that stands up under scrutiny, but the usefulness of probability distributions in representing data regularities is widely accepted.
+
+However, in light of the difficulties with theories of causation, it is notable that many causal questions can be formalised without appealing to a theory of causation at all, an observation also made by \citet{dawid_decision-theoretic_2020}. Causal statistical decision theory (CSDT), introduced here, shows how the type definition of ``causal models'' is almost completely determined by the given \emph{causal decision problem}. Causal decision problems are problems such as: Should I smoke? Should cigarettes be taxed? Such problems are ubiquitous, and causal inferences are instrumental in answering them. As with existing theories of causal inference, determining the relation between observational probabilities and causal models is the key problem in CSDT, and existing theories of causal inference have developed many useful approaches to this. CSDT additionally offers the opportunity to understand what remains true of causal decision problems regardless of the theory of causation in use and the opportunity to consider theories of causation which may be useful in solving particular causal decision problems but need not be universally valid.
+
+\section{Causal Questions}
+
+\citet{pearl_book_2018} has proposed three types of causal question:
+\begin{enumerate}
+    \item Association: How are $\RV{X}$ and $\RV{Y}$ related? How would observing $\RV{X}$ change my beliefs about $\RV{Y}$?
+    \item Intervention: What would happen if I do ... ? How can I make $E$ happen?
+    \item Counterfactual: Was $\RV{X}$ responsible for $\RV{Y}$? What if I had done ... instead of what I actually did?
+\end{enumerate}
+
+I focus on a particular type of question here: ``How can I make $E$ happen?''. Pearl calls this type of question an ``interventional'' question but we observe that this query is in fact a \emph{causal decision problem} (I also wish to avoid the term ``intervention'' as it has a technical meaning which that I touched on above). A causal decision problem is a problem of the following form:
+
+\begin{quote}\label{def:causal_decision_problem}
+    Given my available options $D$ and the way I would like the world to turn out, which options are likely to have a desirable result?
+\end{quote}
+
+When one asks ``How can I make $E$ happen?'', I suppose that the answer will be one or more elements of a set of available options $D$. Observing that $E$ corresponds to ``the way I would like the world to turn out'', we can see that this question is a causal decision problem.
+
+I choose to focus on this type of problem because the problem of choosing a decision given desired results is ubiquitous, and Definition \ref{def:causal_decision_problem} is a broadly applicable prototype for this kind of problem. It's possible that a similar approach can succeed for counterfactual queries, but obviously a different prototype problem would be required. Enough questions are raised by focusing on causal decision problems to restrict our attention to this type of problem for now.
+
+Causal \emph{statistical} causal decision problems extend causal decision problems by introducing data and assumptions about how the world works:
+
+\begin{quote}\label{def:causal_statistical_decision_problem}
+    Given my available options $D$, data $\vecRV{X}$ and preferences $u$, which options are likely to have a desirable result?
+\end{quote}
+
+\subsection{Formalising Causal Statistical Decision Problems: See-Do Maps}
+
+I introduce \emph{see-do maps} which formalise causal statistical decision problems introduced in Definition \ref{def:causal_statistical_decision_problem}. I don't derive see-do maps from first principles - rather, I make use of probability theory and expected utility theory because they're the standard tools used to formalise models of noisy observations and choice under uncertainty.
+
+\todo[inline]{Section \ref{sec:decision_makers_decision_models} (currently unfinished) considers more fundamental assumptions that might lead to see-do maps}
+
+First, we formally define \emph{causal statistical decision problems}.
+
+\begin{definition}[Causal Statistical Decision Problem]\label{def:csdp}
+A \emph{causal statistical decision problem} (CSDP) is a tuple $(D,x,X,Y,u)$ where $D$ is a set of \emph{decisions} that may be taken, $x\in X$ is a \emph{data sequence} of observations, $Y$ is the space of possible \emph{consequences} of decisions and $u:Y\to \mathbb{R}$ is a \emph{utility function} where $u(y)\geq u(y')$ implies that $y$ is at least as desirable as $y'$.
+
+We place a number of additional requirements on causal statistical decision problems:
+\begin{itemize}
+    \item $D$ is a denumerable set
+    \item The principle of \emph{expected utility maximisation} is acceptable, so the desirability of a probability distribution $\prob{P}_{\RV{Y}}\in \Delta(\mathcal{Y})$ can be found by evaluating $\mathbb{E}_{\prob{P}_{\RV{Y}}} [u]$
+    \item $X$ and $Y$ are \emph{standard measurable} ($D$ is automatically standard measurable due to it being denumerable)
+    \item A decision maker may select any probability distribution in $\Delta(\mathcal{D})$ as its stochastic decision. A deterministic distribution $\delta_d$ is equivalent to directly choosing $d\in D$, while deciding on a non-deterministic distribution involves consulting a source of randomness to select a particular decision in accordance with the probabilities chosen
+\end{itemize}
+\end{definition}
+
+Definition \ref{def:csdp} are the elements of a CSDP that we regard as fixed.
+
+A \emph{decision maker} brings prior knowledge to the problem in the form of a \emph{see-do map}, which captures the relation between the \emph{observed probability distribution} and the \emph{consequence map}.
+
+\begin{definition}[Observed probability distribution]\label{def:observed_probability}
+Given a CSDP $(D,x,X,Y,u)$, under hypothesis $\theta$ the data $x$ are ``distributed according to'' some \emph{observed probability} $\prob{O}_\theta\in \Delta(\mathcal{X})$.\todo{``Distributed according to'' is a weasel phrase with no particularly satisfactory interpretation, but I'd like to avoid worrying about it at this point \citep{hajek_interpretations_2019}.}
+\end{definition}
+
+\begin{definition}[Consequence map]\label{def:conseq_map}
+Given a decision set $D$ and a consequence set $Y$, under hypothesis $\theta$ a \emph{consequence map} $\kernel{C}_\theta:D\to \Delta(\mathcal{Y})$ is a Markov kernel mapping decisions to probability distributions on the consequence space. For a stochastic decision $\gamma\in \Delta(\mathcal{D})$, $\gamma\kernel{C}$ is the \emph{consequence} of $\gamma$ with respect to $\kernel{C}_\theta$.
+\end{definition}
+
+\begin{definition}[Causal hypothesis]\label{def:hypothesis}
+A causal hypothesis $\theta$ on a CSDP $(D,x,X,Y,u)$ is a pair $(\prob{O}_\theta,\kernel{C}_\theta)\in \Delta(\mathcal{X})\times\Delta(\mathcal{Y})^D$. A hypothesis $(\prob{O}_\theta,\kernel{C}_\theta)$ can be interpreted as the statement ``the observed data are distributed according to $\prob{O}_\theta$ and the consequences of decisions are given by $\prob{C}_\theta$''
+\end{definition}
+
+\begin{definition}[Causal hypothesis class]\label{def:chc}
+A \emph{causal hypothesis class} $\Theta$ is a set of causal hypotheses on $(D,x,X,Y,u)$.
+\end{definition}
+
+\begin{definition}[See-do map]\label{def:see-do}
+Given a CSDP $(D,x,X,Y,u)$ and a causal hypothesis class $\Theta$, the\emph{see-do} model $\kernel{T}:\Theta\times D\times (\mathcal{X}\otimes \mathcal{Y})$ is the map $\kernel{T}:(\theta,d,A\times B)\mapsto \prob{O}_\theta(A) \kernel{C}_{(\theta,d)} (B)$.
+
+We assume that see-do maps are Markov kernels (i.e. there is a $\sigma$-algebra $\theta\otimes\mathcal{D}$ such that the map $(\theta,d)\mapsto \prob{O}_\theta(A) \kernel{C}_{(\theta,d)} (B)$ is $\theta\otimes\mathcal{D}$-measurable). This is guaranteed if $\Theta$ is denumerable and endowed with the discrete $\sigma$-algebra. If $\Theta$ is standard measurable, this imposes restrictions on $\Theta$; for example, we can't have some$d\in D$, $A\times B\in \mathcal{X}\otimes \mathcal{Y}$ such that $\prob{O}_\cdot(A) \kernel{C}_{(\cdot,d)} (B)^{-1}(\{1\})$ is a non-measurable collection of hypotheses in $\Theta$.
+\end{definition}
+
+There is a generic graphical representation of see-do maps. See Section \ref{ssec:mken_diagrams} for a thorough explanation of the notation used. 
+
+Define $\kernel{O}:\Theta\to \Delta(\mathcal{X})$ by $\kernel{O}:\theta\mapsto \kernel{O}_\theta$ and $\kernel{C}:\Theta\times D\to \Delta(\mathcal{X}\otimes\mathcal{Y})$ by $\kernel{C}:(\theta,d)\mapsto \kernel{C}_{(\theta,d)}$. Then we have
+
+\begin{align}
+\kernel{T} = \begin{tikzpicture}
+          \path (0,0) node(theta) {$\Theta$}
+             +(0,-1) node (P) {$\RV{D}$}
+             ++(0.5,0) coordinate (copy0)
+             ++(0.5,0) node[kernel] (H) {$\kernel{O}$}
+             +(0,-1) node[kernel] (I) {$\kernel{C}$}
+             ++(0.7,0.) node (N1) {$\RV{X}$}
+             +(0,-1) node (N2) {$\RV{Y}$};
+          \draw (theta) -- (copy0);
+          \draw (P) -- (I);
+          \draw (I) -- (N2);
+          \draw (copy0) to [bend right] ($(I.west)+(0,0.1)$);
+          \draw (copy0) -- (H);
+          \draw (H) -- (N1);
+          \end{tikzpicture}
+\end{align}
+
+A key difference between CSDT and other approaches to causal inference is that diagrams in CSDT feature two coupled maps $\kernel{O}$ and $\kernel{C}$, while most other approaches to causal inference represent both $\kernel{O}$ and $\kernel{C}$ in one diagram. \citet{lattimore_replacing_2019} is the only other example I am aware of that represents both $\kernel{O}$ and $\kernel{C}$. Nevertheless, ``one-picture'' causal models such as Causal Bayesian Networks, Single World Intervention Graphs \emph{do} represent observational distributions and interventional maps, and the two differ (see Section \ref{sec:single_double_representation})
+
+A causal hypothesis class $\Theta$ induces a binary relation between observed probability distributions $\prob{O}_\theta$ and consequence maps $\prob{C}_\theta$. This approach is very agnostic about the actual relation induced -- we do not even insist that the range of the observed data $X$ is the same as the range of possible consequences $Y$ (though we will generally limit our attention to cases where the two coincide). 
+
+In common with \citet{heckerman_decision-theoretic_1995}, decisions (or ``acts'') are primitive elements of see-do maps. In contrast to our work, \citet{heckerman_decision-theoretic_1995} only discuss deterministic \emph{consequence maps}, while see-do maps represent relations between consequence maps and observed probability.
+
+Decisions are similar to the ``regime indicators'' found in \citet{dawid_decision-theoretic_2020}. They coincide precisely if we suppose that the observation and consequence spaces coincide ($X=Y$) and there exists an ``idle'' decision $d^*\in D$ such that $\kernel{C}_{(\cdot,d^*)} = \kernel{O}_{\cdot}$. However, in general we don't require that $\kernel{O}$ and $\kernel{C}$ are related in this manner. This assumption will be revisited in \todo[inline]{A section I haven't written yet}.
+
+\subsection{D-causation}
+
+While we take $D$ to be a primitive element of causal decision problems, and therefore a primitive of see-do maps. Causes are not primitive, but we can offer a secondary notion of causation. We call this $D$-causation to stress the fact that it arises in a theory of causal inference in which the set $D$ of available decisions is primitive. A similar idea is discussed extensively in \citet{heckerman_decision-theoretic_1995}. The main differences are that what we call ``consequence maps'' map decisions to probability distributions over possible consequences while Heckerman and Shachter work with ``states'' that map decisions deterministically to consequences. In addition, while we define $D$-causation relative to a particular consequence map $\kernel{C}_\theta$, Heckerman and Shachter define it with respect to a \emph{set} of states.
+
+Section \ref{sec:cbns_without_d} explores the difficulty of defining ``objective causation'' without reference to a set of basic decisions, acts or operations. $D$ need not be interpreted as the set of decisions an agent may make, but whatever interpretation it is assigned, all existing examples of causal models seem to require a ``domain set''.
+
+See Section \ref{ssec:random_variables} for the definition of random variables.
+
+\todo[inline]{Add definition of conditional independence, revise wire label definitions}
+
+One way to motivate the notion of $D$-causation is to observe that for many decision problems, the full set $D$ may be extremely large. Suppose I aim to have my light switched on, and there is a switch that controls the light. Often, the relevant choice of acts for such a problem would appear to be $D_0=\{\text{flip the switch},\text{don't flip the switch}\}$. However, in principle I have a much larger range of options to choose from. For simplicity's sake, suppose I have instead the following set of options:
+
+\begin{align*}
+D_1:=&\{``\text{walk to the switch and press it with my thumb}'', \\
+    &``\text{trip over the lego on the floor, hop to the light switch and stab my finger at it}'',\\
+    &``\text{stay in bed}''\}
+\end{align*}
+
+If having the light turned on is all that matters, I could consider any acts in $D_1$ to be equivalent if they have the same ultimate impact on the position of the light switch. $D_0$ is a quotient over $D_1$ under this equivalence relation. 
+
+If I hypothesize that, relative to $D_1$, the ultimate state of the light switch is all that matters to determine the ultimate state of the light, I can say that the light switch $D_1$-causes the state of the light. Given this $D_1$-causation, the $D_1$ decision problem can (subject to my hypothesis) be reduced to a $D_0$ decision between states of the light switch.
+
+If I consider an even larger set of possible acts $D_2$, I might not accept the hypothesis of $D_2$-causation. Let $D_2$ be the following acts:
+
+\begin{align*}
+D_2:=&\{``\text{walk to the switch and press it with my thumb}'', \\
+    &``\text{trip over the lego on the floor, hop to the light switch and stab my finger at it}'',\\
+    &``\text{stay in bed}'',
+    &``\text{toggle the mains power, then flip the light switch}''\}
+\end{align*}
+
+In this case, it would be unreasonable to hypothesize that all acts that left the light switch in the ``on'' position would also result in the light being ``on''. Thus the switch does not $D_2$-cause the light to be on.
+
+Formally, $D$-causation is defined in terms of conditional independence:
+
+\begin{definition}[$D$-causation]\label{def:d_cause}
+Given a consequence map $\kernel{C}_\theta:D\to \Delta(\mathcal{Y})$, random variables $\RV{Y}_1:Y\times D\to Y_1$, $\RV{Y}_2:Y\times D\to Y_2$ and domain variable $\RV{D}:Y\times D\to D$ (Definition \ref{def:domain_variable}), $\RV{Y}_1$ $D$-causes $\RV{Y}_2$ iff $\RV{Y}_2\CI_{\kernel{C}_\theta} \RV{D}|\RV{Y}_1$.
+\end{definition}
+
+\subsection{D-causation vs Heckerman and Shachter}
+
+Heckerman and Shachter study deterministic ``consequence maps''. Furthermore, what we call hypotheses $\theta\in\Theta$, Heckerman and Schachter call states $s\in S$. One could consider a state to be a hypothesis that is specific enough to yield a deterministic map from decisions to outcomes. Heckerman and Shachter's notion of causation is defined by \emph{limited unresponsiveness} rather than \emph{conditional independence}, which depends on a partition of states rather than a particular hypothesis.
+
+\begin{definition}[Limited unresponsiveness]
+    Given states $S$, deterministic consequence maps $\kernel{C}_s:D\to \Delta(F)$ for each $s\in A$ and a random variables $\RV{X}:F\to X$, $\RV{Y}:F\to Y$, $\RV{Y}$ is unresponsive to $\RV{D}$ in states limited by $\RV{X}$ if $\kernel{C}_{(s,d)}^{\RV{X}|\RV{D}}=\kernel{C}_{(s,d')}^{\RV{X}|\RV{D}\RV{S}}\implies \kernel{C}_{(s,d)}^{\RV{Y}|\RV{D}\RV{S}}=\kernel{C}_{(s,d')}^{\RV{Y}|\RV{D}\RV{S}}$ for all $d,d'\in D$, $s\in S$. Write $\RV{Y}\not\hookleftarrow_{\RV{X}} \RV{D}$
+\end{definition}
+
+\begin{lemma}[Limited unresponsiveness implies $D$-causation]
+For deterministic consequence maps, $\RV{Y}\not\hookleftarrow_{\RV{X}} \RV{D} $ implies $\RV{X}$ $D$-causes $\RV{Y}$ in every state $s\in S$.
+\end{lemma}
+
+\begin{proof}
+By the assumption of determinism, for each $s\in S$ and $d\in D$ there exists $x(s,d)$ and $y(s,d)$ such that $\kernel{C}^{\RV{X}\RV{Y}|\RV{D}\RV{S}}_{d,s} = \delta_{x(s,d)}\otimes\delta_{y(s,d)}$.
+
+By the assumption of limited unresponsiveness, for all $d,d'$ such that $x(s,d)=x(s,d')$, $y(s,d)=y(s,d')$ also. Define $f:X\times S\to Y$ by $(s,x)\mapsto y(s,[x(s,\cdot)]^{-1}(x(s,d)))$ where $[x(s,\cdot)]^{-1}(a)$ is an arbitrary element of $\{d|x(s,d)=a\}$. For all $s,d$, $f(x(s,d),s)=y(s,d)$. Define $\kernel{M}:X\times D\times S\to \Delta(\mathcal{Y})$ by $(x,d,s)\mapsto \delta_{f(x,s)}$. $\kernel{M}$ is a version of $\kernel{C}^{\RV{Y}|\RV{X},\RV{D},\RV{S}}$ because, for all $A\in \mathcal{X}$, $B\in \mathcal{Y}$, $s\in S$, $d\in D$:
+
+\begin{align}
+    \kernel{C}^{\RV{X}|\RV{D}\RV{S}}_{(d,s)}\splitter{0.1}(\kernel{M}\otimes\mathrm{Id}) &= \int_A \kernel{M}(x',d,s;B) d\delta_{x(s,d)}(x') \\
+                                                                                        &= \int_A \delta_{f(x',s)}(B) d\delta_{x(s,d)}(x') \\
+                                                                                        &= \delta_{f(x(s,d),s)}(B)\delta_{x(s,d)}(A) \\
+                                                                                        &= \delta_{y(s,d)}(B)\delta_{x(s,d)}(A)\\
+                                                                                        &= \delta_{x(s,d)}\otimes\delta_{y(s,d)}(A\times B)
+\end{align}
+
+$\kernel{M}$ is also independent of $\RV{D}$, given the obvious labeling of inputs. Therefore $\RV{Y}\CI_{\kernel{C}_s}\RV{D}|\RV{X}$.
+\end{proof}
+
+However, despite limited unresponsiveness implying $D$-causation within every state, it does not imply $D$-causation in mixtures of states. Suppose $D=\{0,1\}$ where $1$ stands for ``toggle light switch'' and $0$ stands for ``do nothing''. Suppose $S=\{[0,0],[0,1],[1,0],[1,1]\}$ where $[0,0]$ represents ``switch initially off, mains off'' the other states generalise this in the obvious way. Finally, $\RV{F}\in\{0,1\}$ is the final position of the switch and $\RV{L}\in\{0,1\}$ is the final state of the light. We have
+
+\begin{align}
+    \kernel{C}^{\RV{L}\RV{F}|\RV{D}\RV{S}}_{d,[i,m]} = \delta_{(d\text{ XOR }i)\text{ AND }m}\otimes \delta_{(d\text{ XOR }i)\text{ AND }m}
+\end{align}
+
+Within states $[0,0]$ and $[1,0]$, the light is always off, so $\RV{F}=a\implies \RV{L}=0$ for any $a$. In states $[0,1]$ and $[1,1]$, $\RV{F}=1\implies \RV{L}=1$ and $\RV{F}=0\implies \RV{L}=0$. Thus $\RV{L}\not\hookleftarrow_{\RV{F}} \RV{D}$. However, suppose we take a mixture of consequence maps:
+\begin{align}
+    \kernel{C}_\gamma &= \frac{1}{4}\kernel{C}_{\cdot,[0,0]} + \frac{1}{4}\kernel{C}_{\cdot,[0,1]} + \frac{1}{2}\kernel{C}_{\cdot,[1,1]}\\
+    \kernel{C}^{\RV{F}\RV{L}|\RV{D}}_\gamma &= \frac{1}{4} \left[\begin{matrix}
+                        1 & 0\\ 0 & 1
+                      \end{matrix}\right]\otimes \left[\begin{matrix}
+                        1 & 0\\ 1 & 0
+                      \end{matrix}\right] + \frac{1}{4} \left[\begin{matrix}
+                        1 & 0\\ 0 & 1
+                      \end{matrix}\right]\otimes \left[\begin{matrix}
+                        1 & 0\\ 0 & 1
+                      \end{matrix}\right] + \frac{1}{2}\left[\begin{matrix}
+                        0 & 1\\ 1 & 0
+                      \end{matrix}\right]\otimes \left[\begin{matrix}
+                        0 & 1\\ 1 & 0
+                      \end{matrix}\right]
+\end{align}
+
+Then
+
+\begin{align}
+    [1,0]\kernel{C}^{\RV{F}\RV{L}|\RV{D}}_{\gamma} &= \frac{1}{4}[0,1]\otimes[1,0]+\frac{1}{4}[0,1]\otimes[0,1]+\frac{1}{2}[1,0]\otimes[1,0]\\
+    [1,0]\splitter{0.1}(\kernel{C}^{\RV{F}|\RV{D}}_\gamma\otimes \kernel{C}^{\RV{L}|\RV{D}}_\gamma) &= (\frac{1}{2}[0,1]+\frac{1}{2}[1,0])\otimes(\frac{1}{4}[0,1]+\frac{3}{4}[1,0])\\
+    \implies [1,0]\kernel{C}^{\RV{F}\RV{L}|\RV{D}}_{\gamma} &\neq [1,0] \splitter{0.1} (\kernel{C}^{\RV{F}|\RV{D}}_\gamma\otimes \kernel{C}^{\RV{L}|\RV{D}}_\gamma)
+\end{align}
+
+Thus under hypothesis mixture $\gamma$, $\RV{F}$ does not $D$-cause $\RV{L}$ even though $\RV{F}$ $D$-causes $\RV{L}$ in all states $S$. The definition of $D$-causation was motivated by the idea that we could reduce a difficult decision problem with a large set $D$ to a simpler problem with a smaller ``effective'' set of decisions by exploiting conditional independence. Even if $\RV{X}$ $D$-causes $\RV{Y}$ in every $\theta\in S$, $\RV{X}$ does not necessarily $D$-cause $\RV{Y}$ in mixtures of states in $S$. For this reason, we do not say that $\RV{X}$ $D$-causes $\RV{Y}$ in $S$ if $\RV{X}$ $D$-causes $\RV{Y}$ in every $\theta\in S$, and in this way we differ substantially from \citet{heckerman_decision-theoretic_1995}.
+
+Instead, we simply extend the definition of $D$-causation to mixtures of hypotheses: if $\gamma\in \Delta(\Theta)$ is a mixture of hypotheses, define $\kernel{C}_\gamma:= (\gamma\otimes\textbf{Id})\kernel{C}$. Then $\RV{X}$ $D$-causes $\RV{Y}$ relative to $\gamma$ iff $\RV{Y}\CI_{\kernel{C}_\gamma} \RV{D}|\RV{X}$.
+
+Theorem \ref{th:univ_d_causation} shows that under some conditions, $D$-causation can hold for arbitrary mixtures over subsets of the hypothesis class $\Theta$.
+
+\begin{theorem}[Universal $D$-causation]\label{th:univ_d_causation}
+If $\kernel{C}^{\RV{X}|\RV{D}}_{\theta} = \kernel{C}^{\RV{X}|\RV{D}}_{\theta'}$ for all $\theta,\theta'\in S\subset \Theta$ and $\RV{X}$ $D$-causes $\RV{Y}$ in all $\theta\in S$, then $\RV{X}$ $D$-causes $\RV{Y}$ with respect to all mixed consequence maps $\kernel{C}_\gamma$ for all $\gamma\in \Delta(\Theta)$ with $\gamma(S)=1$.
+\end{theorem}
+
+\begin{proof}
+
+For $\gamma\in \Delta(\Theta)$, define the mixture
+
+\begin{align}
+\kernel{C}_\gamma := \begin{tikzpicture}
+    \path (0,0) node[dist] (g) {$\gamma$}
+    + (0,-0.45) node (D) {$\RV{D}$}
+    ++ (1,-0.3) node[kernel] (C) {$\kernel{C}$}
+    ++ (1,0) node (F) {$\RV{F}$};
+    \draw (g) to [out=0,in=180] ($(C.west) + (0,0.15)$) (D) -- ($(C.west) + (0,-0.15)$) (C) -- (F);
+\end{tikzpicture}
+\end{align}
+
+Because $\kernel{C}_\theta^{\RV{X}|\RV{D}} = \kernel{C}_{\theta'}^{\RV{X}|\RV{D}}$ for all $\theta,\theta'\in \Theta$, we have
+
+\begin{align}
+\begin{tikzpicture}
+    \path (0,0) node[dist] (g) {$\gamma$}
+    + (0.7,-0.15) coordinate (copy0)
+    + (0,-0.45) node (D) {$\RV{D}$}
+    ++ (1.5,-0.3) node[kernel] (C) {$\kernel{C}^{\RV{X}|\RV{D}\Theta}$}
+    ++ (1,0) node (X) {$\RV{X}$}
+    + (0,0.5) node (T) {$\Theta$};
+    \draw (g) to [out=0,in=180] (copy0) -- ($(C.west) + (0,0.15)$) (D) -- ($(C.west) + (0,-0.15)$);
+    \draw (C) -- (X);
+    \draw (copy0) to [out=90,in=180] (T);
+\end{tikzpicture} &= \begin{tikzpicture}
+    \path (0,0) node[dist] (g) {$\gamma$}
+    + (0,0.5) node[dist] (g2) {$\gamma$}
+    + (0.7,-0.15) coordinate (copy0)
+    + (0,-0.45) node (D) {$\RV{D}$}
+    ++ (1.5,-0.3) node[kernel] (C) {$\kernel{C}^{\RV{X}|\RV{D}\Theta}$}
+    ++ (1,0) node (X) {$\RV{X}$}
+    + (0,0.3) node (T) {$\Theta$};
+    \draw (g) to [out=0,in=180] (copy0) -- ($(C.west) + (0,0.15)$) (D) -- ($(C.west) + (0,-0.15)$);
+    \draw (C) -- (X);
+    \draw (g2) to [out=0,in=180] (T);
+\end{tikzpicture} \label{eq:decompose_condi_x}
+\end{align}
+
+Also
+
+\begin{align}
+    \kernel{C}_\gamma^{\RV{XY}|\RV{D}} &= \begin{tikzpicture}
+    \path (0,0) node[dist] (g) {$\gamma$}
+    + (0,-0.45) node (D) {$\RV{D}$}
+    ++ (1,-0.3) node[kernel] (C) {$\kernel{C}$}
+    ++ (1,0) node[kernel] (F) {$\kernel{F}^{\RV{X}\utimes\RV{Y}}$}
+    ++ (1,0.15) node (X) {$\RV{X}$}
+    + (0,-0.3) node (Y) {$\RV{Y}$};
+    \draw (g) to [out=0,in=180] ($(C.west) + (0,0.15)$) (D) -- ($(C.west) + (0,-0.15)$) (C) -- (F);
+    \draw ($(F.east) + (0,0.15)$) -- (X) ($(F.east) + (0,-0.15)$) -- (Y);
+\end{tikzpicture}\\
+    &= \begin{tikzpicture}
+    \path (0,0) node[dist] (g) {$\gamma$}
+    + (0,-0.45) node (D) {$\RV{D}$}
+    ++ (1,-0.3) node[kernel] (C) {$\kernel{C}^{\RV{XY}|\RV{D}\Theta}$}
+    ++ (1,0.15) node (X) {$\RV{X}$}
+    + (0,-0.3) node (Y) {$\RV{Y}$};
+    \draw (g) to [out=0,in=180] ($(C.west) + (0,0.15)$) (D) -- ($(C.west) + (0,-0.15)$);
+    \draw ($(C.east) + (0,0.15)$) -- (X) ($(C.east) + (0,-0.15)$) -- (Y);
+\end{tikzpicture}\\
+ &= \begin{tikzpicture}
+    \path (0,0) node[dist] (g) {$\gamma$}
+    + (0,-0.45) node (D) {$\RV{D}$}
+    + (0.7,-0.45) coordinate (copy0)
+    + (0.7,-0.15) coordinate (copy1)
+    ++ (1.4,-0.3) node[kernel] (C) {$\kernel{C}^{\RV{X}|\RV{D}\Theta}$}
+    + (0,0.6) coordinate (via0)
+    + (0,-0.6) coordinate (via1)
+    ++ (0.9,0) coordinate (copy2)
+    ++ (0.7,0) node[kernel] (Yx) {$\kernel{C}^{\RV{Y}|\RV{X}\RV{D}\Theta}$}
+    ++ (1.2,0.15) node (X) {$\RV{Y}$}
+    + (0,-0.5) node (Y) {$\RV{X}$};
+    \draw (g) to [out=0,in=180] (copy1) -- ($(C.west) + (0,0.15)$) (D) -- ($(C.west) + (0,-0.15)$) (C)--(Yx);
+    \draw (copy0) to [out=-90,in=180] (via1) to [out=0,in=180] ($(Yx.west) + (0,-0.15)$) (copy1) to [out=90,in=180] (via0) to [out=0,in=180] ($(Yx.west) + (0,0.15)$);
+    \draw ($(Yx.east) + (0,0.15)$) -- (X) (copy2) to [out=-90,in=180] (Y);
+ \end{tikzpicture}\\
+ &\overset{\RV{Y}\CI \RV{D}|\RV{X}\Theta}{=} \begin{tikzpicture}
+    \path (0,0) node[dist] (g) {$\gamma$}
+    + (0,-0.45) node (D) {$\RV{D}$}
+    + (0.7,-0.15) coordinate (copy1)
+    ++ (1.4,-0.3) node[kernel] (C) {$\kernel{C}^{\RV{X}|\RV{D}\Theta}$}
+    ++ (0.9,0.1) coordinate (copy2)
+    ++ (0.7,0.3) node[kernel] (Yx) {$\kernel{C}^{\RV{Y}|\RV{X}\Theta}$}
+    ++ (1.2,0.15) node (X) {$\RV{Y}$}
+    + (0,-0.5) node (Y) {$\RV{X}$};
+    \draw (g) to [out=0,in=180] (copy1) -- ($(C.west) + (0,0.15)$) (D) -- ($(C.west) + (0,-0.15)$) (C) to [out=0,in=180] (copy2) to [out=0,in=180] (Yx);
+    \draw (copy1) to [out=90,in=180] ($(Yx.west) + (0,0.15)$);
+    \draw ($(Yx.east) + (0,0.15)$) -- (X) (copy2) to [out=-90,in=180] (Y);
+ \end{tikzpicture} \\
+ &\overset{\ref{eq:decompose_condi_x}}{=} \begin{tikzpicture}
+    \path (0,0) node[dist] (g) {$\gamma$}
+    + (0,-0.45) node (D) {$\RV{D}$}
+    + (0.7,-0.15) coordinate (copy1)
+    ++ (1.4,-0.3) node[kernel] (C) {$\kernel{C}^{\RV{X}|\RV{D}\Theta}$}
+    + (1,0.6) node[dist] (g2) {$\gamma$}
+    ++ (0.9,0.1) coordinate (copy2)
+    ++ (1,0.3) node[kernel] (Yx) {$\kernel{C}^{\RV{Y}|\RV{X}\Theta}$}
+    ++ (1.2,0.15) node (X) {$\RV{Y}$}
+    + (0,-0.5) node (Y) {$\RV{X}$};
+    \draw (g) to [out=0,in=180] (copy1) -- ($(C.west) + (0,0.15)$) (D) -- ($(C.west) + (0,-0.15)$) (C) to [out=0,in=180] (copy2) to [out=0,in=180] (Yx);
+    \draw (g2) to [out=0,in=180] ($(Yx.west) + (0,0.15)$);
+    \draw ($(Yx.east) + (0,0.15)$) -- (X) (copy2) to [out=-90,in=180] (Y);
+ \end{tikzpicture}\\
+ &= \overset{\ref{eq:decompose_condi_x}}{=} \begin{tikzpicture}
+    \path (0,0) node (g) {}
+    + (0,-0.45) node (D) {$\RV{D}$}
+    + (0.7,-0.45) coordinate (copy1)
+    ++ (1.4,-0.3) node[kernel] (C) {$\kernel{C}_\gamma^{\RV{X}|\RV{D}\Theta}$}
+    + (1,0.6) node[dist] (g2) {$\gamma$}
+    ++ (0.9,0.1) coordinate (copy2)
+    ++ (1,0.3) node[kernel] (Yx) {$\kernel{C}^{\RV{Y}|\RV{X}\Theta}$}
+    + (-0.5,0.6) coordinate (stop0)
+    ++ (1.2,0.15) node (X) {$\RV{Y}$}
+    + (0,-0.5) node (Y) {$\RV{X}$};
+    \draw (D) -- ($(C.west) + (0,-0.15)$) (C) to [out=0,in=180] (copy2) to [out=0,in=180] (Yx);
+    \draw (g2) to [out=0,in=180] ($(Yx.west) + (0,0.15)$);
+    \draw ($(Yx.east) + (0,0.15)$) -- (X) (copy2) to [out=-90,in=180] (Y);
+    \draw[-{Rays[n=8]}] (copy1) to [out=90,in=180] (stop0);
+ \end{tikzpicture}\label{eq:is_conditional}
+\end{align}
+Equation \ref{eq:is_conditional} establishes that $(\gamma\otimes\textbf{Id}_X\otimes\stopper{0.3}_D)\kernel{C}^{\RV{Y}|\RV{X}\Theta}$ is a version of $\kernel{C}_\gamma^{\RV{Y}|\RV{X}\RV{D}}$, and thus $\RV{Y}\CI_{\kernel{C}_\gamma} \RV{D}|\RV{X}$.
+
+This can also be derived from the semi-graphoid rules:
+
+\begin{align}
+    \Theta\CI \RV{D} \land \Theta\CI \RV{X} | \RV{D} &\implies \Theta\CI \RV{XD}\\
+    &\implies \Theta\CI \RV{D}|\RV{X}\\
+    \RV{D} \CI \Theta|\RV{X} \land \RV{D}\CI \RV{Y}|\RV{X}\Theta &\implies \RV{D}\CI \RV{Y}|\RV{X}\\
+    &\implies \RV{Y}\CI\RV{D}|\RV{X}
+\end{align}
+\end{proof}
+
+\subsection{Properties of D-causation}
+
+If $\RV{X}$ D-causes $\RV{Y}$ relative to $\kernel{C}_\theta$, then the following holds:
+
+\begin{align}
+    \kernel{C}_{\theta}^{\RV{X}|\RV{D}} &= \begin{tikzpicture}
+    \path (0,0) node (D) {$\RV{D}$}
+    ++ (0.9,0) node[kernel] (Xd) {$\kernel{C}^{\RV{X}|\RV{D}}$}
+    ++ (1.3,0) node[kernel] (Yd) {$\kernel{C}^{\RV{Y}|\RV{X}}$}
+    ++ (0.9,0) node (Y) {$\RV{Y}$};
+    \draw (D) -- (Xd) -- (Yd) -- (Y); 
+    \end{tikzpicture}
+\end{align}
+
+This follows from version (2) of Definition \ref{def:conditional_independence}:
+
+\begin{align}
+    \kernel{C}_\theta^{\RV{X}|\RV{D}} &= \begin{tikzpicture}
+    \path (0,0) node (D) {$\RV{D}$}
+    ++ (0.7,0) coordinate (copy0)
+    ++ (0.7,0) node[kernel] (Xd) {$\kernel{C}^{\RV{X}|\RV{D}}$}
+    + (0,0.5) coordinate (via1)
+    ++ (1.3,0) node[kernel] (Yd) {$\kernel{C}^{\RV{Y}|\RV{X}\RV{D}}$}
+    ++ (0.9,0) node (Y) {$\RV{Y}$};
+    \draw (D) -- (Xd) -- (Yd) -- (Y);
+    \draw (copy0) to [out=90,in=180] (via1) to [out=0,in=180] ($(Yd.west)+(0,0.15)$); 
+    \end{tikzpicture}\\
+     &= \begin{tikzpicture}
+    \path (0,0) node (D) {$\RV{D}$}
+    ++ (0.7,0) coordinate (copy0)
+    ++ (0.7,0) node[kernel] (Xd) {$\kernel{C}^{\RV{X}|\RV{D}}$}
+    + (1.3,0.5) coordinate (via1)
+    ++ (1.3,0) node[kernel] (Yd) {$\kernel{C}^{\RV{Y}|\RV{X}}$}
+    ++ (0.9,0) node (Y) {$\RV{Y}$};
+    \draw (D) -- (Xd) -- (Yd) -- (Y);
+    \draw[-{Rays[n=8]}] (copy0) to [out=90,in=180] (via1); 
+    \end{tikzpicture}\\
+    &= \begin{tikzpicture}
+    \path (0,0) node (D) {$\RV{D}$}
+    ++ (0.9,0) node[kernel] (Xd) {$\kernel{C}^{\RV{X}|\RV{D}}$}
+    ++ (1.3,0) node[kernel] (Yd) {$\kernel{C}^{\RV{Y}|\RV{X}}$}
+    ++ (0.9,0) node (Y) {$\RV{Y}$};
+    \draw (D) -- (Xd) -- (Yd) -- (Y); 
+    \end{tikzpicture}
+\end{align}
+
+D-causation is not transitive: if $\RV{X}$ D-causes $\RV{Y}$ and $\RV{Y}$ D-causes $\RV{Z}$ then $\RV{X}$ doesn't necessarily D-cause $\RV{Z}$.
